@@ -1,0 +1,5 @@
+bin/*
+*.user
+*.ncb
+*.suo
+obj/*
