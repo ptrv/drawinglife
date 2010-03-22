@@ -14,6 +14,7 @@
 		D048D82D1157A78C00DFF8D9 /* sqlite3x_transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8281157A78C00DFF8D9 /* sqlite3x_transaction.cpp */; };
 		D048D8431157A82B00DFF8D9 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D048D8401157A82B00DFF8D9 /* sqlite3.c */; };
 		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
+		D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */; };
 		E44667010F5B3E04005D0BF0 /* model3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D70F5B3E03005D0BF0 /* model3DS.cpp */; };
 		E44667020F5B3E04005D0BF0 /* texture3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */; };
 		E44667030F5B3E04005D0BF0 /* ofx3dModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665DD0F5B3E03005D0BF0 /* ofx3dModelLoader.cpp */; };
@@ -54,7 +55,6 @@
 		E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */; };
 		E49DA7E310CD40AD0006B5A8 /* freeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E49DA7E210CD40AD0006B5A8 /* freeimage.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
-		E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */; };
 		E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */; };
 		E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424410CC5A17004149E2 /* AppKit.framework */; };
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
@@ -128,6 +128,8 @@
 		D07156AD11515155008CEA46 /* DBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBReader.h; sourceTree = "<group>"; };
 		D07156AE11515155008CEA46 /* DBReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DBReader.cpp; sourceTree = "<group>"; };
 		D07157751151BEFD008CEA46 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawingLifeApp.cpp; sourceTree = "<group>"; };
+		D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeApp.h; sourceTree = "<group>"; };
 		E44665D70F5B3E03005D0BF0 /* model3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.cpp; sourceTree = SOURCE_ROOT; };
 		E44665D80F5B3E03005D0BF0 /* model3DS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model3DS.h; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.h; sourceTree = SOURCE_ROOT; };
 		E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/texture3DS.cpp; sourceTree = SOURCE_ROOT; };
@@ -249,8 +251,6 @@
 		E49DA7E210CD40AD0006B5A8 /* freeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = freeimage.a; path = ../../../libs/FreeImage/lib/osx/freeimage.a; sourceTree = SOURCE_ROOT; };
 		E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawingLifeDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
-		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
-		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		E4C2421610CC549C004149E2 /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E4C2424410CC5A17004149E2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -930,8 +930,8 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
-				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
+				D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */,
+				D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */,
 				D07156AD11515155008CEA46 /* DBReader.h */,
 				D07156AE11515155008CEA46 /* DBReader.cpp */,
 				D07157751151BEFD008CEA46 /* Logger.h */,
@@ -1093,7 +1093,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
-				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				E44667010F5B3E04005D0BF0 /* model3DS.cpp in Sources */,
 				E44667020F5B3E04005D0BF0 /* texture3DS.cpp in Sources */,
 				E44667030F5B3E04005D0BF0 /* ofx3dModelLoader.cpp in Sources */,
@@ -1129,6 +1128,7 @@
 				D048D82C1157A78C00DFF8D9 /* sqlite3x_reader.cpp in Sources */,
 				D048D82D1157A78C00DFF8D9 /* sqlite3x_transaction.cpp in Sources */,
 				D048D8431157A82B00DFF8D9 /* sqlite3.c in Sources */,
+				D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

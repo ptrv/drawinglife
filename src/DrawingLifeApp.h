@@ -2,8 +2,8 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
-#ifndef _TEST_APP
-#define _TEST_APP
+#ifndef _DRAWINGLIFEAPP_H_
+#define _DRAWINGLIFEAPP_H_
 
 
 #include "ofMain.h"
@@ -12,7 +12,7 @@
 #include "Logger.h"
 #include "DBReader.h"
 
-class testApp : public ofBaseApp{
+class DrawingLifeApp : public ofBaseApp{
 	
 public:
 	
@@ -33,4 +33,4 @@ public:
 	DBReader* m_dbReader;
 };
 
-#endif
+#endif // _DRAWINGLIFEAPP_H_

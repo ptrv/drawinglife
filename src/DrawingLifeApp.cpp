@@ -2,11 +2,11 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
-#include "testApp.h"
+#include "DrawingLifeApp.h"
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
-void testApp::setup(){
+void DrawingLifeApp::setup(){
 	
 	ofSetFrameRate(20);
 
@@ -48,46 +48,46 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void DrawingLifeApp::update(){
 }
 
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void DrawingLifeApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed  (int key){
-
-}
-
-//--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void DrawingLifeApp::keyPressed  (int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void DrawingLifeApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void DrawingLifeApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void DrawingLifeApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void DrawingLifeApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::resized(int w, int h){
+void DrawingLifeApp::mouseReleased(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void DrawingLifeApp::resized(int w, int h){
 
 }
 
