@@ -5,51 +5,90 @@
 #ifndef _DATA_H_
 #define _DATA_H_
 
-class GpsPoint {
-	double latitude;
-	double longitude;
-	double elevation;
-	std::string timestamp;
+class GpsPoint 
+{
+	int m_gpsPointId;
+	double m_latitude;
+	double m_longitude;
+	double m_elevation;
+	std::string m_timestamp;
 	
 public:
 	GpsPoint()
 	:
-	latitude(0.0),
-	longitude(0.0),
-	elevation(0.0),
-	timestamp("")
+	m_gpsPointId(0),
+	m_latitude(0.0),
+	m_longitude(0.0),
+	m_elevation(0.0),
+	m_timestamp("")
 	{};
+	
 	~GpsPoint(){};
-	void setGpsPoint(double lat, double lon, double ele, std::string time)
+
+	void setGpsPoint(double latitude, double longitude, double elevation, std::string timestamp)
 	{
-		latitude = lat;
-		longitude = lon;
-		elevation = ele;
-		timestamp = time;
+		++m_gpsPointId;
+		m_latitude = latitude;
+		m_longitude = longitude;
+		m_elevation = elevation;
+		m_timestamp = timestamp;
 	}
-	double getLatitude() const { return latitude; }
-	double getLongitude() const { return longitude; }
-	double getElevation() const { return elevation; }
-	std::string getTimestamp() const { return timestamp; }
+	double getLatitude() const { return m_latitude; }
+	double getLongitude() const { return m_longitude; }
+	double getElevation() const { return m_elevation; }
+	std::string getTimestamp() const { return m_timestamp; }
 };
 
-class GpsSegment {
-	std::vector<GpsPoint*> points;
-	int segment;
+class GpsSegment 
+{
+	int m_gpsSegmentId;
+	std::vector<GpsPoint*> m_points;
+	int m_segment;
+
 public:
+	
 	GpsSegment()
 	:
-	points(NULL),
-	segment(0)
+	m_gpsSegmentId(0),
+	m_points(NULL),
+	m_segment(0)
 	{};
+	
 	~GpsSegment(){};
-	void setGpsSegment(std::vector<GpsPoint*> pts, int seg)
+	
+	void setGpsSegment(std::vector<GpsPoint*> points, int segment)
 	{
-		points = pts;
-		segment = seg;
+		++m_gpsSegmentId;
+		m_points = points;
+		m_segment = segment;
 	}
-	std::vector<GpsPoint*> getPoints() const { return points; }
-	int getSegment() const { return segment; }
+	std::vector<GpsPoint*> getPoints() const { return m_points; }
+	int getSegment() const { return m_segment; }
+};
+
+class GpsData 
+{
+	int m_gpsDataId;
+	std::vector<GpsSegment*> m_segments;
+	int m_user;
+
+public:
+	GpsData()
+	:
+	m_gpsDataId(0),
+	m_segments(NULL),
+	m_user(-1)
+	{};
+	
+	~GpsData(){};
+	
+	void setGpsData(std::vector<GpsSegment*> segments, int user)
+	{
+		++m_gpsDataId;
+		m_segments = segments;
+		m_user = user;
+	}
+	
 };
 
 #endif // _DATA_H_

@@ -37,8 +37,6 @@ public:
 	
 	
 	ofxXmlSettings settings;
-	//ofxSQLite* sqlite;
-	
 	DBReader* m_dbReader;
 };
 
