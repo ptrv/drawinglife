@@ -1,3 +1,7 @@
+/*=======================================================
+ Copyright (c) avp::ptr, 2010
+=======================================================*/
+
 #include "ofMain.h"
 #include "testApp.h"
 #include "ofAppGlutWindow.h"

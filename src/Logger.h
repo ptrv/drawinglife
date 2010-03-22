@@ -1,5 +1,5 @@
 /*=======================================================
- Copyright (c) Peter Vasil, 2010
+ Copyright (c) avp::ptr, 2010
 =======================================================*/
 
 #ifndef _LOGGER_H_
@@ -37,6 +37,7 @@ public:
 #define LOG_ERROR(format, args)			ofLog(OF_LOG_ERROR, format, args)
 #define LOG_FATAL_ERROR(format, args)	ofLog(OF_LOG_FATAL_ERROR, format, args)
 #define LOG_NOTICE(format, args)		ofLog(OF_LOG_NOTICE, format, args)
+#define LOG_VALUE(format, args)			ofLog(OF_LOG_SILENT, format, args)
 
 #define DBG_VAL(value)					Logger::logValue(__PRETTY_FUNCTION__, #value, value)
 

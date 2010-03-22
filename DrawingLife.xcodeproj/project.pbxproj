@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D048D8291157A78C00DFF8D9 /* sqlite3x_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8241157A78C00DFF8D9 /* sqlite3x_command.cpp */; };
+		D048D82A1157A78C00DFF8D9 /* sqlite3x_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8251157A78C00DFF8D9 /* sqlite3x_connection.cpp */; };
+		D048D82B1157A78C00DFF8D9 /* sqlite3x_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8261157A78C00DFF8D9 /* sqlite3x_exception.cpp */; };
+		D048D82C1157A78C00DFF8D9 /* sqlite3x_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8271157A78C00DFF8D9 /* sqlite3x_reader.cpp */; };
+		D048D82D1157A78C00DFF8D9 /* sqlite3x_transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8281157A78C00DFF8D9 /* sqlite3x_transaction.cpp */; };
+		D048D8431157A82B00DFF8D9 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D048D8401157A82B00DFF8D9 /* sqlite3.c */; };
+		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
 		E44667010F5B3E04005D0BF0 /* model3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D70F5B3E03005D0BF0 /* model3DS.cpp */; };
 		E44667020F5B3E04005D0BF0 /* texture3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */; };
 		E44667030F5B3E04005D0BF0 /* ofx3dModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665DD0F5B3E03005D0BF0 /* ofx3dModelLoader.cpp */; };
@@ -108,6 +115,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D048D8231157A78C00DFF8D9 /* sqlite3x.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sqlite3x.hpp; sourceTree = "<group>"; };
+		D048D8241157A78C00DFF8D9 /* sqlite3x_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_command.cpp; sourceTree = "<group>"; };
+		D048D8251157A78C00DFF8D9 /* sqlite3x_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_connection.cpp; sourceTree = "<group>"; };
+		D048D8261157A78C00DFF8D9 /* sqlite3x_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_exception.cpp; sourceTree = "<group>"; };
+		D048D8271157A78C00DFF8D9 /* sqlite3x_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_reader.cpp; sourceTree = "<group>"; };
+		D048D8281157A78C00DFF8D9 /* sqlite3x_transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_transaction.cpp; sourceTree = "<group>"; };
+		D048D8401157A82B00DFF8D9 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
+		D048D8411157A82B00DFF8D9 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		D048D8421157A82B00DFF8D9 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		D048D8F61157B7FA00DFF8D9 /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Data.h; sourceTree = "<group>"; };
+		D07156AD11515155008CEA46 /* DBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBReader.h; sourceTree = "<group>"; };
+		D07156AE11515155008CEA46 /* DBReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DBReader.cpp; sourceTree = "<group>"; };
+		D07157751151BEFD008CEA46 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		E44665D70F5B3E03005D0BF0 /* model3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.cpp; sourceTree = SOURCE_ROOT; };
 		E44665D80F5B3E03005D0BF0 /* model3DS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model3DS.h; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.h; sourceTree = SOURCE_ROOT; };
 		E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/texture3DS.cpp; sourceTree = SOURCE_ROOT; };
@@ -286,6 +306,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D048D8221157A78C00DFF8D9 /* sqlite3x */ = {
+			isa = PBXGroup;
+			children = (
+				D048D8401157A82B00DFF8D9 /* sqlite3.c */,
+				D048D8411157A82B00DFF8D9 /* sqlite3.h */,
+				D048D8421157A82B00DFF8D9 /* sqlite3ext.h */,
+				D048D8231157A78C00DFF8D9 /* sqlite3x.hpp */,
+				D048D8241157A78C00DFF8D9 /* sqlite3x_command.cpp */,
+				D048D8251157A78C00DFF8D9 /* sqlite3x_connection.cpp */,
+				D048D8261157A78C00DFF8D9 /* sqlite3x_exception.cpp */,
+				D048D8271157A78C00DFF8D9 /* sqlite3x_reader.cpp */,
+				D048D8281157A78C00DFF8D9 /* sqlite3x_transaction.cpp */,
+			);
+			path = sqlite3x;
+			sourceTree = "<group>";
+		};
 		E44665C70F5B3E03005D0BF0 /* addons */ = {
 			isa = PBXGroup;
 			children = (
@@ -880,6 +916,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				D048D8221157A78C00DFF8D9 /* sqlite3x */,
 				E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -895,6 +932,10 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
+				D07156AD11515155008CEA46 /* DBReader.h */,
+				D07156AE11515155008CEA46 /* DBReader.cpp */,
+				D07157751151BEFD008CEA46 /* Logger.h */,
+				D048D8F61157B7FA00DFF8D9 /* Data.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1081,6 +1122,13 @@
 				E4D9467E0F5F492F00B90D9D /* ofxMatrix3x3.cpp in Sources */,
 				E4485C3110E4BDE2003102AC /* ofxMatrix4x4.cpp in Sources */,
 				E4485C4510E54E89003102AC /* ofxQuaternion.cpp in Sources */,
+				D07156AF11515155008CEA46 /* DBReader.cpp in Sources */,
+				D048D8291157A78C00DFF8D9 /* sqlite3x_command.cpp in Sources */,
+				D048D82A1157A78C00DFF8D9 /* sqlite3x_connection.cpp in Sources */,
+				D048D82B1157A78C00DFF8D9 /* sqlite3x_exception.cpp in Sources */,
+				D048D82C1157A78C00DFF8D9 /* sqlite3x_reader.cpp in Sources */,
+				D048D82D1157A78C00DFF8D9 /* sqlite3x_transaction.cpp in Sources */,
+				D048D8431157A82B00DFF8D9 /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
