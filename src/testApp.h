@@ -7,16 +7,9 @@
 
 
 #include "ofMain.h"
-#include "Logger.h"
-//#include "ofxOpenCv.h"
-//#include "ofxDirList.h"
-//#include "ofxVectorMath.h"
-//#include "ofxNetwork.h"
-//#include "ofxOsc.h"
-//#include "ofxThread.h"
 #include "ofxXmlSettings.h"
-//#include "ofx3DModelLoader.h"
-//#include "ofxSQLiteHeaders.h"
+
+#include "Logger.h"
 #include "DBReader.h"
 
 class testApp : public ofBaseApp{

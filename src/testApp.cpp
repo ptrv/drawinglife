@@ -7,30 +7,44 @@
 #include <vector>
 //--------------------------------------------------------------
 void testApp::setup(){
+	
 	ofSetFrameRate(20);
+
+	// reading settings from xml file
 	settings.loadFile("AppSettings.xml");
 	ofSetLogLevel(settings.getAttribute("settings:log", "level", 0));
 	string dbPath = ofToDataPath(settings.getValue("settings:database", "test.db"), true);
+	
 	DBG_VAL(dbPath);
+	
+	GpsData gpsData;
+	
+	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
-	vector<GpsPoint> qVec;
 	m_dbReader->setupDbConnection();
-	//m_dbReader->getQuery(qVec);
-	m_dbReader->getGpsDataDayRange(qVec, 9, 11);
+	m_dbReader->getGpsDataDay(gpsData, 11);
 	m_dbReader->closeDbConnection();
-//	for (unsigned int i = 0; i < qVec.size(); ++i) {
-//		stringstream message;
-//		message << "Value " << i << ": ";
-//		message << ofToString(qVec[i].getLongitude());
-//		message << ", ";
-//		message << ofToString(qVec[i].getLatitude());
-//		message << ", ";
-//		message << ofToString(qVec[i].getElevation());
-//		message << ", ";
-//		message << qVec[i].getTimestamp();
-//		//ofLog(OF_LOG_SILENT, "value %i: %lf, %lf, %lf, %s",i, , ,, );
-//		ofLog(OF_LOG_SILENT, message.str());
-//	}
+	
+	// test print
+	int k = 0;
+	for (unsigned int i = 0; i < gpsData.getSegments().size(); ++i) {
+		for (unsigned int j = 0; j < gpsData.getSegments()[i].getPoints().size(); ++j) {
+			stringstream message;
+			message << "Value i " << i << ", j " << j << ", k " << k <<": ";
+			message << ofToString(gpsData.getSegments()[i].getPoints()[j].getLongitude());
+			message << ", ";
+			message << ofToString(gpsData.getSegments()[i].getPoints()[j].getLatitude());
+			message << ", ";
+			message << ofToString(gpsData.getSegments()[i].getPoints()[j].getElevation());
+			message << ", ";
+			message << gpsData.getSegments()[i].getPoints()[j].getTimestamp();
+			message << ", ";
+			message << gpsData.getSegments()[i].getSegmentNum();
+			ofLog(OF_LOG_NOTICE, message.str() );
+			++k;
+		}
+	}
+	delete m_dbReader;
 }
 
 //--------------------------------------------------------------

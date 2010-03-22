@@ -5,31 +5,30 @@
 #ifndef _DBREADER_H_
 #define _DBREADER_H_
 
+#include "Data.h"
 #include <string>
 #include "sqlite3x.hpp"
 using namespace sqlite3x;
 
 using namespace std;
 
-#include "Data.h"
+
 class DBReader {
 public:
-	//DBReader();
 	DBReader(const string& dbpath);
 	~DBReader();
-	bool getQuery(vector<GpsPoint>& queryVec);
 	void setupDbConnection();
 	void closeDbConnection();
-	bool getGpsDataDay(vector<GpsPoint>& queryVec, int day);
-	bool getGpsDataDayRange(vector<GpsPoint>& queryVec, int dayStart, int dayEnd);
-	bool getGpsDataMonth(vector<GpsPoint>& queryVec, int month);
-	bool getGpsDataMonthRange(vector<GpsPoint>& queryVec, int monthStart, int monthEnd);
-	bool getGpsDataYear(vector<GpsPoint>& queryVec, int year);
-	bool getGpsDataYearRange(vector<GpsPoint>& queryVec, int yearStart, int yearEnd);
+	bool getGpsDataDay(GpsData& gpsData, int day);
+	bool getGpsDataDayRange(GpsData& gpsData, int dayStart, int dayEnd);
+	bool getGpsDataMonth(GpsData& gpsData, int month);
+	bool getGpsDataMonthRange(GpsData& gpsData, int monthStart, int monthEnd);
+	bool getGpsDataYear(GpsData& gpsData, int year);
+	bool getGpsDataYearRange(GpsData& gpsData, int yearStart, int yearEnd);
 	
 private:
 	
-	bool getGpsData(vector<GpsPoint>& gpsDataVec, const std::string& query);
+	bool getGpsData(GpsData& gpsData, const std::string& query);
 	
 	// -----------------------------------------------------------------------------
 	
