@@ -12,7 +12,10 @@ using namespace sqlite3x;
 
 using namespace std;
 
-
+/**
+ * \brief Class for reading from database using sqlite3x.
+ * 
+ */
 class DBReader {
 public:
 	DBReader(const string& dbpath);

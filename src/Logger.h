@@ -5,6 +5,13 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
+/**
+ * \brief Wrapper class for ofLog.
+ *
+ * Makes easy to debug values of various types.
+ */
+
+
 class Logger {
 private:
 	Logger();

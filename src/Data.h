@@ -5,6 +5,11 @@
 #ifndef _DATA_H_
 #define _DATA_H_
 
+/**
+ * \brief Holds one gps point with timestamp.
+ * 
+ */
+
 class GpsPoint 
 {
 	int m_gpsPointId;
@@ -47,6 +52,11 @@ public:
 	}
 };
 
+/**
+ * \brief Has vector with GpsPoints that have the same segment number. 
+ * 
+ */
+
 class GpsSegment 
 {
 	int m_gpsSegmentId;
@@ -79,6 +89,11 @@ public:
 		m_gpsSegmentId = 0;
 	}
 };
+
+/**
+ * \brief Holds a vector with segments and user.
+ *
+ */
 
 class GpsData 
 {

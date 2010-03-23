@@ -12,6 +12,10 @@
 #include "Logger.h"
 #include "DBReader.h"
 
+/**
+ *  \brief Main application class.
+ */
+
 class DrawingLifeApp : public ofBaseApp{
 	
 public:
