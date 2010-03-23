@@ -6,47 +6,51 @@
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
+DrawingLifeApp::~DrawingLifeApp()
+{
+	delete m_gpsData;
+}
 void DrawingLifeApp::setup(){
 	
 	ofSetFrameRate(20);
 
 	// reading settings from xml file
-	settings.loadFile("AppSettings.xml");
-	ofSetLogLevel(settings.getAttribute("settings:log", "level", 0));
+	m_settings.loadFile("AppSettings.xml");
+	ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
 	// db path must be absolute path for DBReader
-	string dbPath = ofToDataPath(settings.getValue("settings:database", "test.db"), true);
+	string dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.db"), true);
 	
 	DBG_VAL(dbPath);
 	
-	GpsData gpsData;
+	m_gpsData = new GpsData();
 	
 	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
-	m_dbReader->getGpsDataDay(gpsData, 11);
+	m_dbReader->getGpsDataDay(*m_gpsData, 11);
 	m_dbReader->closeDbConnection();
 	
 	// test print
 	int k = 0;
-	for (unsigned int i = 0; i < gpsData.getSegments().size(); ++i) {
-		for (unsigned int j = 0; j < gpsData.getSegments()[i].getPoints().size(); ++j) {
+	for (unsigned int i = 0; i < m_gpsData->getSegments().size(); ++i) {
+		for (unsigned int j = 0; j < m_gpsData->getSegments()[i].getPoints().size(); ++j) {
 			stringstream message;
 			//message << "Value i " << i << ", j " << j << ", k " << k <<": ";
 			message << "GpsPoint nr " << k << ": ";
-			message << gpsData.getSegments()[i].getPoints()[j].getLatitude();
-			DBG_VAL(gpsData.getSegments()[i].getPoints()[j].getLatitude());
+			message << m_gpsData->getSegments()[i].getPoints()[j].getLatitude();
 			message << ", ";
-			message << gpsData.getSegments()[i].getPoints()[j].getLongitude();
+			message << m_gpsData->getSegments()[i].getPoints()[j].getLongitude();
 			message << ", ";
-			message << gpsData.getSegments()[i].getPoints()[j].getElevation();
+			message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
 			message << ", ";
-			message << gpsData.getSegments()[i].getPoints()[j].getTimestamp();
+			message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
 			message << ", ";
-			message << gpsData.getSegments()[i].getSegmentNum();
+			message << m_gpsData->getSegments()[i].getSegmentNum();
 			ofLog(OF_LOG_NOTICE, message.str() );
 			++k;
 		}
 	}
+	
 	delete m_dbReader;
 }
 

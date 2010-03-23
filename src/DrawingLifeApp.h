@@ -16,6 +16,7 @@ class DrawingLifeApp : public ofBaseApp{
 	
 public:
 	
+	~DrawingLifeApp();
 	void setup();
 	void update();
 	void draw();
@@ -29,8 +30,9 @@ public:
 	void resized(int w, int h);
 	
 	
-	ofxXmlSettings settings;
+	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
+	GpsData* m_gpsData;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
