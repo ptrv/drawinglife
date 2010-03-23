@@ -82,7 +82,8 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 			
 			int currentSegment = reader.getint(5);
 			user = reader.getint(6);
-
+			
+			// for logging
 //			ofLog(OF_LOG_NOTICE, "userid: %d, lat: %lf, lon: %lf, ele: %lf, time: %s, segment: %d, user: %d", 
 //				  reader.getint(0), reader.getdouble(1), reader.getdouble(2), reader.getdouble(3), reader.getstring(4).c_str(), currentSegment, user);
 			

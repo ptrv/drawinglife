@@ -13,6 +13,7 @@ void DrawingLifeApp::setup(){
 	// reading settings from xml file
 	settings.loadFile("AppSettings.xml");
 	ofSetLogLevel(settings.getAttribute("settings:log", "level", 0));
+	// db path must be absolute path for DBReader
 	string dbPath = ofToDataPath(settings.getValue("settings:database", "test.db"), true);
 	
 	DBG_VAL(dbPath);
@@ -30,12 +31,14 @@ void DrawingLifeApp::setup(){
 	for (unsigned int i = 0; i < gpsData.getSegments().size(); ++i) {
 		for (unsigned int j = 0; j < gpsData.getSegments()[i].getPoints().size(); ++j) {
 			stringstream message;
-			message << "Value i " << i << ", j " << j << ", k " << k <<": ";
-			message << ofToString(gpsData.getSegments()[i].getPoints()[j].getLongitude());
+			//message << "Value i " << i << ", j " << j << ", k " << k <<": ";
+			message << "GpsPoint nr " << k << ": ";
+			message << gpsData.getSegments()[i].getPoints()[j].getLatitude();
+			DBG_VAL(gpsData.getSegments()[i].getPoints()[j].getLatitude());
 			message << ", ";
-			message << ofToString(gpsData.getSegments()[i].getPoints()[j].getLatitude());
+			message << gpsData.getSegments()[i].getPoints()[j].getLongitude();
 			message << ", ";
-			message << ofToString(gpsData.getSegments()[i].getPoints()[j].getElevation());
+			message << gpsData.getSegments()[i].getPoints()[j].getElevation();
 			message << ", ";
 			message << gpsData.getSegments()[i].getPoints()[j].getTimestamp();
 			message << ", ";
