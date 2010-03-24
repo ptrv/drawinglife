@@ -117,6 +117,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		}
 		gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
 		gpsSegmentVec.push_back(gpsSeg);
+		gpsData.clear();
 		gpsData.setGpsData(gpsSegmentVec, user);
 	}
 	CATCHDBERRORSQ(query)

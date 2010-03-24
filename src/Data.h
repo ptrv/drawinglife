@@ -30,7 +30,7 @@ public:
 	
 	~GpsPoint(){};
 
-	void setGpsPoint(double latitude, double longitude, double elevation, std::string timestamp)
+	void setGpsPoint(double latitude, double longitude, double elevation, const std::string& timestamp)
 	{
 		++m_gpsPointId;
 		m_latitude = latitude;
@@ -74,7 +74,7 @@ public:
 	
 	~GpsSegment(){};
 	
-	void setGpsSegment(std::vector<GpsPoint> points, int segment)
+	void setGpsSegment(const std::vector<GpsPoint>& points, int segment)
 	{
 		++m_gpsSegmentId;
 		m_points = points;
@@ -111,7 +111,7 @@ public:
 	
 	~GpsData(){};
 	
-	void setGpsData(std::vector<GpsSegment> segments, int user)
+	void setGpsData(const std::vector<GpsSegment>& segments, int user)
 	{
 		++m_gpsDataId;
 		m_segments = segments;
