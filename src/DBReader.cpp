@@ -70,10 +70,10 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		DBG_VAL(query);
 		
 		int lastSegment = -1;
-		std::vector<GpsPoint> gpsPointVec;
-		GpsSegment gpsSeg;
-		std::vector<GpsSegment> gpsSegmentVec;
 		int user = -1;
+		GpsSegment gpsSeg;
+		std::vector<GpsPoint> gpsPointVec;
+		std::vector<GpsSegment> gpsSegmentVec;
 
 		while(reader.read())
 		{
@@ -85,7 +85,13 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 			
 			// for logging
 //			ofLog(OF_LOG_NOTICE, "userid: %d, lat: %lf, lon: %lf, ele: %lf, time: %s, segment: %d, user: %d", 
-//				  reader.getint(0), reader.getdouble(1), reader.getdouble(2), reader.getdouble(3), reader.getstring(4).c_str(), currentSegment, user);
+//				  reader.getint(0),
+//				  reader.getdouble(1),
+//				  reader.getdouble(2),
+//				  reader.getdouble(3),
+//				  reader.getstring(4).c_str(),
+//				  currentSegment,
+//				  user);
 			
 			if (currentSegment != lastSegment) 
 			{
