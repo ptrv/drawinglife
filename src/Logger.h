@@ -5,6 +5,10 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
+#ifndef __GNUC__
+# define __PRETTY_FUNCTION__ __FUNCTION__
+#endif
+
 /**
  * \brief Wrapper class for ofLog.
  *

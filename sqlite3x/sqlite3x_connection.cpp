@@ -23,7 +23,7 @@
 		$Revision: 1.1 $
 */
 
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include "sqlite3x.hpp"
 
 namespace sqlite3x {

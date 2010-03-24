@@ -191,15 +191,31 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\src\Data.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DBReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DBReader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DrawingLifeApp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DrawingLifeApp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Logger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\testApp.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\testApp.h"
 				>
 			</File>
 		</Filter>
@@ -449,6 +465,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxMatrix4x4.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxMatrix4x4.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxPoint2f.h"
 						>
 					</File>
@@ -461,6 +485,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxQuaternion.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxQuaternion.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxVec2f.h"
 						>
 					</File>
@@ -470,22 +502,6 @@
 					</File>
 					<File
 						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxVec4f.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxMatrix4x4.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxMatrix4x4.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxQuaternion.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\addons\ofxVectorMath\src\ofxQuaternion.cpp"
 						>
 					</File>
 					<File
@@ -566,6 +582,46 @@
 					</File>
 				</Filter>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="sqlite3x"
+			>
+			<File
+				RelativePath=".\sqlite3x\sqlite3.c"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3ext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3x.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3x_command.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3x_connection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3x_exception.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3x_reader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\sqlite3x\sqlite3x_transaction.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
