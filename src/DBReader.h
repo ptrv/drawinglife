@@ -22,17 +22,17 @@ public:
 	~DBReader();
 	void setupDbConnection();
 	void closeDbConnection();
-	bool getGpsDataDay(GpsData& gpsData, const string& username, int day);
-	bool getGpsDataDayRange(GpsData& gpsData, const string& username, int dayStart, int dayEnd);
-	bool getGpsDataMonth(GpsData& gpsData, const string& username, int month);
-	bool getGpsDataMonthRange(GpsData& gpsData, const string& username, int monthStart, int monthEnd);
-	bool getGpsDataYear(GpsData& gpsData, const string& username, int year);
-	bool getGpsDataYearRange(GpsData& gpsData, const string& username, int yearStart, int yearEnd);
+	bool getGpsDataDay(GpsData& gpsData, const string& userName, int day);
+	bool getGpsDataDayRange(GpsData& gpsData, const string& userName, int dayStart, int dayEnd);
+	bool getGpsDataMonth(GpsData& gpsData, const string& userName, int month);
+	bool getGpsDataMonthRange(GpsData& gpsData, const string& userName, int monthStart, int monthEnd);
+	bool getGpsDataYear(GpsData& gpsData, const string& userName, int year);
+	bool getGpsDataYearRange(GpsData& gpsData, const string& userName, int yearStart, int yearEnd);
 	
 private:
 	
 	bool getGpsData(GpsData& gpsData, const std::string& query);
-//	bool getMinMax(double 
+
 	// -----------------------------------------------------------------------------
 	
 	string m_dbPath;

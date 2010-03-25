@@ -94,7 +94,7 @@ public:
 };
 
 /**
- * \brief Holds a vector with segments and user.
+ * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
  *
  */
 

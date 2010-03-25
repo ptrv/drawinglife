@@ -54,6 +54,7 @@ void DrawingLifeApp::setup(){
 			++maxPoints;
 		}
 	}
+	// printing min/max values
 	ofLog(OF_LOG_NOTICE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf", 
 		  m_gpsData->getMinLon(), 
 		  m_gpsData->getMaxLon(),

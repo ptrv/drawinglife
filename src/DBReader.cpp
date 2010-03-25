@@ -63,6 +63,8 @@ void DBReader::closeDbConnection()
 bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 {
 	bool result = false;
+	bool queryFirstOk = false;
+	stringstream queryMinMax;
 	try {
 		sqlite3_command cmd(*m_dbconn, query.c_str());
 		sqlite3_reader reader=cmd.executereader();
@@ -74,7 +76,11 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		GpsSegment gpsSeg;
 		std::vector<GpsPoint> gpsPointVec;
 		std::vector<GpsSegment> gpsSegmentVec;
+		
 
+		// -----------------------------------------------------------------------------
+		// Get all data from query.
+		// -----------------------------------------------------------------------------
 		while(reader.read())
 		{
 			GpsPoint gpsPoint;
@@ -115,9 +121,15 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 				gpsPointVec.push_back(gpsPoint);				
 			}
 		}
+		queryFirstOk = true;
+		// -----------------------------------------------------------------------------
+		
 		gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
 		gpsSegmentVec.push_back(gpsSeg);
 		
+		// -----------------------------------------------------------------------------
+		// Get min/max values for query.
+		// -----------------------------------------------------------------------------
 		size_t posS = query.find("FROM");
 		size_t posE = query.find(" ORDER");
 		stringstream queryMinMax;
@@ -137,15 +149,16 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 			minLat = readerMinMax.getdouble(2);
 			maxLat = readerMinMax.getdouble(3);
 		}
+		// -----------------------------------------------------------------------------
 		gpsData.clear();
 		gpsData.setGpsData(gpsSegmentVec, minLon, maxLon, minLat, maxLat, user);
 	}
-	CATCHDBERRORSQ(query)
+	CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))
 	return result;
 }
 
 
-bool DBReader::getGpsDataDay(GpsData& gpsData, const string& username, int day)
+bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int day)
 {
 	bool result = false;
 	stringstream query;
@@ -157,7 +170,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const string& username, int day)
 	query << "FROM 'gpsdata' AS 'a' ";
 	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
 	query << "WHERE name = '";
-	query << username;
+	query << userName;
 	query << "' AND strftime('%d', time) = '";
 	query << (day < 10 ? "0" : "");
 	query << day;
@@ -165,7 +178,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const string& username, int day)
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
-bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& username, int dayStart, int dayEnd)
+bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int dayStart, int dayEnd)
 {
 	bool result = false;
 	stringstream query;
@@ -176,7 +189,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& username, int 
 	query << "FROM 'gpsdata' AS 'a' ";
 	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
 	query << "WHERE name = '";
-	query << username;
+	query << userName;
 	query << "' AND strftime('%d', time) >= '";
 	query << (dayStart < 10 ? "0" : "");
 	query << dayStart;
@@ -189,7 +202,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& username, int 
 	return result;
 }
 
-bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& username, int month)
+bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int month)
 {
 	bool result = false;
 	stringstream query;
@@ -200,7 +213,7 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& username, int mon
 	query << "FROM 'gpsdata' AS 'a' ";
 	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
 	query << "WHERE name = '";
-	query << username;
+	query << userName;
 	query << "' AND strftime('%m', time) >= '";
 	query << (month < 10 ? "0" : "");
 	query << month;
@@ -210,7 +223,7 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& username, int mon
 	return result;
 }
 
-bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& username, int monthStart, int monthEnd)
+bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, int monthStart, int monthEnd)
 {
 	bool result = false;
 	stringstream query;
@@ -221,7 +234,7 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& username, in
 	query << "FROM 'gpsdata' AS 'a' ";
 	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
 	query << "WHERE name = '";
-	query << username;
+	query << userName;
 	query << "' AND strftime('%m', time) >= '";
 	query << (monthStart < 10 ? "0" : "");
 	query << monthStart;
@@ -234,7 +247,7 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& username, in
 	return result;
 }
 
-bool DBReader::getGpsDataYear(GpsData& gpsData, const string& username, int year)
+bool DBReader::getGpsDataYear(GpsData& gpsData, const string& userName, int year)
 {
 	bool result = false;
 	stringstream query;
@@ -245,7 +258,7 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const string& username, int year
 	query << "FROM 'gpsdata' AS 'a' ";
 	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
 	query << "WHERE name = '";
-	query << username;
+	query << userName;
 	query << "' AND strftime('%Y', time) >= '";
 	query << (year < 10 ? "0" : "");
 	query << year;
@@ -255,7 +268,7 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const string& username, int year
 	return result;
 }
 
-bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& username, int yearStart, int yearEnd)
+bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& userName, int yearStart, int yearEnd)
 {
 	bool result = false;
 	stringstream query;
@@ -266,7 +279,7 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& username, int
 	query << "FROM 'gpsdata' AS 'a' ";
 	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
 	query << "WHERE name = '";
-	query << username;
+	query << userName;
 	query << "' AND strftime('%Y', time) >= '";
 	query << (yearStart < 10 ? "0" : "");
 	query << yearStart;
