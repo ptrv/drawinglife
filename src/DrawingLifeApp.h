@@ -41,6 +41,7 @@ public:
 	int currentGpsSegment;
 	int maxPoints;
 	int currentPoint;
+	bool m_firstPoint;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

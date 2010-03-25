@@ -15,7 +15,7 @@ DrawingLifeApp::~DrawingLifeApp()
 }
 void DrawingLifeApp::setup(){
 	
-	ofSetFrameRate(10);
+	ofSetFrameRate(20);
 
 	// reading settings from xml file
 	m_settings.loadFile("AppSettings.xml");
@@ -30,7 +30,7 @@ void DrawingLifeApp::setup(){
 	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
-	m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 9);
+	m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 18);
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
 	
@@ -67,22 +67,25 @@ void DrawingLifeApp::setup(){
 	
 	ofBackground(0, 0, 0);
 	
-	currentGpsPoint = -1;
+	currentGpsPoint = 0;
 	currentGpsSegment = 0;
 	currentPoint = -1;
+	m_firstPoint = true;
 }
 
 //--------------------------------------------------------------
 void DrawingLifeApp::update(){
-	
+
 	if (m_gpsData->getSegments().size() > 0) 
 	{
-		
 		if ((unsigned int)currentGpsSegment < m_gpsData->getSegments().size()-1) 
 		{
 			if ((unsigned int)currentGpsPoint < m_gpsData->getSegments()[currentGpsSegment].getPoints().size() - 1) 
 			{
-				++currentGpsPoint;
+				if (!m_firstPoint) 
+					++currentGpsPoint;
+				else
+					m_firstPoint = false;
 			}
 			else
 			{
@@ -92,9 +95,16 @@ void DrawingLifeApp::update(){
 		}
 		else
 		{
-			currentGpsPoint = 0;
-			currentGpsSegment = 0;
-			currentPoint = -1;
+			if ((unsigned int)currentGpsPoint < m_gpsData->getSegments()[currentGpsSegment].getPoints().size() - 1) 
+			{
+				++currentGpsPoint;
+			}
+			else
+			{
+				currentGpsPoint = 0;
+				currentGpsSegment = 0;
+				currentPoint = -1;
+			}
 		}
 		++currentPoint;
 	}
@@ -104,7 +114,7 @@ void DrawingLifeApp::update(){
 //--------------------------------------------------------------
 void DrawingLifeApp::draw(){
 	
-	if (m_gpsData->getSegments().size() > 0)
+	if (m_gpsData->getSegments().size() > 0 && m_gpsData->getSegments()[currentGpsSegment].getPoints().size() > 0)
 	{
 		double lat = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLatitude();
 		double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
@@ -114,11 +124,14 @@ void DrawingLifeApp::draw(){
 		"Longitude:  " + ofToString(lon) + "\n" +
 		"Elevation:  " + ofToString(ele) + "\n" +
 		"Time:       " + timest + "\n" +
-		"Cur. point: " + ofToString(currentPoint);
+		"Cur. point: " + ofToString(currentPoint) + "\n" +
+		"Segment nr: " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum());
 		
+		//ofLog(OF_LOG_VERBOSE, ofToString(currentPoint));
+		ofLog(OF_LOG_VERBOSE, ofToString(currentPoint) + " " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum()));
 		ofFill();
 		ofSetColor(0xE5A93F);
-		ofRect(10,10,300,85);
+		ofRect(10,10,300,100);
 		ofSetColor(0x000000);
 		ofDrawBitmapString(info,30,30);
 	}
