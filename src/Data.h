@@ -30,7 +30,10 @@ public:
 	
 	~GpsPoint(){};
 
-	void setGpsPoint(double latitude, double longitude, double elevation, const std::string& timestamp)
+	void setGpsPoint(double latitude, 
+					 double longitude, 
+					 double elevation, 
+					 const std::string& timestamp)
 	{
 		++m_gpsPointId;
 		m_latitude = latitude;
@@ -41,7 +44,7 @@ public:
 	double getLatitude() const { return m_latitude; }
 	double getLongitude() const { return m_longitude; }
 	double getElevation() const { return m_elevation; }
-	std::string getTimestamp() const { return m_timestamp; }
+	const std::string& getTimestamp() const { return m_timestamp; }
 	void clear()
 	{
 		m_gpsPointId = 0;
@@ -68,7 +71,6 @@ public:
 	GpsSegment()
 	:
 	m_gpsSegmentId(0),
-	m_points(NULL),
 	m_segment(-1)
 	{};
 	
@@ -77,6 +79,7 @@ public:
 	void setGpsSegment(const std::vector<GpsPoint>& points, int segment)
 	{
 		++m_gpsSegmentId;
+		m_points.clear();
 		m_points = points;
 		m_segment = segment;
 	}
@@ -99,32 +102,56 @@ class GpsData
 {
 	int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;
-	int m_user;
+	std::string m_user;
+	double m_minLon;
+	double m_maxLon;
+	double m_minLat;
+	double m_maxLat;
 
 public:
 	GpsData()
 	:
 	m_gpsDataId(0),
-	m_segments(NULL),
-	m_user(-1)
+	m_user(""),
+	m_minLon(0.0),
+	m_maxLon(0.0),
+	m_minLat(0.0),
+	m_maxLat(0.0)
 	{};
 	
 	~GpsData(){};
 	
-	void setGpsData(const std::vector<GpsSegment>& segments, int user)
+	void setGpsData(const std::vector<GpsSegment>& segments, 
+					double minLon, 
+					double maxLon, 
+					double minLat, 
+					double maxLat, 
+					const std::string& user)
 	{
 		++m_gpsDataId;
+		m_segments.clear();
 		m_segments = segments;
+		m_minLon = minLon;
+		m_maxLon = maxLon;
+		m_minLat = minLat;
+		m_maxLat = maxLat;
 		m_user = user;
 	}
 	void clear()
 	{
 		m_gpsDataId = 0;
 		m_segments.clear();
-		m_user = -1;
+		m_minLon = 0.0;
+		m_maxLon = 0.0;
+		m_minLat = 0.0;
+		m_maxLat = 0.0;
+		m_user = "";
 	}
 	std::vector<GpsSegment> getSegments() const { return m_segments; }
-	
+	double getMinLon() const { return m_minLon; }
+	double getMaxLon() const { return m_maxLon; }
+	double getMinLat() const { return m_minLat; }
+	double getMaxLat() const { return m_maxLat; }	
 	
 };
 

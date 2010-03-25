@@ -37,6 +37,10 @@ public:
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
 	GpsData* m_gpsData;
+	int currentGpsPoint;
+	int currentGpsSegment;
+	int maxPoints;
+	int currentPoint;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
