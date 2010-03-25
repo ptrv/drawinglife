@@ -132,7 +132,6 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		// -----------------------------------------------------------------------------
 		size_t posS = query.find("FROM");
 		size_t posE = query.find(" ORDER");
-		stringstream queryMinMax;
 		
 		queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
 		queryMinMax << query.substr(posS, (posE - posS));
@@ -157,18 +156,21 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 	return result;
 }
 
-
+const string DBReader::getBasicQueryString()
+{
+	// This is the part of the query string that all queries have common.
+	return	"SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"\
+			"'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',"\
+			"'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',"\
+			"'b'.'name' AS 'name' "\
+			"FROM 'gpsdata' AS 'a' "\
+			"JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+}
 bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int day)
 {
 	bool result = false;
 	stringstream query;
-	
-	query << "SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"; 
-	query << "'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',";
-	query << "'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',";
-	query << "'b'.'name' AS 'name' ";
-	query << "FROM 'gpsdata' AS 'a' ";
-	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
 	query << "' AND strftime('%d', time) = '";
@@ -182,12 +184,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int 
 {
 	bool result = false;
 	stringstream query;
-	query << "SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"; 
-	query << "'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',";
-	query << "'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',";
-	query << "'b'.'name' AS 'name' ";
-	query << "FROM 'gpsdata' AS 'a' ";
-	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
 	query << "' AND strftime('%d', time) >= '";
@@ -206,12 +203,7 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int mon
 {
 	bool result = false;
 	stringstream query;
-	query << "SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"; 
-	query << "'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',";
-	query << "'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',";
-	query << "'b'.'name' AS 'name' ";
-	query << "FROM 'gpsdata' AS 'a' ";
-	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
 	query << "' AND strftime('%m', time) >= '";
@@ -227,12 +219,7 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, in
 {
 	bool result = false;
 	stringstream query;
-	query << "SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"; 
-	query << "'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',";
-	query << "'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',";
-	query << "'b'.'name' AS 'name' ";
-	query << "FROM 'gpsdata' AS 'a' ";
-	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
 	query << "' AND strftime('%m', time) >= '";
@@ -251,12 +238,7 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const string& userName, int year
 {
 	bool result = false;
 	stringstream query;
-	query << "SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"; 
-	query << "'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',";
-	query << "'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',";
-	query << "'b'.'name' AS 'name' ";
-	query << "FROM 'gpsdata' AS 'a' ";
-	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
 	query << "' AND strftime('%Y', time) >= '";
@@ -272,12 +254,7 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& userName, int
 {
 	bool result = false;
 	stringstream query;
-	query << "SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"; 
-	query << "'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',";
-	query << "'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',";
-	query << "'b'.'name' AS 'name' ";
-	query << "FROM 'gpsdata' AS 'a' ";
-	query << "JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
 	query << "' AND strftime('%Y', time) >= '";
