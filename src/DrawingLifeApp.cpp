@@ -31,7 +31,6 @@ void DrawingLifeApp::setup(){
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
 	m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 9);
-	//m_dbReader->getGpsDataYear(*m_gpsData, 2010);
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
 	
@@ -75,50 +74,54 @@ void DrawingLifeApp::setup(){
 //--------------------------------------------------------------
 void DrawingLifeApp::update(){
 	
-//	if ((unsigned int)currentGpsSegment < m_gpsData->getSegments().size()-1) 
-//	{
-//		if ((unsigned int)currentGpsPoint < m_gpsData->getSegments()[currentGpsSegment].getPoints().size() - 1) 
-//		{
-//			currentGpsPoint++;
-//		}
-//		else
-//		{
-//			currentGpsSegment++;
-//			currentGpsPoint = 0;
-//		}
-//		
-//	}
-//	else
-//	{
-//		currentGpsPoint = 0;
-//		currentGpsSegment = 0;
-//		currentPoint = -1;
-//	}
-//	++currentPoint;
+	if (m_gpsData->getSegments().size() > 0) 
+	{
+		
+		if ((unsigned int)currentGpsSegment < m_gpsData->getSegments().size()-1) 
+		{
+			if ((unsigned int)currentGpsPoint < m_gpsData->getSegments()[currentGpsSegment].getPoints().size() - 1) 
+			{
+				++currentGpsPoint;
+			}
+			else
+			{
+				++currentGpsSegment;
+				currentGpsPoint = 0;
+			}
+		}
+		else
+		{
+			currentGpsPoint = 0;
+			currentGpsSegment = 0;
+			currentPoint = -1;
+		}
+		++currentPoint;
+	}
 }
 
 
 //--------------------------------------------------------------
 void DrawingLifeApp::draw(){
 	
-//	ofLog(OF_LOG_VERBOSE, ofToString(currentGpsSegment));
-//	ofLog(OF_LOG_VERBOSE, ofToString(currentGpsPoint));
-//	double lat = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLatitude();
-//	double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
-//	double ele = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getElevation();
-//	string timest = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getTimestamp();
-//	string info = "Latitude:   " + ofToString(lat) + "\n" +
-//				  "Longitude:  " + ofToString(lon) + "\n" +
-//				  "Elevation:  " + ofToString(ele) + "\n" +
-//				  "Time:       " + timest + "\n" +
-//				  "Cur. point: " + ofToString(currentPoint);
-//	
-//	ofFill();
-//	ofSetColor(0xE5A93F);
-//	ofRect(10,10,300,85);
-//	ofSetColor(0x000000);
-//	ofDrawBitmapString(info,30,30);
-//
+	if (m_gpsData->getSegments().size() > 0)
+	{
+		double lat = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLatitude();
+		double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
+		double ele = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getElevation();
+		string timest = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getTimestamp();
+		string info = "Latitude:   " + ofToString(lat) + "\n" +
+		"Longitude:  " + ofToString(lon) + "\n" +
+		"Elevation:  " + ofToString(ele) + "\n" +
+		"Time:       " + timest + "\n" +
+		"Cur. point: " + ofToString(currentPoint);
+		
+		ofFill();
+		ofSetColor(0xE5A93F);
+		ofRect(10,10,300,85);
+		ofSetColor(0x000000);
+		ofDrawBitmapString(info,30,30);
+	}
+	
 }
 
 //--------------------------------------------------------------
