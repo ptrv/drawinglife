@@ -72,7 +72,9 @@ public:
 	:
 	m_gpsSegmentId(0),
 	m_segment(-1)
-	{};
+	{
+		m_points.reserve(1000);
+	};
 	
 	~GpsSegment(){};
 	
@@ -83,7 +85,7 @@ public:
 		m_points = points;
 		m_segment = segment;
 	}
-	std::vector<GpsPoint> getPoints() const { return m_points; }
+	const std::vector<GpsPoint>& getPoints() const { return m_points; }
 	int getSegmentNum() const { return m_segment; }
 	void clear()
 	{
@@ -117,7 +119,9 @@ public:
 	m_maxLon(0.0),
 	m_minLat(0.0),
 	m_maxLat(0.0)
-	{};
+	{
+		m_segments.reserve(1000); // TODO richtige groesse hacken 
+	};
 	
 	~GpsData(){};
 	
@@ -147,7 +151,7 @@ public:
 		m_maxLat = 0.0;
 		m_user = "";
 	}
-	std::vector<GpsSegment> getSegments() const { return m_segments; }
+	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
 	double getMinLon() const { return m_minLon; }
 	double getMaxLon() const { return m_maxLon; }
 	double getMinLat() const { return m_minLat; }
