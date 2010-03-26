@@ -32,7 +32,9 @@ public:
 private:
 	
 	bool getGpsData(GpsData& gpsData, const std::string& query);
-
+	
+	const string getBasicQueryString();
+	
 	// -----------------------------------------------------------------------------
 	
 	string m_dbPath;

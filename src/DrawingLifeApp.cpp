@@ -76,6 +76,7 @@ void DrawingLifeApp::setup(){
 //--------------------------------------------------------------
 void DrawingLifeApp::update(){
 
+	// Counting through GpsSegments and GpsPoints
 	if (m_gpsData->getSegments().size() > 0) 
 	{
 		if ((unsigned int)currentGpsSegment < m_gpsData->getSegments().size()-1) 
@@ -120,12 +121,12 @@ void DrawingLifeApp::draw(){
 		double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
 		double ele = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getElevation();
 		string timest = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getTimestamp();
-		string info = "Latitude:   " + ofToString(lat) + "\n" +
-		"Longitude:  " + ofToString(lon) + "\n" +
-		"Elevation:  " + ofToString(ele) + "\n" +
-		"Time:       " + timest + "\n" +
-		"Cur. point: " + ofToString(currentPoint) + "\n" +
-		"Segment nr: " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum());
+		string info =	"Latitude   : " + ofToString(lat) + "\n" +
+						"Longitude  : " + ofToString(lon) + "\n" +
+						"Elevation  : " + ofToString(ele) + "\n" +
+						"Time       : " + timest + "\n" +
+						"Cur. point : " + ofToString(currentPoint) + "\n" +
+						"Segment nr : " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum());
 		
 		//ofLog(OF_LOG_VERBOSE, ofToString(currentPoint));
 		ofLog(OF_LOG_VERBOSE, ofToString(currentPoint) + " " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum()));
