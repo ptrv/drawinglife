@@ -159,12 +159,12 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 const string DBReader::getBasicQueryString()
 {
 	// This is the part of the query string that all queries have common.
-	return	"SELECT 'a'.'gpsdataid' AS 'gpsdataid', 'a'.'latitude' AS 'latitude',"\
-			"'a'.'longitude' AS 'longitude', 'a'.'time' AS 'time',"\
-			"'a'.'elevation' AS 'elevation', 'a'.'segment' AS 'segment',"\
-			"'b'.'name' AS 'name' "\
-			"FROM 'gpsdata' AS 'a' "\
-			"JOIN 'user' AS 'b' ON ('a'.'user' = 'b'.'userid') ";
+	return	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
+			"a.longitude AS longitude, a.time AS time,"\
+			"a.elevation AS elevation, a.segment AS segment,"\
+			"b.name AS name "\
+			"FROM gpsdata AS a "\
+			"JOIN user AS b ON (a.user = b.userid) ";
 }
 bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int day)
 {
