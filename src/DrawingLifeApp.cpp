@@ -15,7 +15,7 @@ DrawingLifeApp::~DrawingLifeApp()
 }
 void DrawingLifeApp::setup(){
 	
-	ofSetFrameRate(20);
+	ofSetFrameRate(5);
 
 	// reading settings from xml file
 	m_settings.loadFile("AppSettings.xml");
@@ -60,7 +60,12 @@ void DrawingLifeApp::setup(){
 		  m_gpsData->getMaxLon(),
 		  m_gpsData->getMinLat(),
 		  m_gpsData->getMaxLat());
-
+	
+	m_minLon = m_gpsData->getMinLon();
+	m_maxLon = m_gpsData->getMaxLon();
+	m_minLat = m_gpsData->getMinLat();
+	m_maxLat = m_gpsData->getMaxLat();
+	
 	// Because the above test print is so slow, here you can prove 
 	// that the data have been read by showing las gpsData
 //	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());
@@ -117,12 +122,28 @@ void DrawingLifeApp::draw(){
 	
 	if (m_gpsData->getSegments().size() > 0 && m_gpsData->getSegments()[currentGpsSegment].getPoints().size() > 0)
 	{
+//		for (int i = 0; i <= currentGpsSegment; ++i) 
+//		{
+//			ofSetColor(0xffffff);
+//			ofNoFill();
+//			glBegin(GL_LINE_STRIP);
+//			for (int j = 0; j <= currentGpsPoint; ++j) {
+//				glVertex2d(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()), 
+//						 getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
+////				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, currentPoint: %d, lon: %lf, lat: %lf",
+////					  currentGpsSegment, 
+////					  currentGpsPoint,
+////					  getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()),
+////					  getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
+//			}
+//			glEnd();
+//		}
 		double lat = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLatitude();
 		double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
 		double ele = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getElevation();
 		string timest = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getTimestamp();
-		string info =	"Latitude   : " + ofToString(lat) + "\n" +
-						"Longitude  : " + ofToString(lon) + "\n" +
+		string info =	"Longitude  : " + ofToString(lon) + "\n" +
+						"Latitude   : " + ofToString(lat) + "\n" +
 						"Elevation  : " + ofToString(ele) + "\n" +
 						"Time       : " + timest + "\n" +
 						"Cur. point : " + ofToString(currentPoint) + "\n" +
@@ -138,6 +159,17 @@ void DrawingLifeApp::draw(){
 	}
 	
 }
+// -----------------------------------------------------------------------------
+float DrawingLifeApp::getNormalizedLatitude(double lat)
+{
+	return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (ofGetHeight()-30) );
+}
+
+float DrawingLifeApp::getNormalizedLongitude(double lon)
+{
+	return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (ofGetWidth()-30) ); 
+}
+
 
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key){

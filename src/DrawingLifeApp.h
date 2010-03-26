@@ -33,6 +33,8 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void resized(int w, int h);
 	
+	float getNormalizedLatitude(double lat);
+	float getNormalizedLongitude(double lon);
 	
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
@@ -42,6 +44,10 @@ public:
 	int maxPoints;
 	int currentPoint;
 	bool m_firstPoint;
+	double m_minLon;
+	double m_maxLon;
+	double m_minLat;
+	double m_maxLat;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
