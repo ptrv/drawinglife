@@ -8,7 +8,7 @@
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
-
+#include "ofxVectorMath.h"
 #include "Logger.h"
 #include "DBReader.h"
 
@@ -33,8 +33,8 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void resized(int w, int h);
 	
-	float getNormalizedLatitude(double lat);
-	float getNormalizedLongitude(double lon);
+	double getNormalizedLatitude(double lat);
+	double getNormalizedLongitude(double lon);
 	
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
