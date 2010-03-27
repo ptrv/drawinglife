@@ -211,7 +211,6 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int 
 	query << dayEnd;
 	query << "' ORDER BY segment;";
 	result = getGpsData(gpsData, query.str());
-	
 	return result;
 }
 
@@ -229,7 +228,6 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int yea
 	query << month;
 	query << "' ORDER BY segment;";
 	result = getGpsData(gpsData, query.str());
-	
 	return result;
 }
 
@@ -252,7 +250,6 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, in
 	query << monthEnd;
 	query << "' ORDER BY segment;";
 	result = getGpsData(gpsData, query.str());
-	
 	return result;
 }
 
@@ -268,7 +265,6 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const string& userName, int year
 	query << year;
 	query << "' ORDER BY segment;";
 	result = getGpsData(gpsData, query.str());
-	
 	return result;
 }
 
@@ -287,7 +283,6 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& userName, int
 	query << yearEnd;
 	query << "' ORDER BY segment;";
 	result = getGpsData(gpsData, query.str());
-	
 	return result;
 }
 
