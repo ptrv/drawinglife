@@ -22,10 +22,10 @@ public:
 	~DBReader();
 	void setupDbConnection();
 	void closeDbConnection();
-	bool getGpsDataDay(GpsData& gpsData, const string& userName, int day);
-	bool getGpsDataDayRange(GpsData& gpsData, const string& userName, int dayStart, int dayEnd);
-	bool getGpsDataMonth(GpsData& gpsData, const string& userName, int month);
-	bool getGpsDataMonthRange(GpsData& gpsData, const string& userName, int monthStart, int monthEnd);
+	bool getGpsDataDay(GpsData& gpsData, const string& userName, int year, int month, int day);
+	bool getGpsDataDayRange(GpsData& gpsData, const string& userName, int year, int month, int dayStart, int dayEnd);
+	bool getGpsDataMonth(GpsData& gpsData, const string& userName, int year, int month);
+	bool getGpsDataMonthRange(GpsData& gpsData, const string& userName, int year, int monthStart, int monthEnd);
 	bool getGpsDataYear(GpsData& gpsData, const string& userName, int year);
 	bool getGpsDataYearRange(GpsData& gpsData, const string& userName, int yearStart, int yearEnd);
 	

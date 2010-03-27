@@ -151,6 +151,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		// -----------------------------------------------------------------------------
 		gpsData.clear();
 		gpsData.setGpsData(gpsSegmentVec, minLon, maxLon, minLat, maxLat, user);
+		result = true;
 	}
 	CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))
 	return result;
@@ -166,31 +167,46 @@ const string DBReader::getBasicQueryString()
 			"FROM gpsdata AS a "\
 			"JOIN user AS b ON (a.user = b.userid) ";
 }
-bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int day)
+bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int year, int month, int day)
 {
 	bool result = false;
 	stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
-	query << "' AND strftime('%d', time) = '";
+	query << "' AND strftime('%Y-%m-%d', time) = '";
+	query << year;
+	query << "-";
+	query << (month < 10 ? "0" : "");
+	query << month;
+	query << "-";
 	query << (day < 10 ? "0" : "");
 	query << day;
 	query << "' ORDER BY segment;";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
-bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int dayStart, int dayEnd)
+bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int year, int month, int dayStart, int dayEnd)
 {
 	bool result = false;
 	stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
-	query << "' AND strftime('%d', time) >= '";
+	query << "' AND strftime('%Y-%m-%d', time) >= '";
+	query << year;
+	query << "-";
+	query << (month < 10 ? "0" : "");
+	query << month;
+	query << "-";
 	query << (dayStart < 10 ? "0" : "");
 	query << dayStart;
-	query << "' AND strftime('%d', time) <= '";
+	query << "' AND strftime('%Y-%m-%d', time) <= '";
+	query << year;
+	query << "-";
+	query << (month < 10 ? "0" : "");
+	query << month;
+	query << "-";
 	query << (dayEnd < 10 ? "0" : "");
 	query << dayEnd;
 	query << "' ORDER BY segment;";
@@ -199,14 +215,16 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int 
 	return result;
 }
 
-bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int month)
+bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int year, int month)
 {
 	bool result = false;
 	stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
-	query << "' AND strftime('%m', time) >= '";
+	query << "' AND strftime('%Y-%m', time) >= '";
+	query << year;
+	query << "-";
 	query << (month < 10 ? "0" : "");
 	query << month;
 	query << "' ORDER BY segment;";
@@ -215,17 +233,21 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int mon
 	return result;
 }
 
-bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, int monthStart, int monthEnd)
+bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, int year, int monthStart, int monthEnd)
 {
 	bool result = false;
 	stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
-	query << "' AND strftime('%m', time) >= '";
+	query << "' AND strftime('%Y-%m', time) >= '";
+	query << year;
+	query << "-";
 	query << (monthStart < 10 ? "0" : "");
 	query << monthStart;
-	query << "' AND strftime('%m', time) <= '";
+	query << "' AND strftime('%Y-%m', time) <= '";
+	query << year;
+	query << "-";
 	query << (monthEnd < 10 ? "0" : "");
 	query << monthEnd;
 	query << "' ORDER BY segment;";

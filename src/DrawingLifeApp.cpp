@@ -19,7 +19,8 @@ void DrawingLifeApp::setup(){
 
 	// reading settings from xml file
 	m_settings.loadFile("AppSettings.xml");
-	ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
+//	ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	// db path must be absolute path for DBReader (true as second parameter)
 	string dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.db"), true);
 	
@@ -30,7 +31,10 @@ void DrawingLifeApp::setup(){
 	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
-	m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 9);
+	if(m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 2010, 2, 9))
+		ofLog(OF_LOG_NOTICE, "--> GpsData load ok!");
+	else
+		ofLog(OF_LOG_NOTICE, "--> No GpsData loaded!");
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
 	
@@ -55,7 +59,7 @@ void DrawingLifeApp::setup(){
 //		}
 //	}
 	// printing min/max values
-	ofLog(OF_LOG_NOTICE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf", 
+	ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf", 
 		  m_gpsData->getMinLon(), 
 		  m_gpsData->getMaxLon(),
 		  m_gpsData->getMinLat(),
