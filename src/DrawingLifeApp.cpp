@@ -123,29 +123,10 @@ void DrawingLifeApp::draw(){
 	
 	
 	if (m_gpsData->getSegments().size() > 0 && m_gpsData->getSegments()[currentGpsSegment].getPoints().size() > 0)
-	{		
-		ofSetColor(0xffffff);
-		ofNoFill();
-		for (int i = 0; i <= currentGpsSegment; ++i) 
-		{
-			ofBeginShape();
-			int pointEnd;
-			if (i == currentGpsSegment)
-				pointEnd = currentGpsPoint;
-			else
-				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
-			for (int j = 0; j <= pointEnd; ++j) 
-			{
-				ofVertex(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()), 
-						   getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
-//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, currentPoint: %d, lon: %lf, lat: %lf",
-//					  currentGpsSegment, 
-//					  currentGpsPoint,
-//					  tmpPt.x,
-//					  tmpPt.y);			
-			}
-			ofEndShape();
-		}
+	{
+		// -----------------------------------------------------------------------------
+		// Draw rectangle with text.
+		// -----------------------------------------------------------------------------
 		double lat = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLatitude();
 		double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
 		double ele = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getElevation();
@@ -163,6 +144,34 @@ void DrawingLifeApp::draw(){
 		ofRect(10,10,300,100);
 		ofSetColor(0x000000);
 		ofDrawBitmapString(info,30,30);
+		
+		// -----------------------------------------------------------------------------
+		// Draw Gps data
+		// -----------------------------------------------------------------------------
+		ofSetColor(0xffffff);
+		ofNoFill();
+		for (int i = 0; i <= currentGpsSegment; ++i) 
+		{
+			ofBeginShape();
+			int pointEnd;
+			if (i == currentGpsSegment)
+				pointEnd = currentGpsPoint;
+			else
+				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
+			for (int j = 0; j <= pointEnd; ++j) 
+			{
+				//				ofVertex(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()), 
+				//						   getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
+				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
+						 getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
+				//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, currentPoint: %d, lon: %lf, lat: %lf",
+				//					  currentGpsSegment, 
+				//					  currentGpsPoint,
+				//					  tmpPt.x,
+				//					  tmpPt.y);			
+			}
+			ofEndShape();
+		}
 	}
 	
 	

@@ -120,11 +120,14 @@ public:
 	m_minLat(0.0),
 	m_maxLat(0.0)
 	{
-		m_segments.reserve(1000); // TODO richtige groesse hacken 
+		m_segments.reserve(1000); // TODO good amount. 
 	};
 	
 	~GpsData(){};
 	
+	// -----------------------------------------------------------------------------
+	// Set Gps data.
+	// -----------------------------------------------------------------------------
 	void setGpsData(const std::vector<GpsSegment>& segments, 
 					double minLon, 
 					double maxLon, 
@@ -141,6 +144,15 @@ public:
 		m_maxLat = maxLat;
 		m_user = user;
 	}
+	// -----------------------------------------------------------------------------
+	// Get members.
+	// -----------------------------------------------------------------------------
+	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
+	double getMinLon() const { return m_minLon; }
+	double getMaxLon() const { return m_maxLon; }
+	double getMinLat() const { return m_minLat; }
+	double getMaxLat() const { return m_maxLat; }
+	// -----------------------------------------------------------------------------
 	void clear()
 	{
 		m_gpsDataId = 0;
@@ -151,12 +163,35 @@ public:
 		m_maxLat = 0.0;
 		m_user = "";
 	}
-	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
-	double getMinLon() const { return m_minLon; }
-	double getMaxLon() const { return m_maxLon; }
-	double getMinLat() const { return m_minLat; }
-	double getMaxLat() const { return m_maxLat; }	
 	
+	// -----------------------------------------------------------------------------
+	// Get Gps point.
+	// -----------------------------------------------------------------------------
+	double getLongitude(int segmentIndex, int pointIndex)
+	{
+		double longitude = -1000.0;
+		if (segmentIndex < (int)m_segments.size()) 
+		{
+			if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+			{
+				longitude = m_segments[segmentIndex].getPoints()[pointIndex].getLongitude();
+			}
+		}
+		return longitude;
+	}
+
+	double getLatitude(int segmentIndex, int pointIndex)
+	{
+		double latitude = -1000.0;
+		if (segmentIndex < (int)m_segments.size()) 
+		{
+			if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+			{
+				latitude = m_segments[segmentIndex].getPoints()[pointIndex].getLatitude();
+			}
+		}
+		return latitude;
+	}
 };
 
 #endif // _DATA_H_
