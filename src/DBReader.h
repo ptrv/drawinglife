@@ -31,7 +31,7 @@ public:
 	
 private:
 	
-	bool getGpsData(GpsData& gpsData, const std::string& query);
+	bool getGpsData(GpsData& gpsData, const string& query);
 	
 	const string getBasicQueryString();
 	
