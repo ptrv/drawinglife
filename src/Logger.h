@@ -23,23 +23,23 @@ private:
 public:
 	static void logValue(const char* function, const char* name, const string& value)
 	{
-		ofLog(OF_LOG_SILENT, "DBG_VAL --> %s \n%s : %s", function, name, value.c_str());
+		ofLog(OF_LOG_VERBOSE, " --> %s \n%s : %s", function, name, value.c_str());
 	}
 	static void logValue(const char* function, const char* name, int value)
 	{
-		ofLog(OF_LOG_SILENT, "DBG_VAL --> %s \n%s : %d", function, name, value);
+		ofLog(OF_LOG_VERBOSE, " --> %s \n%s : %d", function, name, value);
 	}
 	static void logValue(const char* function, const char* name, double value)
 	{
-		ofLog(OF_LOG_SILENT, "DBG_VAL --> %s \n%s : %f", function, name, value);
+		ofLog(OF_LOG_VERBOSE, " --> %s \n%s : %f", function, name, value);
 	}
 	static void logValue(const char* function, const char* name, float value)
 	{
-		ofLog(OF_LOG_SILENT, "DBG_VAL --> %s \n%s : %f", function, name, value);
+		ofLog(OF_LOG_VERBOSE, " --> %s \n%s : %f", function, name, value);
 	}
 	static void logValue(const char* function, const char* name, bool value)
 	{
-		ofLog(OF_LOG_SILENT, "DBG_VAL --> %s \n%s : %s", function, name, (value ? "true" : "false"));
+		ofLog(OF_LOG_VERBOSE, " --> %s \n%s : %s", function, name, (value ? "true" : "false"));
 	}
 };
 
