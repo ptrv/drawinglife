@@ -32,9 +32,16 @@ void DrawingLifeApp::setup(){
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
 	if(m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 2010, 2, 9))
-		ofLog(OF_LOG_NOTICE, "--> GpsData load ok!");
+	{
+		ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
+		ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!", 
+			  m_gpsData->getSegments().size(),
+			  m_gpsData->getTotalGpsPoints());
+	}
 	else
-		ofLog(OF_LOG_NOTICE, "--> No GpsData loaded!");
+	{
+		ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+	}
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
 	

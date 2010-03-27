@@ -192,6 +192,19 @@ public:
 		}
 		return latitude;
 	}
+	// -----------------------------------------------------------------------------
+	
+	// -----------------------------------------------------------------------------
+	int getTotalGpsPoints()
+	{
+		int num = 0;
+		for (unsigned int i = 0; i < m_segments.size(); ++i) {
+			for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) {
+				++num;
+			}
+		}
+		return num;
+	}
 };
 
 #endif // _DATA_H_

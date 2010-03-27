@@ -69,7 +69,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		sqlite3_command cmd(*m_dbconn, query.c_str());
 		sqlite3_reader reader=cmd.executereader();
 		
-		DBG_VAL(query);
+		//DBG_VAL(query);
 		
 		int lastSegment = -1;
 		string user = "";
@@ -136,7 +136,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
 		queryMinMax << query.substr(posS, (posE - posS));
 
-		DBG_VAL(queryMinMax.str());
+		//DBG_VAL(queryMinMax.str());
 		
 		sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
 		sqlite3_reader readerMinMax = cmd2.executereader();
