@@ -164,7 +164,7 @@ void DrawingLifeApp::draw(){
 		// -----------------------------------------------------------------------------
 		ofSetColor(0xffffff);
 		ofNoFill();
-		for (int i = 0; i <= m_currentGpsSegment; ++i) 
+		for (unsigned int i = 0; i <= m_currentGpsSegment; ++i) 
 		{
 			ofBeginShape();
 			int pointEnd;
@@ -172,7 +172,7 @@ void DrawingLifeApp::draw(){
 				pointEnd = m_currentGpsPoint;
 			else
 				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
-			for (int j = 0; j <= pointEnd; ++j) 
+			for (unsigned int j = 0; j <= pointEnd; ++j) 
 			{
 				//				ofVertex(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()), 
 				//						   getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
