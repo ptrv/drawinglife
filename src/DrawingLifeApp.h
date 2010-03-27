@@ -39,10 +39,10 @@ public:
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
 	GpsData* m_gpsData;
-	int currentGpsPoint;
-	int currentGpsSegment;
+	int m_currentGpsPoint;
+	int m_currentGpsSegment;
 	int maxPoints;
-	int currentPoint;
+	int m_currentPoint;
 	bool m_firstPoint;
 	double m_minLon;
 	double m_maxLon;

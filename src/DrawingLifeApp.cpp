@@ -31,6 +31,8 @@ void DrawingLifeApp::setup(){
 	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
+	// -----------------------------------------------------------------------------
+	// DB query
 	if(m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 2010, 2, 9))
 	{
 		ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
@@ -42,6 +44,7 @@ void DrawingLifeApp::setup(){
 	{
 		ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
 	}
+	// -----------------------------------------------------------------------------
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
 	
@@ -84,9 +87,9 @@ void DrawingLifeApp::setup(){
 
 	ofBackground(0, 0, 0);
 	
-	currentGpsPoint = 0;
-	currentGpsSegment = 0;
-	currentPoint = -1;
+	m_currentGpsPoint = 0;
+	m_currentGpsSegment = 0;
+	m_currentPoint = -1;
 	m_firstPoint = true;
 }
 
@@ -96,35 +99,35 @@ void DrawingLifeApp::update(){
 	// Counting through GpsSegments and GpsPoints
 	if (m_gpsData->getSegments().size() > 0) 
 	{
-		if ((unsigned int)currentGpsSegment < m_gpsData->getSegments().size()-1) 
+		if ((unsigned int)m_currentGpsSegment < m_gpsData->getSegments().size()-1) 
 		{
-			if ((unsigned int)currentGpsPoint < m_gpsData->getSegments()[currentGpsSegment].getPoints().size() - 1) 
+			if ((unsigned int)m_currentGpsPoint < m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() - 1) 
 			{
 				if (!m_firstPoint) 
-					++currentGpsPoint;
+					++m_currentGpsPoint;
 				else
 					m_firstPoint = false;
 			}
 			else
 			{
-				++currentGpsSegment;
-				currentGpsPoint = 0;
+				++m_currentGpsSegment;
+				m_currentGpsPoint = 0;
 			}
 		}
 		else
 		{
-			if ((unsigned int)currentGpsPoint < m_gpsData->getSegments()[currentGpsSegment].getPoints().size() - 1) 
+			if ((unsigned int)m_currentGpsPoint < m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() - 1) 
 			{
-				++currentGpsPoint;
+				++m_currentGpsPoint;
 			}
 			else
 			{
-				currentGpsPoint = 0;
-				currentGpsSegment = 0;
-				currentPoint = -1;				
+				m_currentGpsPoint = 0;
+				m_currentGpsSegment = 0;
+				m_currentPoint = -1;				
 			}
 		}
-		++currentPoint;
+		++m_currentPoint;
 	}	
 }
 
@@ -133,23 +136,23 @@ void DrawingLifeApp::update(){
 void DrawingLifeApp::draw(){
 	
 	
-	if (m_gpsData->getSegments().size() > 0 && m_gpsData->getSegments()[currentGpsSegment].getPoints().size() > 0)
+	if (m_gpsData->getSegments().size() > 0 && m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() > 0)
 	{
 		// -----------------------------------------------------------------------------
 		// Draw rectangle with text.
 		// -----------------------------------------------------------------------------
-		double lat = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLatitude();
-		double lon = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getLongitude();
-		double ele = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getElevation();
-		string timest = m_gpsData->getSegments()[currentGpsSegment].getPoints()[currentGpsPoint].getTimestamp();
+		double lat = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getLatitude();
+		double lon = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getLongitude();
+		double ele = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getElevation();
+		string timest = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
 		string info =	"Longitude  : " + ofToString(lon) + "\n" +
 						"Latitude   : " + ofToString(lat) + "\n" +
 						"Elevation  : " + ofToString(ele) + "\n" +
 						"Time       : " + timest + "\n" +
-						"Cur. point : " + ofToString(currentPoint) + "\n" +
-						"Segment nr : " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum());
+						"Cur. point : " + ofToString(m_currentPoint) + "\n" +
+						"Segment nr : " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum());
 		
-//		ofLog(OF_LOG_VERBOSE, ofToString(currentPoint) + " " + ofToString(m_gpsData->getSegments()[currentGpsSegment].getSegmentNum()));
+//		ofLog(OF_LOG_VERBOSE, ofToString(m_currentPoint) + " " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum()));
 		ofFill();
 		ofSetColor(0xE5A93F);
 		ofRect(10,10,300,100);
@@ -161,12 +164,12 @@ void DrawingLifeApp::draw(){
 		// -----------------------------------------------------------------------------
 		ofSetColor(0xffffff);
 		ofNoFill();
-		for (int i = 0; i <= currentGpsSegment; ++i) 
+		for (int i = 0; i <= m_currentGpsSegment; ++i) 
 		{
 			ofBeginShape();
 			int pointEnd;
-			if (i == currentGpsSegment)
-				pointEnd = currentGpsPoint;
+			if (i == m_currentGpsSegment)
+				pointEnd = m_currentGpsPoint;
 			else
 				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
 			for (int j = 0; j <= pointEnd; ++j) 
@@ -175,9 +178,9 @@ void DrawingLifeApp::draw(){
 				//						   getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
 				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
 						 getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
-				//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, currentPoint: %d, lon: %lf, lat: %lf",
-				//					  currentGpsSegment, 
-				//					  currentGpsPoint,
+				//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, m_currentPoint: %d, lon: %lf, lat: %lf",
+				//					  m_currentGpsSegment, 
+				//					  m_currentGpsPoint,
 				//					  tmpPt.x,
 				//					  tmpPt.y);			
 			}
@@ -198,7 +201,6 @@ double DrawingLifeApp::getNormalizedLongitude(double lon)
 {
 	return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (ofGetWidth()-30) ); 
 }
-
 
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key){
