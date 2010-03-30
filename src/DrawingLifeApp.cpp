@@ -6,6 +6,13 @@
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
+DrawingLifeApp::DrawingLifeApp() : m_dbReader(NULL), m_gpsData(NULL)
+{
+	m_viewXOffset = 0;
+	m_viewYOffset = 0;
+	m_viewMinDimension = 0;
+	m_viewPadding = 15;
+}
 DrawingLifeApp::~DrawingLifeApp()
 {
 	if (m_gpsData != NULL) 
@@ -82,15 +89,16 @@ void DrawingLifeApp::setup(){
 	
 	// Because the above test print is so slow, here you can prove 
 	// that the data have been read by showing las gpsData
-//	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());
-	
+//	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());	
 
-	ofBackground(0, 0, 0);
+	ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
 	
 	m_currentGpsPoint = 0;
 	m_currentGpsSegment = 0;
 	m_currentPoint = -1;
 	m_firstPoint = true;
+
+	this->setViewAspectRatio();
 }
 
 //--------------------------------------------------------------
@@ -151,7 +159,9 @@ void DrawingLifeApp::draw(){
 						"Time       : " + timest + "\n" +
 						"Cur. point : " + ofToString(m_currentPoint) + "\n" +
 						"Segment nr : " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum());
-		
+
+		fillViewArea( 0xededed);
+
 //		ofLog(OF_LOG_VERBOSE, ofToString(m_currentPoint) + " " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum()));
 		ofFill();
 		ofSetColor(0xE5A93F);
@@ -162,7 +172,7 @@ void DrawingLifeApp::draw(){
 		// -----------------------------------------------------------------------------
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
-		ofSetColor(0xffffff);
+		ofSetColor(FOREGROUND);
 		ofNoFill();
 		for (unsigned int i = 0; i <= m_currentGpsSegment; ++i) 
 		{
@@ -186,20 +196,58 @@ void DrawingLifeApp::draw(){
 			}
 			ofEndShape();
 		}
-	}
-	
-	
-	
-}
-// -----------------------------------------------------------------------------
-double DrawingLifeApp::getNormalizedLatitude(double lat)
-{
-	return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (ofGetHeight()-30) );
+	}			
 }
 
+// -----------------------------------------------------------------------------
 double DrawingLifeApp::getNormalizedLongitude(double lon)
 {
-	return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (ofGetWidth()-30) ); 
+	return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset); 
+}
+
+double DrawingLifeApp::getNormalizedLatitude(double lat)
+{
+	return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+}
+
+void DrawingLifeApp::setViewAspectRatio()
+{
+	int width = ofGetWidth();
+	int height = ofGetHeight();
+
+	// Reset for view padding.
+	m_viewXOffset = 0;
+	m_viewYOffset = 0;
+	
+	// Set square view area and center.
+	if (height < width)
+	{
+		m_viewMinDimension = height;
+		m_viewXOffset = (width - height) / 2;
+	}
+	else if (width < height)
+	{
+		m_viewMinDimension = width;
+		m_viewYOffset = (height - width) / 2;		
+	}
+	else
+	{
+		m_viewMinDimension = width;
+	}
+
+	// Left and top intend.
+	m_viewXOffset += m_viewPadding;
+	m_viewYOffset += m_viewPadding;
+}
+void DrawingLifeApp::fillViewArea( int backgroundColor)
+{
+	double x = getNormalizedLongitude(m_minLon);
+	double y = getNormalizedLatitude(m_minLat);
+	double w = getNormalizedLongitude(m_maxLon) - x;
+	double h = getNormalizedLatitude(m_maxLat) - y;
+	ofFill();
+	ofSetColor( backgroundColor);
+	ofRect(x, y, w, h);
 }
 
 //--------------------------------------------------------------
@@ -233,7 +281,8 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void DrawingLifeApp::resized(int w, int h){
-
+void DrawingLifeApp::windowResized(int w, int h)
+{
+	this->setViewAspectRatio();
 }
 

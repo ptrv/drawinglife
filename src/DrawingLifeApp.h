@@ -19,8 +19,8 @@
 class DrawingLifeApp : public ofBaseApp{
 	
 public:
-	
-	~DrawingLifeApp();
+	DrawingLifeApp();
+	virtual ~DrawingLifeApp();
 	void setup();
 	void update();
 	void draw();
@@ -31,10 +31,12 @@ public:
 	void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
-	void resized(int w, int h);
+	void windowResized(int w, int h);
 	
 	double getNormalizedLatitude(double lat);
 	double getNormalizedLongitude(double lon);
+	
+	void setViewAspectRatio();
 	
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
@@ -43,11 +45,21 @@ public:
 	int m_currentGpsSegment;
 	int maxPoints;
 	int m_currentPoint;
+	int m_viewXOffset;
+	int m_viewYOffset;
+	int m_viewMinDimension;
+	int m_viewPadding;
 	bool m_firstPoint;
 	double m_minLon;
 	double m_maxLon;
 	double m_minLat;
 	double m_maxLat;
+
+	static const int BACKGROUND = 0xFFFFFF; 
+	static const int FOREGROUND = 0x000000;
+
+private:
+	void fillViewArea( int backgroundColor);
 };
 
 #endif // _DRAWINGLIFEAPP_H_
