@@ -57,24 +57,24 @@ void DrawingLifeApp::setup(){
 
 	// test print
 	maxPoints = 0;
-//	for (unsigned int i = 0; i < m_gpsData->getSegments().size(); ++i) {
-//		for (unsigned int j = 0; j < m_gpsData->getSegments()[i].getPoints().size(); ++j) {
-//			stringstream message;
-//			//message << "Value i " << i << ", j " << j << ", k " << k <<": ";
-//			message << "GpsPoint nr " << maxPoints << ": ";
-//			message << m_gpsData->getSegments()[i].getPoints()[j].getLatitude();
-//			message << ", ";
-//			message << m_gpsData->getSegments()[i].getPoints()[j].getLongitude();
-//			message << ", ";
-//			message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
-//			message << ", ";
-//			message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
-//			message << ", ";
-//			message << m_gpsData->getSegments()[i].getSegmentNum();
-//			ofLog(OF_LOG_NOTICE, message.str() );
-//			++maxPoints;
-//		}
-//	}
+	for (unsigned int i = 0; i < m_gpsData->getSegments().size(); ++i) {
+		for (unsigned int j = 0; j < m_gpsData->getSegments()[i].getPoints().size(); ++j) {
+			stringstream message;
+			//message << "Value i " << i << ", j " << j << ", k " << k <<": ";
+			message << "GpsPoint nr " << maxPoints << ": ";
+			message << m_gpsData->getSegments()[i].getPoints()[j].getLatitude();
+			message << ", ";
+			message << m_gpsData->getSegments()[i].getPoints()[j].getLongitude();
+			message << ", ";
+			message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
+			message << ", ";
+			message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
+			message << ", ";
+			message << m_gpsData->getSegments()[i].getSegmentNum();
+			ofLog(OF_LOG_NOTICE, message.str() );
+			++maxPoints;
+		}
+	}
 	// printing min/max values
 	ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
 		  m_gpsData->getMinLon(),
@@ -176,7 +176,8 @@ void DrawingLifeApp::draw(){
 		ofNoFill();
 		for (unsigned int i = 0; i <= m_currentGpsSegment; ++i)
 		{
-			ofBeginShape();
+			//ofBeginShape();
+			glBegin(GL_LINE_STRIP);
 			int pointEnd;
 			if (i == m_currentGpsSegment)
 				pointEnd = m_currentGpsPoint;
@@ -184,19 +185,28 @@ void DrawingLifeApp::draw(){
 				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
 			for (unsigned int j = 0; j <= pointEnd; ++j)
 			{
-				//				ofVertex(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()),
-				//						   getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
-				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)),
-						 getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
+				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
+						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
+//				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
+//						 getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
 				//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, m_currentPoint: %d, lon: %lf, lat: %lf",
 				//					  m_currentGpsSegment,
 				//					  m_currentGpsPoint,
 				//					  tmpPt.x,
 				//					  tmpPt.y);
 			}
-			ofEndShape();
+			//ofEndShape();
+			glEnd();
 		}
+		ofFill();
+		ofSetColor(0, 255, 0);
+		ofCircle(getNormalizedLongitude(m_gpsData->getLongitude(m_currentGpsSegment,m_currentGpsPoint)), 
+				 getNormalizedLatitude(m_gpsData->getLatitude(m_currentGpsSegment,m_currentGpsPoint)), 5);
+
 	}
+	
+	
+	
 }
 
 // -----------------------------------------------------------------------------
