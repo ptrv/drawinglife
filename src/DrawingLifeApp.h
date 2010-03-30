@@ -55,6 +55,8 @@ public:
 	double m_minLat;
 	double m_maxLat;
 
+	bool m_isFullscreen;
+	bool m_isDebugMode;
 	static const int BACKGROUND = 0xFFFFFF; 
 	static const int FOREGROUND = 0x000000;
 

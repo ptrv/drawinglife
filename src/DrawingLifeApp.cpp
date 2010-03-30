@@ -6,7 +6,10 @@
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
-DrawingLifeApp::DrawingLifeApp() : m_dbReader(NULL), m_gpsData(NULL)
+DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL), 
+									m_gpsData(NULL),
+									m_isFullscreen(false),
+									m_isDebugMode(false)
 {
 	m_viewXOffset = 0;
 	m_viewYOffset = 0;
@@ -264,7 +267,14 @@ void DrawingLifeApp::fillViewArea( int backgroundColor)
 
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key){
-
+	switch (key) {
+		case 'f':
+			m_isFullscreen = !m_isFullscreen;
+			ofSetFullscreen(m_isFullscreen);
+			break;
+		default:
+			break;
+	}
 }
 
 //--------------------------------------------------------------
