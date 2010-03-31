@@ -2,7 +2,6 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
-#include "DrawingLifeIncludes.h"
 #include "DrawingLifeApp.h"
 #include "Data.h"
 #include <vector>
@@ -21,10 +20,7 @@ DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL),
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
-	if (m_gpsData != NULL)
-	{
 		SAFE_DELETE(m_gpsData);
-	}
 }
 void DrawingLifeApp::setup(){
 

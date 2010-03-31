@@ -2,7 +2,7 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
-#include "ofMain.h"
+#include "DrawingLifeIncludes.h"
 #include "DrawingLifeApp.h"
 #include "ofAppGlutWindow.h"
 

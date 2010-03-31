@@ -5,11 +5,9 @@
 #ifndef _DRAWINGLIFEAPP_H_
 #define _DRAWINGLIFEAPP_H_
 
-
-#include "ofMain.h"
+#include "DrawingLifeIncludes.h"
 #include "ofxXmlSettings.h"
 #include "ofxVectorMath.h"
-#include "Logger.h"
 #include "DBReader.h"
 
 /**

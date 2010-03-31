@@ -3,9 +3,7 @@
 =======================================================*/
 
 #include "DrawingLifeIncludes.h"
-#include "ofMain.h"
 #include "DBReader.h"
-#include "Logger.h"
 #include <string>
 #include <iostream>
 #include <stdexcept>

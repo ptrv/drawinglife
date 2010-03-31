@@ -5,7 +5,7 @@
 #ifndef _GPSPOINT_H_
 #define _GPSPOINT_H_
 
-// found at http://www.gpsy.com/gpsinfo/geotoutm/
+// UTM conversion found at http://www.gpsy.com/gpsinfo/geotoutm/
 #include "UTMconversion/LatLong-UTMconversion.h"
 
 /**
