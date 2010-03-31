@@ -6,7 +6,7 @@
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
-DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL), 
+DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL),
 									m_gpsData(NULL),
 									m_isFullscreen(false),
 									m_isDebugMode(false),
@@ -28,6 +28,7 @@ DrawingLifeApp::~DrawingLifeApp()
 void DrawingLifeApp::setup(){
 
 	ofSetFrameRate(60);
+    ofEnableAlphaBlending();
 
 	// reading settings from xml file
 	m_settings.loadFile("AppSettings.xml");
@@ -93,9 +94,9 @@ void DrawingLifeApp::setup(){
 		  m_gpsData->getMaxUtmX(),
 		  m_gpsData->getMinUtmY(),
 		  m_gpsData->getMaxUtmY());
-	
+
 	setMinMaxRatioUTM();
-	
+
 	// Because the above test print is so slow, here you can prove
 	// that the data have been read by showing las gpsData
 //	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());
@@ -172,7 +173,7 @@ void DrawingLifeApp::draw(){
 
 		//fillViewArea( 0xededed);
 		fillViewAreaUTM( 0xededed);
-		
+
 		ofFill();
 		ofSetColor(0xE5A93F);
 		ofRect(10,10,300,100);
@@ -194,23 +195,23 @@ void DrawingLifeApp::draw(){
 				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
 			for (unsigned int j = 0; j <= pointEnd; ++j)
 			{
-//				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
+//				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)),
 //						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
-				glVertex2d(getNormalizedUtmX(m_gpsData->getUtmX(i,j)), 
+				glVertex2d(getNormalizedUtmX(m_gpsData->getUtmX(i,j)),
 						   getNormalizedUtmY(m_gpsData->getUtmY(i,j)));
 			}
 			glEnd();
 		}
 		ofFill();
-		ofSetColor(0, 255, 0);
-//		ofCircle(getNormalizedLongitude(m_gpsData->getLongitude(m_currentGpsSegment,m_currentGpsPoint)), 
+		ofSetColor(0, 255, 0, 127);
+//		ofCircle(getNormalizedLongitude(m_gpsData->getLongitude(m_currentGpsSegment,m_currentGpsPoint)),
 //				 getNormalizedLatitude(m_gpsData->getLatitude(m_currentGpsSegment,m_currentGpsPoint)), 5);
-		ofCircle(getNormalizedUtmX(m_gpsData->getUtmX(m_currentGpsSegment,m_currentGpsPoint)), 
+		ofCircle(getNormalizedUtmX(m_gpsData->getUtmX(m_currentGpsSegment,m_currentGpsPoint)),
 				 getNormalizedUtmY(m_gpsData->getUtmY(m_currentGpsSegment,m_currentGpsPoint)), 5);
 	}
-	
-	
-	
+
+
+
 }
 // -----------------------------------------------------------------------------
 // Retreiving new GpsData
@@ -254,19 +255,19 @@ void DrawingLifeApp::setMinMaxRatio()
 	double minLon = m_gpsData->getMinLon();
 	double maxLon = m_gpsData->getMaxLon();
 	double minLat = m_gpsData->getMinLat();
-	double maxLat = m_gpsData->getMaxLat();	
+	double maxLat = m_gpsData->getMaxLat();
 
 	double deltaLon = maxLon - minLon;
 	double deltaLat = maxLat - minLat;
 
-	if (deltaLon <	deltaLat) 
+	if (deltaLon <	deltaLat)
 	{
 		m_minLon = minLon - (deltaLat - deltaLon)/2;
 		m_maxLon = maxLon + (deltaLat - deltaLon)/2;
 		m_minLat = minLat;
-		m_maxLat = maxLat;		
+		m_maxLat = maxLat;
 	}
-	else if (deltaLat < deltaLon) 
+	else if (deltaLat < deltaLon)
 	{
 		m_minLon = minLon;
 		m_maxLon = maxLon;
@@ -289,18 +290,18 @@ void DrawingLifeApp::setMinMaxRatioUTM()
 	double minLon = m_gpsData->getMinUtmX();
 	double maxLon = m_gpsData->getMaxUtmX();
 	double minLat = m_gpsData->getMinUtmY();
-	double maxLat = m_gpsData->getMaxUtmY();	
-	
+	double maxLat = m_gpsData->getMaxUtmY();
+
 	double deltaLon = maxLon - minLon;
 	double deltaLat = maxLat - minLat;
-	if (deltaLon <	deltaLat) 
+	if (deltaLon <	deltaLat)
 	{
 		m_minUtmX = minLon - (deltaLat - deltaLon)/2;
 		m_maxUtmX = maxLon + (deltaLat - deltaLon)/2;
 		m_minUtmY = minLat;
-		m_maxUtmY = maxLat;		
+		m_maxUtmY = maxLat;
 	}
-	else if (deltaLat < deltaLon) 
+	else if (deltaLat < deltaLon)
 	{
 		m_minUtmX = minLon;
 		m_maxUtmX = maxLon;
