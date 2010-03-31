@@ -4,3 +4,5 @@ bin/*
 *.suo
 obj/*
 doc/html/*
+*.depend
+*.layout
