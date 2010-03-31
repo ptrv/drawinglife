@@ -133,7 +133,8 @@
 		D010115C11637D4F0096EC19 /* GpsSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsSegment.h; sourceTree = "<group>"; };
 		D010115D11637D870096EC19 /* GpsData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsData.h; sourceTree = "<group>"; };
 		D010115E11637D870096EC19 /* GpsData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GpsData.cpp; sourceTree = "<group>"; };
-		D048D8F61157B7FA00DFF8D9 /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Data.h; sourceTree = "<group>"; };
+		D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeIncludes.h; sourceTree = "<group>"; };
+		D01011DB1163FCCA0096EC19 /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Data.h; sourceTree = "<group>"; };
 		D07156AD11515155008CEA46 /* DBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBReader.h; sourceTree = "<group>"; };
 		D07156AE11515155008CEA46 /* DBReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DBReader.cpp; sourceTree = "<group>"; };
 		D07157751151BEFD008CEA46 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
@@ -950,12 +951,13 @@
 				D01010B4116371AE0096EC19 /* sqlite3x */,
 				D0101014116360F80096EC19 /* UTMconversion */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
+				D01011DB1163FCCA0096EC19 /* Data.h */,
+				D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */,
 				D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */,
 				D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */,
 				D07156AD11515155008CEA46 /* DBReader.h */,
 				D07156AE11515155008CEA46 /* DBReader.cpp */,
 				D07157751151BEFD008CEA46 /* Logger.h */,
-				D048D8F61157B7FA00DFF8D9 /* Data.h */,
 				D010115B11637D3C0096EC19 /* GpsPoint.h */,
 				D010115C11637D4F0096EC19 /* GpsSegment.h */,
 				D010115D11637D870096EC19 /* GpsData.h */,
