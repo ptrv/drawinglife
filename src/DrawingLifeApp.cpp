@@ -32,14 +32,14 @@ void DrawingLifeApp::setup(){
 //	ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	// db path must be absolute path for DBReader (true as second parameter)
-	string dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.db"), true);
+	m_dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.sqlite"), true);
 
-	DBG_VAL(dbPath);
+	DBG_VAL(m_dbPath);
 
 	m_gpsData = new GpsData();
 
 	// get GpsData from database
-	m_dbReader = new DBReader(dbPath);
+	m_dbReader = new DBReader(m_dbPath);
 	if (m_dbReader->setupDbConnection())
 	{
 	// -----------------------------------------------------------------------------

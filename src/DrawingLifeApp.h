@@ -41,6 +41,7 @@ public:
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
 	GpsData* m_gpsData;
+	string m_dbPath;
 	int m_currentGpsPoint;
 	int m_currentGpsSegment;
 	int maxPoints;
