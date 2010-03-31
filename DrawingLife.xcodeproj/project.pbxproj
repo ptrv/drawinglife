@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0101018116360F80096EC19 /* LatLong-UTMconversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0101016116360F80096EC19 /* LatLong-UTMconversion.cpp */; };
 		D048D8291157A78C00DFF8D9 /* sqlite3x_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8241157A78C00DFF8D9 /* sqlite3x_command.cpp */; };
 		D048D82A1157A78C00DFF8D9 /* sqlite3x_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8251157A78C00DFF8D9 /* sqlite3x_connection.cpp */; };
 		D048D82B1157A78C00DFF8D9 /* sqlite3x_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D048D8261157A78C00DFF8D9 /* sqlite3x_exception.cpp */; };
@@ -115,6 +116,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0101015116360F80096EC19 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		D0101016116360F80096EC19 /* LatLong-UTMconversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "LatLong-UTMconversion.cpp"; sourceTree = "<group>"; };
+		D0101017116360F80096EC19 /* LatLong-UTMconversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LatLong-UTMconversion.h"; sourceTree = "<group>"; };
 		D048D8231157A78C00DFF8D9 /* sqlite3x.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sqlite3x.hpp; sourceTree = "<group>"; };
 		D048D8241157A78C00DFF8D9 /* sqlite3x_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_command.cpp; sourceTree = "<group>"; };
 		D048D8251157A78C00DFF8D9 /* sqlite3x_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_connection.cpp; sourceTree = "<group>"; };
@@ -306,6 +310,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D0101014116360F80096EC19 /* UTMconversion */ = {
+			isa = PBXGroup;
+			children = (
+				D0101015116360F80096EC19 /* constants.h */,
+				D0101016116360F80096EC19 /* LatLong-UTMconversion.cpp */,
+				D0101017116360F80096EC19 /* LatLong-UTMconversion.h */,
+			);
+			path = UTMconversion;
+			sourceTree = "<group>";
+		};
 		D048D8221157A78C00DFF8D9 /* sqlite3x */ = {
 			isa = PBXGroup;
 			children = (
@@ -929,6 +943,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D0101014116360F80096EC19 /* UTMconversion */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */,
 				D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */,
@@ -1129,6 +1144,7 @@
 				D048D82D1157A78C00DFF8D9 /* sqlite3x_transaction.cpp in Sources */,
 				D048D8431157A82B00DFF8D9 /* sqlite3.c in Sources */,
 				D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */,
+				D0101018116360F80096EC19 /* LatLong-UTMconversion.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

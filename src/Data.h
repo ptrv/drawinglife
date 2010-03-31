@@ -5,6 +5,9 @@
 #ifndef _DATA_H_
 #define _DATA_H_
 
+// found at http://www.gpsy.com/gpsinfo/geotoutm/
+#include "UTMconversion/LatLong-UTMconversion.h"
+
 /**
  * \brief Holds one gps point with timestamp.
  * 
@@ -16,7 +19,14 @@ class GpsPoint
 	double m_latitude;
 	double m_longitude;
 	double m_elevation;
+	double m_utmX;
+	double m_utmY;
 	std::string m_timestamp;
+
+	// variables for UTM conversation
+	char utmZone[4];
+	int refEllipsoid;//WGS-84. See list with file "LatLong- UTM conversion.cpp" for id numbers
+	
 	
 public:
 	GpsPoint()
@@ -25,7 +35,10 @@ public:
 	m_latitude(0.0),
 	m_longitude(0.0),
 	m_elevation(0.0),
-	m_timestamp("")
+	m_utmX(0.0),
+	m_utmY(0.0),
+	m_timestamp(""),
+	refEllipsoid(23)
 	{};
 	
 	~GpsPoint(){};
@@ -40,10 +53,13 @@ public:
 		m_longitude = longitude;
 		m_elevation = elevation;
 		m_timestamp = timestamp;
+		LLtoUTM(refEllipsoid, m_latitude , m_longitude, m_utmY, m_utmX, utmZone);
 	}
 	double getLatitude() const { return m_latitude; }
 	double getLongitude() const { return m_longitude; }
 	double getElevation() const { return m_elevation; }
+	double getUtmX() const { return m_utmX; }
+	double getUtmY() const { return m_utmY; }
 	const std::string& getTimestamp() const { return m_timestamp; }
 	void clear()
 	{
@@ -51,6 +67,8 @@ public:
 		m_latitude = 0;
 		m_longitude = 0;
 		m_elevation = 0;
+		m_utmX = 0;
+		m_utmY = 0;
 		m_timestamp = "";
 	}
 };
@@ -109,6 +127,13 @@ class GpsData
 	double m_maxLon;
 	double m_minLat;
 	double m_maxLat;
+	double m_minUtmX;
+	double m_maxUtmX;
+	double m_minUtmY;
+	double m_maxUtmY;
+	
+	char utmZone[4];
+	int refEllipsoid;//23 for WGS-84. See list with file "LatLong- UTM conversion.cpp" for id numbers
 
 public:
 	GpsData()
@@ -118,7 +143,12 @@ public:
 	m_minLon(0.0),
 	m_maxLon(0.0),
 	m_minLat(0.0),
-	m_maxLat(0.0)
+	m_maxLat(0.0),
+	m_minUtmX(0.0),
+	m_maxUtmX(0.0),
+	m_minUtmY(0.0),
+	m_maxUtmY(0.0),
+	refEllipsoid(23)
 	{
 		m_segments.reserve(1000); // TODO good amount. 
 	};
@@ -142,6 +172,8 @@ public:
 		m_maxLon = maxLon;
 		m_minLat = minLat;
 		m_maxLat = maxLat;
+		LLtoUTM(refEllipsoid, m_minLat, m_minLon, m_minUtmY, m_minUtmX, utmZone);
+		LLtoUTM(refEllipsoid, m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, utmZone);
 		m_user = user;
 	}
 	// -----------------------------------------------------------------------------
@@ -152,6 +184,13 @@ public:
 	double getMaxLon() const { return m_maxLon; }
 	double getMinLat() const { return m_minLat; }
 	double getMaxLat() const { return m_maxLat; }
+
+	// get UTM convertd min/max values
+	double getMinUtmX() const { return m_minUtmX; }
+	double getMaxUtmX() const { return m_maxUtmX; }
+	double getMinUtmY() const { return m_minUtmY; }
+	double getMaxUtmY() const { return m_maxUtmY; }
+	
 	// -----------------------------------------------------------------------------
 	void clear()
 	{
@@ -161,6 +200,10 @@ public:
 		m_maxLon = 0.0;
 		m_minLat = 0.0;
 		m_maxLat = 0.0;
+		m_minUtmX = 0.0;
+		m_maxUtmX = 0.0;
+		m_minUtmY = 0.0;
+		m_maxUtmY = 0.0;
 		m_user = "";
 	}
 	
@@ -193,6 +236,32 @@ public:
 		return latitude;
 	}
 	// -----------------------------------------------------------------------------
+	
+	double getUtmX(int segmentIndex, int pointIndex)
+	{
+		double utmX = 0.0;
+		if (segmentIndex < (int)m_segments.size()) 
+		{
+			if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+			{
+				utmX = m_segments[segmentIndex].getPoints()[pointIndex].getUtmX();
+			}
+		}
+		return utmX;
+	}
+	
+	double getUtmY(int segmentIndex, int pointIndex)
+	{
+		double utmY = 0.0;
+		if (segmentIndex < (int)m_segments.size()) 
+		{
+			if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+			{
+				utmY = m_segments[segmentIndex].getPoints()[pointIndex].getUtmY();
+			}
+		}
+		return utmY;
+	}
 	
 	// -----------------------------------------------------------------------------
 	int getTotalGpsPoints()

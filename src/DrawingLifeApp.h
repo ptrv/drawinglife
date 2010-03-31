@@ -35,6 +35,8 @@ public:
 	
 	double getNormalizedLatitude(double lat);
 	double getNormalizedLongitude(double lon);
+	double getNormalizedUtmY(double lat);
+	double getNormalizedUtmX(double lon);
 	
 	void setViewAspectRatio();
 	
@@ -55,7 +57,11 @@ public:
 	double m_maxLon;
 	double m_minLat;
 	double m_maxLat;
-
+	double m_minUtmX;
+	double m_maxUtmX;
+	double m_minUtmY;
+	double m_maxUtmY;
+	
 	bool m_isFullscreen;
 	bool m_isDebugMode;
 	
@@ -67,9 +73,10 @@ public:
 
 private:
 	void fillViewArea( int backgroundColor);
+	void fillViewAreaUTM( int backgroundColor);
 	void getNewGpsData();
 	void setMinMaxRatio();
-
+	void setMinMaxRatioUTM();
 };
 
 #endif // _DRAWINGLIFEAPP_H_

@@ -83,13 +83,18 @@ void DrawingLifeApp::setup(){
 		}
 	}
 	// printing min/max values
+//	ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
+//		  m_gpsData->getMinLon(),
+//		  m_gpsData->getMaxLon(),
+//		  m_gpsData->getMinLat(),
+//		  m_gpsData->getMaxLat());
 	ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-		  m_gpsData->getMinLon(),
-		  m_gpsData->getMaxLon(),
-		  m_gpsData->getMinLat(),
-		  m_gpsData->getMaxLat());
-
-	setMinMaxRatio();
+		  m_gpsData->getMinUtmX(),
+		  m_gpsData->getMaxUtmX(),
+		  m_gpsData->getMinUtmY(),
+		  m_gpsData->getMaxUtmY());
+	
+	setMinMaxRatioUTM();
 	
 	// Because the above test print is so slow, here you can prove
 	// that the data have been read by showing las gpsData
@@ -156,6 +161,7 @@ void DrawingLifeApp::draw(){
 		double lat = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getLatitude();
 		double lon = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getLongitude();
 		double ele = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getElevation();
+
 		string timest = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
 		string info =	"Longitude  : " + ofToString(lon) + "\n" +
 						"Latitude   : " + ofToString(lat) + "\n" +
@@ -164,9 +170,9 @@ void DrawingLifeApp::draw(){
 						"Cur. point : " + ofToString(m_currentPoint) + "\n" +
 						"Segment nr : " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum());
 
-		fillViewArea( 0xededed);
-
-//		ofLog(OF_LOG_VERBOSE, ofToString(m_currentPoint) + " " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum()));
+		//fillViewArea( 0xededed);
+		fillViewAreaUTM( 0xededed);
+		
 		ofFill();
 		ofSetColor(0xE5A93F);
 		ofRect(10,10,300,100);
@@ -180,7 +186,6 @@ void DrawingLifeApp::draw(){
 		ofNoFill();
 		for (unsigned int i = 0; i <= m_currentGpsSegment; ++i)
 		{
-			//ofBeginShape();
 			glBegin(GL_LINE_STRIP);
 			int pointEnd;
 			if (i == m_currentGpsSegment)
@@ -189,24 +194,19 @@ void DrawingLifeApp::draw(){
 				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
 			for (unsigned int j = 0; j <= pointEnd; ++j)
 			{
-				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
-						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
-//				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
-//						 getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
-				//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, m_currentPoint: %d, lon: %lf, lat: %lf",
-				//					  m_currentGpsSegment,
-				//					  m_currentGpsPoint,
-				//					  tmpPt.x,
-				//					  tmpPt.y);
+//				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
+//						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
+				glVertex2d(getNormalizedUtmX(m_gpsData->getUtmX(i,j)), 
+						   getNormalizedUtmY(m_gpsData->getUtmY(i,j)));
 			}
-			//ofEndShape();
 			glEnd();
 		}
 		ofFill();
 		ofSetColor(0, 255, 0);
-		ofCircle(getNormalizedLongitude(m_gpsData->getLongitude(m_currentGpsSegment,m_currentGpsPoint)), 
-				 getNormalizedLatitude(m_gpsData->getLatitude(m_currentGpsSegment,m_currentGpsPoint)), 5);
-
+//		ofCircle(getNormalizedLongitude(m_gpsData->getLongitude(m_currentGpsSegment,m_currentGpsPoint)), 
+//				 getNormalizedLatitude(m_gpsData->getLatitude(m_currentGpsSegment,m_currentGpsPoint)), 5);
+		ofCircle(getNormalizedUtmX(m_gpsData->getUtmX(m_currentGpsSegment,m_currentGpsPoint)), 
+				 getNormalizedUtmY(m_gpsData->getUtmY(m_currentGpsSegment,m_currentGpsPoint)), 5);
 	}
 	
 	
@@ -244,7 +244,7 @@ void DrawingLifeApp::getNewGpsData()
 	// -----------------------------------------------------------------------------
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
-	setMinMaxRatio();
+	setMinMaxRatioUTM();
 }
 // -----------------------------------------------------------------------------
 // Set min/max ratio
@@ -255,9 +255,10 @@ void DrawingLifeApp::setMinMaxRatio()
 	double maxLon = m_gpsData->getMaxLon();
 	double minLat = m_gpsData->getMinLat();
 	double maxLat = m_gpsData->getMaxLat();	
-	
+
 	double deltaLon = maxLon - minLon;
 	double deltaLat = maxLat - minLat;
+
 	if (deltaLon <	deltaLat) 
 	{
 		m_minLon = minLon - (deltaLat - deltaLon)/2;
@@ -280,6 +281,40 @@ void DrawingLifeApp::setMinMaxRatio()
 		m_maxLat = maxLat;
 	}
 }
+// -----------------------------------------------------------------------------
+// Set min/max ratio with UTM values
+// -----------------------------------------------------------------------------
+void DrawingLifeApp::setMinMaxRatioUTM()
+{
+	double minLon = m_gpsData->getMinUtmX();
+	double maxLon = m_gpsData->getMaxUtmX();
+	double minLat = m_gpsData->getMinUtmY();
+	double maxLat = m_gpsData->getMaxUtmY();	
+	
+	double deltaLon = maxLon - minLon;
+	double deltaLat = maxLat - minLat;
+	if (deltaLon <	deltaLat) 
+	{
+		m_minUtmX = minLon - (deltaLat - deltaLon)/2;
+		m_maxUtmX = maxLon + (deltaLat - deltaLon)/2;
+		m_minUtmY = minLat;
+		m_maxUtmY = maxLat;		
+	}
+	else if (deltaLat < deltaLon) 
+	{
+		m_minUtmX = minLon;
+		m_maxUtmX = maxLon;
+		m_minUtmY = minLat - (deltaLon - deltaLat);
+		m_maxUtmY = maxLat + (deltaLon - deltaLat);
+	}
+	else
+	{
+		m_minUtmX = minLon;
+		m_maxUtmX = maxLon;
+		m_minUtmY = minLat;
+		m_maxUtmY = maxLat;
+	}
+}
 
 // -----------------------------------------------------------------------------
 double DrawingLifeApp::getNormalizedLongitude(double lon)
@@ -293,6 +328,21 @@ double DrawingLifeApp::getNormalizedLatitude(double lat)
 	// Flip y coordinates ??
 	return m_viewMinDimension - ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
 }
+
+// -----------------------------------------------------------------------------
+double DrawingLifeApp::getNormalizedUtmX(double lon)
+{
+	return ( (lon - m_minUtmX) / (m_maxUtmX - m_minUtmX) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
+}
+
+double DrawingLifeApp::getNormalizedUtmY(double lat)
+{
+	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+	// Flip y coordinates ??
+	return m_viewMinDimension - ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+}
+
+// -----------------------------------------------------------------------------
 
 void DrawingLifeApp::setViewAspectRatio()
 {
@@ -329,6 +379,16 @@ void DrawingLifeApp::fillViewArea( int backgroundColor)
 	double y = getNormalizedLatitude(m_minLat);
 	double w = getNormalizedLongitude(m_maxLon) - x;
 	double h = getNormalizedLatitude(m_maxLat) - y;
+	ofFill();
+	ofSetColor( backgroundColor);
+	ofRect(x, y, w, h);
+}
+void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
+{
+	double x = getNormalizedUtmX(m_minUtmX);
+	double y = getNormalizedUtmY(m_minUtmY);
+	double w = getNormalizedUtmX(m_maxUtmX) - x;
+	double h = getNormalizedUtmY(m_maxUtmY) - y;
 	ofFill();
 	ofSetColor( backgroundColor);
 	ofRect(x, y, w, h);
