@@ -15,13 +15,13 @@ DrawingLifeApp::DrawingLifeApp() : m_dbReader(NULL), m_gpsData(NULL)
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
-	if (m_gpsData != NULL) 
+	if (m_gpsData != NULL)
 	{
 		delete m_gpsData;
 	}
 }
 void DrawingLifeApp::setup(){
-	
+
 	ofSetFrameRate(60);
 
 	// reading settings from xml file
@@ -30,20 +30,20 @@ void DrawingLifeApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	// db path must be absolute path for DBReader (true as second parameter)
 	string dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.db"), true);
-	
+
 	DBG_VAL(dbPath);
-	
+
 	m_gpsData = new GpsData();
-	
+
 	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
 	m_dbReader->setupDbConnection();
 	// -----------------------------------------------------------------------------
 	// DB query
-	if(m_dbReader->getGpsDataDay(*m_gpsData, "Dan", 2010, 2, 9))
+	if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, 9, 18))
 	{
 		ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
-		ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!", 
+		ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
 			  m_gpsData->getSegments().size(),
 			  m_gpsData->getTotalGpsPoints());
 	}
@@ -54,7 +54,7 @@ void DrawingLifeApp::setup(){
 	// -----------------------------------------------------------------------------
 	m_dbReader->closeDbConnection();
 	delete m_dbReader;
-	
+
 	// test print
 	maxPoints = 0;
 //	for (unsigned int i = 0; i < m_gpsData->getSegments().size(); ++i) {
@@ -76,23 +76,23 @@ void DrawingLifeApp::setup(){
 //		}
 //	}
 	// printing min/max values
-	ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf", 
-		  m_gpsData->getMinLon(), 
+	ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
+		  m_gpsData->getMinLon(),
 		  m_gpsData->getMaxLon(),
 		  m_gpsData->getMinLat(),
 		  m_gpsData->getMaxLat());
-	
+
 	m_minLon = m_gpsData->getMinLon();
 	m_maxLon = m_gpsData->getMaxLon();
 	m_minLat = m_gpsData->getMinLat();
 	m_maxLat = m_gpsData->getMaxLat();
-	
-	// Because the above test print is so slow, here you can prove 
+
+	// Because the above test print is so slow, here you can prove
 	// that the data have been read by showing las gpsData
-//	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());	
+//	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());
 
 	ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
-	
+
 	m_currentGpsPoint = 0;
 	m_currentGpsSegment = 0;
 	m_currentPoint = -1;
@@ -105,13 +105,13 @@ void DrawingLifeApp::setup(){
 void DrawingLifeApp::update(){
 
 	// Counting through GpsSegments and GpsPoints
-	if (m_gpsData->getSegments().size() > 0) 
+	if (m_gpsData->getSegments().size() > 0)
 	{
-		if ((unsigned int)m_currentGpsSegment < m_gpsData->getSegments().size()-1) 
+		if ((unsigned int)m_currentGpsSegment < m_gpsData->getSegments().size()-1)
 		{
-			if ((unsigned int)m_currentGpsPoint < m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() - 1) 
+			if ((unsigned int)m_currentGpsPoint < m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
 			{
-				if (!m_firstPoint) 
+				if (!m_firstPoint)
 					++m_currentGpsPoint;
 				else
 					m_firstPoint = false;
@@ -124,7 +124,7 @@ void DrawingLifeApp::update(){
 		}
 		else
 		{
-			if ((unsigned int)m_currentGpsPoint < m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() - 1) 
+			if ((unsigned int)m_currentGpsPoint < m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
 			{
 				++m_currentGpsPoint;
 			}
@@ -132,18 +132,18 @@ void DrawingLifeApp::update(){
 			{
 				m_currentGpsPoint = 0;
 				m_currentGpsSegment = 0;
-				m_currentPoint = -1;				
+				m_currentPoint = -1;
 			}
 		}
 		++m_currentPoint;
-	}	
+	}
 }
 
 
 //--------------------------------------------------------------
 void DrawingLifeApp::draw(){
-	
-	
+
+
 	if (m_gpsData->getSegments().size() > 0 && m_gpsData->getSegments()[m_currentGpsSegment].getPoints().size() > 0)
 	{
 		// -----------------------------------------------------------------------------
@@ -168,13 +168,13 @@ void DrawingLifeApp::draw(){
 		ofRect(10,10,300,100);
 		ofSetColor(0x000000);
 		ofDrawBitmapString(info,30,30);
-		
+
 		// -----------------------------------------------------------------------------
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 		ofSetColor(FOREGROUND);
 		ofNoFill();
-		for (unsigned int i = 0; i <= m_currentGpsSegment; ++i) 
+		for (unsigned int i = 0; i <= m_currentGpsSegment; ++i)
 		{
 			ofBeginShape();
 			int pointEnd;
@@ -182,32 +182,34 @@ void DrawingLifeApp::draw(){
 				pointEnd = m_currentGpsPoint;
 			else
 				pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
-			for (unsigned int j = 0; j <= pointEnd; ++j) 
+			for (unsigned int j = 0; j <= pointEnd; ++j)
 			{
-				//				ofVertex(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()), 
+				//				ofVertex(getNormalizedLongitude(m_gpsData->getSegments()[i].getPoints()[j].getLongitude()),
 				//						   getNormalizedLatitude(m_gpsData->getSegments()[i].getPoints()[j].getLatitude()));
-				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)), 
+				ofVertex(getNormalizedLongitude(m_gpsData->getLongitude(i,j)),
 						 getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
 				//				ofLog(OF_LOG_VERBOSE, "currentSeg: %d, m_currentPoint: %d, lon: %lf, lat: %lf",
-				//					  m_currentGpsSegment, 
+				//					  m_currentGpsSegment,
 				//					  m_currentGpsPoint,
 				//					  tmpPt.x,
-				//					  tmpPt.y);			
+				//					  tmpPt.y);
 			}
 			ofEndShape();
 		}
-	}			
+	}
 }
 
 // -----------------------------------------------------------------------------
 double DrawingLifeApp::getNormalizedLongitude(double lon)
 {
-	return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset); 
+	return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
 }
 
 double DrawingLifeApp::getNormalizedLatitude(double lat)
 {
-	return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+//    return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+	// Flip y coordinates ??
+	return m_viewMinDimension - ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
 }
 
 void DrawingLifeApp::setViewAspectRatio()
@@ -218,7 +220,7 @@ void DrawingLifeApp::setViewAspectRatio()
 	// Reset for view padding.
 	m_viewXOffset = 0;
 	m_viewYOffset = 0;
-	
+
 	// Set square view area and center.
 	if (height < width)
 	{
@@ -228,7 +230,7 @@ void DrawingLifeApp::setViewAspectRatio()
 	else if (width < height)
 	{
 		m_viewMinDimension = width;
-		m_viewYOffset = (height - width) / 2;		
+		m_viewYOffset = (height - width) / 2;
 	}
 	else
 	{
