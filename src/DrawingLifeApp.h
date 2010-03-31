@@ -37,7 +37,6 @@ public:
 	double getNormalizedLongitude(double lon);
 	
 	void setViewAspectRatio();
-	void setMinMaxRatio();
 	
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
@@ -59,11 +58,18 @@ public:
 
 	bool m_isFullscreen;
 	bool m_isDebugMode;
+	
+	int m_currentSelectedDayEnd;
+	int m_currentSelectedDayStart;
+	
 	static const int BACKGROUND = 0xFFFFFF; 
 	static const int FOREGROUND = 0x000000;
 
 private:
 	void fillViewArea( int backgroundColor);
+	void getNewGpsData();
+	void setMinMaxRatio();
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_

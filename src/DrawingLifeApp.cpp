@@ -9,7 +9,9 @@
 DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL), 
 									m_gpsData(NULL),
 									m_isFullscreen(false),
-									m_isDebugMode(false)
+									m_isDebugMode(false),
+									m_currentSelectedDayStart(9),
+									m_currentSelectedDayEnd(18)
 {
 	m_viewXOffset = 0;
 	m_viewYOffset = 0;
@@ -211,6 +213,40 @@ void DrawingLifeApp::draw(){
 	
 }
 // -----------------------------------------------------------------------------
+// Retreiving new GpsData
+// -----------------------------------------------------------------------------
+void DrawingLifeApp::getNewGpsData()
+{
+	// get GpsData from database
+	m_gpsData->clear();
+	m_gpsData = NULL;
+	m_gpsData = new GpsData();
+	m_currentGpsSegment = 0;
+	m_currentGpsPoint = 0;
+	m_currentPoint = -1;
+	m_dbReader = new DBReader(m_dbPath);
+	if (m_dbReader->setupDbConnection())
+	{
+		// -----------------------------------------------------------------------------
+		// DB query
+		if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, m_currentSelectedDayStart, m_currentSelectedDayEnd))
+		{
+			ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
+			ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
+				  m_gpsData->getSegments().size(),
+				  m_gpsData->getTotalGpsPoints());
+		}
+		else
+		{
+			ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+		}
+	}
+	// -----------------------------------------------------------------------------
+	m_dbReader->closeDbConnection();
+	delete m_dbReader;
+	setMinMaxRatio();
+}
+// -----------------------------------------------------------------------------
 // Set min/max ratio
 // -----------------------------------------------------------------------------
 void DrawingLifeApp::setMinMaxRatio()
@@ -304,6 +340,26 @@ void DrawingLifeApp::keyPressed  (int key){
 		case 'f':
 			m_isFullscreen = !m_isFullscreen;
 			ofSetFullscreen(m_isFullscreen);
+			break;
+		case 'w':
+			m_currentSelectedDayStart += 1;
+			getNewGpsData();
+			DBG_VAL(m_currentSelectedDayStart);
+			break;
+		case 's':
+			m_currentSelectedDayStart -= 1;
+			DBG_VAL(m_currentSelectedDayStart);
+			getNewGpsData();
+			break;
+		case 'e':
+			m_currentSelectedDayEnd += 1;
+			DBG_VAL(m_currentSelectedDayEnd);
+			getNewGpsData();
+			break;
+		case 'd':
+			m_currentSelectedDayEnd -= 1;
+			DBG_VAL(m_currentSelectedDayEnd);
+			getNewGpsData();
 			break;
 		default:
 			break;
