@@ -37,6 +37,7 @@ public:
 	double getNormalizedLongitude(double lon);
 	
 	void setViewAspectRatio();
+	void setMinMaxRatio();
 	
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;

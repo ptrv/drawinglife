@@ -87,11 +87,8 @@ void DrawingLifeApp::setup(){
 		  m_gpsData->getMinLat(),
 		  m_gpsData->getMaxLat());
 
-	m_minLon = m_gpsData->getMinLon();
-	m_maxLon = m_gpsData->getMaxLon();
-	m_minLat = m_gpsData->getMinLat();
-	m_maxLat = m_gpsData->getMaxLat();
-
+	setMinMaxRatio();
+	
 	// Because the above test print is so slow, here you can prove
 	// that the data have been read by showing las gpsData
 //	ofLog(OF_LOG_NOTICE, m_gpsData->getSegments().back().getPoints().back().getTimestamp());
@@ -212,6 +209,40 @@ void DrawingLifeApp::draw(){
 	
 	
 	
+}
+// -----------------------------------------------------------------------------
+// Set min/max ratio
+// -----------------------------------------------------------------------------
+void DrawingLifeApp::setMinMaxRatio()
+{
+	double minLon = m_gpsData->getMinLon();
+	double maxLon = m_gpsData->getMaxLon();
+	double minLat = m_gpsData->getMinLat();
+	double maxLat = m_gpsData->getMaxLat();	
+	
+	double deltaLon = maxLon - minLon;
+	double deltaLat = maxLat - minLat;
+	if (deltaLon <	deltaLat) 
+	{
+		m_minLon = minLon - (deltaLat - deltaLon)/2;
+		m_maxLon = maxLon + (deltaLat - deltaLon)/2;
+		m_minLat = minLat;
+		m_maxLat = maxLat;		
+	}
+	else if (deltaLat < deltaLon) 
+	{
+		m_minLon = minLon;
+		m_maxLon = maxLon;
+		m_minLat = minLat - (deltaLon - deltaLat);
+		m_maxLat = maxLat + (deltaLon - deltaLat);
+	}
+	else
+	{
+		m_minLon = minLon;
+		m_maxLon = maxLon;
+		m_minLat = minLat;
+		m_maxLat = maxLat;
+	}
 }
 
 // -----------------------------------------------------------------------------
