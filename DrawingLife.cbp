@@ -349,6 +349,18 @@
 		<Unit filename="src/DrawingLifeApp.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/GpsData.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/GpsData.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/GpsPoint.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/GpsSegment.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/Logger.h">
 			<Option virtualFolder="src/" />
 		</Unit>
