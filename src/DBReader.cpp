@@ -2,6 +2,7 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
+#include "DrawingLifeIncludes.h"
 #include "ofMain.h"
 #include "DBReader.h"
 #include "Logger.h"
@@ -39,8 +40,8 @@ m_trans(NULL)
 
 DBReader::~DBReader()
 {
-	delete m_dbconn;
-	delete m_trans;
+	SAFE_DELETE(m_dbconn);
+	SAFE_DELETE(m_trans);
 }
 
 bool DBReader::setupDbConnection()
@@ -71,15 +72,15 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 	try {
 		sqlite3_command cmd(*m_dbconn, query.c_str());
 		sqlite3_reader reader=cmd.executereader();
-		
+
 		//DBG_VAL(query);
-		
+
 		int lastSegment = -1;
 		string user = "";
 		GpsSegment gpsSeg;
 		std::vector<GpsPoint> gpsPointVec;
 		std::vector<GpsSegment> gpsSegmentVec;
-		
+
 
 		// -----------------------------------------------------------------------------
 		// Get all data from query.
@@ -88,12 +89,12 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		{
 			GpsPoint gpsPoint;
 			gpsPoint.setGpsPoint(reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3));
-			
+
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
-						
+
 			// for logging
-//			ofLog(OF_LOG_NOTICE, "userid: %d, lat: %lf, lon: %lf, ele: %lf, time: %s, segment: %d, user: %d", 
+//			ofLog(OF_LOG_NOTICE, "userid: %d, lat: %lf, lon: %lf, ele: %lf, time: %s, segment: %d, user: %d",
 //				  reader.getint(0),
 //				  reader.getdouble(1),
 //				  reader.getdouble(2),
@@ -101,11 +102,11 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 //				  reader.getstring(4).c_str(),
 //				  currentSegment,
 //				  user);
-			
-			if (currentSegment != lastSegment) 
+
+			if (currentSegment != lastSegment)
 			{
 				// this is true only for first time getting to this point
-				if (lastSegment == -1) 
+				if (lastSegment == -1)
 				{
 					lastSegment = currentSegment;
 					gpsPointVec.push_back(gpsPoint);
@@ -121,26 +122,26 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 			}
 			else
 			{
-				gpsPointVec.push_back(gpsPoint);				
+				gpsPointVec.push_back(gpsPoint);
 			}
 		}
 		queryFirstOk = true;
 		// -----------------------------------------------------------------------------
-		
+
 		gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
 		gpsSegmentVec.push_back(gpsSeg);
-		
+
 		// -----------------------------------------------------------------------------
 		// Get min/max values for query.
 		// -----------------------------------------------------------------------------
 		size_t posS = query.find("FROM");
 		size_t posE = query.find(" ORDER");
-		
+
 		queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
 		queryMinMax << query.substr(posS, (posE - posS));
 
 		//DBG_VAL(queryMinMax.str());
-		
+
 		sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
 		sqlite3_reader readerMinMax = cmd2.executereader();
 		double minLon, maxLon, minLat, maxLat;

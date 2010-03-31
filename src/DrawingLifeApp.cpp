@@ -2,6 +2,7 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
+#include "DrawingLifeIncludes.h"
 #include "DrawingLifeApp.h"
 #include "Data.h"
 #include <vector>
@@ -22,7 +23,7 @@ DrawingLifeApp::~DrawingLifeApp()
 {
 	if (m_gpsData != NULL)
 	{
-		delete m_gpsData;
+		SAFE_DELETE(m_gpsData);
 	}
 }
 void DrawingLifeApp::setup(){
@@ -61,7 +62,7 @@ void DrawingLifeApp::setup(){
 	}
 	// -----------------------------------------------------------------------------
 	m_dbReader->closeDbConnection();
-	delete m_dbReader;
+	SAFE_DELETE(m_dbReader);
 
 	// test print
 	maxPoints = 0;
@@ -220,7 +221,7 @@ void DrawingLifeApp::getNewGpsData()
 {
 	// get GpsData from database
 	m_gpsData->clear();
-	m_gpsData = NULL;
+	SAFE_DELETE(m_gpsData);
 	m_gpsData = new GpsData();
 	m_currentGpsSegment = 0;
 	m_currentGpsPoint = 0;
@@ -244,7 +245,7 @@ void DrawingLifeApp::getNewGpsData()
 	}
 	// -----------------------------------------------------------------------------
 	m_dbReader->closeDbConnection();
-	delete m_dbReader;
+	SAFE_DELETE(m_dbReader);
 	setMinMaxRatioUTM();
 }
 // -----------------------------------------------------------------------------

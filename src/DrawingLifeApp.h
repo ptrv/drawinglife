@@ -17,14 +17,14 @@
  */
 
 class DrawingLifeApp : public ofBaseApp{
-	
+
 public:
 	DrawingLifeApp();
 	virtual ~DrawingLifeApp();
 	void setup();
 	void update();
 	void draw();
-	
+
 	void keyPressed  (int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y );
@@ -32,14 +32,14 @@ public:
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
-	
+
 	double getNormalizedLatitude(double lat);
 	double getNormalizedLongitude(double lon);
 	double getNormalizedUtmY(double lat);
 	double getNormalizedUtmX(double lon);
-	
+
 	void setViewAspectRatio();
-	
+
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
 	GpsData* m_gpsData;
@@ -61,14 +61,14 @@ public:
 	double m_maxUtmX;
 	double m_minUtmY;
 	double m_maxUtmY;
-	
+
 	bool m_isFullscreen;
 	bool m_isDebugMode;
-	
+
 	int m_currentSelectedDayEnd;
 	int m_currentSelectedDayStart;
-	
-	static const int BACKGROUND = 0xFFFFFF; 
+
+	static const int BACKGROUND = 0xFFFFFF;
 	static const int FOREGROUND = 0x000000;
 
 private:

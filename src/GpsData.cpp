@@ -19,7 +19,7 @@ m_minUtmY(0.0),
 m_maxUtmY(0.0),
 refEllipsoid(23)
 {
-	m_segments.reserve(1000); // TODO good amount. 
+	m_segments.reserve(1000); // TODO good amount.
 }
 
 GpsData::~GpsData()
@@ -29,11 +29,11 @@ GpsData::~GpsData()
 // -----------------------------------------------------------------------------
 // Set Gps data.
 // -----------------------------------------------------------------------------
-void GpsData::setGpsData(const std::vector<GpsSegment>& segments, 
-						 double minLon, 
-						 double maxLon, 
-						 double minLat, 
-						 double maxLat, 
+void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
+						 double minLon,
+						 double maxLon,
+						 double minLat,
+						 double maxLat,
 						 const std::string& user)
 {
 	++m_gpsDataId;
@@ -63,15 +63,15 @@ void GpsData::clear()
 	m_user = "";
 }
 
-// -----------------------------------------------------------------------------
+// ---------------------------------Folgendem--------------------------------------------
 // Get Gps point.
 // -----------------------------------------------------------------------------
 double GpsData::getLongitude(int segmentIndex, int pointIndex)
 {
 	double longitude = -1000.0;
-	if (segmentIndex < (int)m_segments.size()) 
+	if (segmentIndex < (int)m_segments.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
 		{
 			longitude = m_segments[segmentIndex].getPoints()[pointIndex].getLongitude();
 		}
@@ -82,9 +82,9 @@ double GpsData::getLongitude(int segmentIndex, int pointIndex)
 double GpsData::getLatitude(int segmentIndex, int pointIndex)
 {
 	double latitude = -1000.0;
-	if (segmentIndex < (int)m_segments.size()) 
+	if (segmentIndex < (int)m_segments.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
 		{
 			latitude = m_segments[segmentIndex].getPoints()[pointIndex].getLatitude();
 		}
@@ -96,9 +96,9 @@ double GpsData::getLatitude(int segmentIndex, int pointIndex)
 double GpsData::getUtmX(int segmentIndex, int pointIndex)
 {
 	double utmX = 0.0;
-	if (segmentIndex < (int)m_segments.size()) 
+	if (segmentIndex < (int)m_segments.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
 		{
 			utmX = m_segments[segmentIndex].getPoints()[pointIndex].getUtmX();
 		}
@@ -109,9 +109,9 @@ double GpsData::getUtmX(int segmentIndex, int pointIndex)
 double GpsData::getUtmY(int segmentIndex, int pointIndex)
 {
 	double utmY = 0.0;
-	if (segmentIndex < (int)m_segments.size()) 
+	if (segmentIndex < (int)m_segments.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size()) 
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
 		{
 			utmY = m_segments[segmentIndex].getPoints()[pointIndex].getUtmY();
 		}
