@@ -43,12 +43,15 @@ DBReader::~DBReader()
 	delete m_trans;
 }
 
-void DBReader::setupDbConnection()
+bool DBReader::setupDbConnection()
 {
+	bool result = false;
 	try {
 		m_dbconn = new sqlite3_connection(m_dbPath.c_str());
+		result = true;
 	}
 	CATCHDBERRORS
+	return result;
 }
 
 void DBReader::closeDbConnection()

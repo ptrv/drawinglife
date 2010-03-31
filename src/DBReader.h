@@ -20,7 +20,7 @@ class DBReader {
 public:
 	DBReader(const string& dbpath);
 	~DBReader();
-	void setupDbConnection();
+	bool setupDbConnection();
 	void closeDbConnection();
 	bool getGpsDataDay(GpsData& gpsData, const string& userName, int year, int month, int day);
 	bool getGpsDataDayRange(GpsData& gpsData, const string& userName, int year, int month, int dayStart, int dayEnd);

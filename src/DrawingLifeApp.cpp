@@ -40,7 +40,8 @@ void DrawingLifeApp::setup(){
 
 	// get GpsData from database
 	m_dbReader = new DBReader(dbPath);
-	m_dbReader->setupDbConnection();
+	if (m_dbReader->setupDbConnection())
+	{
 	// -----------------------------------------------------------------------------
 	// DB query
 	if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, 9, 18))
@@ -53,6 +54,7 @@ void DrawingLifeApp::setup(){
 	else
 	{
 		ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+	}
 	}
 	// -----------------------------------------------------------------------------
 	m_dbReader->closeDbConnection();
