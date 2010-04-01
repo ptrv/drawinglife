@@ -290,4 +290,16 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& userName, int
 	return result;
 }
 
-
+bool DBReader::getGpsDataCity(GpsData& gpsData, const string& userName, const string& city)
+{
+	bool result = false;
+	stringstream query;
+	query << getBasicQueryString();
+	query << "WHERE name = '";
+	query << userName;
+	query << "' AND c.city = '";
+	query << city;
+	query << "' ORDER BY time ASC;";
+	result = getGpsData(gpsData, query.str());
+	return result;
+}

@@ -14,7 +14,7 @@ using namespace std;
 
 /**
  * \brief Class for reading from database using sqlite3x.
- * 
+ *
  */
 class DBReader {
 public:
@@ -28,18 +28,19 @@ public:
 	bool getGpsDataMonthRange(GpsData& gpsData, const string& userName, int year, int monthStart, int monthEnd);
 	bool getGpsDataYear(GpsData& gpsData, const string& userName, int year);
 	bool getGpsDataYearRange(GpsData& gpsData, const string& userName, int yearStart, int yearEnd);
-	
+	bool getGpsDataCity(GpsData& gpsData, const string& userName, const string& city);
+
 private:
-	
+
 	bool getGpsData(GpsData& gpsData, const string& query);
-	
+
 	const string getBasicQueryString();
-	
+
 	// -----------------------------------------------------------------------------
-	
+
 	string m_dbPath;
 	sqlite3_connection* m_dbconn;
 	sqlite3_transaction* m_trans;
-	
+
 };
 #endif // _DBREADER_H_
