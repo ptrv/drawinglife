@@ -120,6 +120,20 @@ double GpsData::getUtmY(int segmentIndex, int pointIndex)
 }
 
 // -----------------------------------------------------------------------------
+
+const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
+{
+	std::string loc = "";
+	if (segmentIndex < (int)m_segments.size())
+	{
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		{
+			loc = m_segments[segmentIndex].getPoints()[pointIndex].getLocation();
+		}
+	}
+	return loc;
+}
+// -----------------------------------------------------------------------------
 int GpsData::getTotalGpsPoints()
 {
 	int num = 0;

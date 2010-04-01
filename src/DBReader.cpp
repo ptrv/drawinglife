@@ -86,7 +86,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		while(reader.read())
 		{
 			GpsPoint gpsPoint;
-			gpsPoint.setGpsPoint(reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3));
+			gpsPoint.setGpsPoint(reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7));
 
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
@@ -165,9 +165,11 @@ const string DBReader::getBasicQueryString()
 	return	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
 			"a.longitude AS longitude, a.time AS time,"\
 			"a.elevation AS elevation, a.segment AS segment,"\
-			"b.name AS name "\
+			"b.name AS name,"\
+			"c.city AS location "\
 			"FROM gpsdata AS a "\
-			"JOIN user AS b ON (a.user = b.userid) ";
+			"JOIN user AS b ON (a.user = b.userid) "\
+			"JOIN location AS c ON (a.location = c.locationid) ";
 }
 bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int year, int month, int day)
 {

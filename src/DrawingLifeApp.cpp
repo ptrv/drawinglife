@@ -161,10 +161,12 @@ void DrawingLifeApp::draw(){
 		double ele = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getElevation();
 
 		string timest = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
+		string currentLocation = m_gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 		string info =	"Longitude  : " + ofToString(lon) + "\n" +
 						"Latitude   : " + ofToString(lat) + "\n" +
 						"Elevation  : " + ofToString(ele) + "\n" +
 						"Time       : " + timest + "\n" +
+						"Location   : " + currentLocation + "\n" +
 						"Cur. point : " + ofToString(m_currentPoint) + "\n" +
 						"Segment nr : " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum());
 
@@ -173,7 +175,7 @@ void DrawingLifeApp::draw(){
 
 		ofFill();
 		ofSetColor(0xE5A93F);
-		ofRect(10,10,300,100);
+		ofRect(10,10,300,120);
 		ofSetColor(0x000000);
 		ofDrawBitmapString(info,30,30);
 
