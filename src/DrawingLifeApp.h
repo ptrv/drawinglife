@@ -62,6 +62,7 @@ public:
 
 	bool m_isFullscreen;
 	bool m_isDebugMode;
+	bool m_isAnimation;
 
 	int m_currentSelectedDayEnd;
 	int m_currentSelectedDayStart;
