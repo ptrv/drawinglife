@@ -186,40 +186,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="src"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
-			>
-			<File
-				RelativePath=".\src\Data.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\DBReader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\DBReader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\DrawingLifeApp.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\DrawingLifeApp.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\Logger.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\main.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="addons"
 			>
 			<File
@@ -620,6 +586,78 @@
 			</File>
 			<File
 				RelativePath=".\sqlite3x\sqlite3x_transaction.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="UTMconversion"
+			>
+			<File
+				RelativePath=".\src\UTMconversion\constants.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\UTMconversion\LatLong-UTMconversion.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\UTMconversion\LatLong-UTMconversion.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			>
+			<File
+				RelativePath=".\src\Data.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DBReader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DrawingLifeApp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DrawingLifeIncludes.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GpsData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GpsPoint.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GpsSegment.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Logger.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Source Files"
+			>
+			<File
+				RelativePath=".\src\DBReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\DrawingLifeApp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GpsData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\main.cpp"
 				>
 			</File>
 		</Filter>

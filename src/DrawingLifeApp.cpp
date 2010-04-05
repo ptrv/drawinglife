@@ -240,7 +240,7 @@ void DrawingLifeApp::draw()
     }
 }
 // -----------------------------------------------------------------------------
-// Retreiving new GpsData
+// Retrieving new GpsData
 // -----------------------------------------------------------------------------
 void DrawingLifeApp::getNewGpsData()
 {
@@ -397,7 +397,7 @@ void DrawingLifeApp::setViewAspectRatio()
         m_viewMinDimension = width;
     }
 
-    // Left and top intend.
+    // Left and top indentation.
     m_viewXOffset += m_viewPadding;
     m_viewYOffset += m_viewPadding;
 }
