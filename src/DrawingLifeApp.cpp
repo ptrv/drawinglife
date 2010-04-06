@@ -232,6 +232,8 @@ void DrawingLifeApp::draw()
             {
 //				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)),
 //						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
+				GpsPoint P = m_gpsData->getNormalizedUtm(i, j);
+				P.getUtmX()
                 glVertex2d(getNormalizedUtmX(m_gpsData->getUtmX(i,j)),
                            getNormalizedUtmY(m_gpsData->getUtmY(i,j)));
             }
@@ -309,44 +311,13 @@ void DrawingLifeApp::setMinMaxRatio()
         m_maxLat = maxLat;
     }
 }
-// -----------------------------------------------------------------------------
-// Set min/max ratio with UTM values
-// -----------------------------------------------------------------------------
-void DrawingLifeApp::setMinMaxRatioUTM()
-{
-    double minLon = m_gpsData->getMinUtmX();
-    double maxLon = m_gpsData->getMaxUtmX();
-    double minLat = m_gpsData->getMinUtmY();
-    double maxLat = m_gpsData->getMaxUtmY();
 
-    double deltaLon = maxLon - minLon;
-    double deltaLat = maxLat - minLat;
-    if (deltaLon <	deltaLat)
-    {
-        m_minUtmX = minLon - (deltaLat - deltaLon)/2;
-        m_maxUtmX = maxLon + (deltaLat - deltaLon)/2;
-        m_minUtmY = minLat;
-        m_maxUtmY = maxLat;
-    }
-    else if (deltaLat < deltaLon)
-    {
-        m_minUtmX = minLon;
-        m_maxUtmX = maxLon;
-        m_minUtmY = minLat - (deltaLon - deltaLat)/2;
-        m_maxUtmY = maxLat + (deltaLon - deltaLat)/2;
-    }
-    else
-    {
-        m_minUtmX = minLon;
-        m_maxUtmX = maxLon;
-        m_minUtmY = minLat;
-        m_maxUtmY = maxLat;
-    }
-}
 
 // -----------------------------------------------------------------------------
 double DrawingLifeApp::getNormalizedLongitude(double lon)
 {
+
+							  // horizontaler wertebereich
     return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
 }
 

@@ -70,9 +70,14 @@ public:
 	double getUtmX(int segmentIndex, int pointIndex);
 	double getUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
+	GpsPoint getNormalizedUtm(int segmentIndex, int pointIndex);
+	// -----------------------------------------------------------------------------
 	const std::string getGpsLocation(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
 	int getTotalGpsPoints();
+
+private:
+	void setMinMaxRatioUTM();
 };
 
 

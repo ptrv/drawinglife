@@ -46,6 +46,8 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	LLtoUTM(refEllipsoid, m_minLat, m_minLon, m_minUtmY, m_minUtmX, utmZone);
 	LLtoUTM(refEllipsoid, m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, utmZone);
 	m_user = user;
+
+	setMinMaxRatioUTM();
 }
 // -----------------------------------------------------------------------------
 void GpsData::clear()
@@ -118,6 +120,22 @@ double GpsData::getUtmY(int segmentIndex, int pointIndex)
 	}
 	return utmY;
 }
+GpsPoint GpsData::getNormalizedUtm(int segmentIndex, int pointIndex)
+{
+	GpsPoint utm = p;
+
+	if (segmentIndex < (int)m_segments.size())
+	{
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		{
+			utm. = m_segments[segmentIndex].getPoints()[pointIndex].getUtmY();
+		}
+	}
+
+	
+	utm
+
+}
 
 // -----------------------------------------------------------------------------
 
@@ -143,4 +161,39 @@ int GpsData::getTotalGpsPoints()
 		}
 	}
 	return num;
+}
+
+// -----------------------------------------------------------------------------
+// Set min/max ratio with UTM values
+// -----------------------------------------------------------------------------
+void GpsData::setMinMaxRatioUTM()
+{
+	double minLon = this->getMinUtmX();
+	double maxLon = this->getMaxUtmX();
+	double minLat = this->getMinUtmY();
+	double maxLat = this->getMaxUtmY();
+
+	double deltaLon = maxLon - minLon;
+	double deltaLat = maxLat - minLat;
+	if (deltaLon <	deltaLat)
+	{
+		m_minUtmX = minLon - (deltaLat - deltaLon)/2;
+		m_maxUtmX = maxLon + (deltaLat - deltaLon)/2;
+		m_minUtmY = minLat;
+		m_maxUtmY = maxLat;
+	}
+	else if (deltaLat < deltaLon)
+	{
+		m_minUtmX = minLon;
+		m_maxUtmX = maxLon;
+		m_minUtmY = minLat - (deltaLon - deltaLat)/2;
+		m_maxUtmY = maxLat + (deltaLon - deltaLat)/2;
+	}
+	else
+	{
+		m_minUtmX = minLon;
+		m_maxUtmX = maxLon;
+		m_minUtmY = minLat;
+		m_maxUtmY = maxLat;
+	}
 }
