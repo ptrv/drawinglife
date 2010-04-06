@@ -396,6 +396,7 @@ void DrawingLifeApp::fillViewArea( int backgroundColor)
 }
 void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
 {
+	// Normalized value range from 0 to 1.
     double x = getScaledUtmX(0);
     double y = getScaledUtmY(0);
     double w = getScaledUtmX(1) - x;

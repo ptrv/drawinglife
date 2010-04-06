@@ -58,12 +58,6 @@ public:
 	double getMaxUtmX() const { return m_maxUtmX; }
 	double getMinUtmY() const { return m_minUtmY; }
 	double getMaxUtmY() const { return m_maxUtmY; }
-
-	// get UTM convertd min/max values
-	double getNormalizedMinUtmX() const { return m_minUtmX; }
-	double getNormalizedMaxUtmX() const { return m_maxUtmX; }
-	double getNormalizedMinUtmY() const { return m_minUtmY; }
-	double getNormalizedMaxUtmY() const { return m_maxUtmY; }
 	
 	// -----------------------------------------------------------------------------
 	void clear();
