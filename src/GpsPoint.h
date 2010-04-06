@@ -21,6 +21,8 @@ class GpsPoint
 	double m_elevation;
 	double m_utmX;
 	double m_utmY;
+	double m_normalizedUtmX;
+	double m_normalizedUtmY;
 	std::string m_timestamp;
 	std::string m_location;
 	
@@ -38,6 +40,8 @@ public:
 	m_elevation(0.0),
 	m_utmX(0.0),
 	m_utmY(0.0),
+	m_normalizedUtmX(0.0),
+	m_normalizedUtmY(0.0),
 	m_timestamp(""),
 	m_location(""),
 	refEllipsoid(23)
@@ -65,7 +69,13 @@ public:
 	const std::string& getLocation() const { return m_location; }
 	double getUtmX() const { return m_utmX; }
 	double getUtmY() const { return m_utmY; }
+	double getNormalizedUtmX() const { return m_normalizedUtmX; }
+	double getNormalizedUtmY() const { return m_normalizedUtmY; }
 	const std::string& getTimestamp() const { return m_timestamp; }
+	// -----------------------------------------------------------------------------
+	void setNormalizedUtmX(double normUtmX) { m_normalizedUtmX = normUtmX; }
+	void setNormalizedUtmY(double normUtmY) { m_normalizedUtmY = normUtmY; }
+	// -----------------------------------------------------------------------------
 	void clear()
 	{
 		m_gpsPointId = 0;

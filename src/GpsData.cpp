@@ -46,8 +46,7 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	LLtoUTM(refEllipsoid, m_minLat, m_minLon, m_minUtmY, m_minUtmX, utmZone);
 	LLtoUTM(refEllipsoid, m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, utmZone);
 	m_user = user;
-
-	setMinMaxRatioUTM();
+	normalizeGpsPoints();	
 }
 // -----------------------------------------------------------------------------
 void GpsData::clear()
@@ -120,21 +119,33 @@ double GpsData::getUtmY(int segmentIndex, int pointIndex)
 	}
 	return utmY;
 }
-GpsPoint GpsData::getNormalizedUtm(int segmentIndex, int pointIndex)
+// -----------------------------------------------------------------------------
+double GpsData::getNormalizedUtmX(int segmentIndex, int pointIndex)
 {
-	GpsPoint utm = p;
-
+	double normalizedUtmX = 0.0;
 	if (segmentIndex < (int)m_segments.size())
 	{
 		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
 		{
-			utm. = m_segments[segmentIndex].getPoints()[pointIndex].getUtmY();
+			normalizedUtmX = m_segments[segmentIndex].getPoints()[pointIndex].getNormalizedUtmX();
 		}
 	}
+	return normalizedUtmX;
 
+}
+
+double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
+{
+	double normalizedUtmY = 0.0;
+	if (segmentIndex < (int)m_segments.size())
+	{
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		{
+			normalizedUtmY = m_segments[segmentIndex].getPoints()[pointIndex].getNormalizedUtmY();
+		}
+	}
+	return normalizedUtmY;
 	
-	utm
-
 }
 
 // -----------------------------------------------------------------------------
@@ -195,5 +206,24 @@ void GpsData::setMinMaxRatioUTM()
 		m_maxUtmX = maxLon;
 		m_minUtmY = minLat;
 		m_maxUtmY = maxLat;
+	}
+}
+// -----------------------------------------------------------------------------
+// Normalize Gps points
+// -----------------------------------------------------------------------------
+void GpsData::normalizeGpsPoints()
+{
+	setMinMaxRatioUTM();
+	for (unsigned int i = 0; i < m_segments.size(); ++i) {
+		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) 
+		{
+			GpsPoint* p = const_cast<GpsPoint*>(&(m_segments[i].getPoints()[j]));
+			double x = p->getUtmX();
+			double y = p->getUtmY();
+			x = (x - m_minUtmX) / (m_maxUtmX - m_minUtmX);
+			y = (y - m_minUtmY) / (m_maxUtmY - m_minUtmY);
+			p->setNormalizedUtmX(x);
+			p->setNormalizedUtmY(y);
+		}
 	}
 }

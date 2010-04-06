@@ -46,7 +46,8 @@ void DrawingLifeApp::setup()
     {
         // -----------------------------------------------------------------------------
         // DB query
-//	if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2009, 12, 24, 31))
+
+		//if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2009, 12, 24, 31))
         if(m_dbReader->getGpsDataCity(*m_gpsData, "Dan", "Berlin"))
         {
             ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
@@ -97,7 +98,7 @@ void DrawingLifeApp::setup()
           m_gpsData->getMinUtmY(),
           m_gpsData->getMaxUtmY());
 
-    setMinMaxRatioUTM();
+    //setMinMaxRatio();
 
     // Because the above test print is so slow, here you can prove
     // that the data have been read by showing las gpsData
@@ -164,10 +165,16 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw rectangle with text.
             // -----------------------------------------------------------------------------
-            double lat = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getUtmY();
-            double lon = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getUtmX();
+//            double lat = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getUtmY();
+//            double lon = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getUtmX();
+            double lat = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getNormalizedUtmX();
+            double lon = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getNormalizedUtmY();
             double ele = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getElevation();
 
+			if (lat < 0 || lon < 0) 
+			{
+				ofLog(OF_LOG_VERBOSE, "Lat: %lf, Lon: %lf", lat, lon);
+			}
             string timest = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
             string currentLocation = m_gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
             string info =	"Longitude  : " + ofToString(lon) + "\n" +
@@ -202,24 +209,29 @@ void DrawingLifeApp::draw()
                     pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
                 for (unsigned int j = 0; j <= pointEnd; ++j)
                 {
-//				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)),
-//						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
-                    glVertex2d(getNormalizedUtmX(m_gpsData->getUtmX(i,j)),
-                               getNormalizedUtmY(m_gpsData->getUtmY(i,j)));
+					double x = m_gpsData->getNormalizedUtmX(i, j);
+					double y = m_gpsData->getNormalizedUtmY(i, j);
+                    glVertex2d(getScaledUtmX(x),
+                               getScaledUtmY(y));
+					
+					// Drawing with non UTM data.
+//					double x = m_gpsData->getLongitude(i, j);
+//					double y = m_gpsData->getLatitude(i, j);
+//                    glVertex2d(getNormalizedLongitude(x),
+//                               getNormalizedLatitude(y));
                 }
                 glEnd();
             }
             ofFill();
             ofSetColor(0, 255, 0, 127);
-//		ofCircle(getNormalizedLongitude(m_gpsData->getLongitude(m_currentGpsSegment,m_currentGpsPoint)),
-//				 getNormalizedLatitude(m_gpsData->getLatitude(m_currentGpsSegment,m_currentGpsPoint)), 5);
-            ofCircle(getNormalizedUtmX(m_gpsData->getUtmX(m_currentGpsSegment,m_currentGpsPoint)),
-                     getNormalizedUtmY(m_gpsData->getUtmY(m_currentGpsSegment,m_currentGpsPoint)), 5);
+            ofCircle(getScaledUtmX(m_gpsData->getNormalizedUtmX(m_currentGpsSegment, m_currentGpsPoint)),
+					 getScaledUtmY(m_gpsData->getNormalizedUtmY(m_currentGpsSegment, m_currentGpsPoint)), 5);
         }
     }
     else
     {
         fillViewAreaUTM( 0xededed);
+		//fillViewArea( 0xededed);
         // -----------------------------------------------------------------------------
         // Draw Gps data
         // -----------------------------------------------------------------------------
@@ -230,12 +242,10 @@ void DrawingLifeApp::draw()
             glBegin(GL_LINE_STRIP);
             for (unsigned int j = 0; j < m_gpsData->getSegments()[i].getPoints().size(); ++j)
             {
-//				glVertex2d(getNormalizedLongitude(m_gpsData->getLongitude(i,j)),
-//						   getNormalizedLatitude(m_gpsData->getLatitude(i,j)));
-				GpsPoint P = m_gpsData->getNormalizedUtm(i, j);
-				P.getUtmX()
-                glVertex2d(getNormalizedUtmX(m_gpsData->getUtmX(i,j)),
-                           getNormalizedUtmY(m_gpsData->getUtmY(i,j)));
+				double x = m_gpsData->getNormalizedUtmX(i, j);
+				double y = m_gpsData->getNormalizedUtmY(i, j);
+				glVertex2d(getScaledUtmX(x),
+						   getScaledUtmY(y));
             }
             glEnd();
         }
@@ -273,7 +283,7 @@ void DrawingLifeApp::getNewGpsData()
     // -----------------------------------------------------------------------------
     m_dbReader->closeDbConnection();
     SAFE_DELETE(m_dbReader);
-    setMinMaxRatioUTM();
+    //setMinMaxRatioUTM();
 }
 // -----------------------------------------------------------------------------
 // Set min/max ratio
@@ -329,16 +339,18 @@ double DrawingLifeApp::getNormalizedLatitude(double lat)
 }
 
 // -----------------------------------------------------------------------------
-double DrawingLifeApp::getNormalizedUtmX(double utmX)
+// Scale to screen
+// -----------------------------------------------------------------------------
+double DrawingLifeApp::getScaledUtmX(double normalizedUtmX)
 {
-    return ( (utmX - m_minUtmX) / (m_maxUtmX - m_minUtmX) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
+    return ( normalizedUtmX * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
 }
 
-double DrawingLifeApp::getNormalizedUtmY(double utmY)
+double DrawingLifeApp::getScaledUtmY(double normalizedUtmY)
 {
-//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
     // Flip y coordinates ??
-    return ofGetHeight() - ( (utmY - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+    return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
 }
 
 // -----------------------------------------------------------------------------
@@ -384,10 +396,10 @@ void DrawingLifeApp::fillViewArea( int backgroundColor)
 }
 void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
 {
-    double x = getNormalizedUtmX(m_minUtmX);
-    double y = getNormalizedUtmY(m_minUtmY);
-    double w = getNormalizedUtmX(m_maxUtmX) - x;
-    double h = getNormalizedUtmY(m_maxUtmY) - y;
+    double x = getScaledUtmX(0);
+    double y = getScaledUtmY(0);
+    double w = getScaledUtmX(1) - x;
+    double h = getScaledUtmY(1) - y;
     ofFill();
     ofSetColor( backgroundColor);
     ofRect(x, y, w, h);

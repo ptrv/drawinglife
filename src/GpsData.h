@@ -59,6 +59,12 @@ public:
 	double getMinUtmY() const { return m_minUtmY; }
 	double getMaxUtmY() const { return m_maxUtmY; }
 
+	// get UTM convertd min/max values
+	double getNormalizedMinUtmX() const { return m_minUtmX; }
+	double getNormalizedMaxUtmX() const { return m_maxUtmX; }
+	double getNormalizedMinUtmY() const { return m_minUtmY; }
+	double getNormalizedMaxUtmY() const { return m_maxUtmY; }
+	
 	// -----------------------------------------------------------------------------
 	void clear();
 	// -----------------------------------------------------------------------------
@@ -70,13 +76,15 @@ public:
 	double getUtmX(int segmentIndex, int pointIndex);
 	double getUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
-	GpsPoint getNormalizedUtm(int segmentIndex, int pointIndex);
+	double getNormalizedUtmX(int segmentIndex, int pointIndex);
+	double getNormalizedUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
 	const std::string getGpsLocation(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
 	int getTotalGpsPoints();
 
 private:
+	void normalizeGpsPoints();
 	void setMinMaxRatioUTM();
 };
 

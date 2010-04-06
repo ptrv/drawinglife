@@ -38,8 +38,8 @@ public:
 private:
 	double getNormalizedLatitude(double lat);
 	double getNormalizedLongitude(double lon);
-	double getNormalizedUtmY(double utmY);
-	double getNormalizedUtmX(double utmX);
+	double getScaledUtmY(double utmY);
+	double getScaledUtmX(double utmX);
 
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
@@ -74,7 +74,6 @@ private:
 	void fillViewAreaUTM( int backgroundColor);
 	void getNewGpsData();
 	void setMinMaxRatio();
-	void setMinMaxRatioUTM();	
 	// Sets square view area and center. 
 	void setViewAspectRatio();
 };
