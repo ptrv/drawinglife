@@ -358,16 +358,16 @@ double DrawingLifeApp::getNormalizedLatitude(double lat)
 }
 
 // -----------------------------------------------------------------------------
-double DrawingLifeApp::getNormalizedUtmX(double lon)
+double DrawingLifeApp::getNormalizedUtmX(double utmX)
 {
-    return ( (lon - m_minUtmX) / (m_maxUtmX - m_minUtmX) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
+    return ( (utmX - m_minUtmX) / (m_maxUtmX - m_minUtmX) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
 }
 
-double DrawingLifeApp::getNormalizedUtmY(double lat)
+double DrawingLifeApp::getNormalizedUtmY(double utmY)
 {
 //    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
     // Flip y coordinates ??
-    return ofGetHeight() - ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+    return ofGetHeight() - ( (utmY - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
 }
 
 // -----------------------------------------------------------------------------

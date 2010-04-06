@@ -14,7 +14,11 @@
  *  \brief Main application class.
  */
 
-class DrawingLifeApp : public ofBaseApp{
+class DrawingLifeApp : public ofBaseApp
+{
+public: /* static */
+	static const int BACKGROUND = 0xFFFFFF;
+	static const int FOREGROUND = 0x000000;
 
 public:
 	DrawingLifeApp();
@@ -31,12 +35,11 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
 
+private:
 	double getNormalizedLatitude(double lat);
 	double getNormalizedLongitude(double lon);
-	double getNormalizedUtmY(double lat);
-	double getNormalizedUtmX(double lon);
-
-	void setViewAspectRatio();
+	double getNormalizedUtmY(double utmY);
+	double getNormalizedUtmX(double utmX);
 
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
@@ -67,15 +70,13 @@ public:
 	int m_currentSelectedDayEnd;
 	int m_currentSelectedDayStart;
 
-	static const int BACKGROUND = 0xFFFFFF;
-	static const int FOREGROUND = 0x000000;
-
-private:
 	void fillViewArea( int backgroundColor);
 	void fillViewAreaUTM( int backgroundColor);
 	void getNewGpsData();
 	void setMinMaxRatio();
-	void setMinMaxRatioUTM();
+	void setMinMaxRatioUTM();	
+	// Sets square view area and center. 
+	void setViewAspectRatio();
 };
 
 #endif // _DRAWINGLIFEAPP_H_
