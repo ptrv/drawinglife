@@ -136,6 +136,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		size_t posE = query.find(" ORDER");
 
 		queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
+		// Retrieve select conditions from original database query.
 		queryMinMax << query.substr(posS, (posE - posS));
 
 		//DBG_VAL(queryMinMax.str());

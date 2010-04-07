@@ -49,10 +49,10 @@ private:
 	int m_currentGpsSegment;
 	int maxPoints;
 	int m_currentPoint;
-	int m_viewXOffset;
-	int m_viewYOffset;
-	int m_viewMinDimension;
-	int m_viewPadding;
+	double m_viewXOffset;
+	double m_viewYOffset;
+	double m_viewMinDimension;
+	double m_viewPadding;
 	bool m_firstPoint;
 	double m_minLon;
 	double m_maxLon;

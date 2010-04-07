@@ -175,7 +175,7 @@ int GpsData::getTotalGpsPoints()
 }
 
 // -----------------------------------------------------------------------------
-// Set min/max ratio with UTM values
+// Set min/max aspect ratio with UTM values.
 // -----------------------------------------------------------------------------
 void GpsData::setMinMaxRatioUTM()
 {
@@ -184,22 +184,27 @@ void GpsData::setMinMaxRatioUTM()
 	double minLat = this->getMinUtmY();
 	double maxLat = this->getMaxUtmY();
 
+	// Calculate horizontal and vertical range.
 	double deltaLon = maxLon - minLon;
 	double deltaLat = maxLat - minLat;
+
+	// Aspect ratio is: width < height.
 	if (deltaLon <	deltaLat)
 	{
-		m_minUtmX = minLon - (deltaLat - deltaLon)/2;
-		m_maxUtmX = maxLon + (deltaLat - deltaLon)/2;
+		m_minUtmX = minLon - (deltaLat - deltaLon)/2.0;
+		m_maxUtmX = maxLon + (deltaLat - deltaLon)/2.0;
 		m_minUtmY = minLat;
 		m_maxUtmY = maxLat;
 	}
-	else if (deltaLat < deltaLon)
+	// Aspect ratio is: width > height.
+	else if (deltaLon > deltaLat)
 	{
 		m_minUtmX = minLon;
 		m_maxUtmX = maxLon;
-		m_minUtmY = minLat - (deltaLon - deltaLat)/2;
-		m_maxUtmY = maxLat + (deltaLon - deltaLat)/2;
+		m_minUtmY = minLat - (deltaLon - deltaLat)/2.0;
+		m_maxUtmY = maxLat + (deltaLon - deltaLat)/2.0;
 	}
+	// Aspect ratio is: height == width.
 	else
 	{
 		m_minUtmX = minLon;
@@ -209,7 +214,7 @@ void GpsData::setMinMaxRatioUTM()
 	}
 }
 // -----------------------------------------------------------------------------
-// Normalize Gps points
+// Normalize Gps points.
 // -----------------------------------------------------------------------------
 void GpsData::normalizeGpsPoints()
 {

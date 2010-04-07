@@ -268,6 +268,7 @@ void DrawingLifeApp::getNewGpsData()
     {
         // -----------------------------------------------------------------------------
         // DB query
+		// TODO: Query needs to match with original database query used in the setup function.
         if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, m_currentSelectedDayStart, m_currentSelectedDayEnd))
         {
             ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
@@ -286,7 +287,7 @@ void DrawingLifeApp::getNewGpsData()
     //setMinMaxRatioUTM();
 }
 // -----------------------------------------------------------------------------
-// Set min/max ratio
+// Set min/max aspect ratio.
 // -----------------------------------------------------------------------------
 void DrawingLifeApp::setMinMaxRatio()
 {
@@ -295,24 +296,27 @@ void DrawingLifeApp::setMinMaxRatio()
     double minLat = m_gpsData->getMinLat();
     double maxLat = m_gpsData->getMaxLat();
 
+	// Calculate horizontal and vertical range.
     double deltaLon = maxLon - minLon;
     double deltaLat = maxLat - minLat;
 
+	// Aspect ratio is: width < height.
     if (deltaLon <	deltaLat)
     {
-        m_minLon = minLon - (deltaLat - deltaLon)/2;
-        m_maxLon = maxLon + (deltaLat - deltaLon)/2;
+        m_minLon = minLon - (deltaLat - deltaLon)/2.0;
+        m_maxLon = maxLon + (deltaLat - deltaLon)/2.0;
         m_minLat = minLat;
         m_maxLat = maxLat;
     }
-    else if (deltaLat < deltaLon)
+	// Aspect ratio is: width > height.
+    else if (deltaLon > deltaLat)
     {
-
         m_minLon = minLon;
         m_maxLon = maxLon;
-        m_minLat = minLat - (deltaLon - deltaLat)/2;
-        m_maxLat = maxLat + (deltaLon - deltaLat)/2;
+        m_minLat = minLat - (deltaLon - deltaLat)/2.0;
+        m_maxLat = maxLat + (deltaLon - deltaLat)/2.0;
     }
+	// Aspect ratio is: height == width.
     else
     {
         m_minLon = minLon;
@@ -326,16 +330,14 @@ void DrawingLifeApp::setMinMaxRatio()
 // -----------------------------------------------------------------------------
 double DrawingLifeApp::getNormalizedLongitude(double lon)
 {
-
-							  // horizontaler wertebereich
-    return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
+    return ( (lon - m_minLon) / (m_maxLon - m_minLon) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
 }
 
 double DrawingLifeApp::getNormalizedLatitude(double lat)
 {
-//    return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+//    return ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
     // Flip y coordinates ??
-    return ofGetHeight() - ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+    return ofGetHeight() - ( (lat - m_minLat) / (m_maxLat - m_minLat) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
 
 // -----------------------------------------------------------------------------
@@ -343,22 +345,22 @@ double DrawingLifeApp::getNormalizedLatitude(double lat)
 // -----------------------------------------------------------------------------
 double DrawingLifeApp::getScaledUtmX(double normalizedUtmX)
 {
-    return ( normalizedUtmX * (m_viewMinDimension - 2 * m_viewPadding) + m_viewXOffset);
+    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
 }
 
 double DrawingLifeApp::getScaledUtmY(double normalizedUtmY)
 {
-	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
     // Flip y coordinates ??
-    return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2 * m_viewPadding) + m_viewYOffset);
+    return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
 
 // -----------------------------------------------------------------------------
 
 void DrawingLifeApp::setViewAspectRatio()
 {
-    int width = ofGetWidth();
-    int height = ofGetHeight();
+    double width = ofGetWidth();
+    double height = ofGetHeight();
 
     // Reset for view padding.
     m_viewXOffset = 0;
@@ -368,12 +370,12 @@ void DrawingLifeApp::setViewAspectRatio()
     if (height < width)
     {
         m_viewMinDimension = height;
-        m_viewXOffset = (width - height) / 2;
+        m_viewXOffset = (width - height) / 2.0;
     }
     else if (width < height)
     {
         m_viewMinDimension = width;
-        m_viewYOffset = (height - width) / 2;
+        m_viewYOffset = (height - width) / 2.0;
     }
     else
     {
