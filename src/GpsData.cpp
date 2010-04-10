@@ -4,6 +4,7 @@
 
 #include "GpsData.h"
 #include "UTMconversion/LatLong-UTMconversion.h"
+#include <limits>
 
 GpsData::GpsData()
 :
@@ -179,6 +180,8 @@ int GpsData::getTotalGpsPoints()
 // -----------------------------------------------------------------------------
 void GpsData::setMinMaxRatioUTM()
 {
+	setMinMaxValuesUTM();
+
 	double minLon = this->getMinUtmX();
 	double maxLon = this->getMaxUtmX();
 	double minLat = this->getMinUtmY();
@@ -231,4 +234,29 @@ void GpsData::normalizeGpsPoints()
 			p->setNormalizedUtmY(y);
 		}
 	}
+}
+
+void GpsData::setMinMaxValuesUTM()
+{
+	double minX = std::numeric_limits<double>::max();
+	double minY = std::numeric_limits<double>::max();
+	double maxX = std::numeric_limits<double>::min();
+	double maxY = std::numeric_limits<double>::min();
+
+	for (unsigned int i = 0; i < m_segments.size(); ++i) {
+		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) 
+		{
+			double x = m_segments[i].getPoints()[j].getUtmX();
+			double y = m_segments[i].getPoints()[j].getUtmY();
+			if (x < minX) minX = x;
+			if (x > maxX) maxX = x;
+			if (y < minY) minY = y;
+			if (y > maxY) maxY = y;
+		}
+	}
+
+	m_minUtmX = minX;
+	m_minUtmY = minY;
+	m_maxUtmX = maxX;
+	m_maxUtmY = maxY;
 }

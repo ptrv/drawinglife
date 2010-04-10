@@ -80,6 +80,7 @@ public:
 private:
 	void normalizeGpsPoints();
 	void setMinMaxRatioUTM();
+	void setMinMaxValuesUTM();
 };
 
 
