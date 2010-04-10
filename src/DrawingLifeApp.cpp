@@ -185,8 +185,8 @@ void DrawingLifeApp::draw()
                             "Cur. point : " + ofToString(m_currentPoint) + "\n" +
                             "Segment nr : " + ofToString(m_gpsData->getSegments()[m_currentGpsSegment].getSegmentNum());
 
-            //fillViewArea( 0xededed);
-            fillViewAreaUTM( 0xededed);
+            //fillViewArea( VIEWBOX);
+            fillViewAreaUTM( VIEWBOX);
 
             ofFill();
             ofSetColor(0xE5A93F);
@@ -230,8 +230,8 @@ void DrawingLifeApp::draw()
     }
     else
     {
-        fillViewAreaUTM( 0xededed);
-		//fillViewArea( 0xededed);
+        fillViewAreaUTM( VIEWBOX);
+		//fillViewArea( VIEWBOX);
         // -----------------------------------------------------------------------------
         // Draw Gps data
         // -----------------------------------------------------------------------------
