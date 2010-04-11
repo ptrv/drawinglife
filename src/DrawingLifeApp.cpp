@@ -59,9 +59,9 @@ void DrawingLifeApp::setup()
         {
             ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
         }
+		m_dbReader->closeDbConnection();
     }
     // -----------------------------------------------------------------------------
-    m_dbReader->closeDbConnection();
     SAFE_DELETE(m_dbReader);
 
     // test print
@@ -70,19 +70,19 @@ void DrawingLifeApp::setup()
     {
         for (unsigned int j = 0; j < m_gpsData->getSegments()[i].getPoints().size(); ++j)
         {
-            stringstream message;
-            //message << "Value i " << i << ", j " << j << ", k " << k <<": ";
-            message << "GpsPoint nr " << maxPoints << ": ";
-            message << m_gpsData->getSegments()[i].getPoints()[j].getLatitude();
-            message << ", ";
-            message << m_gpsData->getSegments()[i].getPoints()[j].getLongitude();
-            message << ", ";
-            message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
-            message << ", ";
-            message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
-            message << ", ";
-            message << m_gpsData->getSegments()[i].getSegmentNum();
-            ofLog(OF_LOG_NOTICE, message.str() );
+            //stringstream message;
+            ////message << "Value i " << i << ", j " << j << ", k " << k <<": ";
+            //message << "GpsPoint nr " << maxPoints << ": ";
+            //message << m_gpsData->getSegments()[i].getPoints()[j].getLatitude();
+            //message << ", ";
+            //message << m_gpsData->getSegments()[i].getPoints()[j].getLongitude();
+            //message << ", ";
+            //message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
+            //message << ", ";
+            //message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
+            //message << ", ";
+            //message << m_gpsData->getSegments()[i].getSegmentNum();
+            //ofLog(OF_LOG_NOTICE, message.str() );
             ++maxPoints;
         }
     }
