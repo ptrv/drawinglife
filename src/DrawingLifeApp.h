@@ -68,8 +68,8 @@ private:
 	bool m_isDebugMode;
 	bool m_isAnimation;
 
-	int m_currentSelectedDayEnd;
 	int m_currentSelectedDayStart;
+	int m_currentSelectedDayEnd;
 
 	void fillViewArea( int backgroundColor);
 	void fillViewAreaUTM( int backgroundColor);

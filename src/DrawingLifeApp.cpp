@@ -199,7 +199,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             ofSetColor(FOREGROUND);
             ofNoFill();
-            for (unsigned int i = 0; i <= m_currentGpsSegment; ++i)
+            for (int i = 0; i <= m_currentGpsSegment; ++i)
             {
                 glBegin(GL_LINE_STRIP);
                 int pointEnd;
@@ -207,13 +207,13 @@ void DrawingLifeApp::draw()
                     pointEnd = m_currentGpsPoint;
                 else
                     pointEnd = (int)m_gpsData->getSegments()[i].getPoints().size()-1;
-                for (unsigned int j = 0; j <= pointEnd; ++j)
+                for (int j = 0; j <= pointEnd; ++j)
                 {
 					double x = m_gpsData->getNormalizedUtmX(i, j);
 					double y = m_gpsData->getNormalizedUtmY(i, j);
                     glVertex2d(getScaledUtmX(x),
                                getScaledUtmY(y));
-					
+
 					// Drawing with non UTM data.
 //					double x = m_gpsData->getLongitude(i, j);
 //					double y = m_gpsData->getLatitude(i, j);
