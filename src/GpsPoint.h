@@ -63,14 +63,18 @@ public:
 		m_location = location;
 		LLtoUTM(refEllipsoid, m_latitude , m_longitude, m_utmY, m_utmX, utmZone);
 	}
+	//---------------------------------------------------------------------------
 	double getLatitude() const { return m_latitude; }
 	double getLongitude() const { return m_longitude; }
 	double getElevation() const { return m_elevation; }
+	//---------------------------------------------------------------------------
 	const std::string& getLocation() const { return m_location; }
+	//---------------------------------------------------------------------------
 	double getUtmX() const { return m_utmX; }
 	double getUtmY() const { return m_utmY; }
 	double getNormalizedUtmX() const { return m_normalizedUtmX; }
 	double getNormalizedUtmY() const { return m_normalizedUtmY; }
+	//---------------------------------------------------------------------------
 	const std::string& getTimestamp() const { return m_timestamp; }
 	// -----------------------------------------------------------------------------
 	void setNormalizedUtmX(double normUtmX) { m_normalizedUtmX = normUtmX; }

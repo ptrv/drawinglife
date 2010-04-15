@@ -37,24 +37,40 @@ public:
 	void windowResized(int w, int h);
 
 private:
+    //---------------------------------------------------------------------------
+    // Functions
+    //---------------------------------------------------------------------------
 	double getNormalizedLatitude(double lat);
 	double getNormalizedLongitude(double lon);
 	double getScaledUtmY(double utmY);
 	double getScaledUtmX(double utmX);
 
+	void fillViewArea( int backgroundColor);
+	void fillViewAreaUTM( int backgroundColor);
+	void getNewGpsData();
+	void setMinMaxRatio();
+	// Sets square view area and center.
+	void setViewAspectRatio();
+    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    // Member variables
+    //---------------------------------------------------------------------------
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
 	GpsData* m_gpsData;
 	string m_dbPath;
+	//---------------------------------------------------------------------------
 	int m_currentGpsPoint;
 	int m_currentGpsSegment;
 	int maxPoints;
 	int m_currentPoint;
+	bool m_firstPoint;
+	//---------------------------------------------------------------------------
 	double m_viewXOffset;
 	double m_viewYOffset;
 	double m_viewMinDimension;
 	double m_viewPadding;
-	bool m_firstPoint;
+	//---------------------------------------------------------------------------
 	double m_minLon;
 	double m_maxLon;
 	double m_minLat;
@@ -63,20 +79,14 @@ private:
 	double m_maxUtmX;
 	double m_minUtmY;
 	double m_maxUtmY;
-
+    //---------------------------------------------------------------------------
 	bool m_isFullscreen;
 	bool m_isDebugMode;
 	bool m_isAnimation;
-
+    //---------------------------------------------------------------------------
 	int m_currentSelectedDayStart;
 	int m_currentSelectedDayEnd;
-
-	void fillViewArea( int backgroundColor);
-	void fillViewAreaUTM( int backgroundColor);
-	void getNewGpsData();
-	void setMinMaxRatio();
-	// Sets square view area and center. 
-	void setViewAspectRatio();
+	//---------------------------------------------------------------------------
 };
 
 #endif // _DRAWINGLIFEAPP_H_
