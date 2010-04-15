@@ -373,6 +373,12 @@
 		<Unit filename="src/UTMconversion/LatLong-UTMconversion.h">
 			<Option virtualFolder="UTMconversation/" />
 		</Unit>
+		<Unit filename="src/UTMconversion/UTMdistance.cpp">
+			<Option virtualFolder="UTMconversation/" />
+		</Unit>
+		<Unit filename="src/UTMconversion/UTMdistance.h">
+			<Option virtualFolder="UTMconversation/" />
+		</Unit>
 		<Unit filename="src/UTMconversion/constants.h">
 			<Option virtualFolder="UTMconversation/" />
 		</Unit>
