@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-	<database>test.sqlite</database>
+	<database>GPSdatabase1.sqlite</database>
 	<log level="0" />
 </settings>
