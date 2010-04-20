@@ -3,7 +3,7 @@
 =======================================================*/
 
 #include "GpsData.h"
-#include "UTMconversion/LatLong-UTMconversion.h"
+#include "GeographicLib/TransverseMercator.hpp"
 #include <limits>
 
 GpsData::GpsData()
@@ -17,8 +17,7 @@ m_maxLat(0.0),
 m_minUtmX(0.0),
 m_maxUtmX(0.0),
 m_minUtmY(0.0),
-m_maxUtmY(0.0),
-refEllipsoid(23)
+m_maxUtmY(0.0)
 {
 	m_segments.reserve(1000); // TODO good amount.
 }
@@ -44,10 +43,12 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	m_maxLon = maxLon;
 	m_minLat = minLat;
 	m_maxLat = maxLat;
-	LLtoUTM(refEllipsoid, m_minLat, m_minLon, m_minUtmY, m_minUtmX, utmZone);
-	LLtoUTM(refEllipsoid, m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, utmZone);
+    const GeographicLib::TransverseMercator& TMS = GeographicLib::TransverseMercator::UTM;
+    GeographicLib::Math::real minGamma, minK, maxGamma, maxK;
+    TMS.Forward(GeographicLib::Math::real(0), m_minLat, m_minLon, m_minUtmY, m_minUtmX, minGamma, minK);
+    TMS.Forward(GeographicLib::Math::real(0), m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, maxGamma, maxK);
 	m_user = user;
-	normalizeGpsPoints();	
+	normalizeGpsPoints();
 }
 // -----------------------------------------------------------------------------
 void GpsData::clear()
@@ -146,7 +147,7 @@ double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
 		}
 	}
 	return normalizedUtmY;
-	
+
 }
 
 // -----------------------------------------------------------------------------
@@ -223,7 +224,7 @@ void GpsData::normalizeGpsPoints()
 {
 	setMinMaxRatioUTM();
 	for (unsigned int i = 0; i < m_segments.size(); ++i) {
-		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) 
+		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
 		{
 			GpsPoint* p = const_cast<GpsPoint*>(&(m_segments[i].getPoints()[j]));
 			double x = p->getUtmX();
@@ -244,7 +245,7 @@ void GpsData::setMinMaxValuesUTM()
 	double maxY = std::numeric_limits<double>::min();
 
 	for (unsigned int i = 0; i < m_segments.size(); ++i) {
-		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) 
+		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
 		{
 			double x = m_segments[i].getPoints()[j].getUtmX();
 			double y = m_segments[i].getPoints()[j].getUtmY();

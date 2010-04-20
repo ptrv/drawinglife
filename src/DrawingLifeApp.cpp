@@ -12,7 +12,10 @@ DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL),
     m_isDebugMode(false),
     m_isAnimation(true),
     m_currentSelectedDayStart(9),
-    m_currentSelectedDayEnd(18)
+    m_currentSelectedDayEnd(18),
+    m_zoomX(0.0),
+    m_zoomY(0.0),
+    m_zoomZ(0.0)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -48,7 +51,7 @@ void DrawingLifeApp::setup()
         // DB query
 
 		//if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2009, 12, 24, 31))
-        if(m_dbReader->getGpsDataCity(*m_gpsData, "Dan", "Berlin"))
+        if(m_dbReader->getGpsDataCity(*m_gpsData, "Dan", "London"))
         {
             ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
             ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
@@ -171,7 +174,7 @@ void DrawingLifeApp::draw()
             double lon = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getNormalizedUtmY();
             double ele = m_gpsData->getSegments()[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getElevation();
 
-			if (lat < 0 || lon < 0) 
+			if (lat < 0 || lon < 0)
 			{
 				ofLog(OF_LOG_VERBOSE, "Lat: %lf, Lon: %lf", lat, lon);
 			}
@@ -199,6 +202,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             ofSetColor(FOREGROUND);
             ofNoFill();
+            glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for (int i = 0; i <= m_currentGpsSegment; ++i)
             {
                 glBegin(GL_LINE_STRIP);

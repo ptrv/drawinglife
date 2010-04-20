@@ -5,7 +5,7 @@
 		<Option title="DrawingLife" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons/;src/;addons/ofxDirList/src/;addons/ofxNetwork/src/;addons/ofxOpenCv/src/;addons/ofxOsc/src/;addons/ofxThread/src/;addons/ofxVectorGraphics/libs/;addons/ofxVectorGraphics/src/;addons/ofxVectorMath/src/;addons/ofXmlSettings/libs/;addons/ofXmlSettings/src/;sqlite3x/;UTMconversation/;" />
+		<Option virtualFolders="addons/;src/;addons/ofxDirList/src/;addons/ofxNetwork/src/;addons/ofxOpenCv/src/;addons/ofxOsc/src/;addons/ofxThread/src/;addons/ofxVectorGraphics/libs/;addons/ofxVectorGraphics/src/;addons/ofxVectorMath/src/;addons/ofXmlSettings/libs/;addons/ofXmlSettings/src/;sqlite3x/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/DrawingLife_debug" prefix_auto="1" extension_auto="1" />
@@ -21,6 +21,7 @@
 				</Compiler>
 				<Linker>
 					<Add library="openFrameworksDebug" />
+					<Add library="Geographicd" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -39,6 +40,7 @@
 				<Linker>
 					<Add option="-s" />
 					<Add library="openFrameworks" />
+					<Add library="Geographic" />
 				</Linker>
 			</Target>
 			<Environment>
@@ -85,6 +87,7 @@
 			<Add directory="../../../addons/ofxDirList/src" />
 			<Add directory="../../../addons/ofxXmlSettings/src" />
 			<Add directory="../../../addons/ofxXmlSettings/libs" />
+			<Add directory="libs/geographiclib-1.1/include" />
 		</Compiler>
 		<Linker>
 			<Add library="fmodex" />
@@ -113,6 +116,7 @@
 			<Add directory="../../../libs/unicap/lib/linux" />
 			<Add directory="../../../libs/poco/lib/linux" />
 			<Add directory="../../../libs/openFrameworksCompiled/lib/linux" />
+			<Add directory="libs/geographiclib-1.1/libs" />
 		</Linker>
 		<ExtraCommands>
 			<Add after="#" />
@@ -366,21 +370,6 @@
 		</Unit>
 		<Unit filename="src/Logger.h">
 			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="src/UTMconversion/LatLong-UTMconversion.cpp">
-			<Option virtualFolder="UTMconversation/" />
-		</Unit>
-		<Unit filename="src/UTMconversion/LatLong-UTMconversion.h">
-			<Option virtualFolder="UTMconversation/" />
-		</Unit>
-		<Unit filename="src/UTMconversion/UTMdistance.cpp">
-			<Option virtualFolder="UTMconversation/" />
-		</Unit>
-		<Unit filename="src/UTMconversion/UTMdistance.h">
-			<Option virtualFolder="UTMconversation/" />
-		</Unit>
-		<Unit filename="src/UTMconversion/constants.h">
-			<Option virtualFolder="UTMconversation/" />
 		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />

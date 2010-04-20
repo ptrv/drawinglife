@@ -87,6 +87,9 @@ private:
 	int m_currentSelectedDayStart;
 	int m_currentSelectedDayEnd;
 	//---------------------------------------------------------------------------
+	double m_zoomX;
+	double m_zoomY;
+	double m_zoomZ;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

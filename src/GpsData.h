@@ -28,9 +28,6 @@ class GpsData
 	double m_minUtmY;
 	double m_maxUtmY;
 
-	char utmZone[4];
-	int refEllipsoid;//23 for WGS-84. See list with file "LatLong- UTM conversion.cpp" for id numbers
-
 public:
 	GpsData();
 	~GpsData();
@@ -58,7 +55,7 @@ public:
 	double getMaxUtmX() const { return m_maxUtmX; }
 	double getMinUtmY() const { return m_minUtmY; }
 	double getMaxUtmY() const { return m_maxUtmY; }
-	
+
 	// -----------------------------------------------------------------------------
 	void clear();
 	// -----------------------------------------------------------------------------

@@ -4,16 +4,14 @@
 
 #ifndef _GPSPOINT_H_
 #define _GPSPOINT_H_
+#include "GeographicLib/TransverseMercator.hpp"
 
-// UTM conversion found at http://www.gpsy.com/gpsinfo/geotoutm/
-#include "UTMconversion/LatLong-UTMconversion.h"
-
+using namespace GeographicLib;
 /**
  * \brief Holds one gps point with timestamp.
- * 
+ *
  */
-
-class GpsPoint 
+class GpsPoint
 {
 	int m_gpsPointId;
 	double m_latitude;
@@ -25,12 +23,7 @@ class GpsPoint
 	double m_normalizedUtmY;
 	std::string m_timestamp;
 	std::string m_location;
-	
-	// variables for UTM conversation
-	char utmZone[4];
-	int refEllipsoid;//WGS-84. See list with file "LatLong- UTM conversion.cpp" for id numbers
-	
-	
+
 public:
 	GpsPoint()
 	:
@@ -43,15 +36,14 @@ public:
 	m_normalizedUtmX(0.0),
 	m_normalizedUtmY(0.0),
 	m_timestamp(""),
-	m_location(""),
-	refEllipsoid(23)
+	m_location("")
 	{};
-	
+
 	~GpsPoint(){};
-	
-	void setGpsPoint(double latitude, 
-					 double longitude, 
-					 double elevation, 
+
+	void setGpsPoint(double latitude,
+					 double longitude,
+					 double elevation,
 					 const std::string& timestamp,
 					 const std::string& location)
 	{
@@ -61,7 +53,9 @@ public:
 		m_elevation = elevation;
 		m_timestamp = timestamp;
 		m_location = location;
-		LLtoUTM(refEllipsoid, m_latitude , m_longitude, m_utmY, m_utmX, utmZone);
+        const TransverseMercator& TMS = TransverseMercator::UTM;
+        Math::real gamma, k;
+        TMS.Forward(Math::real(0), latitude, longitude, m_utmX, m_utmY, gamma, k);
 	}
 	//---------------------------------------------------------------------------
 	double getLatitude() const { return m_latitude; }

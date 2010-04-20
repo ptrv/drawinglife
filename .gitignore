@@ -6,3 +6,5 @@ obj/*
 doc/html/*
 *.depend
 *.layout
+*.o
+libs/geographiclib-1.1/libs/*
