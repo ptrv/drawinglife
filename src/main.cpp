@@ -5,7 +5,6 @@
 #include "DrawingLifeIncludes.h"
 #include "DrawingLifeApp.h"
 #include "ofAppGlutWindow.h"
-//#include "ofxXmlSettings.h"
 
 //========================================================================
 int main( ){

@@ -6,6 +6,8 @@
 #include "GeographicLib/TransverseMercatorExact.hpp"
 #include <limits>
 
+using namespace GeographicLib;
+
 GpsData::GpsData()
 :
 m_gpsDataId(0),
@@ -43,10 +45,10 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	m_maxLon = maxLon;
 	m_minLat = minLat;
 	m_maxLat = maxLat;
-    const GeographicLib::TransverseMercatorExact& TMS = GeographicLib::TransverseMercatorExact::UTM;
-    GeographicLib::Math::real minGamma, minK, maxGamma, maxK;
-    TMS.Forward(GeographicLib::Math::real(0), m_minLat, m_minLon, m_minUtmY, m_minUtmX, minGamma, minK);
-    TMS.Forward(GeographicLib::Math::real(0), m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, maxGamma, maxK);
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    Math::real minGamma, minK, maxGamma, maxK;
+    TMS.Forward(Math::real(0), m_minLat, m_minLon, m_minUtmY, m_minUtmX, minGamma, minK);
+    TMS.Forward(Math::real(0), m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, maxGamma, maxK);
 	m_user = user;
 	normalizeGpsPoints();
 }
@@ -241,6 +243,8 @@ void GpsData::setMinMaxValuesUTM()
 {
 	double minX = std::numeric_limits<double>::max();
 	double minY = std::numeric_limits<double>::max();
+	// using -std::numeric_limits<double>::max() for smallest double
+	// std::numeric_limits<double>::min() yields smallest positiv number.
 	double maxX = -std::numeric_limits<double>::max();
 	double maxY = -std::numeric_limits<double>::max();
 
