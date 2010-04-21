@@ -4,7 +4,7 @@
 
 #ifndef _GPSPOINT_H_
 #define _GPSPOINT_H_
-#include "GeographicLib/TransverseMercator.hpp"
+#include "GeographicLib/TransverseMercatorExact.hpp"
 
 using namespace GeographicLib;
 /**
@@ -53,7 +53,7 @@ public:
 		m_elevation = elevation;
 		m_timestamp = timestamp;
 		m_location = location;
-        const TransverseMercator& TMS = TransverseMercator::UTM;
+        const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
         Math::real gamma, k;
         TMS.Forward(Math::real(0), latitude, longitude, m_utmX, m_utmY, gamma, k);
 	}

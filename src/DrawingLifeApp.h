@@ -47,7 +47,7 @@ private:
 
 	void fillViewArea( int backgroundColor);
 	void fillViewAreaUTM( int backgroundColor);
-	void getNewGpsData();
+	void getNewGpsData(string city);
 	void setMinMaxRatio();
 	// Sets square view area and center.
 	void setViewAspectRatio();

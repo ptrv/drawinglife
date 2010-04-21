@@ -73,19 +73,19 @@ void DrawingLifeApp::setup()
     {
         for (unsigned int j = 0; j < m_gpsData->getSegments()[i].getPoints().size(); ++j)
         {
-            //stringstream message;
-            ////message << "Value i " << i << ", j " << j << ", k " << k <<": ";
-            //message << "GpsPoint nr " << maxPoints << ": ";
-            //message << m_gpsData->getSegments()[i].getPoints()[j].getLatitude();
-            //message << ", ";
-            //message << m_gpsData->getSegments()[i].getPoints()[j].getLongitude();
-            //message << ", ";
-            //message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
-            //message << ", ";
-            //message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
-            //message << ", ";
-            //message << m_gpsData->getSegments()[i].getSegmentNum();
-            //ofLog(OF_LOG_NOTICE, message.str() );
+//            stringstream message;
+//            //message << "Value i " << i << ", j " << j << ", k " << k <<": ";
+//            message << "GpsPoint nr " << maxPoints << ": ";
+//            message << m_gpsData->getSegments()[i].getPoints()[j].getUtmY();
+//            message << ", ";
+//            message << m_gpsData->getSegments()[i].getPoints()[j].getUtmX();
+//            message << ", ";
+//            message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
+//            message << ", ";
+//            message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
+//            message << ", ";
+//            message << m_gpsData->getSegments()[i].getSegmentNum();
+//            ofLog(OF_LOG_NOTICE, message.str() );
             ++maxPoints;
         }
     }
@@ -258,7 +258,7 @@ void DrawingLifeApp::draw()
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
 // -----------------------------------------------------------------------------
-void DrawingLifeApp::getNewGpsData()
+void DrawingLifeApp::getNewGpsData(string city)
 {
     // get GpsData from database
     m_gpsData->clear();
@@ -273,7 +273,8 @@ void DrawingLifeApp::getNewGpsData()
         // -----------------------------------------------------------------------------
         // DB query
 		// TODO: Query needs to match with original database query used in the setup function.
-        if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, m_currentSelectedDayStart, m_currentSelectedDayEnd))
+//        if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, m_currentSelectedDayStart, m_currentSelectedDayEnd))
+        if(m_dbReader->getGpsDataCity(*m_gpsData, "Dan", city))
         {
             ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
             ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
@@ -289,6 +290,14 @@ void DrawingLifeApp::getNewGpsData()
     m_dbReader->closeDbConnection();
     SAFE_DELETE(m_dbReader);
     //setMinMaxRatioUTM();
+    //this->setViewAspectRatio();
+    DBG_VAL(city);
+    ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
+      m_gpsData->getMinUtmX(),
+      m_gpsData->getMaxUtmX(),
+      m_gpsData->getMinUtmY(),
+      m_gpsData->getMaxUtmY());
+
 }
 // -----------------------------------------------------------------------------
 // Set min/max aspect ratio.
@@ -424,26 +433,53 @@ void DrawingLifeApp::keyPressed  (int key)
         m_isFullscreen = !m_isFullscreen;
         ofSetFullscreen(m_isFullscreen);
         break;
-    case 'w':
-        m_currentSelectedDayStart += 1;
-        getNewGpsData();
-        DBG_VAL(m_currentSelectedDayStart);
+    case 49:
+        getNewGpsData("Berlin");
         break;
-    case 's':
-        m_currentSelectedDayStart -= 1;
-        DBG_VAL(m_currentSelectedDayStart);
-        getNewGpsData();
+    case 50:
+        getNewGpsData("London");
         break;
-    case 'e':
-        m_currentSelectedDayEnd += 1;
-        DBG_VAL(m_currentSelectedDayEnd);
-        getNewGpsData();
+    case 51:
+        getNewGpsData("Barcelona");
         break;
-    case 'd':
-        m_currentSelectedDayEnd -= 1;
-        DBG_VAL(m_currentSelectedDayEnd);
-        getNewGpsData();
+    case 52:
+        getNewGpsData("Hamburg");
         break;
+    case 53:
+        getNewGpsData("Vienna");
+        break;
+    case 54:
+        getNewGpsData("New York");
+        break;
+    case 55:
+        getNewGpsData("Tokyo");
+        break;
+    case 56:
+        getNewGpsData("San Francisco");
+        break;
+    case 57:
+        getNewGpsData("Bristol");
+        break;
+//    case 'w':
+//        m_currentSelectedDayStart += 1;
+//        getNewGpsData();
+//        DBG_VAL(m_currentSelectedDayStart);
+//        break;
+//    case 's':
+//        m_currentSelectedDayStart -= 1;
+//        DBG_VAL(m_currentSelectedDayStart);
+//        getNewGpsData();
+//        break;
+//    case 'e':
+//        m_currentSelectedDayEnd += 1;
+//        DBG_VAL(m_currentSelectedDayEnd);
+//        getNewGpsData();
+//        break;
+//    case 'd':
+//        m_currentSelectedDayEnd -= 1;
+//        DBG_VAL(m_currentSelectedDayEnd);
+//        getNewGpsData();
+//        break;
     default:
         break;
     }

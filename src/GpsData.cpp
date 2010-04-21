@@ -3,7 +3,7 @@
 =======================================================*/
 
 #include "GpsData.h"
-#include "GeographicLib/TransverseMercator.hpp"
+#include "GeographicLib/TransverseMercatorExact.hpp"
 #include <limits>
 
 GpsData::GpsData()
@@ -43,7 +43,7 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	m_maxLon = maxLon;
 	m_minLat = minLat;
 	m_maxLat = maxLat;
-    const GeographicLib::TransverseMercator& TMS = GeographicLib::TransverseMercator::UTM;
+    const GeographicLib::TransverseMercatorExact& TMS = GeographicLib::TransverseMercatorExact::UTM;
     GeographicLib::Math::real minGamma, minK, maxGamma, maxK;
     TMS.Forward(GeographicLib::Math::real(0), m_minLat, m_minLon, m_minUtmY, m_minUtmX, minGamma, minK);
     TMS.Forward(GeographicLib::Math::real(0), m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, maxGamma, maxK);
@@ -241,8 +241,8 @@ void GpsData::setMinMaxValuesUTM()
 {
 	double minX = std::numeric_limits<double>::max();
 	double minY = std::numeric_limits<double>::max();
-	double maxX = std::numeric_limits<double>::min();
-	double maxY = std::numeric_limits<double>::min();
+	double maxX = -std::numeric_limits<double>::max();
+	double maxY = -std::numeric_limits<double>::max();
 
 	for (unsigned int i = 0; i < m_segments.size(); ++i) {
 		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
