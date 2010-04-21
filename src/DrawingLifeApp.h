@@ -22,7 +22,7 @@ public: /* static */
 	static const int VIEWBOX = 0x343434;
 
 public:
-	DrawingLifeApp();
+	DrawingLifeApp(const ofxXmlSettings& settings);
 	virtual ~DrawingLifeApp();
 	void setup();
 	void update();

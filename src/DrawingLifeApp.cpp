@@ -6,7 +6,8 @@
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
-DrawingLifeApp::DrawingLifeApp() :  m_dbReader(NULL),
+DrawingLifeApp::DrawingLifeApp(const ofxXmlSettings& settings) :  m_dbReader(NULL),
+    m_settings(settings),
     m_gpsData(NULL),
     m_isFullscreen(false),
     m_isDebugMode(false),
@@ -33,7 +34,7 @@ void DrawingLifeApp::setup()
     ofEnableAlphaBlending();
 
     // reading settings from xml file
-    m_settings.loadFile("AppSettings.xml");
+    //m_settings.loadFile("AppSettings.xml");
 //	ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
     ofSetLogLevel(OF_LOG_VERBOSE);
     // db path must be absolute path for DBReader (true as second parameter)
