@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D0101018116360F80096EC19 /* LatLong-UTMconversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0101016116360F80096EC19 /* LatLong-UTMconversion.cpp */; };
 		D01010BE116371AE0096EC19 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D01010B5116371AE0096EC19 /* sqlite3.c */; };
 		D01010BF116371AE0096EC19 /* sqlite3x_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010B9116371AE0096EC19 /* sqlite3x_command.cpp */; };
 		D01010C0116371AE0096EC19 /* sqlite3x_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010BA116371AE0096EC19 /* sqlite3x_connection.cpp */; };
@@ -16,6 +15,7 @@
 		D01010C3116371AE0096EC19 /* sqlite3x_transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010BD116371AE0096EC19 /* sqlite3x_transaction.cpp */; };
 		D010115F11637D870096EC19 /* GpsData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D010115E11637D870096EC19 /* GpsData.cpp */; };
 		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
+		D0B38854117F106F005E46BA /* libGeographicUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B38853117F1047005E46BA /* libGeographicUniversal.a */; };
 		D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */; };
 		E44667010F5B3E04005D0BF0 /* model3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D70F5B3E03005D0BF0 /* model3DS.cpp */; };
 		E44667020F5B3E04005D0BF0 /* texture3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */; };
@@ -77,6 +77,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D0B38852117F1047005E46BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC046055464E500DB518D;
+			remoteInfo = GeographicLibrary;
+		};
+		D0B38855117F1082005E46BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC045055464E500DB518D;
+			remoteInfo = GeographicLibrary;
+		};
 		E4C2421D10CC549C004149E2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4C2421610CC549C004149E2 /* openFrameworksLib.xcodeproj */;
@@ -117,9 +131,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D0101015116360F80096EC19 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
-		D0101016116360F80096EC19 /* LatLong-UTMconversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "LatLong-UTMconversion.cpp"; sourceTree = "<group>"; };
-		D0101017116360F80096EC19 /* LatLong-UTMconversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LatLong-UTMconversion.h"; sourceTree = "<group>"; };
 		D01010B5116371AE0096EC19 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		D01010B6116371AE0096EC19 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		D01010B7116371AE0096EC19 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
@@ -138,6 +149,7 @@
 		D07156AD11515155008CEA46 /* DBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBReader.h; sourceTree = "<group>"; };
 		D07156AE11515155008CEA46 /* DBReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DBReader.cpp; sourceTree = "<group>"; };
 		D07157751151BEFD008CEA46 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
 		D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawingLifeApp.cpp; sourceTree = "<group>"; };
 		D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeApp.h; sourceTree = "<group>"; };
 		E44665D70F5B3E03005D0BF0 /* model3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.cpp; sourceTree = SOURCE_ROOT; };
@@ -284,6 +296,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B38854117F106F005E46BA /* libGeographicUniversal.a in Frameworks */,
 				E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */,
 				E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */,
 				E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */,
@@ -316,16 +329,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D0101014116360F80096EC19 /* UTMconversion */ = {
-			isa = PBXGroup;
-			children = (
-				D0101015116360F80096EC19 /* constants.h */,
-				D0101016116360F80096EC19 /* LatLong-UTMconversion.cpp */,
-				D0101017116360F80096EC19 /* LatLong-UTMconversion.h */,
-			);
-			path = UTMconversion;
-			sourceTree = "<group>";
-		};
 		D01010B4116371AE0096EC19 /* sqlite3x */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +343,22 @@
 				D01010BD116371AE0096EC19 /* sqlite3x_transaction.cpp */,
 			);
 			path = sqlite3x;
+			sourceTree = "<group>";
+		};
+		D0B38845117F1024005E46BA /* GeographicLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */,
+			);
+			name = GeographicLibrary;
+			sourceTree = "<group>";
+		};
+		D0B3884C117F1047005E46BA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D0B38853117F1047005E46BA /* libGeographicUniversal.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E44665C70F5B3E03005D0BF0 /* addons */ = {
@@ -939,6 +958,7 @@
 				E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				D0B38845117F1024005E46BA /* GeographicLibrary */,
 				E4C2422310CC54B6004149E2 /* openFrameworks */,
 				E44665C70F5B3E03005D0BF0 /* addons */,
 				E45BE0360E8CC5DE009D7055 /* libs */,
@@ -949,7 +969,6 @@
 			isa = PBXGroup;
 			children = (
 				D01010B4116371AE0096EC19 /* sqlite3x */,
-				D0101014116360F80096EC19 /* UTMconversion */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				D01011DB1163FCCA0096EC19 /* Data.h */,
 				D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */,
@@ -1057,6 +1076,7 @@
 			);
 			dependencies = (
 				E4C2422810CC54DA004149E2 /* PBXTargetDependency */,
+				D0B38856117F1082005E46BA /* PBXTargetDependency */,
 			);
 			name = DrawingLife;
 			productName = myOFApp;
@@ -1076,6 +1096,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = D0B3884C117F1047005E46BA /* Products */;
+					ProjectRef = D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */;
+				},
+				{
 					ProductGroup = E4C2421710CC549C004149E2 /* Products */;
 					ProjectRef = E4C2421610CC549C004149E2 /* openFrameworksLib.xcodeproj */;
 				},
@@ -1088,6 +1112,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		D0B38853117F1047005E46BA /* libGeographicUniversal.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGeographicUniversal.a;
+			remoteRef = D0B38852117F1047005E46BA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1149,7 +1180,6 @@
 				E4485C4510E54E89003102AC /* ofxQuaternion.cpp in Sources */,
 				D07156AF11515155008CEA46 /* DBReader.cpp in Sources */,
 				D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */,
-				D0101018116360F80096EC19 /* LatLong-UTMconversion.cpp in Sources */,
 				D01010BE116371AE0096EC19 /* sqlite3.c in Sources */,
 				D01010BF116371AE0096EC19 /* sqlite3x_command.cpp in Sources */,
 				D01010C0116371AE0096EC19 /* sqlite3x_connection.cpp in Sources */,
@@ -1163,6 +1193,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D0B38856117F1082005E46BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GeographicLibrary;
+			targetProxy = D0B38855117F1082005E46BA /* PBXContainerItemProxy */;
+		};
 		E4C2422810CC54DA004149E2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = openFrameworks;
@@ -1196,6 +1231,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"libs/geographiclib-1.1/include",
 					"../../../libs/openFrameworks/**",
 					../../../libs/freetype/include/,
 					../../../libs/freetype/include/freetype2,
@@ -1286,6 +1322,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"libs/geographiclib-1.1/include",
 					"../../../libs/openFrameworks/**",
 					../../../libs/freetype/include/,
 					../../../libs/freetype/include/freetype2,
@@ -1322,6 +1359,7 @@
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"libs/geographiclib-1.1/include",
 					"../../../libs/openFrameworks/**",
 					../../../libs/freetype/include/,
 					../../../libs/freetype/include/freetype2,

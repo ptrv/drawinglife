@@ -1,0 +1,362 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D0B387D0117F0DC8005E46BA /* AzimuthalEquidistant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C1117F0DC8005E46BA /* AzimuthalEquidistant.cpp */; };
+		D0B387D1117F0DC8005E46BA /* CassiniSoldner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C2117F0DC8005E46BA /* CassiniSoldner.cpp */; };
+		D0B387D2117F0DC8005E46BA /* DMS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C3117F0DC8005E46BA /* DMS.cpp */; };
+		D0B387D3117F0DC8005E46BA /* EllipticFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C4117F0DC8005E46BA /* EllipticFunction.cpp */; };
+		D0B387D4117F0DC8005E46BA /* Geocentric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C5117F0DC8005E46BA /* Geocentric.cpp */; };
+		D0B387D5117F0DC8005E46BA /* GeoCoords.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C6117F0DC8005E46BA /* GeoCoords.cpp */; };
+		D0B387D6117F0DC8005E46BA /* Geodesic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C7117F0DC8005E46BA /* Geodesic.cpp */; };
+		D0B387D7117F0DC8005E46BA /* Geoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C8117F0DC8005E46BA /* Geoid.cpp */; };
+		D0B387D8117F0DC8005E46BA /* LambertConformalConic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387C9117F0DC8005E46BA /* LambertConformalConic.cpp */; };
+		D0B387D9117F0DC8005E46BA /* LocalCartesian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387CA117F0DC8005E46BA /* LocalCartesian.cpp */; };
+		D0B387DA117F0DC8005E46BA /* MGRS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387CB117F0DC8005E46BA /* MGRS.cpp */; };
+		D0B387DB117F0DC8005E46BA /* PolarStereographic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387CC117F0DC8005E46BA /* PolarStereographic.cpp */; };
+		D0B387DC117F0DC8005E46BA /* TransverseMercator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387CD117F0DC8005E46BA /* TransverseMercator.cpp */; };
+		D0B387DD117F0DC8005E46BA /* TransverseMercatorExact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387CE117F0DC8005E46BA /* TransverseMercatorExact.cpp */; };
+		D0B387DE117F0DC8005E46BA /* UTMUPS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B387CF117F0DC8005E46BA /* UTMUPS.cpp */; };
+		D0B387F0117F0DF0005E46BA /* AzimuthalEquidistant.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E0117F0DF0005E46BA /* AzimuthalEquidistant.hpp */; };
+		D0B387F1117F0DF0005E46BA /* CassiniSoldner.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E1117F0DF0005E46BA /* CassiniSoldner.hpp */; };
+		D0B387F2117F0DF0005E46BA /* Constants.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E2117F0DF0005E46BA /* Constants.hpp */; };
+		D0B387F3117F0DF0005E46BA /* DMS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E3117F0DF0005E46BA /* DMS.hpp */; };
+		D0B387F4117F0DF0005E46BA /* EllipticFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E4117F0DF0005E46BA /* EllipticFunction.hpp */; };
+		D0B387F5117F0DF0005E46BA /* Geocentric.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E5117F0DF0005E46BA /* Geocentric.hpp */; };
+		D0B387F6117F0DF0005E46BA /* GeoCoords.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E6117F0DF0005E46BA /* GeoCoords.hpp */; };
+		D0B387F7117F0DF0005E46BA /* Geodesic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E7117F0DF0005E46BA /* Geodesic.hpp */; };
+		D0B387F8117F0DF0005E46BA /* Geoid.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E8117F0DF0005E46BA /* Geoid.hpp */; };
+		D0B387F9117F0DF0005E46BA /* LambertConformalConic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387E9117F0DF0005E46BA /* LambertConformalConic.hpp */; };
+		D0B387FA117F0DF0005E46BA /* LocalCartesian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387EA117F0DF0005E46BA /* LocalCartesian.hpp */; };
+		D0B387FB117F0DF0005E46BA /* MGRS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387EB117F0DF0005E46BA /* MGRS.hpp */; };
+		D0B387FC117F0DF0005E46BA /* PolarStereographic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387EC117F0DF0005E46BA /* PolarStereographic.hpp */; };
+		D0B387FD117F0DF0005E46BA /* TransverseMercator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387ED117F0DF0005E46BA /* TransverseMercator.hpp */; };
+		D0B387FE117F0DF0005E46BA /* TransverseMercatorExact.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387EE117F0DF0005E46BA /* TransverseMercatorExact.hpp */; };
+		D0B387FF117F0DF0005E46BA /* UTMUPS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D0B387EF117F0DF0005E46BA /* UTMUPS.hpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D0B387C1117F0DC8005E46BA /* AzimuthalEquidistant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AzimuthalEquidistant.cpp; path = ../src/AzimuthalEquidistant.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C2117F0DC8005E46BA /* CassiniSoldner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CassiniSoldner.cpp; path = ../src/CassiniSoldner.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C3117F0DC8005E46BA /* DMS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DMS.cpp; path = ../src/DMS.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C4117F0DC8005E46BA /* EllipticFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipticFunction.cpp; path = ../src/EllipticFunction.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C5117F0DC8005E46BA /* Geocentric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geocentric.cpp; path = ../src/Geocentric.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C6117F0DC8005E46BA /* GeoCoords.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GeoCoords.cpp; path = ../src/GeoCoords.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C7117F0DC8005E46BA /* Geodesic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodesic.cpp; path = ../src/Geodesic.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C8117F0DC8005E46BA /* Geoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geoid.cpp; path = ../src/Geoid.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387C9117F0DC8005E46BA /* LambertConformalConic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LambertConformalConic.cpp; path = ../src/LambertConformalConic.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387CA117F0DC8005E46BA /* LocalCartesian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LocalCartesian.cpp; path = ../src/LocalCartesian.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387CB117F0DC8005E46BA /* MGRS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MGRS.cpp; path = ../src/MGRS.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387CC117F0DC8005E46BA /* PolarStereographic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PolarStereographic.cpp; path = ../src/PolarStereographic.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387CD117F0DC8005E46BA /* TransverseMercator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TransverseMercator.cpp; path = ../src/TransverseMercator.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387CE117F0DC8005E46BA /* TransverseMercatorExact.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TransverseMercatorExact.cpp; path = ../src/TransverseMercatorExact.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387CF117F0DC8005E46BA /* UTMUPS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UTMUPS.cpp; path = ../src/UTMUPS.cpp; sourceTree = SOURCE_ROOT; };
+		D0B387E0117F0DF0005E46BA /* AzimuthalEquidistant.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AzimuthalEquidistant.hpp; sourceTree = "<group>"; };
+		D0B387E1117F0DF0005E46BA /* CassiniSoldner.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CassiniSoldner.hpp; sourceTree = "<group>"; };
+		D0B387E2117F0DF0005E46BA /* Constants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Constants.hpp; sourceTree = "<group>"; };
+		D0B387E3117F0DF0005E46BA /* DMS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DMS.hpp; sourceTree = "<group>"; };
+		D0B387E4117F0DF0005E46BA /* EllipticFunction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EllipticFunction.hpp; sourceTree = "<group>"; };
+		D0B387E5117F0DF0005E46BA /* Geocentric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geocentric.hpp; sourceTree = "<group>"; };
+		D0B387E6117F0DF0005E46BA /* GeoCoords.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GeoCoords.hpp; sourceTree = "<group>"; };
+		D0B387E7117F0DF0005E46BA /* Geodesic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geodesic.hpp; sourceTree = "<group>"; };
+		D0B387E8117F0DF0005E46BA /* Geoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geoid.hpp; sourceTree = "<group>"; };
+		D0B387E9117F0DF0005E46BA /* LambertConformalConic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LambertConformalConic.hpp; sourceTree = "<group>"; };
+		D0B387EA117F0DF0005E46BA /* LocalCartesian.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocalCartesian.hpp; sourceTree = "<group>"; };
+		D0B387EB117F0DF0005E46BA /* MGRS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MGRS.hpp; sourceTree = "<group>"; };
+		D0B387EC117F0DF0005E46BA /* PolarStereographic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PolarStereographic.hpp; sourceTree = "<group>"; };
+		D0B387ED117F0DF0005E46BA /* TransverseMercator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransverseMercator.hpp; sourceTree = "<group>"; };
+		D0B387EE117F0DF0005E46BA /* TransverseMercatorExact.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransverseMercatorExact.hpp; sourceTree = "<group>"; };
+		D0B387EF117F0DF0005E46BA /* UTMUPS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UTMUPS.hpp; sourceTree = "<group>"; };
+		D2AAC046055464E500DB518D /* libGeographicUniversal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGeographicUniversal.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289987405E68DCB004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* GeographicLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				D0B387DF117F0DF0005E46BA /* Include */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6A0FF2B0290797F04C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = GeographicLibrary;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D0B387C1117F0DC8005E46BA /* AzimuthalEquidistant.cpp */,
+				D0B387C2117F0DC8005E46BA /* CassiniSoldner.cpp */,
+				D0B387C3117F0DC8005E46BA /* DMS.cpp */,
+				D0B387C4117F0DC8005E46BA /* EllipticFunction.cpp */,
+				D0B387C5117F0DC8005E46BA /* Geocentric.cpp */,
+				D0B387C6117F0DC8005E46BA /* GeoCoords.cpp */,
+				D0B387C7117F0DC8005E46BA /* Geodesic.cpp */,
+				D0B387C8117F0DC8005E46BA /* Geoid.cpp */,
+				D0B387C9117F0DC8005E46BA /* LambertConformalConic.cpp */,
+				D0B387CA117F0DC8005E46BA /* LocalCartesian.cpp */,
+				D0B387CB117F0DC8005E46BA /* MGRS.cpp */,
+				D0B387CC117F0DC8005E46BA /* PolarStereographic.cpp */,
+				D0B387CD117F0DC8005E46BA /* TransverseMercator.cpp */,
+				D0B387CE117F0DC8005E46BA /* TransverseMercatorExact.cpp */,
+				D0B387CF117F0DC8005E46BA /* UTMUPS.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC046055464E500DB518D /* libGeographicUniversal.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+		D0B387DF117F0DF0005E46BA /* Include */ = {
+			isa = PBXGroup;
+			children = (
+				D0B387E0117F0DF0005E46BA /* AzimuthalEquidistant.hpp */,
+				D0B387E1117F0DF0005E46BA /* CassiniSoldner.hpp */,
+				D0B387E2117F0DF0005E46BA /* Constants.hpp */,
+				D0B387E3117F0DF0005E46BA /* DMS.hpp */,
+				D0B387E4117F0DF0005E46BA /* EllipticFunction.hpp */,
+				D0B387E5117F0DF0005E46BA /* Geocentric.hpp */,
+				D0B387E6117F0DF0005E46BA /* GeoCoords.hpp */,
+				D0B387E7117F0DF0005E46BA /* Geodesic.hpp */,
+				D0B387E8117F0DF0005E46BA /* Geoid.hpp */,
+				D0B387E9117F0DF0005E46BA /* LambertConformalConic.hpp */,
+				D0B387EA117F0DF0005E46BA /* LocalCartesian.hpp */,
+				D0B387EB117F0DF0005E46BA /* MGRS.hpp */,
+				D0B387EC117F0DF0005E46BA /* PolarStereographic.hpp */,
+				D0B387ED117F0DF0005E46BA /* TransverseMercator.hpp */,
+				D0B387EE117F0DF0005E46BA /* TransverseMercatorExact.hpp */,
+				D0B387EF117F0DF0005E46BA /* UTMUPS.hpp */,
+			);
+			name = Include;
+			path = ../include/GeographicLib;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC043055464E500DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0B387F0117F0DF0005E46BA /* AzimuthalEquidistant.hpp in Headers */,
+				D0B387F1117F0DF0005E46BA /* CassiniSoldner.hpp in Headers */,
+				D0B387F2117F0DF0005E46BA /* Constants.hpp in Headers */,
+				D0B387F3117F0DF0005E46BA /* DMS.hpp in Headers */,
+				D0B387F4117F0DF0005E46BA /* EllipticFunction.hpp in Headers */,
+				D0B387F5117F0DF0005E46BA /* Geocentric.hpp in Headers */,
+				D0B387F6117F0DF0005E46BA /* GeoCoords.hpp in Headers */,
+				D0B387F7117F0DF0005E46BA /* Geodesic.hpp in Headers */,
+				D0B387F8117F0DF0005E46BA /* Geoid.hpp in Headers */,
+				D0B387F9117F0DF0005E46BA /* LambertConformalConic.hpp in Headers */,
+				D0B387FA117F0DF0005E46BA /* LocalCartesian.hpp in Headers */,
+				D0B387FB117F0DF0005E46BA /* MGRS.hpp in Headers */,
+				D0B387FC117F0DF0005E46BA /* PolarStereographic.hpp in Headers */,
+				D0B387FD117F0DF0005E46BA /* TransverseMercator.hpp in Headers */,
+				D0B387FE117F0DF0005E46BA /* TransverseMercatorExact.hpp in Headers */,
+				D0B387FF117F0DF0005E46BA /* UTMUPS.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC045055464E500DB518D /* GeographicLibrary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "GeographicLibrary" */;
+			buildPhases = (
+				D2AAC043055464E500DB518D /* Headers */,
+				D2AAC044055464E500DB518D /* Sources */,
+				D289987405E68DCB004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GeographicLibrary;
+			productName = GeographicLibrary;
+			productReference = D2AAC046055464E500DB518D /* libGeographicUniversal.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "GeographicLibrary" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* GeographicLibrary */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC045055464E500DB518D /* GeographicLibrary */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC044055464E500DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0B387D0117F0DC8005E46BA /* AzimuthalEquidistant.cpp in Sources */,
+				D0B387D1117F0DC8005E46BA /* CassiniSoldner.cpp in Sources */,
+				D0B387D2117F0DC8005E46BA /* DMS.cpp in Sources */,
+				D0B387D3117F0DC8005E46BA /* EllipticFunction.cpp in Sources */,
+				D0B387D4117F0DC8005E46BA /* Geocentric.cpp in Sources */,
+				D0B387D5117F0DC8005E46BA /* GeoCoords.cpp in Sources */,
+				D0B387D6117F0DC8005E46BA /* Geodesic.cpp in Sources */,
+				D0B387D7117F0DC8005E46BA /* Geoid.cpp in Sources */,
+				D0B387D8117F0DC8005E46BA /* LambertConformalConic.cpp in Sources */,
+				D0B387D9117F0DC8005E46BA /* LocalCartesian.cpp in Sources */,
+				D0B387DA117F0DC8005E46BA /* MGRS.cpp in Sources */,
+				D0B387DB117F0DC8005E46BA /* PolarStereographic.cpp in Sources */,
+				D0B387DC117F0DC8005E46BA /* TransverseMercator.cpp in Sources */,
+				D0B387DD117F0DC8005E46BA /* TransverseMercatorExact.cpp in Sources */,
+				D0B387DE117F0DC8005E46BA /* UTMUPS.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91EC08733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH)";
+				CONFIGURATION_BUILD_DIR = ../libs;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = GeographicD;
+			};
+			name = Debug;
+		};
+		1DEB91ED08733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH)";
+				CONFIGURATION_BUILD_DIR = ../libs;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = Geographic;
+			};
+			name = Release;
+		};
+		1DEB91F008733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../include;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		1DEB91F108733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../include;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+		D0B38834117F0E6A005E46BA /* ReleaseUniversal */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../include;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = ReleaseUniversal;
+		};
+		D0B38835117F0E6A005E46BA /* ReleaseUniversal */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = ../libs;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = GeographicUniversal;
+			};
+			name = ReleaseUniversal;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "GeographicLibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91EC08733DB70010E9CD /* Debug */,
+				1DEB91ED08733DB70010E9CD /* Release */,
+				D0B38835117F0E6A005E46BA /* ReleaseUniversal */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "GeographicLibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91F008733DB70010E9CD /* Debug */,
+				1DEB91F108733DB70010E9CD /* Release */,
+				D0B38834117F0E6A005E46BA /* ReleaseUniversal */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

@@ -11,4 +11,4 @@ libs/geographiclib-1.1/libs/*
 Path
 libs/geographiclib-1.1/windows/Debug/*
 libs/geographiclib-1.1/windows/Release/*
-
+libs/geographiclib-1.1/xcode/build/*
