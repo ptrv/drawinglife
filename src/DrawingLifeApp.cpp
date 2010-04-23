@@ -6,8 +6,9 @@
 #include "Data.h"
 #include <vector>
 //--------------------------------------------------------------
-DrawingLifeApp::DrawingLifeApp(const ofxXmlSettings& settings) :  m_dbReader(NULL),
+DrawingLifeApp::DrawingLifeApp(const ofxXmlSettings& settings) :
     m_settings(settings),
+    m_dbReader(NULL),
     m_gpsData(NULL),
     m_isFullscreen(false),
     m_isDebugMode(false),

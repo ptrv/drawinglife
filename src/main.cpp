@@ -12,16 +12,8 @@ int main( ){
     int h;
     ofxXmlSettings settings;
     settings.loadFile("AppSettings.xml");
-    if(settings.getValue("settings:window:mode", "normal").compare("fullscreen") == 0)
-    {
-        w = settings.getValue("settings:window:size1:width", 1024);
-        h = settings.getValue("settings:window:size1:height", 768);
-    }
-    else
-    {
-        w = settings.getValue("settings:window:size2:width", 1024);
-        h = settings.getValue("settings:window:size2:height", 768);
-    }
+    w = settings.getValue("settings:window:width", 1024);
+    h = settings.getValue("settings:window:height", 768);
 
     ofAppGlutWindow window;
 //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);

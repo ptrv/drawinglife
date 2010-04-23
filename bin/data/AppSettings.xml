@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
   <window>
-    <mode>normal</mode>
-    <size1>
-      <width>1680</width>
-      <height>1050</height>
-    </size1>
-    <size2>
-      <width>1024</width>
-      <height>768</height>
-    </size2>
+    <width>1024</width>
+    <height>768</height>
   </window>
   <database>test.sqlite</database>
   <log level="0" />
