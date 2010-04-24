@@ -5,6 +5,11 @@
 #include "DrawingLifeIncludes.h"
 #include "GpsData.h"
 #include "GeographicLib/TransverseMercatorExact.hpp"
+
+#if defined (WIN32)
+#undef max
+#undef min
+#endif
 #include <limits>
 
 using namespace GeographicLib;
