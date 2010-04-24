@@ -13,20 +13,8 @@
  * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
  *
  */
-
 class GpsData
 {
-	int m_gpsDataId;
-	std::vector<GpsSegment> m_segments;
-	std::string m_user;
-	double m_minLon;
-	double m_maxLon;
-	double m_minLat;
-	double m_maxLat;
-	double m_minUtmX;
-	double m_maxUtmX;
-	double m_minUtmY;
-	double m_maxUtmY;
 
 public:
 	GpsData();
@@ -70,14 +58,59 @@ public:
 	double getNormalizedUtmX(int segmentIndex, int pointIndex);
 	double getNormalizedUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
+	const GpsPoint& getCurrentPoint();
+	// -----------------------------------------------------------------------------
 	const std::string getGpsLocation(int segmentIndex, int pointIndex);
+	const std::string getGpsLocationCurrent();
+	// -----------------------------------------------------------------------------
+	int getCurrentSegmentNum();
+	int getCurrentPointNum();
 	// -----------------------------------------------------------------------------
 	int getTotalGpsPoints();
+	//------------------------------------------------------------------------------
+	void setViewBounds(int screenWidth,
+                        int screenHeight,
+                        double viewXOffset,
+                        double viewYOffset,
+                        double viewMinDimension,
+                        double viewPadding);
+
+   	double getScaledUtmY(double utmY);
+	double getScaledUtmX(double utmX);
+	//---------------------------------------------------------------------------
+    void draw(bool animated = true);
+    void update();
+    void reset();
 
 private:
 	void normalizeGpsPoints();
 	void setMinMaxRatioUTM();
 	void setMinMaxValuesUTM();
+
+    int m_gpsDataId;
+	std::vector<GpsSegment> m_segments;
+	std::string m_user;
+	double m_minLon;
+	double m_maxLon;
+	double m_minLat;
+	double m_maxLat;
+	double m_minUtmX;
+	double m_maxUtmX;
+	double m_minUtmY;
+	double m_maxUtmY;
+
+	int m_currentGpsPoint;
+	int m_currentGpsSegment;
+	int m_currentPoint;
+	bool m_firstPoint;
+
+	int m_screenWidth;
+	int m_screenHeight;
+	double m_viewXOffset;
+	double m_viewYOffset;
+	double m_viewMinDimension;
+	double m_viewPadding;
+
 };
 
 

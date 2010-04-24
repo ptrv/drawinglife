@@ -2,6 +2,7 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
+#include "DrawingLifeIncludes.h"
 #include "GpsData.h"
 #include "GeographicLib/TransverseMercatorExact.hpp"
 #include <limits>
@@ -19,7 +20,17 @@ m_maxLat(0.0),
 m_minUtmX(0.0),
 m_maxUtmX(0.0),
 m_minUtmY(0.0),
-m_maxUtmY(0.0)
+m_maxUtmY(0.0),
+m_currentGpsPoint(0),
+m_currentGpsSegment(0),
+m_currentPoint(-1),
+m_firstPoint(true),
+m_screenWidth(0),
+m_screenHeight(0),
+m_viewXOffset(0.0),
+m_viewYOffset(0.0),
+m_viewMinDimension(0.0),
+m_viewPadding(0.0)
 {
 	m_segments.reserve(1000); // TODO good amount.
 }
@@ -67,7 +78,138 @@ void GpsData::clear()
 	m_maxUtmY = 0.0;
 	m_user = "";
 }
+// -----------------------------------------------------------------------------
+// Counting through GpsSegments and GpsPoints
+// -----------------------------------------------------------------------------
+void GpsData::update()
+{
+    if (this->getSegments().size() > 0)
+    {
+        if ((unsigned int)m_currentGpsSegment < this->getSegments().size()-1)
+        {
+            if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+            {
+                if (!m_firstPoint)
+                    ++m_currentGpsPoint;
+                else
+                    m_firstPoint = false;
+            }
+            else
+            {
+                ++m_currentGpsSegment;
+                m_currentGpsPoint = 0;
+            }
+        }
+        else
+        {
+            if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+            {
+                ++m_currentGpsPoint;
+            }
+            else//	void setMinMaxRatio();
 
+            {
+                m_currentGpsPoint = 0;
+                m_currentGpsSegment = 0;
+                m_currentPoint = -1;
+            }
+        }
+        ++m_currentPoint;
+    }
+}
+
+void GpsData::reset()
+{
+    m_currentGpsPoint = 0;
+    m_currentGpsSegment = 0;
+    m_currentPoint = -1;
+    m_firstPoint = true;
+}
+// -----------------------------------------------------------------------------
+
+void GpsData::draw(bool animated)
+{
+    if (animated)
+    {
+        if (this->getSegments().size() > 0 && this->getSegments()[m_currentGpsSegment].getPoints().size() > 0)
+        {
+            // -----------------------------------------------------------------------------
+            // Draw Gps data
+            // -----------------------------------------------------------------------------
+            for (int i = 0; i <= m_currentGpsSegment; ++i)
+            {
+                glBegin(GL_LINE_STRIP);
+                int pointEnd;
+                if (i == m_currentGpsSegment)
+                    pointEnd = m_currentGpsPoint;
+                else
+                    pointEnd = (int)this->getSegments()[i].getPoints().size()-1;
+                for (int j = 0; j <= pointEnd; ++j)
+                {
+					double x = this->getNormalizedUtmX(i, j);
+					double y = this->getNormalizedUtmY(i, j);
+                    glVertex2d(getScaledUtmX(x),
+                               getScaledUtmY(y));
+                }
+                glEnd();
+            }
+            ofFill();
+            ofSetColor(0, 255, 0, 127);
+            ofCircle(getScaledUtmX(this->getNormalizedUtmX(m_currentGpsSegment, m_currentGpsPoint)),
+					 getScaledUtmY(this->getNormalizedUtmY(m_currentGpsSegment, m_currentGpsPoint)), 5);
+        }
+    }
+    else
+    {
+        // -----------------------------------------------------------------------------
+        // Draw Gps data
+        // -----------------------------------------------------------------------------
+        ofNoFill();
+        for (unsigned int i = 0; i < this->getSegments().size(); ++i)
+        {
+            glBegin(GL_LINE_STRIP);
+            for (unsigned int j = 0; j < this->getSegments()[i].getPoints().size(); ++j)
+            {
+				double x = this->getNormalizedUtmX(i, j);
+				double y = this->getNormalizedUtmY(i, j);
+				glVertex2d(getScaledUtmX(x),
+						   getScaledUtmY(y));
+            }
+            glEnd();
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+// Set view bounds.
+// -----------------------------------------------------------------------------
+void GpsData::setViewBounds(int screenWidth,
+                            int screenHeight,
+                            double viewXOffset,
+                            double viewYOffset,
+                            double viewMinDimension,
+                            double viewPadding)
+{
+    m_screenWidth = screenWidth;
+    m_screenHeight = screenHeight;
+    m_viewXOffset = viewXOffset;
+    m_viewYOffset = viewYOffset;
+    m_viewMinDimension = viewMinDimension;
+    m_viewPadding = viewPadding;
+}
+
+
+const std::string GpsData::getGpsLocationCurrent()
+{
+    return getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
+}
+int GpsData::getCurrentSegmentNum()
+{
+    return m_segments[m_currentGpsSegment].getSegmentNum();
+}
+int GpsData::getCurrentPointNum()
+{
+    return m_currentPoint;
+}
 // -----------------------------------------------------------------------------
 // Get Gps point.
 // -----------------------------------------------------------------------------
@@ -153,7 +295,29 @@ double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
 }
 
 // -----------------------------------------------------------------------------
+const GpsPoint& GpsData::getCurrentPoint()
+{
+    return m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint];
+}
 
+// -----------------------------------------------------------------------------
+// Scale to screen
+// -----------------------------------------------------------------------------
+double GpsData::getScaledUtmX(double normalizedUtmX)
+{
+    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
+}
+
+double GpsData::getScaledUtmY(double normalizedUtmY)
+{
+	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
+    // Flip y coordinates ??
+    return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
+}
+
+
+
+//---------------------------------------------------------------------------
 const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
 {
 	std::string loc = "";
