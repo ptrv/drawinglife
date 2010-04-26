@@ -41,9 +41,19 @@ private:
     // Functions
     //---------------------------------------------------------------------------
 	void fillViewArea( int backgroundColor);
+	/**
+	* \brief Draw a square to draw onto.
+	* \param backgroundColor color of the square.
+	*/
 	void fillViewAreaUTM( int backgroundColor);
+	/**
+	* \brief
+	* \param city string with city name.
+	*/
 	void loadGpsData(string city);
-	// Sets square view area and center.
+	/**
+	* \brief Set square view area and center.
+	*/
 	void setViewAspectRatio();
     //---------------------------------------------------------------------------
     // Member variables

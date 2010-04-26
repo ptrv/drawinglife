@@ -41,6 +41,14 @@ public:
 
 	~GpsPoint(){};
 
+    /**
+    * \brief Set values for a GpsPoint.
+    * \param latitude
+    * \param longitude
+    * \param elevation
+    * \param timestamp
+    * \param location
+    */
 	void setGpsPoint(double latitude,
 					 double longitude,
 					 double elevation,
@@ -58,22 +66,69 @@ public:
         TMS.Forward(Math::real(0), latitude, longitude, m_utmX, m_utmY, gamma, k);
 	}
 	//---------------------------------------------------------------------------
+	/**
+	* \brief Get latitude.
+	* \return latitude double value.
+	*/
 	double getLatitude() const { return m_latitude; }
+	/**
+	* \brief Get longitude.
+	* \return longitude double value.
+	*/
 	double getLongitude() const { return m_longitude; }
+	/**
+	* \brief Get elevation.
+	* \return elevation double value.
+	*/
 	double getElevation() const { return m_elevation; }
 	//---------------------------------------------------------------------------
+    /**
+	* \brief Get location for GpsPoint.
+	* \return Location string.
+	*/
 	const std::string& getLocation() const { return m_location; }
 	//---------------------------------------------------------------------------
+	/**
+	* \brief Get UTM X value.
+	* \return UTM X double value.
+	*/
 	double getUtmX() const { return m_utmX; }
+	/**
+	* \brief Get UTM Y value.
+	* \return UTM Y double value.
+	*/
 	double getUtmY() const { return m_utmY; }
+	/**
+	* \brief Get normalized UTM X value.
+	* \return normalized UTM X double value.
+	*/
 	double getNormalizedUtmX() const { return m_normalizedUtmX; }
+	/**
+	* \brief Get normalized UTM Y value.
+	* \return normalized UTM Y double value.
+	*/
 	double getNormalizedUtmY() const { return m_normalizedUtmY; }
 	//---------------------------------------------------------------------------
+    /**
+	* \brief Get time stamp for GpsPoint.
+	* \return Timestamp string.
+	*/
 	const std::string& getTimestamp() const { return m_timestamp; }
 	// -----------------------------------------------------------------------------
+	/**
+	* \brief Set normalized UTM X value.
+	* \param normUtmX the new normalized UTM X value.
+	*/
 	void setNormalizedUtmX(double normUtmX) { m_normalizedUtmX = normUtmX; }
+	/**
+	* \brief Set normalized UTM Y value.
+	* \param normUtmY the new normalized UTM Y value.
+	*/
 	void setNormalizedUtmY(double normUtmY) { m_normalizedUtmY = normUtmY; }
 	// -----------------------------------------------------------------------------
+	/**
+	* \brief Clear GpsPoint object.
+	*/
 	void clear()
 	{
 		m_gpsPointId = 0;
