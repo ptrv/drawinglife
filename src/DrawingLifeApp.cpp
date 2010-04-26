@@ -43,7 +43,11 @@ void DrawingLifeApp::setup()
 
     DBG_VAL(m_dbPath);
     m_gpsData = new GpsData();
-    loadGpsData("London");
+    if (m_settings.getValue("settings:data:loadonstart",1) == 1)
+    {
+        string city = m_settings.getValue("settings:data:defaultcity", "London");
+        loadGpsData(city);
+    }
 }
 
 //--------------------------------------------------------------

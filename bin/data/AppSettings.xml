@@ -6,4 +6,8 @@
   </window>
   <database>test.sqlite</database>
   <log level="0" />
+  <data>
+    <loadonstart>0</loadonstart>
+    <defaultcity>Barcelona</defaultcity>
+  </data>
 </settings>
