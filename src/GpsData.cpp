@@ -88,38 +88,42 @@ void GpsData::clear()
 // -----------------------------------------------------------------------------
 void GpsData::update()
 {
-    if (this->getSegments().size() > 0)
+    if (getTotalGpsPoints() > 0)
     {
-        if ((unsigned int)m_currentGpsSegment < this->getSegments().size()-1)
+        if (this->getSegments().size() > 0)
         {
-            if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+            if ((unsigned int)m_currentGpsSegment < this->getSegments().size()-1)
             {
-                if (!m_firstPoint)
-                    ++m_currentGpsPoint;
+                if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+                {
+                    if (!m_firstPoint)
+                        ++m_currentGpsPoint;
+                    else
+                        m_firstPoint = false;
+                }
                 else
-                    m_firstPoint = false;
+                {
+                    ++m_currentGpsSegment;
+                    m_currentGpsPoint = 0;
+                }
             }
             else
             {
-                ++m_currentGpsSegment;
-                m_currentGpsPoint = 0;
-            }
-        }
-        else
-        {
-            if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
-            {
-                ++m_currentGpsPoint;
-            }
-            else//	void setMinMaxRatio();
+                if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+                {
+                    ++m_currentGpsPoint;
+                }
+                else//	void setMinMaxRatio();
 
-            {
-                m_currentGpsPoint = 0;
-                m_currentGpsSegment = 0;
-                m_currentPoint = -1;
+                {
+                    m_currentGpsPoint = 0;
+                    m_currentGpsSegment = 0;
+                    m_currentPoint = -1;
+                }
             }
+            ++m_currentPoint;
         }
-        ++m_currentPoint;
+
     }
 }
 
@@ -209,12 +213,46 @@ const std::string GpsData::getGpsLocationCurrent()
 }
 int GpsData::getCurrentSegmentNum()
 {
-    return m_segments[m_currentGpsSegment].getSegmentNum();
+    int segmentNum = 0;
+    if(m_currentGpsSegment < (int)m_segments.size())
+    {
+        if(m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
+        {
+            segmentNum = m_segments[m_currentGpsSegment].getSegmentNum();
+        }
+    }
+    return segmentNum;
 }
 int GpsData::getCurrentPointNum()
 {
     return m_currentPoint;
 }
+string GpsData::getCurrentTimestamp()
+{
+    string timestamp = "";
+	if (m_currentGpsSegment < (int)m_segments.size())
+	{
+		if (m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
+		{
+			timestamp = m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
+		}
+	}
+	return timestamp;
+
+}
+double GpsData::getCurrentLongitude()
+{
+    return getLongitude(m_currentGpsSegment, m_currentGpsPoint);
+}
+double GpsData::getCurrentLatitude()
+{
+    return getLatitude(m_currentGpsSegment, m_currentGpsPoint);
+}
+//double GpsData::getCurrentElevation()
+//{
+//    this->get
+//}
+
 // -----------------------------------------------------------------------------
 // Get Gps point.
 // -----------------------------------------------------------------------------
@@ -300,10 +338,16 @@ double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
 }
 
 // -----------------------------------------------------------------------------
-const GpsPoint& GpsData::getCurrentPoint()
-{
-    return m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint];
-}
+//const GpsPoint& GpsData::getCurrentPoint()
+//{
+//    if(m_currentGpsSegment < (int)m_segments.size())
+//    {
+//        if(m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
+//        {
+//            return m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint];
+//        }
+//    }
+//}
 
 // -----------------------------------------------------------------------------
 // Scale to screen
@@ -429,8 +473,8 @@ void GpsData::setMinMaxValuesUTM()
 		}
 	}
 
-	m_minUtmX = minX;
-	m_minUtmY = minY;
-	m_maxUtmX = maxX;
-	m_maxUtmY = maxY;
+    m_minUtmX = minX;
+    m_minUtmY = minY;
+    m_maxUtmX = maxX;
+    m_maxUtmY = maxY;
 }

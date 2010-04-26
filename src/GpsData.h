@@ -58,13 +58,17 @@ public:
 	double getNormalizedUtmX(int segmentIndex, int pointIndex);
 	double getNormalizedUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
-	const GpsPoint& getCurrentPoint();
+//	const GpsPoint& getCurrentPoint();
 	// -----------------------------------------------------------------------------
 	const std::string getGpsLocation(int segmentIndex, int pointIndex);
 	const std::string getGpsLocationCurrent();
 	// -----------------------------------------------------------------------------
 	int getCurrentSegmentNum();
 	int getCurrentPointNum();
+	string getCurrentTimestamp();
+	double getCurrentLongitude();
+	double getCurrentLatitude();
+//	double getCurrentElevation();
 	// -----------------------------------------------------------------------------
 	int getTotalGpsPoints();
 	//------------------------------------------------------------------------------

@@ -42,8 +42,8 @@ void DrawingLifeApp::setup()
     m_dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.sqlite"), true);
 
     DBG_VAL(m_dbPath);
-
-    loadGpsData("Berlin");
+    m_gpsData = new GpsData();
+    loadGpsData("London");
 }
 
 //--------------------------------------------------------------
@@ -55,20 +55,19 @@ void DrawingLifeApp::update()
 //--------------------------------------------------------------
 void DrawingLifeApp::draw()
 {
-
     if (m_isAnimation)
     {
         // -----------------------------------------------------------------------------
         // Draw rectangle with text.
         // -----------------------------------------------------------------------------
-        double lat = m_gpsData->getCurrentPoint().getNormalizedUtmX();
-        double lon = m_gpsData->getCurrentPoint().getNormalizedUtmY();
-        double ele = m_gpsData->getCurrentPoint().getElevation();
-        string timest = m_gpsData->getCurrentPoint().getTimestamp();
+        double lat = m_gpsData->getCurrentLongitude();
+        double lon = m_gpsData->getCurrentLatitude();
+        //double ele = m_gpsData->getCurrentPoint().getElevation();
+        string timest = m_gpsData->getCurrentTimestamp();
         string currentLocation = m_gpsData->getGpsLocationCurrent();
-        string info =	"Longitude  : " + ofToString(lon) + "\n" +
-                        "Latitude   : " + ofToString(lat) + "\n" +
-                        "Elevation  : " + ofToString(ele) + "\n" +
+        string info =	"Longitude  : " + ofToString(lon, 7) + "\n" +
+                        "Latitude   : " + ofToString(lat, 7) + "\n" +
+                        //"Elevation  : " + ofToString(ele) + "\n" +
                         "Time       : " + timest + "\n" +
                         "Location   : " + currentLocation + "\n" +
                         "Cur. point : " + ofToString(m_gpsData->getCurrentPointNum()) + "\n" +
@@ -100,6 +99,7 @@ void DrawingLifeApp::draw()
         glTranslated(m_zoomX, m_zoomY, m_zoomZ);
         m_gpsData->draw(false);
     }
+
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
