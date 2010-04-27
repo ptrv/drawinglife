@@ -645,6 +645,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\bin\data\AppSettings.xml"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
