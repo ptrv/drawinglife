@@ -9,6 +9,13 @@
 #include <string>
 #include "GpsSegment.h"
 
+struct UtmPoint
+{
+    double x;
+    double y;
+};
+
+
 /**
  * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
  *
@@ -233,11 +240,13 @@ public:
     */
     void reset();
 
+    double getProjectionCentralMeridian() const { return m_lon0; }
+
 private:
     /**
-    * \brief Normalize all GpsPoints to a value between 0 and 1.
+    * \brief Normalize all UtmPoints to a value between 0 and 1.
     */
-	void normalizeGpsPoints();
+	void normalizeUtmPoints();
     /**
     * \brief Set range of min/max values to be the same (square).
     */
@@ -246,6 +255,8 @@ private:
     * \brief Set ÚTM min/max values for all GpsPoints.
     */
 	void setMinMaxValuesUTM();
+
+    void calculateUtmPoints();
 
     int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;
@@ -271,6 +282,9 @@ private:
 	double m_viewMinDimension;
 	double m_viewPadding;
 
+	std::vector< std::vector<UtmPoint> > m_utmPoints;
+	std::vector< std::vector<UtmPoint> > m_normalizedUtmPoints;
+    double m_lon0;
 };
 
 

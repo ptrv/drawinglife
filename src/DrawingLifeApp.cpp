@@ -89,6 +89,9 @@ void DrawingLifeApp::draw()
         // -----------------------------------------------------------------------------
         ofSetColor(FOREGROUND);
         ofNoFill();
+//        glTranslated(m_gpsData->getMaxUtmX()/2, m_gpsData->getMaxUtmY()/2, 0.0);
+//        glRotated(90.0,0.0,0.0,1.0);
+//        glTranslated(-m_gpsData->getMaxUtmX()/2, -m_gpsData->getMaxUtmY()/2, 0.0);
         glTranslated(m_zoomX, m_zoomY, m_zoomZ);
         m_gpsData->draw();
     }
@@ -168,7 +171,7 @@ void DrawingLifeApp::loadGpsData(string city)
       m_gpsData->getMaxUtmX(),
       m_gpsData->getMinUtmY(),
       m_gpsData->getMaxUtmY());
-
+    ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsData->getProjectionCentralMeridian());
 }
 // -----------------------------------------------------------------------------
 
@@ -253,10 +256,31 @@ void DrawingLifeApp::keyPressed  (int key)
         loadGpsData("Bristol");
         break;
     case 'w':
-        m_zoomZ += 10;
+        if(m_zoomZ > 590 && m_zoomZ < 598)
+        {
+            m_zoomZ += 1;
+        }
+        else if (m_zoomZ >= 598)
+        {
+            m_zoomZ += 0.05;
+        }
+        else if (m_zoomZ < 599)
+        {
+            m_zoomZ += 10;
+        }
+        DBG_VAL(m_zoomZ);
         break;
     case 's':
-        m_zoomZ -= 10;
+        if(m_zoomZ > 590)
+        {
+            m_zoomZ -= 1;
+        }
+        else
+        {
+            m_zoomZ -= 10;
+        }
+
+        DBG_VAL(m_zoomZ);
         break;
     case OF_KEY_UP:
         m_zoomY += 50;

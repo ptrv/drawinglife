@@ -35,7 +35,8 @@ m_screenHeight(0),
 m_viewXOffset(0.0),
 m_viewYOffset(0.0),
 m_viewMinDimension(0.0),
-m_viewPadding(0.0)
+m_viewPadding(0.0),
+m_lon0(0.0)
 {
 	m_segments.reserve(1000); // TODO good amount.
 }
@@ -63,10 +64,12 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	m_maxLat = maxLat;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     Math::real minGamma, minK, maxGamma, maxK;
-    TMS.Forward(Math::real(0), m_minLat, m_minLon, m_minUtmY, m_minUtmX, minGamma, minK);
-    TMS.Forward(Math::real(0), m_maxLat, m_maxLon, m_maxUtmY, m_maxUtmX, maxGamma, maxK);
+    m_lon0 = m_minLon + (m_maxLon-m_minLon)/2;
+    TMS.Forward(Math::real(m_lon0), m_minLat, m_minLon, m_minUtmX, m_minUtmY, minGamma, minK);
+    TMS.Forward(Math::real(m_lon0), m_maxLat, m_maxLon, m_maxUtmX, m_maxUtmY, maxGamma, maxK);
 	m_user = user;
-	normalizeGpsPoints();
+	calculateUtmPoints();
+    normalizeUtmPoints();
 }
 // -----------------------------------------------------------------------------
 void GpsData::clear()
@@ -90,11 +93,11 @@ void GpsData::update()
 {
     if (getTotalGpsPoints() > 0)
     {
-        if (this->getSegments().size() > 0)
+        if (m_normalizedUtmPoints.size() > 0)
         {
-            if ((unsigned int)m_currentGpsSegment < this->getSegments().size()-1)
+            if ((unsigned int)m_currentGpsSegment < m_normalizedUtmPoints.size()-1)
             {
-                if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+                if ((unsigned int)m_currentGpsPoint < m_normalizedUtmPoints[m_currentGpsSegment].size() - 1)
                 {
                     if (!m_firstPoint)
                         ++m_currentGpsPoint;
@@ -109,7 +112,7 @@ void GpsData::update()
             }
             else
             {
-                if ((unsigned int)m_currentGpsPoint < this->getSegments()[m_currentGpsSegment].getPoints().size() - 1)
+                if ((unsigned int)m_currentGpsPoint < m_normalizedUtmPoints[m_currentGpsSegment].size() - 1)
                 {
                     ++m_currentGpsPoint;
                 }
@@ -140,7 +143,7 @@ void GpsData::draw(bool animated)
 {
     if (animated)
     {
-        if (this->getSegments().size() > 0 && this->getSegments()[m_currentGpsSegment].getPoints().size() > 0)
+        if (m_normalizedUtmPoints.size() > 0 && m_normalizedUtmPoints[m_currentGpsSegment].size() > 0)
         {
             // -----------------------------------------------------------------------------
             // Draw Gps data
@@ -152,20 +155,18 @@ void GpsData::draw(bool animated)
                 if (i == m_currentGpsSegment)
                     pointEnd = m_currentGpsPoint;
                 else
-                    pointEnd = (int)this->getSegments()[i].getPoints().size()-1;
+                    pointEnd = (int)m_normalizedUtmPoints[i].size()-1;
                 for (int j = 0; j <= pointEnd; ++j)
                 {
-					double x = this->getNormalizedUtmX(i, j);
-					double y = this->getNormalizedUtmY(i, j);
-                    glVertex2d(getScaledUtmX(x),
-                               getScaledUtmY(y));
+                    glVertex2d(getScaledUtmX(m_normalizedUtmPoints[i][j].x),
+                               getScaledUtmY(m_normalizedUtmPoints[i][j].y));
                 }
                 glEnd();
             }
             ofFill();
             ofSetColor(0, 255, 0, 127);
-            ofCircle(getScaledUtmX(this->getNormalizedUtmX(m_currentGpsSegment, m_currentGpsPoint)),
-					 getScaledUtmY(this->getNormalizedUtmY(m_currentGpsSegment, m_currentGpsPoint)), 5);
+            ofCircle(getScaledUtmX(m_normalizedUtmPoints[m_currentGpsSegment][m_currentGpsPoint].x),
+					 getScaledUtmY(m_normalizedUtmPoints[m_currentGpsSegment][m_currentGpsPoint].y), 5);
         }
     }
     else
@@ -174,15 +175,13 @@ void GpsData::draw(bool animated)
         // Draw Gps data
         // -----------------------------------------------------------------------------
         ofNoFill();
-        for (unsigned int i = 0; i < this->getSegments().size(); ++i)
+        for (unsigned int i = 0; i < m_normalizedUtmPoints.size(); ++i)
         {
             glBegin(GL_LINE_STRIP);
-            for (unsigned int j = 0; j < this->getSegments()[i].getPoints().size(); ++j)
+            for (unsigned int j = 0; j < m_normalizedUtmPoints[i].size(); ++j)
             {
-				double x = this->getNormalizedUtmX(i, j);
-				double y = this->getNormalizedUtmY(i, j);
-				glVertex2d(getScaledUtmX(x),
-						   getScaledUtmY(y));
+				glVertex2d(getScaledUtmX(m_normalizedUtmPoints[i][j].x),
+						   getScaledUtmY(m_normalizedUtmPoints[i][j].y));
             }
             glEnd();
         }
@@ -286,11 +285,11 @@ double GpsData::getLatitude(int segmentIndex, int pointIndex)
 double GpsData::getUtmX(int segmentIndex, int pointIndex)
 {
 	double utmX = 0.0;
-	if (segmentIndex < (int)m_segments.size())
+	if (segmentIndex < (int)m_utmPoints.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		if (pointIndex < (int)m_utmPoints[segmentIndex].size())
 		{
-			utmX = m_segments[segmentIndex].getPoints()[pointIndex].getUtmX();
+			utmX = m_utmPoints[segmentIndex][pointIndex].x;
 		}
 	}
 	return utmX;
@@ -299,55 +298,41 @@ double GpsData::getUtmX(int segmentIndex, int pointIndex)
 double GpsData::getUtmY(int segmentIndex, int pointIndex)
 {
 	double utmY = 0.0;
-	if (segmentIndex < (int)m_segments.size())
+	if (segmentIndex < (int)m_utmPoints.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		if (pointIndex < (int)m_utmPoints[segmentIndex].size())
 		{
-			utmY = m_segments[segmentIndex].getPoints()[pointIndex].getUtmY();
+			utmY = m_utmPoints[segmentIndex][pointIndex].y;
 		}
 	}
 	return utmY;
 }
-// -----------------------------------------------------------------------------
+
 double GpsData::getNormalizedUtmX(int segmentIndex, int pointIndex)
 {
-	double normalizedUtmX = 0.0;
-	if (segmentIndex < (int)m_segments.size())
+	double utmX = 0.0;
+	if (segmentIndex < (int)m_normalizedUtmPoints.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		if (pointIndex < (int)m_normalizedUtmPoints[segmentIndex].size())
 		{
-			normalizedUtmX = m_segments[segmentIndex].getPoints()[pointIndex].getNormalizedUtmX();
+			utmX = m_normalizedUtmPoints[segmentIndex][pointIndex].x;
 		}
 	}
-	return normalizedUtmX;
-
+	return utmX;
 }
 
 double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
 {
-	double normalizedUtmY = 0.0;
-	if (segmentIndex < (int)m_segments.size())
+	double utmY = 0.0;
+	if (segmentIndex < (int)m_normalizedUtmPoints.size())
 	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		if (pointIndex < (int)m_normalizedUtmPoints[segmentIndex].size())
 		{
-			normalizedUtmY = m_segments[segmentIndex].getPoints()[pointIndex].getNormalizedUtmY();
+			utmY = m_normalizedUtmPoints[segmentIndex][pointIndex].y;
 		}
 	}
-	return normalizedUtmY;
-
+	return utmY;
 }
-
-// -----------------------------------------------------------------------------
-//const GpsPoint& GpsData::getCurrentPoint()
-//{
-//    if(m_currentGpsSegment < (int)m_segments.size())
-//    {
-//        if(m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
-//        {
-//            return m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint];
-//        }
-//    }
-//}
 
 // -----------------------------------------------------------------------------
 // Scale to screen
@@ -363,8 +348,6 @@ double GpsData::getScaledUtmY(double normalizedUtmY)
     // Flip y coordinates ??
     return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
-
-
 
 //---------------------------------------------------------------------------
 const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
@@ -433,21 +416,21 @@ void GpsData::setMinMaxRatioUTM()
 	}
 }
 // -----------------------------------------------------------------------------
-// Normalize Gps points.
+// Normalize Utm points.
 // -----------------------------------------------------------------------------
-void GpsData::normalizeGpsPoints()
+void GpsData::normalizeUtmPoints()
 {
 	setMinMaxRatioUTM();
-	for (unsigned int i = 0; i < m_segments.size(); ++i) {
-		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+	m_normalizedUtmPoints = m_utmPoints;
+	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
+		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
 		{
-			GpsPoint* p = const_cast<GpsPoint*>(&(m_segments[i].getPoints()[j]));
-			double x = p->getUtmX();
-			double y = p->getUtmY();
+			double x = m_utmPoints[i][j].x;
+			double y = m_utmPoints[i][j].y;
 			x = (x - m_minUtmX) / (m_maxUtmX - m_minUtmX);
 			y = (y - m_minUtmY) / (m_maxUtmY - m_minUtmY);
-			p->setNormalizedUtmX(x);
-			p->setNormalizedUtmY(y);
+			m_normalizedUtmPoints[i][j].x = x;
+			m_normalizedUtmPoints[i][j].y = y;
 		}
 	}
 }
@@ -461,11 +444,11 @@ void GpsData::setMinMaxValuesUTM()
 	double maxX = -std::numeric_limits<double>::max();
 	double maxY = -std::numeric_limits<double>::max();
 
-	for (unsigned int i = 0; i < m_segments.size(); ++i) {
-		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
+		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
 		{
-			double x = m_segments[i].getPoints()[j].getUtmX();
-			double y = m_segments[i].getPoints()[j].getUtmY();
+			double x = m_utmPoints[i][j].x;
+			double y = m_utmPoints[i][j].y;
 			if (x < minX) minX = x;
 			if (x > maxX) maxX = x;
 			if (y < minY) minY = y;
@@ -477,4 +460,27 @@ void GpsData::setMinMaxValuesUTM()
     m_minUtmY = minY;
     m_maxUtmX = maxX;
     m_maxUtmY = maxY;
+}
+
+void GpsData::calculateUtmPoints()
+{
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    m_utmPoints.clear();
+    m_utmPoints.reserve(m_segments.size());
+    for(unsigned int i = 0; i < m_segments.size(); ++i)
+    {
+        std::vector<UtmPoint> utmVec;
+        utmVec.reserve( m_segments[i].getPoints().size());
+        for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+        {
+            Math::real gamma, k;
+            UtmPoint utmP;
+            TMS.Forward(Math::real(m_lon0),
+                        m_segments[i].getPoints()[j].getLatitude(),
+                        m_segments[i].getPoints()[j].getLongitude(),
+                        utmP.x, utmP.y, gamma, k);
+            utmVec.push_back(utmP);
+        }
+        m_utmPoints.push_back(utmVec);
+    }
 }
