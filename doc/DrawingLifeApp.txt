@@ -1,0 +1,16 @@
+/**
+ * \file DrawingLifeApp.txt
+ * \brief Documentation for DrawingLifeApp
+ *
+ * Written by avp::ptr
+ **********************************************************************/
+
+/**
+\mainpage DrawingLifeApp
+\author avp::ptr
+\version 1.0
+\date 2010-02-09
+
+This application draws life maps with GpsData.
+
+**********************************************************************/

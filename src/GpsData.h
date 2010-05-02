@@ -240,6 +240,10 @@ public:
     */
     void reset();
 
+    /**
+    * \brief Get central meridian for projection.
+    * \return central meridian double value.
+    */
     double getProjectionCentralMeridian() const { return m_lon0; }
 
 private:
@@ -256,6 +260,9 @@ private:
     */
 	void setMinMaxValuesUTM();
 
+    /**
+    * \brief Calculate UTM values for all GpsPoints.
+    */
     void calculateUtmPoints();
 
     int m_gpsDataId;
