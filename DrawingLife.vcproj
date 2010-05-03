@@ -593,10 +593,6 @@
 			Name="Header Files"
 			>
 			<File
-				RelativePath=".\src\Data.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\DBReader.h"
 				>
 			</File>
