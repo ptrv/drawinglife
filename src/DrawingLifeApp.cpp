@@ -52,6 +52,10 @@ void DrawingLifeApp::setup()
     {
         string city = m_settings.getValue("settings:data:defaultcity", "London");
         loadGpsDataCity(city);
+        if(m_gpsData->getTotalGpsPoints() == 0)
+        {
+            m_startScreenMode = true;
+        }
     }
     else
     {
