@@ -55,6 +55,8 @@ private:
 	* \brief Set square view area and center.
 	*/
 	void setViewAspectRatio();
+
+	void drawStartScreen();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -78,6 +80,12 @@ private:
 	double m_zoomX;
 	double m_zoomY;
 	double m_zoomZ;
+	//---------------------------------------------------------------------------
+	bool m_startScreenMode;
+	ofTrueTypeFont m_fontTitle;
+	ofTrueTypeFont m_fontAuthor;
+	ofTrueTypeFont m_fontText;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_

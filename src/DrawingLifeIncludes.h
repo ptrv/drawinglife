@@ -6,6 +6,12 @@
 #define _DRAWINGLIFEINCLUDES_H_
 
 // -----------------------------------------------------------------------------
+
+#define APP_NAME_STR "DrawingLife"
+#define APP_AUTHOR_STR "avp::ptr"
+#define APP_VERSION_STR "1.0"
+
+// -----------------------------------------------------------------------------
 // include openFrameworks source tree.
 // -----------------------------------------------------------------------------
 

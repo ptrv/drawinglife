@@ -15,7 +15,8 @@ DrawingLifeApp::DrawingLifeApp(const ofxXmlSettings& settings) :
     m_isAnimation(true),
     m_zoomX(0.0),
     m_zoomY(0.0),
-    m_zoomZ(0.0)
+    m_zoomZ(0.0),
+    m_startScreenMode(false)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -28,6 +29,10 @@ DrawingLifeApp::~DrawingLifeApp()
 }
 void DrawingLifeApp::setup()
 {
+    m_fontTitle.loadFont("mono.ttf", 50);
+    m_fontAuthor.loadFont("mono.ttf",24);
+    m_fontText.loadFont("mono.ttf",18);
+
     ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
     this->setViewAspectRatio();
 
@@ -48,6 +53,10 @@ void DrawingLifeApp::setup()
         string city = m_settings.getValue("settings:data:defaultcity", "London");
         loadGpsData(city);
     }
+    else
+    {
+        m_startScreenMode = true;
+    }
 }
 
 //--------------------------------------------------------------
@@ -59,60 +68,80 @@ void DrawingLifeApp::update()
 //--------------------------------------------------------------
 void DrawingLifeApp::draw()
 {
-    if (m_isAnimation)
+    if (m_startScreenMode)
     {
-        // -----------------------------------------------------------------------------
-        // Draw rectangle with text.
-        // -----------------------------------------------------------------------------
-        double lat = m_gpsData->getCurrentLongitude();
-        double lon = m_gpsData->getCurrentLatitude();
-        //double ele = m_gpsData->getCurrentPoint().getElevation();
-        string timest = m_gpsData->getCurrentTimestamp();
-        string currentLocation = m_gpsData->getGpsLocationCurrent();
-        string info =	"Longitude  : " + ofToString(lon, 7) + "\n" +
-                        "Latitude   : " + ofToString(lat, 7) + "\n" +
-                        //"Elevation  : " + ofToString(ele) + "\n" +
-                        "Time       : " + timest + "\n" +
-                        "Location   : " + currentLocation + "\n" +
-                        "Cur. point : " + ofToString(m_gpsData->getCurrentPointNum()) + "\n" +
-                        "Segment nr : " + ofToString(m_gpsData->getCurrentSegmentNum());
-
-        fillViewAreaUTM( VIEWBOX);
-        //---------------------------------------------------------------------------
-        ofFill();
-        ofSetColor(0xE5A93F);
-        ofRect(10,10,300,120);
-        ofSetColor(0x000000);
-        ofDrawBitmapString(info,30,30);
-        // -----------------------------------------------------------------------------
-        // Draw Gps data
-        // -----------------------------------------------------------------------------
-        ofSetColor(FOREGROUND);
-        ofNoFill();
-//        glTranslated(m_gpsData->getMaxUtmX()/2, m_gpsData->getMaxUtmY()/2, 0.0);
-//        glRotated(90.0,0.0,0.0,1.0);
-//        glTranslated(-m_gpsData->getMaxUtmX()/2, -m_gpsData->getMaxUtmY()/2, 0.0);
-        glTranslated(m_zoomX, m_zoomY, m_zoomZ);
-        m_gpsData->draw();
+        drawStartScreen();
     }
     else
     {
-        fillViewAreaUTM( VIEWBOX);
-        // -----------------------------------------------------------------------------
-        // Draw Gps data
-        // -----------------------------------------------------------------------------
-        ofSetColor(FOREGROUND);
-        ofNoFill();
-        glTranslated(m_zoomX, m_zoomY, m_zoomZ);
-        m_gpsData->draw(false);
-    }
+        if (m_isAnimation)
+        {
+            // -----------------------------------------------------------------------------
+            // Draw rectangle with text.
+            // -----------------------------------------------------------------------------
+            double lat = m_gpsData->getCurrentLongitude();
+            double lon = m_gpsData->getCurrentLatitude();
+            //double ele = m_gpsData->getCurrentPoint().getElevation();
+            string timest = m_gpsData->getCurrentTimestamp();
+            string currentLocation = m_gpsData->getGpsLocationCurrent();
+            string info =	"Longitude  : " + ofToString(lon, 7) + "\n" +
+                            "Latitude   : " + ofToString(lat, 7) + "\n" +
+                            //"Elevation  : " + ofToString(ele) + "\n" +
+                            "Time       : " + timest + "\n" +
+                            "Location   : " + currentLocation + "\n" +
+                            "Cur. point : " + ofToString(m_gpsData->getCurrentPointNum()) + "\n" +
+                            "Segment nr : " + ofToString(m_gpsData->getCurrentSegmentNum());
 
+            fillViewAreaUTM( VIEWBOX);
+            //---------------------------------------------------------------------------
+            ofFill();
+            ofSetColor(0xE5A93F);
+            ofRect(10,10,300,120);
+            ofSetColor(0x000000);
+            ofDrawBitmapString(info,30,30);
+            // -----------------------------------------------------------------------------
+            // Draw Gps data
+            // -----------------------------------------------------------------------------
+            ofSetColor(FOREGROUND);
+            ofNoFill();
+    //        glTranslated(m_gpsData->getMaxUtmX()/2, m_gpsData->getMaxUtmY()/2, 0.0);
+    //        glRotated(90.0,0.0,0.0,1.0);
+    //        glTranslated(-m_gpsData->getMaxUtmX()/2, -m_gpsData->getMaxUtmY()/2, 0.0);
+            glTranslated(m_zoomX, m_zoomY, m_zoomZ);
+            m_gpsData->draw();
+        }
+        else
+        {
+            fillViewAreaUTM( VIEWBOX);
+            // -----------------------------------------------------------------------------
+            // Draw Gps data
+            // -----------------------------------------------------------------------------
+            ofSetColor(FOREGROUND);
+            ofNoFill();
+            glTranslated(m_zoomX, m_zoomY, m_zoomZ);
+            m_gpsData->draw(false);
+        }
+    }
+}
+void DrawingLifeApp::drawStartScreen()
+{
+    ofSetColor(255,255,255);
+
+    string title = APP_NAME_STR;
+    title += " ";
+    title += APP_VERSION_STR;
+    m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
+
+    m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
+
+    m_fontText.drawString("Press key 1 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
 // -----------------------------------------------------------------------------
 void DrawingLifeApp::loadGpsData(string city)
 {
+    m_startScreenMode = false;
     // get GpsData from database
 //    m_gpsData->clear();
     SAFE_DELETE(m_gpsData);
