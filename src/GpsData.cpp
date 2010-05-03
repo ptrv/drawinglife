@@ -36,7 +36,8 @@ m_viewXOffset(0.0),
 m_viewYOffset(0.0),
 m_viewMinDimension(0.0),
 m_viewPadding(0.0),
-m_lon0(0.0)
+m_lon0(0.0),
+m_currentGpsPointInfo("")
 {
 	m_segments.reserve(1000); // TODO good amount.
 }
@@ -482,4 +483,16 @@ void GpsData::calculateUtmPoints()
         }
         m_utmPoints.push_back(utmVec);
     }
+}
+
+const std::string& GpsData::getCurrentGpsInfo()
+{
+    m_currentGpsPointInfo =	"Longitude  : " + ofToString(getCurrentLongitude(), 7) + "\n" +
+                            "Latitude   : " + ofToString(getCurrentLatitude(), 7) + "\n" +
+                            //"Elevation  : " + ofToString(getCurrentElevation(), 7) + "\n" +
+                            "Time       : " + getCurrentTimestamp() + "\n" +
+                            "Location   : " + getGpsLocationCurrent() + "\n" +
+                            "Cur. point : " + ofToString(getCurrentPointNum()) + "\n" +
+                            "Segment nr : " + ofToString(getCurrentSegmentNum());
+    return m_currentGpsPointInfo;
 }

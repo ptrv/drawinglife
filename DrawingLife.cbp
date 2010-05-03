@@ -344,9 +344,6 @@
 		<Unit filename="src/DBReader.h">
 			<Option virtualFolder="src/" />
 		</Unit>
-		<Unit filename="src/Data.h">
-			<Option virtualFolder="src/" />
-		</Unit>
 		<Unit filename="src/DrawingLifeApp.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

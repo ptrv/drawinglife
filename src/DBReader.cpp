@@ -3,6 +3,9 @@
 =======================================================*/
 
 #include "DrawingLifeIncludes.h"
+#include "GpsPoint.h"
+#include "GpsSegment.h"
+#include "GpsData.h"
 #include "DBReader.h"
 #include <string>
 #include <iostream>
@@ -11,8 +14,6 @@ using namespace std;
 
 #include "sqlite3x/sqlite3x.hpp"
 using namespace sqlite3x;
-
-//#include "Data.h"
 
 // --------------------------------------------------------------------------------------
 #define CATCHDBERRORS																	\

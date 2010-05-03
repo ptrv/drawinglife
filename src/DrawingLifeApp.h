@@ -50,12 +50,15 @@ private:
 	* \brief
 	* \param city string with city name.
 	*/
-	void loadGpsData(string city);
+	void loadGpsDataCity(string city);
 	/**
 	* \brief Set square view area and center.
 	*/
 	void setViewAspectRatio();
 
+    /**
+    * \brief Draw start screen with app info.
+    */
 	void drawStartScreen();
     //---------------------------------------------------------------------------
     // Member variables

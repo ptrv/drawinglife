@@ -5,7 +5,7 @@
 #ifndef _DBREADER_H_
 #define _DBREADER_H_
 
-#include "Data.h"
+#include "GpsData.h"
 #include <string>
 #include "sqlite3x/sqlite3x.hpp"
 using namespace sqlite3x;

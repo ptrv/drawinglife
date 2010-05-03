@@ -149,48 +149,6 @@ public:
 	*/
 	double getNormalizedUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
-//	const GpsPoint& getCurrentPoint();
-	// -----------------------------------------------------------------------------
-	/**
-	* \brief Get location for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
-	* \return location for given GpsSegment and GpsPoint.
-	*/
-	const std::string getGpsLocation(int segmentIndex, int pointIndex);
-    /**
-    * \brief Get current Gps location.
-    * \return location string for current GpsPoint.
-    */
-	const std::string getGpsLocationCurrent();
-	// -----------------------------------------------------------------------------
-    /**
-    * \brief Get current GpsSegment number.
-    * \return number of current GpsSegment.
-    */
-	int getCurrentSegmentNum();
-    /**
-    * \brief Get current GpsPoint number.
-    * \return number of current GpsSegment.
-    */
-	int getCurrentPointNum();
-    /**
-    * \brief Get timestamp for current GpsPoint.
-    * \return timestamp string of current GpsPoint.
-    */
-	string getCurrentTimestamp();
-    /**
-    * \brief Get current logitude for GpsPoint.
-    * \return longitude of current GpsPoint.
-    */
-	double getCurrentLongitude();
-    /**
-    * \brief Get current latitude for GpsPoint.
-    * \return latitude of current GpsPoint.
-    */
-	double getCurrentLatitude();
-//	double getCurrentElevation();
-	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get total number of GpsPoints.
 	* \return number of all GpsPoints
@@ -246,7 +204,56 @@ public:
     */
     double getProjectionCentralMeridian() const { return m_lon0; }
 
+    /**
+    * \brief Get current GpsPoint information.
+    * \return formatted string with info.
+    */
+    const std::string& getCurrentGpsInfo();
+
 private:
+	// -----------------------------------------------------------------------------
+//	const GpsPoint& getCurrentPoint();
+	// -----------------------------------------------------------------------------
+	/**
+	* \brief Get location for given GpsSegment and GpsPoint.
+	* \param segmentIndex number of a GpsSegment.
+	* \param pointIndex number of a GpsPoint.
+	* \return location for given GpsSegment and GpsPoint.
+	*/
+	const std::string getGpsLocation(int segmentIndex, int pointIndex);
+    /**
+    * \brief Get current Gps location.
+    * \return location string for current GpsPoint.
+    */
+	const std::string getGpsLocationCurrent();
+	// -----------------------------------------------------------------------------
+    /**
+    * \brief Get current GpsSegment number.
+    * \return number of current GpsSegment.
+    */
+	int getCurrentSegmentNum();
+    /**
+    * \brief Get current GpsPoint number.
+    * \return number of current GpsSegment.
+    */
+	int getCurrentPointNum();
+    /**
+    * \brief Get timestamp for current GpsPoint.
+    * \return timestamp string of current GpsPoint.
+    */
+	string getCurrentTimestamp();
+    /**
+    * \brief Get current logitude for GpsPoint.
+    * \return longitude of current GpsPoint.
+    */
+	double getCurrentLongitude();
+    /**
+    * \brief Get current latitude for GpsPoint.
+    * \return latitude of current GpsPoint.
+    */
+	double getCurrentLatitude();
+//	double getCurrentElevation();
+
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1.
     */
@@ -292,7 +299,8 @@ private:
 	std::vector< std::vector<UtmPoint> > m_utmPoints;
 	std::vector< std::vector<UtmPoint> > m_normalizedUtmPoints;
     double m_lon0;
-};
 
+    std::string m_currentGpsPointInfo;
+};
 
 #endif // _GPSDATA_H_
