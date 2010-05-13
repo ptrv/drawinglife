@@ -29,7 +29,13 @@ DrawingLifeApp::~DrawingLifeApp()
 }
 void DrawingLifeApp::setup()
 {
-    m_fontTitle.loadFont("mono.ttf", 50);
+#if defined TARGET_OSX
+	// On mac the working directory is at this point in bin.
+	// In DrawingLifeApp working directory is DrawingLifeApp.app/Contents/MacOS
+	// Have to set Data dir seperately in main.cpp and DrawingLifeApp.cpp.	
+	ofSetDataPathRoot("../../../data/");
+#endif
+	m_fontTitle.loadFont("mono.ttf", 50);
     m_fontAuthor.loadFont("mono.ttf",24);
     m_fontText.loadFont("mono.ttf",18);
 

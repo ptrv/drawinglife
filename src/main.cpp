@@ -11,6 +11,13 @@ int main( ){
     int w;
     int h;
     ofxXmlSettings settings;
+	
+#if defined TARGET_OSX
+	// On mac the working directory is at this point in bin.
+	// In DrawingLifeApp working directory is DrawingLifeApp.app/Contents/MacOS
+	// Have to set Data dir seperately in main.cpp and DrawingLifeApp.cpp.
+	ofSetDataPathRoot("./data/");
+#endif
     settings.loadFile("AppSettings.xml");
     w = settings.getValue("settings:window:width", 1024);
     h = settings.getValue("settings:window:height", 768);
