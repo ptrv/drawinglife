@@ -48,15 +48,15 @@ void DrawingLifeApp::setup()
 
     ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
 //    ofSetLogLevel(OF_LOG_VERBOSE);
+
     // db path must be absolute path for DBReader (true as second parameter)
     m_dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.sqlite"), true);
 
     DBG_VAL(m_dbPath);
 //    m_gpsData = new GpsData();
 
-    string city = m_settings.getValue("settings:data:defaultcity", "London");
+    string city = m_settings.getValue("data:defaultcity", "London");
 
-    m_settings.pushTag("settings");
     m_settings.pushTag("data");
     m_settings.pushTag("person");
     m_numPerson = m_settings.getNumTags("name");
@@ -68,10 +68,9 @@ void DrawingLifeApp::setup()
     }
     m_settings.popTag();
     m_settings.popTag();
-    m_settings.popTag();
     DBG_VAL(m_numPerson);
 
-    if (m_settings.getValue("settings:data:loadonstart",1) == 1)
+    if (m_settings.getValue("settings:loadgpsonstart",1) == 1)
     {
         for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
         {

@@ -2,13 +2,13 @@
 <settings>
   <database>test.sqlite</database>
   <log level="0" />
-  <data>
-    <loadonstart>1</loadonstart>
-    <person>
-      <name>Dan</name>
-      <!-- <name>Sophia</name> -->
-    </person>
-    <defaultcity>Berlin</defaultcity>
-  </data>
+  <loadgpsonstart>1</loadgpsonstart>
   <font>mono.ttf</font>
 </settings>
+<data>
+  <person>
+    <name>Dan</name>
+    <!-- <name>Sophia</name> -->
+  </person>
+  <defaultcity>Berlin</defaultcity>
+</data>
