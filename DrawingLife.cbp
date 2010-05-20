@@ -88,6 +88,7 @@
 			<Add directory="../../../addons/ofxXmlSettings/src" />
 			<Add directory="../../../addons/ofxXmlSettings/libs" />
 			<Add directory="libs/geographiclib-1.1/include" />
+			<Add directory="libs/sqlite3x" />
 		</Compiler>
 		<Linker>
 			<Add library="fmodex" />
@@ -338,6 +339,34 @@
 		<Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.h">
 			<Option virtualFolder="addons/ofXmlSettings/src" />
 		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3.c">
+			<Option compilerVar="CC" />
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3.h">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3ext.h">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3x.hpp">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3x_command.cpp">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3x_connection.cpp">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3x_exception.cpp">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3x_reader.cpp">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
+		<Unit filename="libs/sqlite3x/sqlite3x_transaction.cpp">
+			<Option virtualFolder="sqlite3x/" />
+		</Unit>
 		<Unit filename="src/DBReader.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>
@@ -370,34 +399,6 @@
 		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3.c">
-			<Option compilerVar="CC" />
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3.h">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3ext.h">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3x.hpp">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3x_command.cpp">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3x_connection.cpp">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3x_exception.cpp">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3x_reader.cpp">
-			<Option virtualFolder="sqlite3x/" />
-		</Unit>
-		<Unit filename="libs/sqlite3x/sqlite3x_transaction.cpp">
-			<Option virtualFolder="sqlite3x/" />
 		</Unit>
 		<Extensions>
 			<lib_finder>
