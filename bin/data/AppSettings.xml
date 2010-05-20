@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <window>
-    <width>1024</width>
-    <height>768</height>
-  </window>
   <database>test.sqlite</database>
   <log level="0" />
   <data>
-    <loadonstart>0</loadonstart>
+    <loadonstart>1</loadonstart>
+    <person>
+      <name>Dan</name>
+      <!-- <name>Sophia</name> -->
+    </person>
     <defaultcity>Berlin</defaultcity>
   </data>
+  <font>mono.ttf</font>
 </settings>

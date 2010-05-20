@@ -22,7 +22,7 @@ public: /* static */
 	static const int VIEWBOX = 0x343434;
 
 public:
-	DrawingLifeApp(const ofxXmlSettings& settings);
+	DrawingLifeApp();
 	virtual ~DrawingLifeApp();
 	void setup();
 	void update();
@@ -50,7 +50,7 @@ private:
 	* \brief
 	* \param city string with city name.
 	*/
-	void loadGpsDataCity(string city);
+	void loadGpsDataCity(vector<string> names, string city);
 	/**
 	* \brief Set square view area and center.
 	*/
@@ -65,7 +65,7 @@ private:
     //---------------------------------------------------------------------------
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
-	GpsData* m_gpsData;
+	vector<GpsData* > m_gpsDatas;
 	string m_dbPath;
 	//---------------------------------------------------------------------------
 	int maxPoints;
@@ -88,7 +88,9 @@ private:
 	ofTrueTypeFont m_fontTitle;
 	ofTrueTypeFont m_fontAuthor;
 	ofTrueTypeFont m_fontText;
-
+    // -----------------------------------------------------------------------------
+    int m_numPerson;
+    vector<string> m_names;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

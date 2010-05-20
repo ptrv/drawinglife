@@ -487,12 +487,14 @@ void GpsData::calculateUtmPoints()
 
 const std::string& GpsData::getCurrentGpsInfo()
 {
-    m_currentGpsPointInfo =	"Longitude  : " + ofToString(getCurrentLongitude(), 7) + "\n" +
-                            "Latitude   : " + ofToString(getCurrentLatitude(), 7) + "\n" +
-                            //"Elevation  : " + ofToString(getCurrentElevation(), 7) + "\n" +
-                            "Time       : " + getCurrentTimestamp() + "\n" +
-                            "Location   : " + getGpsLocationCurrent() + "\n" +
-                            "Cur. point : " + ofToString(getCurrentPointNum()) + "\n" +
-                            "Segment nr : " + ofToString(getCurrentSegmentNum());
+    m_currentGpsPointInfo =	"Longitude    : " + ofToString(getCurrentLongitude(), 7) + "\n" +
+                            "Latitude     : " + ofToString(getCurrentLatitude(), 7) + "\n" +
+                            //"Elevation    : " + ofToString(getCurrentElevation(), 7) + "\n" +
+                            "Time         : " + getCurrentTimestamp() + "\n" +
+                            "Location     : " + getGpsLocationCurrent() + "\n" +
+                            "Currrent pts.: " + ofToString(getCurrentPointNum()) + "\n" +
+                            //"Segment nr.  : " + ofToString(getCurrentSegmentNum()) + "\n" +
+                            "Total pts.   : " + ofToString(getTotalGpsPoints()) + "\n" +
+                            "Person       : " + m_user;
     return m_currentGpsPointInfo;
 }
