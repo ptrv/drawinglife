@@ -12,7 +12,7 @@
 #include <stdexcept>
 using namespace std;
 
-#include "sqlite3x/sqlite3x.hpp"
+#include "sqlite3x.hpp"
 using namespace sqlite3x;
 
 // --------------------------------------------------------------------------------------
