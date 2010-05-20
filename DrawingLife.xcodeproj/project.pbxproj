@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D01010BE116371AE0096EC19 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D01010B5116371AE0096EC19 /* sqlite3.c */; };
-		D01010BF116371AE0096EC19 /* sqlite3x_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010B9116371AE0096EC19 /* sqlite3x_command.cpp */; };
-		D01010C0116371AE0096EC19 /* sqlite3x_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010BA116371AE0096EC19 /* sqlite3x_connection.cpp */; };
-		D01010C1116371AE0096EC19 /* sqlite3x_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010BB116371AE0096EC19 /* sqlite3x_exception.cpp */; };
-		D01010C2116371AE0096EC19 /* sqlite3x_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010BC116371AE0096EC19 /* sqlite3x_reader.cpp */; };
-		D01010C3116371AE0096EC19 /* sqlite3x_transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01010BD116371AE0096EC19 /* sqlite3x_transaction.cpp */; };
 		D010115F11637D870096EC19 /* GpsData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D010115E11637D870096EC19 /* GpsData.cpp */; };
 		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
-		D0B38854117F106F005E46BA /* libGeographicUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B38853117F1047005E46BA /* libGeographicUniversal.a */; };
+		D0B38854117F106F005E46BA /* libGeographicD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B38853117F1047005E46BA /* libGeographicD.a */; };
 		D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */; };
+		D0E8CF8811A6020200541164 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF7F11A6020200541164 /* sqlite3.c */; };
+		D0E8CF8911A6020200541164 /* sqlite3x_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8211A6020200541164 /* sqlite3x_command.cpp */; };
+		D0E8CF8A11A6020200541164 /* sqlite3x_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8311A6020200541164 /* sqlite3x_connection.cpp */; };
+		D0E8CF8B11A6020200541164 /* sqlite3x_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8411A6020200541164 /* sqlite3x_exception.cpp */; };
+		D0E8CF8C11A6020200541164 /* sqlite3x_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8511A6020200541164 /* sqlite3x_reader.cpp */; };
+		D0E8CF8D11A6020200541164 /* sqlite3x_transaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8611A6020200541164 /* sqlite3x_transaction.cpp */; };
 		E44667010F5B3E04005D0BF0 /* model3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D70F5B3E03005D0BF0 /* model3DS.cpp */; };
 		E44667020F5B3E04005D0BF0 /* texture3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */; };
 		E44667030F5B3E04005D0BF0 /* ofx3dModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E44665DD0F5B3E03005D0BF0 /* ofx3dModelLoader.cpp */; };
@@ -131,15 +131,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D01010B5116371AE0096EC19 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
-		D01010B6116371AE0096EC19 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
-		D01010B7116371AE0096EC19 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
-		D01010B8116371AE0096EC19 /* sqlite3x.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sqlite3x.hpp; sourceTree = "<group>"; };
-		D01010B9116371AE0096EC19 /* sqlite3x_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_command.cpp; sourceTree = "<group>"; };
-		D01010BA116371AE0096EC19 /* sqlite3x_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_connection.cpp; sourceTree = "<group>"; };
-		D01010BB116371AE0096EC19 /* sqlite3x_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_exception.cpp; sourceTree = "<group>"; };
-		D01010BC116371AE0096EC19 /* sqlite3x_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_reader.cpp; sourceTree = "<group>"; };
-		D01010BD116371AE0096EC19 /* sqlite3x_transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sqlite3x_transaction.cpp; sourceTree = "<group>"; };
 		D010115B11637D3C0096EC19 /* GpsPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsPoint.h; sourceTree = "<group>"; };
 		D010115C11637D4F0096EC19 /* GpsSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsSegment.h; sourceTree = "<group>"; };
 		D010115D11637D870096EC19 /* GpsData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsData.h; sourceTree = "<group>"; };
@@ -151,6 +142,15 @@
 		D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
 		D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawingLifeApp.cpp; sourceTree = "<group>"; };
 		D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeApp.h; sourceTree = "<group>"; };
+		D0E8CF7F11A6020200541164 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs/sqlite3x/sqlite3.c; sourceTree = "<group>"; };
+		D0E8CF8011A6020200541164 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs/sqlite3x/sqlite3.h; sourceTree = "<group>"; };
+		D0E8CF8111A6020200541164 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = libs/sqlite3x/sqlite3ext.h; sourceTree = "<group>"; };
+		D0E8CF8211A6020200541164 /* sqlite3x_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite3x_command.cpp; path = libs/sqlite3x/sqlite3x_command.cpp; sourceTree = "<group>"; };
+		D0E8CF8311A6020200541164 /* sqlite3x_connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite3x_connection.cpp; path = libs/sqlite3x/sqlite3x_connection.cpp; sourceTree = "<group>"; };
+		D0E8CF8411A6020200541164 /* sqlite3x_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite3x_exception.cpp; path = libs/sqlite3x/sqlite3x_exception.cpp; sourceTree = "<group>"; };
+		D0E8CF8511A6020200541164 /* sqlite3x_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite3x_reader.cpp; path = libs/sqlite3x/sqlite3x_reader.cpp; sourceTree = "<group>"; };
+		D0E8CF8611A6020200541164 /* sqlite3x_transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sqlite3x_transaction.cpp; path = libs/sqlite3x/sqlite3x_transaction.cpp; sourceTree = "<group>"; };
+		D0E8CF8711A6020200541164 /* sqlite3x.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sqlite3x.hpp; path = libs/sqlite3x/sqlite3x.hpp; sourceTree = "<group>"; };
 		E44665D70F5B3E03005D0BF0 /* model3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.cpp; sourceTree = SOURCE_ROOT; };
 		E44665D80F5B3E03005D0BF0 /* model3DS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model3DS.h; path = ../../../addons/ofx3DModelLoader/src/3DS/model3DS.h; sourceTree = SOURCE_ROOT; };
 		E44665D90F5B3E03005D0BF0 /* texture3DS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture3DS.cpp; path = ../../../addons/ofx3DModelLoader/src/3DS/texture3DS.cpp; sourceTree = SOURCE_ROOT; };
@@ -295,7 +295,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0B38854117F106F005E46BA /* libGeographicUniversal.a in Frameworks */,
+				D0B38854117F106F005E46BA /* libGeographicD.a in Frameworks */,
 				E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */,
 				E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */,
 				E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */,
@@ -328,22 +328,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D01010B4116371AE0096EC19 /* sqlite3x */ = {
-			isa = PBXGroup;
-			children = (
-				D01010B5116371AE0096EC19 /* sqlite3.c */,
-				D01010B6116371AE0096EC19 /* sqlite3.h */,
-				D01010B7116371AE0096EC19 /* sqlite3ext.h */,
-				D01010B8116371AE0096EC19 /* sqlite3x.hpp */,
-				D01010B9116371AE0096EC19 /* sqlite3x_command.cpp */,
-				D01010BA116371AE0096EC19 /* sqlite3x_connection.cpp */,
-				D01010BB116371AE0096EC19 /* sqlite3x_exception.cpp */,
-				D01010BC116371AE0096EC19 /* sqlite3x_reader.cpp */,
-				D01010BD116371AE0096EC19 /* sqlite3x_transaction.cpp */,
-			);
-			path = sqlite3x;
-			sourceTree = "<group>";
-		};
 		D0B38845117F1024005E46BA /* GeographicLibrary */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,9 +339,25 @@
 		D0B3884C117F1047005E46BA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D0B38853117F1047005E46BA /* libGeographicUniversal.a */,
+				D0B38853117F1047005E46BA /* libGeographicD.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D0E8CF7A11A601DF00541164 /* sqlite3x */ = {
+			isa = PBXGroup;
+			children = (
+				D0E8CF7F11A6020200541164 /* sqlite3.c */,
+				D0E8CF8011A6020200541164 /* sqlite3.h */,
+				D0E8CF8111A6020200541164 /* sqlite3ext.h */,
+				D0E8CF8211A6020200541164 /* sqlite3x_command.cpp */,
+				D0E8CF8311A6020200541164 /* sqlite3x_connection.cpp */,
+				D0E8CF8411A6020200541164 /* sqlite3x_exception.cpp */,
+				D0E8CF8511A6020200541164 /* sqlite3x_reader.cpp */,
+				D0E8CF8611A6020200541164 /* sqlite3x_transaction.cpp */,
+				D0E8CF8711A6020200541164 /* sqlite3x.hpp */,
+			);
+			name = sqlite3x;
 			sourceTree = "<group>";
 		};
 		E44665C70F5B3E03005D0BF0 /* addons */ = {
@@ -957,6 +957,7 @@
 				E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				D0E8CF7A11A601DF00541164 /* sqlite3x */,
 				D0B38845117F1024005E46BA /* GeographicLibrary */,
 				E4C2422310CC54B6004149E2 /* openFrameworks */,
 				E44665C70F5B3E03005D0BF0 /* addons */,
@@ -967,7 +968,6 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				D01010B4116371AE0096EC19 /* sqlite3x */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */,
 				D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */,
@@ -1110,10 +1110,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		D0B38853117F1047005E46BA /* libGeographicUniversal.a */ = {
+		D0B38853117F1047005E46BA /* libGeographicD.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libGeographicUniversal.a;
+			path = libGeographicD.a;
 			remoteRef = D0B38852117F1047005E46BA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1178,13 +1178,13 @@
 				E4485C4510E54E89003102AC /* ofxQuaternion.cpp in Sources */,
 				D07156AF11515155008CEA46 /* DBReader.cpp in Sources */,
 				D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */,
-				D01010BE116371AE0096EC19 /* sqlite3.c in Sources */,
-				D01010BF116371AE0096EC19 /* sqlite3x_command.cpp in Sources */,
-				D01010C0116371AE0096EC19 /* sqlite3x_connection.cpp in Sources */,
-				D01010C1116371AE0096EC19 /* sqlite3x_exception.cpp in Sources */,
-				D01010C2116371AE0096EC19 /* sqlite3x_reader.cpp in Sources */,
-				D01010C3116371AE0096EC19 /* sqlite3x_transaction.cpp in Sources */,
 				D010115F11637D870096EC19 /* GpsData.cpp in Sources */,
+				D0E8CF8811A6020200541164 /* sqlite3.c in Sources */,
+				D0E8CF8911A6020200541164 /* sqlite3x_command.cpp in Sources */,
+				D0E8CF8A11A6020200541164 /* sqlite3x_connection.cpp in Sources */,
+				D0E8CF8B11A6020200541164 /* sqlite3x_exception.cpp in Sources */,
+				D0E8CF8C11A6020200541164 /* sqlite3x_reader.cpp in Sources */,
+				D0E8CF8D11A6020200541164 /* sqlite3x_transaction.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
