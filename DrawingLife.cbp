@@ -371,32 +371,32 @@
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3.c">
+		<Unit filename="libs/sqlite3x/sqlite3.c">
 			<Option compilerVar="CC" />
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3.h">
+		<Unit filename="libs/sqlite3x/sqlite3.h">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3ext.h">
+		<Unit filename="libs/sqlite3x/sqlite3ext.h">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3x.hpp">
+		<Unit filename="libs/sqlite3x/sqlite3x.hpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3x_command.cpp">
+		<Unit filename="libs/sqlite3x/sqlite3x_command.cpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3x_connection.cpp">
+		<Unit filename="libs/sqlite3x/sqlite3x_connection.cpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3x_exception.cpp">
+		<Unit filename="libs/sqlite3x/sqlite3x_exception.cpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3x_reader.cpp">
+		<Unit filename="libs/sqlite3x/sqlite3x_reader.cpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
-		<Unit filename="src/sqlite3x/sqlite3x_transaction.cpp">
+		<Unit filename="libs/sqlite3x/sqlite3x_transaction.cpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
 		<Extensions>

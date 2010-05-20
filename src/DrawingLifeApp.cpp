@@ -115,10 +115,10 @@ void DrawingLifeApp::draw()
             for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
             {
                 ofFill();
-                ofSetColor(0xE5A93F);
+                int color = 0xE5A93F;
+                ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 220);
                 ofRect(10 + (ofGetWidth()/m_numPerson)*i,10,320,120);
                 ofSetColor(0x000000);
-
                 ofDrawBitmapString(m_gpsDatas[i]->getCurrentGpsInfo(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
