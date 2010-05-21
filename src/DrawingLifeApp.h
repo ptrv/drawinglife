@@ -9,6 +9,7 @@
 #include "ofxXmlSettings.h"
 #include "ofxVectorMath.h"
 #include "DBReader.h"
+#include "Timeline.h"
 
 /**
  *  \brief Main application class.
@@ -90,6 +91,9 @@ private:
     // -----------------------------------------------------------------------------
     int m_numPerson;
     vector<string> m_names;
+    // -----------------------------------------------------------------------------
+    Timeline* m_timeline;
+    int m_drawSpeed;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

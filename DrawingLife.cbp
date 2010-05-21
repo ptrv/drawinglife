@@ -397,6 +397,12 @@
 		<Unit filename="src/Logger.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/Timeline.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/Timeline.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

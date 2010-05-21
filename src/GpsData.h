@@ -15,7 +15,7 @@ struct UtmPoint
     double y;
 };
 
-
+using namespace std;
 /**
  * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
  *

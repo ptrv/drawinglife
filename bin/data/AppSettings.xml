@@ -4,6 +4,7 @@
   <log level="0" />
   <loadgpsonstart>1</loadgpsonstart>
   <font>mono.ttf</font>
+  <drawspeed>1</drawspeed>
 </settings>
 <data>
   <person>

@@ -17,7 +17,9 @@ DrawingLifeApp::DrawingLifeApp() :
     m_zoomY(0.0),
     m_zoomZ(0.0),
     m_startScreenMode(false),
-    m_numPerson(0)
+    m_numPerson(0),
+    m_timeline(NULL),
+    m_drawSpeed(1)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -26,6 +28,7 @@ DrawingLifeApp::~DrawingLifeApp()
     {
         SAFE_DELETE(m_gpsDatas[i]);
     }
+    SAFE_DELETE(m_timeline);
 }
 void DrawingLifeApp::setup()
 {
@@ -70,16 +73,18 @@ void DrawingLifeApp::setup()
     // -----------------------------------------------------------------------------
     this->setViewAspectRatio();
     // -----------------------------------------------------------------------------
+    m_timeline = new Timeline();
+    m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
     if (m_settings.getValue("settings:loadgpsonstart",1) == 1)
     {
-        for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
-        {
+//        for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+//        {
             loadGpsDataCity(m_names, city);
-            if(m_gpsDatas[i]->getTotalGpsPoints() == 0)
-            {
-                m_startScreenMode = true;
-            }
-        }
+//            if(m_gpsDatas[i]->getTotalGpsPoints() == 0)
+//            {
+//                m_startScreenMode = true;
+//            }
+//        }
     }
     else
     {
@@ -90,10 +95,18 @@ void DrawingLifeApp::setup()
 //--------------------------------------------------------------
 void DrawingLifeApp::update()
 {
-    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    for(unsigned int i = 0; i < m_drawSpeed; ++i)
     {
-        m_gpsDatas[i]->update();
+        int id = m_timeline->getNext();
+        if (id < m_gpsDatas.size())
+        {
+            m_gpsDatas[id]->update();
+        }
     }
+//    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+//    {
+//        m_gpsDatas[i]->update();
+//    }
 }
 
 //--------------------------------------------------------------
@@ -123,11 +136,13 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                ofSetColor(FOREGROUND);
+                //ofSetColor(FOREGROUND);
+                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
                 ofNoFill();
                 glTranslated(m_zoomX, m_zoomY, m_zoomZ);
+                glPushMatrix();
                 m_gpsDatas[i]->draw();
-
+                glPopMatrix();
             }
         }
         else
@@ -136,7 +151,8 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor(FOREGROUND);
+//            ofSetColor(FOREGROUND);
+            ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
             ofNoFill();
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
@@ -231,6 +247,15 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
           m_gpsDatas[ii]->getMinUtmY(),
           m_gpsDatas[ii]->getMaxUtmY());
         ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[ii]->getProjectionCentralMeridian());
+    }
+    if (m_gpsDatas.size() > 0)
+    {
+        m_timeline->setTimeline(m_gpsDatas);
+//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
+//        {
+//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", m_timeline->getTimeline()[i].timeString.c_str(), m_timeline->getTimeline()[i].id, m_timeline->getTimeline()[i].secs);
+//        }
+
     }
 
 }
