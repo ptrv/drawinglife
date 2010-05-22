@@ -982,8 +982,8 @@
 				D010115C11637D4F0096EC19 /* GpsSegment.h */,
 				D010115D11637D870096EC19 /* GpsData.h */,
 				D010115E11637D870096EC19 /* GpsData.cpp */,
-				D0355F3111A77F3D0022191B /* Timeline.cpp */,
 				D0355F3211A77F3D0022191B /* Timeline.h */,
+				D0355F3111A77F3D0022191B /* Timeline.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

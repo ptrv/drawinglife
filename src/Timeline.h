@@ -9,11 +9,12 @@
 #include <vector>
 #include <string>
 #include "GpsData.h"
-//#include "Time.h"
+
+using namespace std;
 
 struct TimelineObject
 {
-    std::string timeString;
+    string timeString;
     time_t secs;
     int id;
     bool operator() (TimelineObject lhs, TimelineObject rhs)
@@ -22,7 +23,6 @@ struct TimelineObject
     }
 };
 
-using namespace std;
 
 class Timeline
 {
@@ -30,19 +30,19 @@ public:
     Timeline();
     ~Timeline();
 
-    void setTimeline(std::vector<GpsData*> gpsDatas);
+    void setTimeline(vector<GpsData*> gpsDatas);
 
     int getNext();
 
-    const std::vector<TimelineObject>& getTimeline() const { return m_timeline; }
+    const vector<TimelineObject>& getTimeline() const { return m_timeline; }
 
 private:
     // -----------------------------------------------------------------------------
-    time_t makeTimeObject(std::string timeString);
+    time_t makeTimeObject(string timeString);
 
     void sort();
     // -----------------------------------------------------------------------------
-    std::vector<TimelineObject> m_timeline;
+    vector<TimelineObject> m_timeline;
 
     unsigned int m_counter;
 };

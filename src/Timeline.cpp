@@ -18,7 +18,7 @@ Timeline::~Timeline()
     //dtor
 }
 
-void Timeline::setTimeline(std::vector<GpsData*> gpsDatas)
+void Timeline::setTimeline(vector<GpsData*> gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
@@ -61,16 +61,16 @@ time_t Timeline::makeTimeObject(std::string timeString)
     struct tm tm;
     time_t t;
     time(&t);
-    int y, m, d, h, min, sec;
+    int year, month, day, hour, min, sec;
     string str = timeString;
     str.replace(10, 1, " ");
     str.replace(19, 1, " ");
-    sscanf(str.c_str(), "%d-%d-%d %d:%d:%d ", &y, &m, &d, &h, &min, &sec);
+    sscanf(str.c_str(), "%d-%d-%d %d:%d:%d ", &year, &month, &day, &hour, &min, &sec);
     tm = *localtime(&t);
-    tm.tm_year = y - 1900;
-    tm.tm_mon = m - 1;
-    tm.tm_mday = d;
-    tm.tm_hour = h;
+    tm.tm_year = year - 1900;
+    tm.tm_mon = month - 1;
+    tm.tm_mday = day;
+    tm.tm_hour = hour;
     tm.tm_min = min;
     tm.tm_sec = sec;
     tm.tm_isdst = -1;
@@ -81,5 +81,5 @@ time_t Timeline::makeTimeObject(std::string timeString)
 void Timeline::sort()
 {
     TimelineObject compareObj;
-    std::sort(m_timeline.begin(), m_timeline.end(), compareObj);
+	std::sort(m_timeline.begin(), m_timeline.end(), compareObj);
 }
