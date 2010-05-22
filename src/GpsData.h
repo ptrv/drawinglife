@@ -73,7 +73,6 @@ public:
 	* \return maximum latitude value.
 	*/
 	double getMaxLat() const { return m_maxLat; }
-
 	// get UTM convertd min/max values
 	/**
 	* \brief Get minimum UTM X value.
@@ -118,6 +117,13 @@ public:
 	* \return latitude for given GpsSegment and GpsPoint.
 	*/
 	double getLatitude(int segmentIndex, int pointIndex);
+	/**
+	* \brief Get elevation for given GpsSegment and GpsPoint.
+	* \param segmentIndex number of a GpsSegment.
+	* \param pointIndex number of a GpsPoint.
+	* \return elevation for given GpsSegment and GpsPoint.
+	*/
+	double getElevation(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get UTM X for given GpsSegment and GpsPoint.
@@ -203,24 +209,16 @@ public:
     * \return central meridian double value.
     */
     double getProjectionCentralMeridian() const { return m_lon0; }
-
+    /**
+    * \brief Get current GpsPoint information.
+    * \return formatted string with info.
+    */
+    const std::string& getCurrentGpsInfoDebug();
     /**
     * \brief Get current GpsPoint information.
     * \return formatted string with info.
     */
     const std::string& getCurrentGpsInfo();
-
-private:
-	// -----------------------------------------------------------------------------
-//	const GpsPoint& getCurrentPoint();
-	// -----------------------------------------------------------------------------
-	/**
-	* \brief Get location for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
-	* \return location for given GpsSegment and GpsPoint.
-	*/
-	const string getGpsLocation(int segmentIndex, int pointIndex);
     /**
     * \brief Get current Gps location.
     * \return location string for current GpsPoint.
@@ -252,7 +250,33 @@ private:
     * \return latitude of current GpsPoint.
     */
 	double getCurrentLatitude();
-//	double getCurrentElevation();
+    /**
+    * \brief Get current elevation for GpsPoint.
+    * \return elevation of current GpsPoint.
+    */
+	double getCurrentElevation();
+    /**
+    * \brief Get current UTM X for GpsPoint.
+    * \return UTM X of current GpsPoint.
+    */
+	double getCurrentUtmX();
+    /**
+    * \brief Get current UTM Y for GpsPoint.
+    * \return UTM Y of current GpsPoint.
+    */
+	double getCurrentUtmY();
+
+private:
+	// -----------------------------------------------------------------------------
+//	const GpsPoint& getCurrentPoint();
+	// -----------------------------------------------------------------------------
+	/**
+	* \brief Get location for given GpsSegment and GpsPoint.
+	* \param segmentIndex number of a GpsSegment.
+	* \param pointIndex number of a GpsPoint.
+	* \return location for given GpsSegment and GpsPoint.
+	*/
+	const string getGpsLocation(int segmentIndex, int pointIndex);
 
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1.
@@ -300,6 +324,7 @@ private:
 	vector< vector<UtmPoint> > m_normalizedUtmPoints;
     double m_lon0;
 
+    string m_currentGpsPointInfoDebug;
     string m_currentGpsPointInfo;
 };
 

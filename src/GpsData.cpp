@@ -37,6 +37,7 @@ m_viewYOffset(0.0),
 m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_lon0(0.0),
+m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo("")
 {
 	m_segments.reserve(1000); // TODO good amount.
@@ -251,6 +252,18 @@ double GpsData::getCurrentLatitude()
 {
     return getLatitude(m_currentGpsSegment, m_currentGpsPoint);
 }
+double GpsData::getCurrentElevation()
+{
+    return getElevation(m_currentGpsSegment, m_currentGpsPoint);
+}
+double GpsData::getCurrentUtmX()
+{
+    return getUtmX(m_currentGpsSegment, m_currentGpsPoint);
+}
+double GpsData::getCurrentUtmY()
+{
+    return getUtmY(m_currentGpsSegment, m_currentGpsPoint);
+}
 
 // -----------------------------------------------------------------------------
 // Get Gps point.
@@ -279,6 +292,19 @@ double GpsData::getLatitude(int segmentIndex, int pointIndex)
 		}
 	}
 	return latitude;
+}
+
+double GpsData::getElevation(int segmentIndex, int pointIndex)
+{
+	double elevation = -1000.0;
+	if (segmentIndex < (int)m_segments.size())
+	{
+		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
+		{
+			elevation = m_segments[segmentIndex].getPoints()[pointIndex].getElevation();
+		}
+	}
+	return elevation;
 }
 // -----------------------------------------------------------------------------
 
@@ -485,16 +511,35 @@ void GpsData::calculateUtmPoints()
     }
 }
 
+const string& GpsData::getCurrentGpsInfoDebug()
+{
+    m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
+                                    "Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
+                                    "Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
+                                    "UTM X             : " + ofToString(getCurrentUtmX(), 7) + "\n" +
+                                    "UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
+                                    "Time              : " + getCurrentTimestamp() + "\n" +
+                                    "Location          : " + getGpsLocationCurrent() + "\n" +
+                                    "Central meridiam  : " + ofToString(m_lon0, 7) + "\n" +
+                                    "Min/Max latitude  : " + ofToString(m_minLat, 7) + " / " + ofToString(m_maxLat, 7) + "\n" +
+                                    "Min/Max longitude : " + ofToString(m_minLon, 7) + " / " + ofToString(m_maxLon, 7) + "\n" +
+                                    "Min/Max UTM X     : " + ofToString(m_minUtmX, 7) + " / " + ofToString(m_maxUtmX, 7) + "\n" +
+                                    "Min/Max UTM Y     : " + ofToString(m_minUtmY, 7) + " / " + ofToString(m_maxUtmY, 7) + "\n" +
+                                    "Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
+                                    "Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
+                                    "Total pts.        : " + ofToString(getTotalGpsPoints()) + "\n" +
+                                    "Person            : " + m_user;
+
+    return m_currentGpsPointInfoDebug;
+}
+
 const string& GpsData::getCurrentGpsInfo()
 {
-    m_currentGpsPointInfo =	"Longitude    : " + ofToString(getCurrentLongitude(), 7) + "\n" +
-                            "Latitude     : " + ofToString(getCurrentLatitude(), 7) + "\n" +
-                            //"Elevation    : " + ofToString(getCurrentElevation(), 7) + "\n" +
-                            "Time         : " + getCurrentTimestamp() + "\n" +
-                            "Location     : " + getGpsLocationCurrent() + "\n" +
-                            "Currrent pts.: " + ofToString(getCurrentPointNum()) + "\n" +
-                            //"Segment nr.  : " + ofToString(getCurrentSegmentNum()) + "\n" +
-                            "Total pts.   : " + ofToString(getTotalGpsPoints()) + "\n" +
-                            "Person       : " + m_user;
+    string timeString = getCurrentTimestamp();
+    int year, month, day, hour, min, sec;
+    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+    char buf[25];
+    sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
+    m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
     return m_currentGpsPointInfo;
 }

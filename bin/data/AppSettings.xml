@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<settings>
-  <database>test.sqlite</database>
-  <log level="0" />
-  <loadgpsonstart>1</loadgpsonstart>
-  <font>mono.ttf</font>
-  <drawspeed>1</drawspeed>
-</settings>
 <data>
+  <database>test.sqlite</database>
   <person>
     <name>Dan</name>
     <name>Sophia</name>
   </person>
   <defaultcity>Berlin</defaultcity>
 </data>
+<settings>
+  <log level="0" />
+  <loadgpsonstart>1</loadgpsonstart>
+  <debugmode>0</debugmode>
+  <drawspeed>5</drawspeed>
+</settings>
+<ui>
+  <font1>mono.ttf</font1>
+  <font2>Standard0753.ttf</font2>
+</ui>

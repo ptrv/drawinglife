@@ -40,15 +40,18 @@ void DrawingLifeApp::setup()
     // reading settings from xml file
     m_settings.loadFile("AppSettings.xml");
 
-	m_fontTitle.loadFont(m_settings.getValue("settings:font", "mono.ttf"), 50);
-    m_fontAuthor.loadFont(m_settings.getValue("settings:font", "mono.ttf"),24);
-    m_fontText.loadFont(m_settings.getValue("settings:font", "mono.ttf"), 18);
+	m_fontTitle.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 50);
+    m_fontAuthor.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),24);
+    m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 18);
+    m_fontInfo.loadFont(m_settings.getValue("ui:font2", "Standard0753.ttf"), 8);
 
     ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
 //    ofSetLogLevel(OF_LOG_VERBOSE);
 
+    m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
+
     // db path must be absolute path for DBReader (true as second parameter)
-    m_dbPath = ofToDataPath(m_settings.getValue("settings:database", "test.sqlite"), true);
+    m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
     DBG_VAL(m_dbPath);
 
     string city = m_settings.getValue("data:defaultcity", "London");
@@ -108,7 +111,6 @@ void DrawingLifeApp::update()
                 m_gpsDatas[id]->update();
             }
         }
-
     }
 }
 
@@ -130,12 +132,22 @@ void DrawingLifeApp::draw()
             //---------------------------------------------------------------------------
             for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
             {
-                ofFill();
-                int color = 0xE5A93F;
-                ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 180);
-                ofRect(10 + (ofGetWidth()/m_numPerson)*i,10,320,120);
-                ofSetColor(0x000000);
-                ofDrawBitmapString(m_gpsDatas[i]->getCurrentGpsInfo(),30 + (ofGetWidth()/m_numPerson)*i,30);
+                if (m_isDebugMode)
+                {
+//                    ofFill();
+//                    int color = 0xE5A93F;
+//                    ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 160);
+//                    ofRect(10 + (ofGetWidth()/m_numPerson)*i,10,350,200);
+                    ofSetColor(0xffffff);
+                    ofDrawBitmapString(m_gpsDatas[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
+                }
+                else
+                {
+                    ofSetColor(0xffffff);
+                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
+                                          m_viewPadding[i] + (ofGetWidth()/m_numPerson)*i ,
+                                          m_viewYOffset[i] + 10);
+                }
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
@@ -254,7 +266,14 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
     if (m_gpsDatas.size() > 0)
     {
         m_timeline->setTimeline(m_gpsDatas);
+//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
+//        {
+//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
+//                                                    m_timeline->getTimeline()[i].id,
+//                                                    (long)(m_timeline->getTimeline()[i].secs));
+//        }
     }
+
 
 }
 // -----------------------------------------------------------------------------
@@ -322,6 +341,9 @@ void DrawingLifeApp::keyPressed  (int key)
         m_isFullscreen = !m_isFullscreen;
         ofSetFullscreen(m_isFullscreen);
         break;
+    case 'd':
+        m_isDebugMode = !m_isDebugMode;
+        break;
     case 49:
         loadGpsDataCity(m_names, "Berlin");
         break;
@@ -376,7 +398,6 @@ void DrawingLifeApp::keyPressed  (int key)
         {
             m_zoomZ -= 10;
         }
-
         DBG_VAL(m_zoomZ);
         break;
     case OF_KEY_UP:

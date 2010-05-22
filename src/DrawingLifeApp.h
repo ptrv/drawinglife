@@ -88,6 +88,7 @@ private:
 	ofTrueTypeFont m_fontTitle;
 	ofTrueTypeFont m_fontAuthor;
 	ofTrueTypeFont m_fontText;
+	ofTrueTypeFont m_fontInfo;
     // -----------------------------------------------------------------------------
     int m_numPerson;
     vector<string> m_names;
