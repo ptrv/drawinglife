@@ -132,7 +132,7 @@ void DrawingLifeApp::draw()
             {
                 ofFill();
                 int color = 0xE5A93F;
-                ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 220);
+                ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 180);
                 ofRect(10 + (ofGetWidth()/m_numPerson)*i,10,320,120);
                 ofSetColor(0x000000);
                 ofDrawBitmapString(m_gpsDatas[i]->getCurrentGpsInfo(),30 + (ofGetWidth()/m_numPerson)*i,30);
@@ -140,7 +140,7 @@ void DrawingLifeApp::draw()
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
                 //ofSetColor(FOREGROUND);
-                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
+                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 64);
                 ofNoFill();
                 glPushMatrix();
                 glTranslated(m_zoomX, m_zoomY, m_zoomZ);
