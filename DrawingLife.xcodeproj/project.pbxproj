@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D010115F11637D870096EC19 /* GpsData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D010115E11637D870096EC19 /* GpsData.cpp */; };
+		D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0355F3111A77F3D0022191B /* Timeline.cpp */; };
 		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
 		D0B38854117F106F005E46BA /* libGeographicD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B38853117F1047005E46BA /* libGeographicD.a */; };
 		D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */; };
@@ -136,6 +137,8 @@
 		D010115D11637D870096EC19 /* GpsData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsData.h; sourceTree = "<group>"; };
 		D010115E11637D870096EC19 /* GpsData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GpsData.cpp; sourceTree = "<group>"; };
 		D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeIncludes.h; sourceTree = "<group>"; };
+		D0355F3111A77F3D0022191B /* Timeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timeline.cpp; sourceTree = "<group>"; };
+		D0355F3211A77F3D0022191B /* Timeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timeline.h; sourceTree = "<group>"; };
 		D07156AD11515155008CEA46 /* DBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBReader.h; sourceTree = "<group>"; };
 		D07156AE11515155008CEA46 /* DBReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DBReader.cpp; sourceTree = "<group>"; };
 		D07157751151BEFD008CEA46 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
@@ -979,6 +982,8 @@
 				D010115C11637D4F0096EC19 /* GpsSegment.h */,
 				D010115D11637D870096EC19 /* GpsData.h */,
 				D010115E11637D870096EC19 /* GpsData.cpp */,
+				D0355F3111A77F3D0022191B /* Timeline.cpp */,
+				D0355F3211A77F3D0022191B /* Timeline.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1185,6 +1190,7 @@
 				D0E8CF8B11A6020200541164 /* sqlite3x_exception.cpp in Sources */,
 				D0E8CF8C11A6020200541164 /* sqlite3x_reader.cpp in Sources */,
 				D0E8CF8D11A6020200541164 /* sqlite3x_transaction.cpp in Sources */,
+				D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
