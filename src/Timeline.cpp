@@ -44,10 +44,17 @@ void Timeline::setTimeline(std::vector<GpsData*> gpsDatas)
 
 int Timeline::getNext()
 {
-    int id = m_timeline[m_counter].id;
-    ++m_counter;
-    m_counter %= m_timeline.size();
-    return id;
+    if (m_timeline.size() > 0)
+    {
+        int id = m_timeline[m_counter].id;
+        ++m_counter;
+        m_counter %= m_timeline.size();
+        return id;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 time_t Timeline::makeTimeObject(std::string timeString)
@@ -72,11 +79,8 @@ time_t Timeline::makeTimeObject(std::string timeString)
     return t;
 }
 
-bool compareFunction(TimelineObject lhs, TimelineObject rhs)
-{
-    return lhs.secs < rhs.secs;
-}
 void Timeline::sort()
 {
-    std::sort(m_timeline.begin(), m_timeline.end(), compareFunction);
+    TimelineObject compareObj;
+    std::sort(m_timeline.begin(), m_timeline.end(), compareObj);
 }

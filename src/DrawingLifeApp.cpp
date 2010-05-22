@@ -77,14 +77,15 @@ void DrawingLifeApp::setup()
     m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
     if (m_settings.getValue("settings:loadgpsonstart",1) == 1)
     {
-//        for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
-//        {
-            loadGpsDataCity(m_names, city);
-//            if(m_gpsDatas[i]->getTotalGpsPoints() == 0)
-//            {
-//                m_startScreenMode = true;
-//            }
-//        }
+        loadGpsDataCity(m_names, city);
+
+        for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+        {
+            if(m_gpsDatas[i]->getTotalGpsPoints() == 0)
+            {
+                m_startScreenMode = true;
+            }
+        }
     }
     else
     {
@@ -95,13 +96,17 @@ void DrawingLifeApp::setup()
 //--------------------------------------------------------------
 void DrawingLifeApp::update()
 {
-    for(unsigned int i = 0; i < m_drawSpeed; ++i)
+    if (m_isAnimation)
     {
-        int id = m_timeline->getNext();
-        if (id < m_gpsDatas.size())
+        for(unsigned int i = 0; i < m_drawSpeed; ++i)
         {
-            m_gpsDatas[id]->update();
+            int id = m_timeline->getNext();
+            if (id < m_gpsDatas.size())
+            {
+                m_gpsDatas[id]->update();
+            }
         }
+
     }
 //    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
 //    {
