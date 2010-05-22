@@ -49,12 +49,12 @@ GpsData::~GpsData()
 // -----------------------------------------------------------------------------
 // Set Gps data.
 // -----------------------------------------------------------------------------
-void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
+void GpsData::setGpsData(const vector<GpsSegment>& segments,
 						 double minLon,
 						 double maxLon,
 						 double minLat,
 						 double maxLat,
-						 const std::string& user)
+						 const string& user)
 {
 	++m_gpsDataId;
 	m_segments.clear();
@@ -210,7 +210,7 @@ void GpsData::setViewBounds(int screenWidth,
 }
 
 
-const std::string GpsData::getGpsLocationCurrent()
+const string GpsData::getGpsLocationCurrent()
 {
     return getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
@@ -350,9 +350,9 @@ double GpsData::getScaledUtmY(double normalizedUtmY)
 }
 
 //---------------------------------------------------------------------------
-const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
+const string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
 {
-	std::string loc = "";
+	string loc = "";
 	if (segmentIndex < (int)m_segments.size())
 	{
 		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
@@ -437,12 +437,12 @@ void GpsData::normalizeUtmPoints()
 
 void GpsData::setMinMaxValuesUTM()
 {
-	double minX = std::numeric_limits<double>::max();
-	double minY = std::numeric_limits<double>::max();
+	double minX = numeric_limits<double>::max();
+	double minY = numeric_limits<double>::max();
 	// using -std::numeric_limits<double>::max() for smallest double
 	// std::numeric_limits<double>::min() yields smallest positiv number.
-	double maxX = -std::numeric_limits<double>::max();
-	double maxY = -std::numeric_limits<double>::max();
+	double maxX = -numeric_limits<double>::max();
+	double maxY = -numeric_limits<double>::max();
 
 	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
 		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
@@ -469,7 +469,7 @@ void GpsData::calculateUtmPoints()
     m_utmPoints.reserve(m_segments.size());
     for(unsigned int i = 0; i < m_segments.size(); ++i)
     {
-        std::vector<UtmPoint> utmVec;
+        vector<UtmPoint> utmVec;
         utmVec.reserve( m_segments[i].getPoints().size());
         for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
         {
@@ -485,7 +485,7 @@ void GpsData::calculateUtmPoints()
     }
 }
 
-const std::string& GpsData::getCurrentGpsInfo()
+const string& GpsData::getCurrentGpsInfo()
 {
     m_currentGpsPointInfo =	"Longitude    : " + ofToString(getCurrentLongitude(), 7) + "\n" +
                             "Latitude     : " + ofToString(getCurrentLatitude(), 7) + "\n" +

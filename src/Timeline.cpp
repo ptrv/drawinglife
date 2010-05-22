@@ -56,16 +56,14 @@ int Timeline::getNext()
     }
 }
 
-time_t Timeline::makeTimeObject(std::string timeString)
+time_t Timeline::makeTimeObject(string timeString)
 {
     struct tm tm;
     time_t t;
     time(&t);
     int year, month, day, hour, min, sec;
     string str = timeString;
-    str.replace(10, 1, " ");
-    str.replace(19, 1, " ");
-    sscanf(str.c_str(), "%d-%d-%d %d:%d:%d ", &year, &month, &day, &hour, &min, &sec);
+    sscanf(str.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
     tm = *localtime(&t);
     tm.tm_year = year - 1900;
     tm.tm_mon = month - 1;

@@ -77,8 +77,8 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		int lastSegment = -1;
 		string user = "";
 		GpsSegment gpsSeg;
-		std::vector<GpsPoint> gpsPointVec;
-		std::vector<GpsSegment> gpsSegmentVec;
+		vector<GpsPoint> gpsPointVec;
+		vector<GpsSegment> gpsSegmentVec;
 
 
 		// -----------------------------------------------------------------------------

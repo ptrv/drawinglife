@@ -6,6 +6,9 @@
 #define _GPSSEGMENT_H_
 
 #include "GpsPoint.h"
+
+using namespace std;
+
 /**
  * \brief Has vector with GpsPoints that have the same segment number.
  *
@@ -14,7 +17,7 @@
 class GpsSegment
 {
 	int m_gpsSegmentId;
-	std::vector<GpsPoint> m_points;
+	vector<GpsPoint> m_points;
 	int m_segment;
 
 public:
@@ -34,7 +37,7 @@ public:
 	* \param points a vecor with points.
 	* \param segment number for segment.
 	*/
-	void setGpsSegment(const std::vector<GpsPoint>& points, int segment)
+	void setGpsSegment(const vector<GpsPoint>& points, int segment)
 	{
 		++m_gpsSegmentId;
 		m_points.clear();
@@ -45,7 +48,7 @@ public:
 	* \brief Get GpsPoints for this segment.
 	* \return vector with GpsPoints.
 	*/
-	const std::vector<GpsPoint>& getPoints() const { return m_points; }
+	const vector<GpsPoint>& getPoints() const { return m_points; }
 	/**
 	* \brief Get segment number.
 	* \return Number for segment.

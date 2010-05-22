@@ -39,12 +39,12 @@ public:
 	* \param maxLat maximum  latitude value.
 	* \param user string with user name.
 	*/
-	void setGpsData(const std::vector<GpsSegment>& segments,
+	void setGpsData(const vector<GpsSegment>& segments,
 					double minLon,
 					double maxLon,
 					double minLat,
 					double maxLat,
-					const std::string& user);
+					const string& user);
 	// -----------------------------------------------------------------------------
 	// Get members.
 	// -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public:
 	* \brief Get GpsSegment objects.
 	* \return vector with GpsSegments.
 	*/
-	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
+	const vector<GpsSegment>& getSegments() const { return m_segments; }
 	/**
 	* \brief Get minimum longitude value.
 	* \return minimum longitude value.
@@ -220,12 +220,12 @@ private:
 	* \param pointIndex number of a GpsPoint.
 	* \return location for given GpsSegment and GpsPoint.
 	*/
-	const std::string getGpsLocation(int segmentIndex, int pointIndex);
+	const string getGpsLocation(int segmentIndex, int pointIndex);
     /**
     * \brief Get current Gps location.
     * \return location string for current GpsPoint.
     */
-	const std::string getGpsLocationCurrent();
+	const string getGpsLocationCurrent();
 	// -----------------------------------------------------------------------------
     /**
     * \brief Get current GpsSegment number.
@@ -273,8 +273,8 @@ private:
     void calculateUtmPoints();
 
     int m_gpsDataId;
-	std::vector<GpsSegment> m_segments;
-	std::string m_user;
+	vector<GpsSegment> m_segments;
+	string m_user;
 	double m_minLon;
 	double m_maxLon;
 	double m_minLat;
@@ -296,11 +296,11 @@ private:
 	double m_viewMinDimension;
 	double m_viewPadding;
 
-	std::vector< std::vector<UtmPoint> > m_utmPoints;
-	std::vector< std::vector<UtmPoint> > m_normalizedUtmPoints;
+	vector< vector<UtmPoint> > m_utmPoints;
+	vector< vector<UtmPoint> > m_normalizedUtmPoints;
     double m_lon0;
 
-    std::string m_currentGpsPointInfo;
+    string m_currentGpsPointInfo;
 };
 
 #endif // _GPSDATA_H_

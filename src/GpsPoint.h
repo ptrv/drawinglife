@@ -5,6 +5,8 @@
 #ifndef _GPSPOINT_H_
 #define _GPSPOINT_H_
 
+using namespace std;
+
 /**
  * \brief Holds one gps point with timestamp.
  *
@@ -15,8 +17,8 @@ class GpsPoint
 	double m_latitude;
 	double m_longitude;
 	double m_elevation;
-	std::string m_timestamp;
-	std::string m_location;
+	string m_timestamp;
+	string m_location;
 
 public:
 	GpsPoint()
@@ -42,8 +44,8 @@ public:
 	void setGpsPoint(double latitude,
 					 double longitude,
 					 double elevation,
-					 const std::string& timestamp,
-					 const std::string& location)
+					 const string& timestamp,
+					 const string& location)
 	{
 		++m_gpsPointId;
 		m_latitude = latitude;
@@ -73,13 +75,13 @@ public:
 	* \brief Get location for GpsPoint.
 	* \return Location string.
 	*/
-	const std::string& getLocation() const { return m_location; }
+	const string& getLocation() const { return m_location; }
 	//---------------------------------------------------------------------------
     /**
 	* \brief Get time stamp for GpsPoint.
 	* \return Timestamp string.
 	*/
-	const std::string& getTimestamp() const { return m_timestamp; }
+	const string& getTimestamp() const { return m_timestamp; }
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Clear GpsPoint object.
