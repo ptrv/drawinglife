@@ -35,7 +35,6 @@ void Timeline::setTimeline(std::vector<GpsData*> gpsDatas)
                 tmObj.id = i;
                 m_timeline.push_back(tmObj);
 //                ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", tmObj.timeString.c_str(), tmObj.id, tmObj.secs);
-                //DBG_VAL(tmObj.timeString);
             }
         }
     }
