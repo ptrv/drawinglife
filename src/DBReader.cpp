@@ -227,7 +227,7 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int yea
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
-	query << "' AND strftime('%Y-%m', time) >= '";
+	query << "' AND strftime('%Y-%m', time) = '";
 	query << year;
 	query << "-";
 	query << (month < 10 ? "0" : "");
@@ -266,7 +266,7 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const string& userName, int year
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
-	query << "' AND strftime('%Y', time) >= '";
+	query << "' AND strftime('%Y', time) = '";
 	query << (year < 10 ? "0" : "");
 	query << year;
 	query << "' ORDER BY segment;";
