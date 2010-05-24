@@ -49,6 +49,7 @@ private:
 	void fillViewAreaUTM( int backgroundColor);
 	/**
 	* \brief
+	* \param names vector with name strings.
 	* \param city string with city name.
 	*/
 	void loadGpsDataCity(vector<string> names, string city);

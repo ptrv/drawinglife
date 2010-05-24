@@ -9,13 +9,18 @@
 #include <string>
 #include "GpsSegment.h"
 
+using namespace std;
+
+/**
+ * \brief Represents x and y value of an UTM coordinate.
+ *
+ */
 struct UtmPoint
 {
     double x;
     double y;
 };
 
-using namespace std;
 /**
  * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
  *
@@ -105,52 +110,52 @@ public:
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get longitude for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return longitude for given GpsSegment and GpsPoint.
 	*/
 	double getLongitude(int segmentIndex, int pointIndex);
 	/**
 	* \brief Get latitude for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return latitude for given GpsSegment and GpsPoint.
 	*/
 	double getLatitude(int segmentIndex, int pointIndex);
 	/**
 	* \brief Get elevation for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return elevation for given GpsSegment and GpsPoint.
 	*/
 	double getElevation(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get UTM X for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return UTM X for given GpsSegment and GpsPoint.
 	*/
 	double getUtmX(int segmentIndex, int pointIndex);
 	/**
 	* \brief Get UTM Y for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return UTM Y for given GpsSegment and GpsPoint.
 	*/
 	double getUtmY(int segmentIndex, int pointIndex);
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get normalized UTM X for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return normalized UTM X for given GpsSegment and GpsPoint.
 	*/
 	double getNormalizedUtmX(int segmentIndex, int pointIndex);
 	/**
 	* \brief Get normalized UTM Y for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return normalized UTM Y for given GpsSegment and GpsPoint.
 	*/
 	double getNormalizedUtmY(int segmentIndex, int pointIndex);
@@ -227,12 +232,12 @@ public:
 	// -----------------------------------------------------------------------------
     /**
     * \brief Get current GpsSegment number.
-    * \return number of current GpsSegment.
+    * \return index of current GpsSegment.
     */
 	int getCurrentSegmentNum();
     /**
     * \brief Get current GpsPoint number.
-    * \return number of current GpsSegment.
+    * \return index of current GpsSegment.
     */
 	int getCurrentPointNum();
     /**
@@ -272,8 +277,8 @@ private:
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get location for given GpsSegment and GpsPoint.
-	* \param segmentIndex number of a GpsSegment.
-	* \param pointIndex number of a GpsPoint.
+	* \param segmentIndex index of a GpsSegment.
+	* \param pointIndex index of a GpsPoint.
 	* \return location for given GpsSegment and GpsPoint.
 	*/
 	const string getGpsLocation(int segmentIndex, int pointIndex);
