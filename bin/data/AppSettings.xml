@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <database>test.sqlite</database>
+  <database>leipzig.sqlite</database>
   <person>
-    <name>Dan</name>
-    <name>Sophia</name>
+    <name>TimSchmieg1</name>
+    <name>Svenja</name>
+    <name>Stobernack</name>
+    <!-- <name>Sophia</name> -->
   </person>
-  <defaultcity>Berlin</defaultcity>
+  <defaultcity>Leipzig</defaultcity>
 </data>
 <settings>
   <log level="0" />
   <loadgpsonstart>1</loadgpsonstart>
   <debugmode>0</debugmode>
-  <drawspeed>5</drawspeed>
+  <drawspeed>1</drawspeed>
 </settings>
 <ui>
   <font1>mono.ttf</font1>
