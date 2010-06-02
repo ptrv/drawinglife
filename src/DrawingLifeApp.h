@@ -74,10 +74,14 @@ private:
 	//---------------------------------------------------------------------------
 	int maxPoints;
 	//---------------------------------------------------------------------------
-	vector<double> m_viewXOffset;
-	vector<double> m_viewYOffset;
-	vector<double> m_viewMinDimension;
-	vector<double> m_viewPadding;
+//	vector<double> m_viewXOffset;
+//	vector<double> m_viewYOffset;
+//	vector<double> m_viewMinDimension;
+//	vector<double> m_viewPadding;
+	double m_viewXOffset;
+	double m_viewYOffset;
+	double m_viewMinDimension;
+	double m_viewPadding;
     //---------------------------------------------------------------------------
 	bool m_isFullscreen;
 	bool m_isDebugMode;

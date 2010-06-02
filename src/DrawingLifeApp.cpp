@@ -22,6 +22,11 @@ DrawingLifeApp::DrawingLifeApp() :
     m_timeline(NULL),
     m_drawSpeed(1)
 {
+    m_viewXOffset = 0;
+    m_viewYOffset = 0;
+    m_viewMinDimension = 0;
+    m_viewPadding = 15;
+
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
@@ -66,10 +71,10 @@ void DrawingLifeApp::setup()
         m_gpsDatas.push_back(new GpsData());
         DBG_VAL(m_names[i]);
 
-        m_viewXOffset.push_back(0);
-        m_viewYOffset.push_back(0);
-        m_viewMinDimension.push_back(0);
-        m_viewPadding.push_back(15);
+//        m_viewXOffset.push_back(0);
+//        m_viewYOffset.push_back(0);
+//        m_viewMinDimension.push_back(0);
+//        m_viewPadding.push_back(15);
     }
     m_settings.popTag();
     m_settings.popTag();
@@ -146,8 +151,8 @@ void DrawingLifeApp::draw()
                 {
                     ofSetColor(0xffffff);
                     m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
-                                          m_viewPadding[i] + (ofGetWidth()/m_numPerson)*i ,
-                                          m_viewYOffset[i] + 10);
+                                          m_viewPadding + (ofGetWidth()/m_numPerson)*i ,
+                                          m_viewYOffset + 10);
                 }
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
@@ -208,7 +213,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
     {
         SAFE_DELETE(m_gpsDatas[ii]);
         m_gpsDatas[ii] = new GpsData();
-        m_gpsDatas[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
+        m_gpsDatas[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset, m_viewYOffset, m_viewMinDimension, m_viewPadding);
         m_gpsDatas[ii]->reset();
 
         m_dbReader = new DBReader(m_dbPath);
@@ -283,48 +288,87 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 
 void DrawingLifeApp::setViewAspectRatio()
 {
-    double width = ofGetWidth()/(int)m_numPerson;
+//    double width = ofGetWidth()/(int)m_numPerson;
+    double width = ofGetWidth();
     double height = ofGetHeight();
 
-    for(int i = 0; i < m_numPerson; ++i)
-    {
+//    for(int i = 0; i < m_numPerson; ++i)
+//    {
+//        // Reset for view padding.
+//        m_viewXOffset[i] = 0;
+//        m_viewYOffset[i] = 0;
+//
+//        // Set square view area and center.
+//        if (height < width)
+//        {
+//            m_viewMinDimension[i] = height;
+//            m_viewXOffset[i] = (width - height) / 2.0;
+//        }
+//        else if (width < height)
+//        {
+//            m_viewMinDimension[i] = width;
+//            m_viewYOffset[i] = (height - width) / 2.0;
+//        }
+//        else
+//        {
+//            m_viewMinDimension[i] = width;
+//        }
+//
+//        // Left and top indentation.
+//        m_viewXOffset[i] += m_viewPadding[i];
+//        m_viewYOffset[i] += m_viewPadding[i];
+//
+//        m_viewXOffset[i] += width * i;
+////        m_viewYOffset += m_viewPadding;
         // Reset for view padding.
-        m_viewXOffset[i] = 0;
-        m_viewYOffset[i] = 0;
+        m_viewXOffset = 0;
+        m_viewYOffset = 0;
 
         // Set square view area and center.
         if (height < width)
         {
-            m_viewMinDimension[i] = height;
-            m_viewXOffset[i] = (width - height) / 2.0;
+            m_viewMinDimension = height;
+            m_viewXOffset = (width - height) / 2.0;
         }
         else if (width < height)
         {
-            m_viewMinDimension[i] = width;
-            m_viewYOffset[i] = (height - width) / 2.0;
+            m_viewMinDimension = width;
+            m_viewYOffset = (height - width) / 2.0;
         }
         else
         {
-            m_viewMinDimension[i] = width;
+            m_viewMinDimension = width;
         }
 
         // Left and top indentation.
-        m_viewXOffset[i] += m_viewPadding[i];
-        m_viewYOffset[i] += m_viewPadding[i];
+        m_viewXOffset += m_viewPadding;
+        m_viewYOffset += m_viewPadding;
 
-        m_viewXOffset[i] += width * i;
+//        m_viewXOffset += width * i;
 //        m_viewYOffset += m_viewPadding;
-    }
+//    }
 }
 void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
 {
-    for(int i = 0; i < m_numPerson; ++i)
+//    for(int i = 0; i < m_numPerson; ++i)
+//    {
+//        // Normalized value range from 0 to 1.
+//        double x = m_gpsDatas[i]->getScaledUtmX(0);
+//        double y = m_gpsDatas[i]->getScaledUtmY(0);
+//        double w = m_gpsDatas[i]->getScaledUtmX(1) - x;
+//        double h = m_gpsDatas[i]->getScaledUtmY(1) - y;
+//        ofFill();
+//        ofSetColor( backgroundColor);
+//        ofRect(x, y, w, h);
+//
+//    }
+    if(m_gpsDatas.size() > 0)
     {
         // Normalized value range from 0 to 1.
-        double x = m_gpsDatas[i]->getScaledUtmX(0);
-        double y = m_gpsDatas[i]->getScaledUtmY(0);
-        double w = m_gpsDatas[i]->getScaledUtmX(1) - x;
-        double h = m_gpsDatas[i]->getScaledUtmY(1) - y;
+        double x = m_gpsDatas[0]->getScaledUtmX(0);
+        double y = m_gpsDatas[0]->getScaledUtmY(0);
+        double w = m_gpsDatas[0]->getScaledUtmX(1) - x;
+        double h = m_gpsDatas[0]->getScaledUtmY(1) - y;
         ofFill();
         ofSetColor( backgroundColor);
         ofRect(x, y, w, h);
@@ -456,7 +500,7 @@ void DrawingLifeApp::windowResized(int w, int h)
     this->setViewAspectRatio();
     for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
     {
-        m_gpsDatas[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[i], m_viewYOffset[i], m_viewMinDimension[i], m_viewPadding[i]);
+        m_gpsDatas[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset, m_viewYOffset, m_viewMinDimension, m_viewPadding);
     }
 }
 
