@@ -62,6 +62,8 @@ private:
     * \brief Draw start screen with app info.
     */
 	void drawStartScreen();
+
+	void calculateGlobalMinMaxValues();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------

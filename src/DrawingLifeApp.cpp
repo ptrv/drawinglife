@@ -5,6 +5,7 @@
 #include "DrawingLifeApp.h"
 #include "GpsData.h"
 #include <vector>
+#include <limits>
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
 //    m_settings(NULL),
@@ -216,7 +217,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
             // -----------------------------------------------------------------------------
             // DB query
             // TODO: Query needs to match with original database query used in the setup function.
-    //        if(m_dbReader->getGpsDataDayRange(*m_gpsData, "Dan", 2010, 2, m_currentSelectedDayStart, m_currentSelectedDayEnd))
+//            if(m_dbReader->getGpsDataYear(*m_gpsDatas[ii], names[ii], 2007))
             if(m_dbReader->getGpsDataCity(*m_gpsDatas[ii], names[ii], city))
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
@@ -272,6 +273,8 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 //                                                    m_timeline->getTimeline()[i].id,
 //                                                    (long)(m_timeline->getTimeline()[i].secs));
 //        }
+        this->calculateGlobalMinMaxValues();
+
     }
 
 
@@ -457,3 +460,23 @@ void DrawingLifeApp::windowResized(int w, int h)
     }
 }
 
+void DrawingLifeApp::calculateGlobalMinMaxValues()
+{
+    double minX = numeric_limits<double>::max();
+    double maxX = -numeric_limits<double>::max();
+    double minY = numeric_limits<double>::max();
+    double maxY = -numeric_limits<double>::max();
+    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    {
+        if (m_gpsDatas[i]->getMinUtmX() < minX) minX = m_gpsDatas[i]->getMinUtmX();
+        if (m_gpsDatas[i]->getMaxUtmX() > maxX) maxX = m_gpsDatas[i]->getMaxUtmX();
+        if (m_gpsDatas[i]->getMinUtmY() < minY) minY = m_gpsDatas[i]->getMinUtmY();
+        if (m_gpsDatas[i]->getMaxUtmY() > maxY) maxY = m_gpsDatas[i]->getMaxUtmY();
+    }
+    GpsData::setGlobalMinMax(minX, maxX, minY, maxY);
+    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    {
+        m_gpsDatas[i]->normalizeUtmPointsGlobal();
+    }
+
+}

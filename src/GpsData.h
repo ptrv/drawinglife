@@ -271,6 +271,16 @@ public:
     */
 	double getCurrentUtmY();
 
+    static void setGlobalMinMax(double minX,
+                                double maxX,
+                                double minY,
+                                double maxY);
+
+    /**
+    * \brief Normalize all UtmPoints to a value between 0 and 1 with global min/max values.
+    */
+	void normalizeUtmPointsGlobal();
+
 private:
 	// -----------------------------------------------------------------------------
 //	const GpsPoint& getCurrentPoint();
@@ -292,14 +302,22 @@ private:
     */
 	void setMinMaxRatioUTM();
     /**
-    * \brief Set ÚTM min/max values for all GpsPoints.
+    * \brief Set range of global min/max values to be the same (square).
+    */
+	void setGlobalMinMaxRatioUTM();
+    /**
+    * \brief Set UTM min/max values for all GpsPoints.
     */
 	void setMinMaxValuesUTM();
-
     /**
     * \brief Calculate UTM values for all GpsPoints.
     */
     void calculateUtmPoints();
+
+    static double maxDrawX;
+    static double minDrawX;
+    static double maxDrawY;
+    static double minDrawY;
 
     int m_gpsDataId;
 	vector<GpsSegment> m_segments;
@@ -327,6 +345,7 @@ private:
 
 	vector< vector<UtmPoint> > m_utmPoints;
 	vector< vector<UtmPoint> > m_normalizedUtmPoints;
+	vector< vector<UtmPoint> > m_normalizedUtmPointsGlobal;
     double m_lon0;
 
     string m_currentGpsPointInfoDebug;

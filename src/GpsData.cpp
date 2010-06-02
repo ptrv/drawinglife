@@ -14,6 +14,12 @@
 
 using namespace GeographicLib;
 
+double GpsData::maxDrawX = -numeric_limits<double>::max();
+double GpsData::minDrawX = numeric_limits<double>::max();
+double GpsData::maxDrawY = -numeric_limits<double>::max();
+double GpsData::minDrawY = numeric_limits<double>::max();
+
+
 GpsData::GpsData()
 :
 m_gpsDataId(0),
@@ -46,6 +52,7 @@ m_currentGpsPointInfo("")
 GpsData::~GpsData()
 {
 }
+
 
 // -----------------------------------------------------------------------------
 // Set Gps data.
@@ -148,7 +155,7 @@ void GpsData::draw(bool animated)
 {
     if (animated)
     {
-        if (m_normalizedUtmPoints.size() > 0 && m_normalizedUtmPoints[m_currentGpsSegment].size() > 0)
+        if (m_normalizedUtmPoints.size() > 0 && m_normalizedUtmPointsGlobal[m_currentGpsSegment].size() > 0)
         {
             // -----------------------------------------------------------------------------
             // Draw Gps data
@@ -160,18 +167,18 @@ void GpsData::draw(bool animated)
                 if (i == m_currentGpsSegment)
                     pointEnd = m_currentGpsPoint;
                 else
-                    pointEnd = (int)m_normalizedUtmPoints[i].size()-1;
+                    pointEnd = (int)m_normalizedUtmPointsGlobal[i].size()-1;
                 for (int j = 0; j <= pointEnd; ++j)
                 {
-                    glVertex2d(getScaledUtmX(m_normalizedUtmPoints[i][j].x),
-                               getScaledUtmY(m_normalizedUtmPoints[i][j].y));
+                    glVertex2d(getScaledUtmX(m_normalizedUtmPointsGlobal[i][j].x),
+                               getScaledUtmY(m_normalizedUtmPointsGlobal[i][j].y));
                 }
                 glEnd();
             }
             ofFill();
             ofSetColor(0, 255, 0, 127);
-            ofCircle(getScaledUtmX(m_normalizedUtmPoints[m_currentGpsSegment][m_currentGpsPoint].x),
-					 getScaledUtmY(m_normalizedUtmPoints[m_currentGpsSegment][m_currentGpsPoint].y), 5);
+            ofCircle(getScaledUtmX(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].x),
+					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), 5);
         }
     }
     else
@@ -183,10 +190,10 @@ void GpsData::draw(bool animated)
         for (unsigned int i = 0; i < m_normalizedUtmPoints.size(); ++i)
         {
             glBegin(GL_LINE_STRIP);
-            for (unsigned int j = 0; j < m_normalizedUtmPoints[i].size(); ++j)
+            for (unsigned int j = 0; j < m_normalizedUtmPointsGlobal[i].size(); ++j)
             {
-				glVertex2d(getScaledUtmX(m_normalizedUtmPoints[i][j].x),
-						   getScaledUtmY(m_normalizedUtmPoints[i][j].y));
+				glVertex2d(getScaledUtmX(m_normalizedUtmPointsGlobal[i][j].x),
+						   getScaledUtmY(m_normalizedUtmPointsGlobal[i][j].y));
             }
             glEnd();
         }
@@ -441,6 +448,42 @@ void GpsData::setMinMaxRatioUTM()
 		m_maxUtmY = maxLat;
 	}
 }
+void GpsData::setGlobalMinMaxRatioUTM()
+{
+	double minLon = minDrawX;
+	double maxLon = maxDrawX;
+	double minLat = minDrawY;
+	double maxLat = maxDrawY;
+
+	// Calculate horizontal and vertical range.
+	double deltaLon = maxLon - minLon;
+	double deltaLat = maxLat - minLat;
+
+	// Aspect ratio is: width < height.
+	if (deltaLon <	deltaLat)
+	{
+		minDrawX = minLon - (deltaLat - deltaLon)/2.0;
+		maxDrawX = maxLon + (deltaLat - deltaLon)/2.0;
+		minDrawY = minLat;
+		maxDrawY = maxLat;
+	}
+	// Aspect ratio is: width > height.
+	else if (deltaLon > deltaLat)
+	{
+		minDrawX = minLon;
+		maxDrawX = maxLon;
+		minDrawY = minLat - (deltaLon - deltaLat)/2.0;
+		maxDrawY = maxLat + (deltaLon - deltaLat)/2.0;
+	}
+	// Aspect ratio is: height == width.
+	else
+	{
+		minDrawX = minLon;
+		maxDrawX = maxLon;
+		minDrawY = minLat;
+		maxDrawY = maxLat;
+	}
+}
 // -----------------------------------------------------------------------------
 // Normalize Utm points.
 // -----------------------------------------------------------------------------
@@ -457,6 +500,22 @@ void GpsData::normalizeUtmPoints()
 			y = (y - m_minUtmY) / (m_maxUtmY - m_minUtmY);
 			m_normalizedUtmPoints[i][j].x = x;
 			m_normalizedUtmPoints[i][j].y = y;
+		}
+	}
+}
+void GpsData::normalizeUtmPointsGlobal()
+{
+	setGlobalMinMaxRatioUTM();
+	m_normalizedUtmPointsGlobal = m_utmPoints;
+	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
+		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
+		{
+			double x = m_utmPoints[i][j].x;
+			double y = m_utmPoints[i][j].y;
+			x = (x - minDrawX) / (maxDrawX - minDrawX);
+			y = (y - minDrawY) / (maxDrawY- minDrawY);
+			m_normalizedUtmPointsGlobal[i][j].x = x;
+			m_normalizedUtmPointsGlobal[i][j].y = y;
 		}
 	}
 }
@@ -542,4 +601,17 @@ const string& GpsData::getCurrentGpsInfo()
     sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
     m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
     return m_currentGpsPointInfo;
+}
+
+void GpsData::setGlobalMinMax(double minX,
+                              double maxX,
+                              double minY,
+                              double maxY)
+{
+    minDrawX = minX;
+    maxDrawX = maxX;
+    minDrawY = minY;
+    maxDrawY = maxY;
+
+    //normalizeUtmPointsGlobal();
 }
