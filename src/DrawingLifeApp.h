@@ -18,7 +18,8 @@
 class DrawingLifeApp : public ofBaseApp
 {
 public: /* static */
-	static const int BACKGROUND = 0x000000;
+//	static const int BACKGROUND = 0x000000;
+	static const int BACKGROUND = 0x101010;
 	static const int FOREGROUND = 0xFFFFFF;
 	static const int VIEWBOX = 0x343434;
 
