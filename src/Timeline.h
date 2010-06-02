@@ -10,15 +10,13 @@
 #include <string>
 #include "GpsData.h"
 
-using namespace std;
-
 /**
  * \brief Represents an entry on the timeline with time and id.
  *
  */
 struct TimelineObject
 {
-    string timeString;
+    std::string timeString;
     time_t secs;
     int id;
     bool operator() (TimelineObject lhs, TimelineObject rhs)
@@ -41,7 +39,7 @@ public:
     * \brief Set timeline for gps data.
     * \param gpsDatas vector with gps data.
     */
-    void setTimeline(vector<GpsData*> gpsDatas);
+    void setTimeline(std::vector<GpsData*> gpsDatas);
 
     /**
     * \brief Get next user id on the timeline.
@@ -53,7 +51,7 @@ public:
     * \brief Get the timeline.
     * \return vector of TimelineObjects.
     */
-    const vector<TimelineObject>& getTimeline() const { return m_timeline; }
+    const std::vector<TimelineObject>& getTimeline() const { return m_timeline; }
 
 private:
     // -----------------------------------------------------------------------------
@@ -62,14 +60,14 @@ private:
     * \param timeString time string.
     * \return time_t value.
     */
-    time_t makeTimeObject(string timeString);
+    time_t makeTimeObject(std::string timeString);
 
     /**
     * \brief Sort timeline objects.
     */
     void sort();
     // -----------------------------------------------------------------------------
-    vector<TimelineObject> m_timeline;
+    std::vector<TimelineObject> m_timeline;
 
     unsigned int m_counter;
 
