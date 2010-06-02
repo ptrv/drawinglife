@@ -284,6 +284,7 @@ public:
     */
     void calculateUtmPointsGlobalLon();
 
+    const ofColor& getDotColor() const { return m_dotColor; }
 
 private:
 	// -----------------------------------------------------------------------------
@@ -356,6 +357,8 @@ private:
 
     std::string m_currentGpsPointInfoDebug;
     std::string m_currentGpsPointInfo;
+
+    ofColor m_dotColor;
 };
 
 #endif // _GPSDATA_H_

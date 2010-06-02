@@ -2,18 +2,26 @@
 <data>
   <database>leipzig.sqlite</database>
   <person>
-    <name>TimSchmieg1</name>
+    <name>Tim1</name>
     <name>Svenja</name>
     <name>Stobernack</name>
+    <name>Tim2</name>
+    <name>Franca</name>
+    <name>Juliane1</name>
+    <name>Juliane2</name>    
+    <name>Maria</name>    
+    <name>Matthias</name>    
+    <name>Ronja</name>    
+    <name>Marianne</name>    
     <!-- <name>Sophia</name> -->
   </person>
   <defaultcity>Leipzig</defaultcity>
 </data>
 <settings>
   <log level="0" />
-  <loadgpsonstart>1</loadgpsonstart>
+  <loadgpsonstart>0</loadgpsonstart>
   <debugmode>0</debugmode>
-  <drawspeed>1</drawspeed>
+  <drawspeed>4</drawspeed>
 </settings>
 <ui>
   <font1>mono.ttf</font1>

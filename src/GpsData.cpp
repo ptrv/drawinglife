@@ -47,6 +47,10 @@ m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo("")
 {
 	m_segments.reserve(1000); // TODO good amount.
+	m_dotColor.a = 127;
+	m_dotColor.r = (int)ofRandom(30,255);
+	m_dotColor.g = (int)ofRandom(30,255);
+	m_dotColor.b = (int)ofRandom(30,255);
 }
 
 GpsData::~GpsData()
@@ -176,9 +180,9 @@ void GpsData::draw(bool animated)
                 glEnd();
             }
             ofFill();
-            ofSetColor(0, 255, 0, 127);
+            ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
             ofCircle(getScaledUtmX(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].x),
-					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), 5);
+					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), 3);
         }
     }
     else
@@ -621,7 +625,8 @@ const std::string& GpsData::getCurrentGpsInfo()
     sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
     char buf[25];
     sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
-    m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
+//    m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
+    m_currentGpsPointInfo = string(buf);
     return m_currentGpsPointInfo;
 }
 

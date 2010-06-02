@@ -149,10 +149,17 @@ void DrawingLifeApp::draw()
                 }
                 else
                 {
+                    ofSetColor(m_gpsDatas[i]->getDotColor().r,
+                               m_gpsDatas[i]->getDotColor().g,
+                               m_gpsDatas[i]->getDotColor().b,
+                               m_gpsDatas[i]->getDotColor().a );
+                    ofFill();
+                    ofCircle(15, 25 + 30*i,5);
                     ofSetColor(0xffffff);
-                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
-                                          m_viewPadding + (ofGetWidth()/m_numPerson)*i ,
-                                          m_viewYOffset + 10);
+//                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
+//                                          m_viewPadding + (ofGetWidth()/m_numPerson)*i ,
+//                                          m_viewYOffset + 10);
+                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(), 30 , 30 + 30*i);
                 }
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
@@ -191,14 +198,21 @@ void DrawingLifeApp::drawStartScreen()
 {
     ofSetColor(255,255,255);
 
-    std::string title = APP_NAME_STR;
-    title += " ";
-    title += APP_VERSION_STR;
-    m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
+//    std::string title = APP_NAME_STR;
+//    title += " ";
+//    title += APP_VERSION_STR;
+//    m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
+//
+//    m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
+//
+//    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
+    std::string title = "The Monday Walks";
+    m_fontTitle.drawString(title, ofGetWidth()/2 - 380, ofGetHeight()/2 - 100);
+    std::string author = "plan b + ";
+    author += APP_AUTHOR_STR;
+    m_fontAuthor.drawString(author, ofGetWidth()/2 - 190, ofGetHeight()/2 + 70);
 
-    m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
-
-    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
+    m_fontText.drawString("Movement in Urban Space, 2010", ofGetWidth()/2 - 250, ofGetHeight()/2 + 250);
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
@@ -379,6 +393,7 @@ void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
+    DBG_VAL(key);
     switch (key)
     {
     case 'a':
@@ -391,36 +406,39 @@ void DrawingLifeApp::keyPressed  (int key)
     case 'd':
         m_isDebugMode = !m_isDebugMode;
         break;
-    case 49:
-        loadGpsDataCity(m_names, "Berlin");
+    case 32:
+        loadGpsDataCity(m_names, "Leipzig");
         break;
-    case 50:
-        loadGpsDataCity(m_names, "London");
-        break;
-    case 51:
-        loadGpsDataCity(m_names, "Barcelona");
-        break;
-    case 52:
-        loadGpsDataCity(m_names, "Hamburg");
-        break;
-    case 53:
-        loadGpsDataCity(m_names, "Vienna");
-        break;
-    case 54:
-        loadGpsDataCity(m_names,"New York");
-        break;
-    case 55:
-        loadGpsDataCity(m_names, "Tokyo");
-        break;
-    case 56:
-        loadGpsDataCity(m_names, "San Francisco");
-        break;
-    case 57:
-        loadGpsDataCity(m_names, "Bristol");
-        break;
-    case 48:
-        loadGpsDataCity(m_names, "Banff");
-        break;
+//    case 49:
+//        loadGpsDataCity(m_names, "Berlin");
+//        break;
+//    case 50:
+//        loadGpsDataCity(m_names, "London");
+//        break;
+//    case 51:
+//        loadGpsDataCity(m_names, "Barcelona");
+//        break;
+//    case 52:
+//        loadGpsDataCity(m_names, "Hamburg");
+//        break;
+//    case 53:
+//        loadGpsDataCity(m_names, "Vienna");
+//        break;
+//    case 54:
+//        loadGpsDataCity(m_names,"New York");
+//        break;
+//    case 55:
+//        loadGpsDataCity(m_names, "Tokyo");
+//        break;
+//    case 56:
+//        loadGpsDataCity(m_names, "San Francisco");
+//        break;
+//    case 57:
+//        loadGpsDataCity(m_names, "Bristol");
+//        break;
+//    case 48:
+//        loadGpsDataCity(m_names, "Banff");
+//        break;
     case 'w':
         if(m_zoomZ > 590 && m_zoomZ < 598)
         {
