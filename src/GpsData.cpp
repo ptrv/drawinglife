@@ -57,12 +57,12 @@ GpsData::~GpsData()
 // -----------------------------------------------------------------------------
 // Set Gps data.
 // -----------------------------------------------------------------------------
-void GpsData::setGpsData(const vector<GpsSegment>& segments,
+void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 						 double minLon,
 						 double maxLon,
 						 double minLat,
 						 double maxLat,
-						 const string& user)
+						 const std::string& user)
 {
 	++m_gpsDataId;
 	m_segments.clear();
@@ -218,7 +218,7 @@ void GpsData::setViewBounds(int screenWidth,
 }
 
 
-const string GpsData::getGpsLocationCurrent()
+const std::string GpsData::getGpsLocationCurrent()
 {
     return getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
@@ -238,9 +238,9 @@ int GpsData::getCurrentPointNum()
 {
     return m_currentPoint;
 }
-string GpsData::getCurrentTimestamp()
+std::string GpsData::getCurrentTimestamp()
 {
-    string timestamp = "";
+    std::string timestamp = "";
 	if (m_currentGpsSegment < (int)m_segments.size())
 	{
 		if (m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
@@ -383,9 +383,9 @@ double GpsData::getScaledUtmY(double normalizedUtmY)
 }
 
 //---------------------------------------------------------------------------
-const string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
+const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
 {
-	string loc = "";
+	std::string loc = "";
 	if (segmentIndex < (int)m_segments.size())
 	{
 		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
@@ -554,7 +554,7 @@ void GpsData::calculateUtmPoints()
     m_utmPoints.reserve(m_segments.size());
     for(unsigned int i = 0; i < m_segments.size(); ++i)
     {
-        vector<UtmPoint> utmVec;
+        std::vector<UtmPoint> utmVec;
         utmVec.reserve( m_segments[i].getPoints().size());
         for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
         {
@@ -576,7 +576,7 @@ void GpsData::calculateUtmPointsGlobalLon()
     m_utmPoints.reserve(m_segments.size());
     for(unsigned int i = 0; i < m_segments.size(); ++i)
     {
-        vector<UtmPoint> utmVec;
+        std::vector<UtmPoint> utmVec;
         utmVec.reserve( m_segments[i].getPoints().size());
         for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
         {
@@ -592,7 +592,7 @@ void GpsData::calculateUtmPointsGlobalLon()
     }
 }
 
-const string& GpsData::getCurrentGpsInfoDebug()
+const std::string& GpsData::getCurrentGpsInfoDebug()
 {
     m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
                                     "Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
@@ -614,9 +614,9 @@ const string& GpsData::getCurrentGpsInfoDebug()
     return m_currentGpsPointInfoDebug;
 }
 
-const string& GpsData::getCurrentGpsInfo()
+const std::string& GpsData::getCurrentGpsInfo()
 {
-    string timeString = getCurrentTimestamp();
+    std::string timeString = getCurrentTimestamp();
     int year, month, day, hour, min, sec;
     sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
     char buf[25];

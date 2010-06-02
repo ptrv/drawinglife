@@ -9,8 +9,6 @@
 #include <string>
 #include "GpsSegment.h"
 
-using namespace std;
-
 /**
  * \brief Represents x and y value of an UTM coordinate.
  *
@@ -44,12 +42,12 @@ public:
 	* \param maxLat maximum  latitude value.
 	* \param user string with user name.
 	*/
-	void setGpsData(const vector<GpsSegment>& segments,
+	void setGpsData(const std::vector<GpsSegment>& segments,
 					double minLon,
 					double maxLon,
 					double minLat,
 					double maxLat,
-					const string& user);
+					const std::string& user);
 	// -----------------------------------------------------------------------------
 	// Get members.
 	// -----------------------------------------------------------------------------
@@ -57,7 +55,7 @@ public:
 	* \brief Get GpsSegment objects.
 	* \return vector with GpsSegments.
 	*/
-	const vector<GpsSegment>& getSegments() const { return m_segments; }
+	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
 	/**
 	* \brief Get minimum longitude value.
 	* \return minimum longitude value.
@@ -228,7 +226,7 @@ public:
     * \brief Get current Gps location.
     * \return location string for current GpsPoint.
     */
-	const string getGpsLocationCurrent();
+	const std::string getGpsLocationCurrent();
 	// -----------------------------------------------------------------------------
     /**
     * \brief Get current GpsSegment number.
@@ -244,7 +242,7 @@ public:
     * \brief Get timestamp for current GpsPoint.
     * \return timestamp string of current GpsPoint.
     */
-	string getCurrentTimestamp();
+	std::string getCurrentTimestamp();
     /**
     * \brief Get current logitude for GpsPoint.
     * \return longitude of current GpsPoint.
@@ -297,7 +295,7 @@ private:
 	* \param pointIndex index of a GpsPoint.
 	* \return location for given GpsSegment and GpsPoint.
 	*/
-	const string getGpsLocation(int segmentIndex, int pointIndex);
+	const std::string getGpsLocation(int segmentIndex, int pointIndex);
 
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1.
@@ -328,8 +326,8 @@ private:
     static double m_lon0Global;
 
     int m_gpsDataId;
-	vector<GpsSegment> m_segments;
-	string m_user;
+	std::vector<GpsSegment> m_segments;
+	std::string m_user;
 	double m_minLon;
 	double m_maxLon;
 	double m_minLat;
@@ -351,13 +349,13 @@ private:
 	double m_viewMinDimension;
 	double m_viewPadding;
 
-	vector< vector<UtmPoint> > m_utmPoints;
-	vector< vector<UtmPoint> > m_normalizedUtmPoints;
-	vector< vector<UtmPoint> > m_normalizedUtmPointsGlobal;
+	std::vector< std::vector<UtmPoint> > m_utmPoints;
+	std::vector< std::vector<UtmPoint> > m_normalizedUtmPoints;
+	std::vector< std::vector<UtmPoint> > m_normalizedUtmPointsGlobal;
     double m_lon0;
 
-    string m_currentGpsPointInfoDebug;
-    string m_currentGpsPointInfo;
+    std::string m_currentGpsPointInfoDebug;
+    std::string m_currentGpsPointInfo;
 };
 
 #endif // _GPSDATA_H_

@@ -18,7 +18,7 @@ Timeline::~Timeline()
     //dtor
 }
 
-void Timeline::setTimeline(vector<GpsData*> gpsDatas)
+void Timeline::setTimeline(std::vector<GpsData*> gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
@@ -28,7 +28,7 @@ void Timeline::setTimeline(vector<GpsData*> gpsDatas)
         {
             for(unsigned int k = 0; k < gpsDatas[i]->getSegments()[j].getPoints().size(); ++k)
             {
-                string timeString = gpsDatas[i]->getSegments()[j].getPoints()[k].getTimestamp();
+                std::string timeString = gpsDatas[i]->getSegments()[j].getPoints()[k].getTimestamp();
                 TimelineObject tmObj;
                 tmObj.timeString = timeString;
                 tmObj.secs = makeTimeObject(timeString);
@@ -62,7 +62,7 @@ time_t Timeline::makeTimeObject(string timeString)
     time_t t;
     time(&t);
     int year, month, day, hour, min, sec;
-    string str = timeString;
+    std::string str = timeString;
     sscanf(str.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
     tm = *localtime(&t);
     tm.tm_year = year - 1900;

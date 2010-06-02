@@ -191,7 +191,7 @@ void DrawingLifeApp::drawStartScreen()
 {
     ofSetColor(255,255,255);
 
-    string title = APP_NAME_STR;
+    std::string title = APP_NAME_STR;
     title += " ";
     title += APP_VERSION_STR;
     m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);

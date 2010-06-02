@@ -52,7 +52,7 @@ private:
 	* \param names vector with name strings.
 	* \param city string with city name.
 	*/
-	void loadGpsDataCity(vector<string> names, string city);
+	void loadGpsDataCity(std::vector<string> names, std::string city);
 	/**
 	* \brief Set square view area and center.
 	*/
@@ -69,15 +69,15 @@ private:
     //---------------------------------------------------------------------------
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
-	vector<GpsData* > m_gpsDatas;
-	string m_dbPath;
+	std::vector<GpsData* > m_gpsDatas;
+	std::string m_dbPath;
 	//---------------------------------------------------------------------------
 	int maxPoints;
 	//---------------------------------------------------------------------------
-//	vector<double> m_viewXOffset;
-//	vector<double> m_viewYOffset;
-//	vector<double> m_viewMinDimension;
-//	vector<double> m_viewPadding;
+//	std::vector<double> m_viewXOffset;
+//	std::vector<double> m_viewYOffset;
+//	std::vector<double> m_viewMinDimension;
+//	std::vector<double> m_viewPadding;
 	double m_viewXOffset;
 	double m_viewYOffset;
 	double m_viewMinDimension;
@@ -98,7 +98,7 @@ private:
 	ofTrueTypeFont m_fontInfo;
     // -----------------------------------------------------------------------------
     int m_numPerson;
-    vector<string> m_names;
+    std::vector<string> m_names;
     // -----------------------------------------------------------------------------
     Timeline* m_timeline;
     int m_drawSpeed;

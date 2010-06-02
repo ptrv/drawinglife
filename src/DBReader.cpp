@@ -10,7 +10,6 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
-using namespace std;
 
 #include "sqlite3x.hpp"
 using namespace sqlite3x;
@@ -29,7 +28,7 @@ ofLog(OF_LOG_ERROR, "Database error: %s, \nwith query: %s", ex.what(), query.c_s
 }																						\
 // --------------------------------------------------------------------------------------
 
-DBReader::DBReader(const string& dbpath)
+DBReader::DBReader(const std::string& dbpath)
 :
 m_dbPath(dbpath),
 m_dbconn(NULL),
@@ -63,11 +62,11 @@ void DBReader::closeDbConnection()
 	CATCHDBERRORS
 }
 
-bool DBReader::getGpsData(GpsData& gpsData, const string& query)
+bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 {
 	bool result = false;
 	bool queryFirstOk = false;
-	stringstream queryMinMax;
+	std::stringstream queryMinMax;
 	try {
 		sqlite3_command cmd(*m_dbconn, query.c_str());
 		sqlite3_reader reader=cmd.executereader();
@@ -75,10 +74,10 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 		//DBG_VAL(query);
 
 		int lastSegment = -1;
-		string user = "";
+		std::string user = "";
 		GpsSegment gpsSeg;
-		vector<GpsPoint> gpsPointVec;
-		vector<GpsSegment> gpsSegmentVec;
+		std::vector<GpsPoint> gpsPointVec;
+		std::vector<GpsSegment> gpsSegmentVec;
 
 
 		// -----------------------------------------------------------------------------
@@ -161,7 +160,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const string& query)
 	return result;
 }
 
-const string DBReader::getBasicQueryString()
+const std::string DBReader::getBasicQueryString()
 {
 	// This is the part of the query string that all queries have common.
 	return	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
@@ -173,10 +172,10 @@ const string DBReader::getBasicQueryString()
 			"JOIN user AS b ON (a.user = b.userid) "\
 			"JOIN location AS c ON (a.location = c.locationid) ";
 }
-bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int year, int month, int day)
+bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int year, int month, int day)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
@@ -192,10 +191,10 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const string& userName, int year,
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
-bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int year, int month, int dayStart, int dayEnd)
+bool DBReader::getGpsDataDayRange(GpsData& gpsData, const std::string& userName, int year, int month, int dayStart, int dayEnd)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
@@ -220,10 +219,10 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const string& userName, int 
 	return result;
 }
 
-bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int year, int month)
+bool DBReader::getGpsDataMonth(GpsData& gpsData, const std::string& userName, int year, int month)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
@@ -237,10 +236,10 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const string& userName, int yea
 	return result;
 }
 
-bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, int year, int monthStart, int monthEnd)
+bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const std::string& userName, int year, int monthStart, int monthEnd)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
@@ -259,10 +258,10 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const string& userName, in
 	return result;
 }
 
-bool DBReader::getGpsDataYear(GpsData& gpsData, const string& userName, int year)
+bool DBReader::getGpsDataYear(GpsData& gpsData, const std::string& userName, int year)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
@@ -274,10 +273,10 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const string& userName, int year
 	return result;
 }
 
-bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& userName, int yearStart, int yearEnd)
+bool DBReader::getGpsDataYearRange(GpsData& gpsData, const std::string& userName, int yearStart, int yearEnd)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
@@ -292,10 +291,10 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const string& userName, int
 	return result;
 }
 
-bool DBReader::getGpsDataCity(GpsData& gpsData, const string& userName, const string& city)
+bool DBReader::getGpsDataCity(GpsData& gpsData, const std::string& userName, const std::string& city)
 {
 	bool result = false;
-	stringstream query;
+	std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE name = '";
 	query << userName;
