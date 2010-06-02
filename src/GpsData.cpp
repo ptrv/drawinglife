@@ -18,7 +18,7 @@ double GpsData::maxDrawX = -numeric_limits<double>::max();
 double GpsData::minDrawX = numeric_limits<double>::max();
 double GpsData::maxDrawY = -numeric_limits<double>::max();
 double GpsData::minDrawY = numeric_limits<double>::max();
-
+double GpsData::m_lon0Global = 0.0;
 
 GpsData::GpsData()
 :
@@ -569,6 +569,28 @@ void GpsData::calculateUtmPoints()
         m_utmPoints.push_back(utmVec);
     }
 }
+void GpsData::calculateUtmPointsGlobalLon()
+{
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    m_utmPoints.clear();
+    m_utmPoints.reserve(m_segments.size());
+    for(unsigned int i = 0; i < m_segments.size(); ++i)
+    {
+        vector<UtmPoint> utmVec;
+        utmVec.reserve( m_segments[i].getPoints().size());
+        for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+        {
+            Math::real gamma, k;
+            UtmPoint utmP;
+            TMS.Forward(Math::real(m_lon0Global),
+                        m_segments[i].getPoints()[j].getLatitude(),
+                        m_segments[i].getPoints()[j].getLongitude(),
+                        utmP.x, utmP.y, gamma, k);
+            utmVec.push_back(utmP);
+        }
+        m_utmPoints.push_back(utmVec);
+    }
+}
 
 const string& GpsData::getCurrentGpsInfoDebug()
 {
@@ -603,15 +625,17 @@ const string& GpsData::getCurrentGpsInfo()
     return m_currentGpsPointInfo;
 }
 
-void GpsData::setGlobalMinMax(double minX,
+void GpsData::setGlobalValues(double minX,
                               double maxX,
                               double minY,
-                              double maxY)
+                              double maxY,
+                              double lon0)
 {
     minDrawX = minX;
     maxDrawX = maxX;
     minDrawY = minY;
     maxDrawY = maxY;
 
+    m_lon0Global = lon0;
     //normalizeUtmPointsGlobal();
 }

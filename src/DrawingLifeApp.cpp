@@ -466,16 +466,25 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
     double maxX = -numeric_limits<double>::max();
     double minY = numeric_limits<double>::max();
     double maxY = -numeric_limits<double>::max();
+    double minLon = numeric_limits<double>::max();
+    double maxLon = -numeric_limits<double>::max();
+    double minLat = numeric_limits<double>::max();
+    double maxLat = -numeric_limits<double>::max();
     for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
     {
         if (m_gpsDatas[i]->getMinUtmX() < minX) minX = m_gpsDatas[i]->getMinUtmX();
         if (m_gpsDatas[i]->getMaxUtmX() > maxX) maxX = m_gpsDatas[i]->getMaxUtmX();
         if (m_gpsDatas[i]->getMinUtmY() < minY) minY = m_gpsDatas[i]->getMinUtmY();
         if (m_gpsDatas[i]->getMaxUtmY() > maxY) maxY = m_gpsDatas[i]->getMaxUtmY();
+        if (m_gpsDatas[i]->getMinLon() < minLon) minLon = m_gpsDatas[i]->getMinLon();
+        if (m_gpsDatas[i]->getMaxLon() > maxLon) maxLon = m_gpsDatas[i]->getMaxLon();
+        if (m_gpsDatas[i]->getMinLat() < minLat) minLat = m_gpsDatas[i]->getMinLon();
+        if (m_gpsDatas[i]->getMaxLat() > maxLat) maxLat = m_gpsDatas[i]->getMaxLon();
     }
-    GpsData::setGlobalMinMax(minX, maxX, minY, maxY);
+    GpsData::setGlobalValues(minX, maxX, minY, maxY, (minLon + (maxLon - minLon)/2));
     for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
     {
+        m_gpsDatas[i]->calculateUtmPointsGlobalLon();
         m_gpsDatas[i]->normalizeUtmPointsGlobal();
     }
 

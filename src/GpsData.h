@@ -271,15 +271,21 @@ public:
     */
 	double getCurrentUtmY();
 
-    static void setGlobalMinMax(double minX,
+    static void setGlobalValues(double minX,
                                 double maxX,
                                 double minY,
-                                double maxY);
+                                double maxY,
+                                double lon0);
 
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1 with global min/max values.
     */
 	void normalizeUtmPointsGlobal();
+    /**
+    * \brief Calculate UTM values for all GpsPoints with global lon0.
+    */
+    void calculateUtmPointsGlobalLon();
+
 
 private:
 	// -----------------------------------------------------------------------------
@@ -318,6 +324,8 @@ private:
     static double minDrawX;
     static double maxDrawY;
     static double minDrawY;
+
+    static double m_lon0Global;
 
     int m_gpsDataId;
 	vector<GpsSegment> m_segments;
