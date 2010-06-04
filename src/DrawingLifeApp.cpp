@@ -6,6 +6,8 @@
 #include "GpsData.h"
 #include <vector>
 #include <limits>
+
+#undef max
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
 //    m_settings(NULL),
