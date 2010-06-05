@@ -7,7 +7,9 @@
 #include <vector>
 #include <limits>
 
+#if defined (WIN32)
 #undef max
+#endif
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
 //    m_settings(NULL),
