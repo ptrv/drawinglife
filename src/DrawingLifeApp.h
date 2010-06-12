@@ -10,6 +10,7 @@
 #include "ofxVectorMath.h"
 #include "DBReader.h"
 #include "Timeline.h"
+#include "ofxTimer.h"
 
 /**
  *  \brief Main application class.
@@ -103,6 +104,8 @@ private:
     // -----------------------------------------------------------------------------
     Timeline* m_timeline;
     int m_drawSpeed;
+
+    TimedCounter* m_counter;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

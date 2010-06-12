@@ -24,7 +24,8 @@ DrawingLifeApp::DrawingLifeApp() :
     m_startScreenMode(false),
     m_numPerson(0),
     m_timeline(NULL),
-    m_drawSpeed(1)
+    m_drawSpeed(1),
+    m_counter(NULL)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -39,9 +40,12 @@ DrawingLifeApp::~DrawingLifeApp()
         SAFE_DELETE(m_gpsDatas[i]);
     }
     SAFE_DELETE(m_timeline);
+    SAFE_DELETE(m_counter);
 }
 void DrawingLifeApp::setup()
 {
+    m_counter = new TimedCounter(0,10,1000);
+
     ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
 
     ofSetFrameRate(60);
@@ -101,11 +105,14 @@ void DrawingLifeApp::setup()
                 m_startScreenMode = true;
             }
         }
+        m_counter->startCount();
     }
     else
     {
         m_startScreenMode = true;
     }
+
+
 }
 
 //--------------------------------------------------------------
@@ -121,6 +128,17 @@ void DrawingLifeApp::update()
                 m_gpsDatas[id]->update();
             }
         }
+    }
+   	if(m_counter->isCounting()){
+		m_counter->update();
+		if(m_counter->hasChanged())
+			cout << "counter changed:" << m_counter->getCurrentCount() << endl;
+		if(m_counter->isCountComplete())
+		{
+			cout << "counter complete!" << endl;
+			m_counter->startCount();
+			cout << "start counter!" << endl;
+		}
     }
 }
 
@@ -140,6 +158,12 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             //fillViewAreaUTM( VIEWBOX);
             //---------------------------------------------------------------------------
+            if (m_gpsDatas.size() > 0)
+            {
+                ofSetColor(0xffffff);
+                m_fontInfo.drawString((m_gpsDatas[0]->getCurrentGpsInfo()).substr(0,10), 30, 30);
+                m_fontInfo.drawString("----------", 30, 40);
+            }
             for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
             {
                 if (m_isDebugMode)
@@ -158,12 +182,12 @@ void DrawingLifeApp::draw()
                                m_gpsDatas[i]->getDotColor().b,
                                m_gpsDatas[i]->getDotColor().a );
                     ofFill();
-                    ofCircle(15, 25 + 30*i,5);
+                    ofCircle(15, 77 + 30*i,5);
                     ofSetColor(0xffffff);
 //                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
 //                                          m_viewPadding + (ofGetWidth()/m_numPerson)*i ,
 //                                          m_viewYOffset + 10);
-                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(), 30 , 30 + 30*i);
+                    m_fontInfo.drawString((m_gpsDatas[i]->getCurrentGpsInfo()).substr(11), 30 , 80 + 30*i);
                 }
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
@@ -412,6 +436,11 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 32:
         loadGpsDataCity(m_names, "Leipzig");
+        if (!m_counter->isCounting())
+        {
+            m_counter->startCount();
+        }
+
         break;
 //    case 49:
 //        loadGpsDataCity(m_names, "Berlin");
