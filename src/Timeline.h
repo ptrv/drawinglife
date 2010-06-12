@@ -48,6 +48,12 @@ public:
     int getNext();
 
     /**
+    * \brief Return true if count is last in timeline.
+    * \return true if count is last.
+    */
+    bool isLast();
+
+    /**
     * \brief Get the timeline.
     * \return vector of TimelineObjects.
     */
