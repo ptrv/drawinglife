@@ -106,6 +106,7 @@ private:
     int m_drawSpeed;
 
     TimedCounter* m_counter;
+    int m_drawCycle;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

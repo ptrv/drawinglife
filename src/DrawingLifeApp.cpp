@@ -25,7 +25,8 @@ DrawingLifeApp::DrawingLifeApp() :
     m_numPerson(0),
     m_timeline(NULL),
     m_drawSpeed(1),
-    m_counter(NULL)
+    m_counter(NULL),
+    m_drawCycle(0)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -44,7 +45,7 @@ DrawingLifeApp::~DrawingLifeApp()
 }
 void DrawingLifeApp::setup()
 {
-    m_counter = new TimedCounter(0,10,1000);
+    m_counter = new TimedCounter(0,std::numeric_limits<int>::max(),1000);
 
     ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
 
@@ -123,6 +124,15 @@ void DrawingLifeApp::update()
         for(int i = 0; i < m_drawSpeed; ++i)
         {
             int id = m_timeline->getNext();
+            if (m_timeline->isLast())
+            {
+                ++m_drawCycle;
+                if(m_drawCycle == 2)
+                {
+                    m_counter->startCount();
+                    m_drawCycle = 0;
+                }
+            }
             if (id < (int)m_gpsDatas.size())
             {
                 m_gpsDatas[id]->update();
