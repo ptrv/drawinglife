@@ -56,6 +56,11 @@ int Timeline::getNext()
     }
 }
 
+bool Timeline::isLast()
+{
+    return m_counter == m_timeline.size()-1;
+}
+
 time_t Timeline::makeTimeObject(string timeString)
 {
     struct tm tm;
