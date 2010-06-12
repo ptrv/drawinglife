@@ -126,11 +126,48 @@ void DrawingLifeApp::update()
             int id = m_timeline->getNext();
             if (m_timeline->isLast())
             {
+                for(unsigned int ii = 0; ii < m_gpsDatas.size(); ++ii)
+                {
+                    m_gpsDatas[ii]->reset();
+                }
                 ++m_drawCycle;
+                switch(m_drawCycle)
+                {
+                    DBG_VAL(m_drawCycle);
+                    case 1:
+                        m_zoomZ += 200;
+                        m_zoomX = 30;
+                        break;
+                    case 2:
+                        m_zoomZ += 200;
+                        m_zoomX = -40;
+                        break;
+                    case 3:
+                        m_zoomZ += 100;
+                        m_zoomX = -80;
+                        //m_drawCycle = 0;
+                        break;
+                    case 4:
+                        m_zoomZ += 50;
+                        m_zoomX = -80;
+                        break;
+                    case 5:
+                        m_zoomZ = 0;
+                        m_zoomX = 0;
+                        m_drawCycle = 0;
+                        break;
+                    default:
+                        m_zoomZ = 0;
+                        m_zoomX = 0;
+                        break;
+
+                }
+
                 if(m_drawCycle == 2)
                 {
                     m_counter->startCount();
                     m_drawCycle = 0;
+
                 }
             }
             if (id < (int)m_gpsDatas.size())
