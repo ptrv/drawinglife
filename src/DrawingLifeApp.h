@@ -78,10 +78,6 @@ private:
 	//---------------------------------------------------------------------------
 	int maxPoints;
 	//---------------------------------------------------------------------------
-//	std::vector<double> m_viewXOffset;
-//	std::vector<double> m_viewYOffset;
-//	std::vector<double> m_viewMinDimension;
-//	std::vector<double> m_viewPadding;
 	double m_viewXOffset;
 	double m_viewYOffset;
 	double m_viewMinDimension;

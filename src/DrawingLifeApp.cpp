@@ -12,9 +12,7 @@
 #endif
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
-//    m_settings(NULL),
     m_dbReader(NULL),
-    //m_gpsData(NULL),
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
@@ -102,7 +100,6 @@ void DrawingLifeApp::setup()
     // -----------------------------------------------------------------------------
     m_timeline = new Timeline();
 
-
     if (m_loadOnStart == 1)
     {
         loadGpsDataCity(m_names, m_currentCity);
@@ -121,10 +118,7 @@ void DrawingLifeApp::setup()
         m_startScreenMode = true;
         m_counter->startCount();
     }
-
-
 }
-
 //--------------------------------------------------------------
 void DrawingLifeApp::update()
 {
@@ -228,10 +222,6 @@ void DrawingLifeApp::draw()
             {
                 if (m_isDebugMode)
                 {
-//                    ofFill();
-//                    int color = 0xE5A93F;
-//                    ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 160);
-//                    ofRect(10 + (ofGetWidth()/m_numPerson)*i,10,350,200);
                     ofSetColor(0xffffff);
                     ofDrawBitmapString(m_gpsDatas[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 }
@@ -244,9 +234,7 @@ void DrawingLifeApp::draw()
                     ofFill();
                     ofCircle(15, 77 + 30*i,5);
                     ofSetColor(255, 255, 255, m_legendAlpha);
-//                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
-//                                          m_viewPadding + (ofGetWidth()/m_numPerson)*i ,
-//                                          m_viewYOffset + 10);
+
                     m_fontInfo.drawString((m_gpsDatas[i]->getCurrentGpsInfo()).substr(11), 30 , 80 + 30*i);
                 }
                 // -----------------------------------------------------------------------------
@@ -267,14 +255,12 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-//            ofSetColor(FOREGROUND);
             ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
             ofNoFill();
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
             {
                 m_gpsDatas[i]->draw(false);
-
             }
         }
     }
@@ -286,14 +272,6 @@ void DrawingLifeApp::drawStartScreen()
 {
     ofSetColor(255,255,255);
 
-//    std::string title = APP_NAME_STR;
-//    title += " ";
-//    title += APP_VERSION_STR;
-//    m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
-//
-//    m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
-//
-//    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
     std::string title = "The Monday Walks";
     m_fontTitle.drawString(title, ofGetWidth()/2 - 380, ofGetHeight()/2 - 100);
     std::string author = "plan b + ";
@@ -374,12 +352,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
     if (m_gpsDatas.size() > 0)
     {
         m_timeline->setTimeline(m_gpsDatas);
-//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
-//        {
-//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
-//                                                    m_timeline->getTimeline()[i].id,
-//                                                    (long)(m_timeline->getTimeline()[i].secs));
-//        }
+
         this->calculateGlobalMinMaxValues();
 
         GpsData::setTrackAlpha(m_dotAlpha);
@@ -395,38 +368,9 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 
 void DrawingLifeApp::setViewAspectRatio()
 {
-//    double width = ofGetWidth()/(int)m_numPerson;
     double width = ofGetWidth();
     double height = ofGetHeight();
 
-//    for(int i = 0; i < m_numPerson; ++i)
-//    {
-//        // Reset for view padding.
-//        m_viewXOffset[i] = 0;
-//        m_viewYOffset[i] = 0;
-//
-//        // Set square view area and center.
-//        if (height < width)
-//        {
-//            m_viewMinDimension[i] = height;
-//            m_viewXOffset[i] = (width - height) / 2.0;
-//        }
-//        else if (width < height)
-//        {
-//            m_viewMinDimension[i] = width;
-//            m_viewYOffset[i] = (height - width) / 2.0;
-//        }
-//        else
-//        {
-//            m_viewMinDimension[i] = width;
-//        }
-//
-//        // Left and top indentation.
-//        m_viewXOffset[i] += m_viewPadding[i];
-//        m_viewYOffset[i] += m_viewPadding[i];
-//
-//        m_viewXOffset[i] += width * i;
-////        m_viewYOffset += m_viewPadding;
         // Reset for view padding.
         m_viewXOffset = 0;
         m_viewYOffset = 0;
@@ -450,25 +394,10 @@ void DrawingLifeApp::setViewAspectRatio()
         // Left and top indentation.
         m_viewXOffset += m_viewPadding;
         m_viewYOffset += m_viewPadding;
-
-//        m_viewXOffset += width * i;
-//        m_viewYOffset += m_viewPadding;
-//    }
 }
+
 void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
 {
-//    for(int i = 0; i < m_numPerson; ++i)
-//    {
-//        // Normalized value range from 0 to 1.
-//        double x = m_gpsDatas[i]->getScaledUtmX(0);
-//        double y = m_gpsDatas[i]->getScaledUtmY(0);
-//        double w = m_gpsDatas[i]->getScaledUtmX(1) - x;
-//        double h = m_gpsDatas[i]->getScaledUtmY(1) - y;
-//        ofFill();
-//        ofSetColor( backgroundColor);
-//        ofRect(x, y, w, h);
-//
-//    }
     if(m_gpsDatas.size() > 0)
     {
         // Normalized value range from 0 to 1.
@@ -502,36 +431,6 @@ void DrawingLifeApp::keyPressed  (int key)
     case 32:
 //        loadGpsDataCity(m_names, m_currentCity);
         break;
-//    case 49:
-//        loadGpsDataCity(m_names, "Berlin");
-//        break;
-//    case 50:
-//        loadGpsDataCity(m_names, "London");
-//        break;
-//    case 51:
-//        loadGpsDataCity(m_names, "Barcelona");
-//        break;
-//    case 52:
-//        loadGpsDataCity(m_names, "Hamburg");
-//        break;
-//    case 53:
-//        loadGpsDataCity(m_names, "Vienna");
-//        break;
-//    case 54:
-//        loadGpsDataCity(m_names,"New York");
-//        break;
-//    case 55:
-//        loadGpsDataCity(m_names, "Tokyo");
-//        break;
-//    case 56:
-//        loadGpsDataCity(m_names, "San Francisco");
-//        break;
-//    case 57:
-//        loadGpsDataCity(m_names, "Bristol");
-//        break;
-//    case 48:
-//        loadGpsDataCity(m_names, "Banff");
-//        break;
     case 'w':
         if(m_zoomZ > 590 && m_zoomZ < 598)
         {
