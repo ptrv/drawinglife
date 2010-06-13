@@ -136,20 +136,20 @@ void DrawingLifeApp::update()
                     DBG_VAL(m_drawCycle);
                     case 1:
                         m_zoomZ += 200;
-                        m_zoomX = 30;
+                        m_zoomX = -90;
                         break;
                     case 2:
                         m_zoomZ += 200;
-                        m_zoomX = -40;
+                        m_zoomX = -90;
                         break;
                     case 3:
-                        m_zoomZ += 100;
-                        m_zoomX = -80;
+                        m_zoomZ += 150;
+                        m_zoomX = -90;
                         //m_drawCycle = 0;
                         break;
                     case 4:
                         m_zoomZ += 50;
-                        m_zoomX = -80;
+                        m_zoomX = -90;
                         break;
                     case 5:
                         m_zoomZ = 0;
@@ -163,12 +163,12 @@ void DrawingLifeApp::update()
 
                 }
 
-                if(m_drawCycle == 2)
-                {
-                    m_counter->startCount();
-                    m_drawCycle = 0;
-
-                }
+//                if(m_drawCycle == 2)
+//                {
+//                    m_counter->startCount();
+//                    m_drawCycle = 0;
+//
+//                }
             }
             if (id < (int)m_gpsDatas.size())
             {
