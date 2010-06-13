@@ -5,7 +5,7 @@
 		<Option title="DrawingLife" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons/;src/;addons/ofxDirList/src/;addons/ofxNetwork/src/;addons/ofxOpenCv/src/;addons/ofxOsc/src/;addons/ofxThread/src/;addons/ofxVectorGraphics/libs/;addons/ofxVectorGraphics/src/;addons/ofxVectorMath/src/;addons/ofXmlSettings/libs/;addons/ofXmlSettings/src/;sqlite3x/;addons/ofxTimer/;addons/ofxTimer/src/;" />
+		<Option virtualFolders="addons/;src/;addons/ofxDirList/src/;addons/ofxNetwork/src/;addons/ofxOpenCv/src/;addons/ofxOsc/src/;addons/ofxThread/src/;addons/ofxVectorGraphics/libs/;addons/ofxVectorGraphics/src/;addons/ofxVectorMath/src/;addons/ofXmlSettings/libs/;addons/ofXmlSettings/src/;sqlite3x/;ofxTimer/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/DrawingLife_debug" prefix_auto="1" extension_auto="1" />
@@ -89,7 +89,7 @@
 			<Add directory="../../../addons/ofxXmlSettings/libs" />
 			<Add directory="libs/geographiclib-1.1/include" />
 			<Add directory="libs/sqlite3x" />
-			<Add directory="../../../addons/ofxTimer/src" />
+			<Add directory="libs/ofxTimer/src" />
 		</Compiler>
 		<Linker>
 			<Add library="fmodex" />
@@ -280,15 +280,6 @@
 		<Unit filename="../../../addons/ofxThread/src/ofxThread.h">
 			<Option virtualFolder="addons/ofxThread/src" />
 		</Unit>
-		<Unit filename="../../../addons/ofxTimer/src/TimedCounter.cpp">
-			<Option virtualFolder="addons/ofxTimer/src/" />
-		</Unit>
-		<Unit filename="../../../addons/ofxTimer/src/TimedCounter.h">
-			<Option virtualFolder="addons/ofxTimer/src/" />
-		</Unit>
-		<Unit filename="../../../addons/ofxTimer/src/ofxTimer.h">
-			<Option virtualFolder="addons/ofxTimer/src/" />
-		</Unit>
 		<Unit filename="../../../addons/ofxVectorGraphics/libs/CreEPS.cpp">
 			<Option virtualFolder="addons/ofxVectorGraphics/libs" />
 		</Unit>
@@ -348,6 +339,15 @@
 		</Unit>
 		<Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.h">
 			<Option virtualFolder="addons/ofXmlSettings/src" />
+		</Unit>
+		<Unit filename="libs/ofxTimer/src/TimedCounter.cpp">
+			<Option virtualFolder="ofxTimer/" />
+		</Unit>
+		<Unit filename="libs/ofxTimer/src/TimedCounter.h">
+			<Option virtualFolder="ofxTimer/" />
+		</Unit>
+		<Unit filename="libs/ofxTimer/src/ofxTimer.h">
+			<Option virtualFolder="ofxTimer/" />
 		</Unit>
 		<Unit filename="libs/sqlite3x/sqlite3.c">
 			<Option compilerVar="CC" />
