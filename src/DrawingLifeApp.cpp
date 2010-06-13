@@ -500,7 +500,7 @@ void DrawingLifeApp::keyPressed  (int key)
         m_isDebugMode = !m_isDebugMode;
         break;
     case 32:
-        loadGpsDataCity(m_names, m_currentCity);
+//        loadGpsDataCity(m_names, m_currentCity);
         break;
 //    case 49:
 //        loadGpsDataCity(m_names, "Berlin");
