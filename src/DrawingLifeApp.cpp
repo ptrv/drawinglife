@@ -26,7 +26,8 @@ DrawingLifeApp::DrawingLifeApp() :
     m_timeline(NULL),
     m_drawSpeed(1),
     m_counter(NULL),
-    m_drawCycle(0)
+    m_drawCycle(0),
+    m_isStartScreenFirstTime(true)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -45,7 +46,7 @@ DrawingLifeApp::~DrawingLifeApp()
 }
 void DrawingLifeApp::setup()
 {
-    m_counter = new TimedCounter(0,std::numeric_limits<int>::max(),1000);
+    m_counter = new TimedCounter(0,1,5000);
 
     ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
 
@@ -106,11 +107,14 @@ void DrawingLifeApp::setup()
                 m_startScreenMode = true;
             }
         }
-        m_counter->startCount();
+//        m_counter->startCount();
     }
     else
     {
+        m_isAnimation = false;
         m_startScreenMode = true;
+        //loadGpsDataCity(m_names, city);
+        m_counter->startCount();
     }
 
 
@@ -151,7 +155,7 @@ void DrawingLifeApp::update()
                         GpsData::setDotSize(1.7);
                         break;
                     case 4:
-                        m_zoomZ += 50;
+                        m_zoomZ += 40;
                         m_zoomX = -90;
                         GpsData::setDotSize(1.4);
                         break;
@@ -160,20 +164,15 @@ void DrawingLifeApp::update()
                         m_zoomX = 0;
                         m_drawCycle = 0;
                         GpsData::setDotSize(3.0);
+                        m_isAnimation = false;
+                        m_startScreenMode = true;
+                        m_counter->startCount();
                         break;
                     default:
                         m_zoomZ = 0;
                         m_zoomX = 0;
                         break;
-
                 }
-
-//                if(m_drawCycle == 5)
-//                {
-//                    m_counter->startCount();
-//                    m_drawCycle = 0;
-//
-//                }
             }
             if (id < (int)m_gpsDatas.size())
             {
@@ -187,9 +186,13 @@ void DrawingLifeApp::update()
 			cout << "counter changed:" << m_counter->getCurrentCount() << endl;
 		if(m_counter->isCountComplete())
 		{
-			cout << "counter complete!" << endl;
-			m_counter->startCount();
-			cout << "start counter!" << endl;
+		    if (m_isStartScreenFirstTime)
+		    {
+		        loadGpsDataCity(m_names, "Leipzig");
+		        m_isStartScreenFirstTime = false;
+		    }
+		    m_startScreenMode = false;
+		    m_isAnimation = true;
 		}
     }
 }
@@ -488,10 +491,10 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 32:
         loadGpsDataCity(m_names, "Leipzig");
-        if (!m_counter->isCounting())
-        {
-            m_counter->startCount();
-        }
+//        if (!m_counter->isCounting())
+//        {
+//            m_counter->startCount();
+//        }
 
         break;
 //    case 49:
