@@ -183,7 +183,7 @@ void GpsData::draw(bool animated)
             ofFill();
             ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
             ofCircle(getScaledUtmX(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].x),
-					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), 3);
+					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), m_dotSize);
         }
     }
     else

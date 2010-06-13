@@ -137,24 +137,29 @@ void DrawingLifeApp::update()
                     case 1:
                         m_zoomZ += 200;
                         m_zoomX = -90;
+                        GpsData::setDotSize(2.5);
                         break;
                     case 2:
                         m_zoomZ += 200;
                         m_zoomX = -90;
+                        GpsData::setDotSize(2.0);
                         break;
                     case 3:
                         m_zoomZ += 150;
                         m_zoomX = -90;
                         //m_drawCycle = 0;
+                        GpsData::setDotSize(1.7);
                         break;
                     case 4:
                         m_zoomZ += 50;
                         m_zoomX = -90;
+                        GpsData::setDotSize(1.4);
                         break;
                     case 5:
                         m_zoomZ = 0;
                         m_zoomX = 0;
                         m_drawCycle = 0;
+                        GpsData::setDotSize(3.0);
                         break;
                     default:
                         m_zoomZ = 0;
@@ -163,7 +168,7 @@ void DrawingLifeApp::update()
 
                 }
 
-//                if(m_drawCycle == 2)
+//                if(m_drawCycle == 5)
 //                {
 //                    m_counter->startCount();
 //                    m_drawCycle = 0;
