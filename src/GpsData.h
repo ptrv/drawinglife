@@ -275,6 +275,7 @@ public:
                                 double maxY,
                                 double lon0);
 
+    static void setDotSize(float dotSize) { m_dotSize = dotSize; }
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1 with global min/max values.
     */
@@ -325,6 +326,8 @@ private:
     static double minDrawY;
 
     static double m_lon0Global;
+
+    static float m_dotSize;
 
     int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;

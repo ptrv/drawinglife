@@ -19,6 +19,7 @@ double GpsData::minDrawX = numeric_limits<double>::max();
 double GpsData::maxDrawY = -numeric_limits<double>::max();
 double GpsData::minDrawY = numeric_limits<double>::max();
 double GpsData::m_lon0Global = 0.0;
+float GpsData::m_dotSize = 3.0;
 
 GpsData::GpsData()
 :
