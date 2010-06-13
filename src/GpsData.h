@@ -276,6 +276,8 @@ public:
                                 double lon0);
 
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
+
+    static void setTrackAlpha(int dotAlpha) { m_dotAlpha = dotAlpha; }
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1 with global min/max values.
     */
@@ -286,6 +288,8 @@ public:
     void calculateUtmPointsGlobalLon();
 
     const ofColor& getDotColor() const { return m_dotColor; }
+
+    void setDotColors();
 
 private:
 	// -----------------------------------------------------------------------------
@@ -324,10 +328,9 @@ private:
     static double minDrawX;
     static double maxDrawY;
     static double minDrawY;
-
     static double m_lon0Global;
-
     static float m_dotSize;
+    static int m_dotAlpha;
 
     int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;

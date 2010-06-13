@@ -13,7 +13,6 @@
     <name>Matthias</name>    
     <name>Ronja</name>    
     <name>Marianne</name>    
-    <!-- <name>Sophia</name> -->
   </person>
   <defaultcity>Leipzig</defaultcity>
 </data>
@@ -21,9 +20,15 @@
   <log level="0" />
   <loadgpsonstart>0</loadgpsonstart>
   <debugmode>0</debugmode>
-  <drawspeed>4</drawspeed>
+  <drawspeed>15</drawspeed>
 </settings>
 <ui>
   <font1>mono.ttf</font1>
   <font2>Standard0753.ttf</font2>
+  <alpha>
+    <tracks>64</tracks>
+    <dots>200</dots>
+    <legend>255</legend>
+  </alpha>
+  <startscreenduration>1000</startscreenduration>
 </ui>

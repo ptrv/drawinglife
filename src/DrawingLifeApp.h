@@ -66,6 +66,8 @@ private:
 	void drawStartScreen();
 
 	void calculateGlobalMinMaxValues();
+
+	void loadXmlSettings();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -101,7 +103,7 @@ private:
     // -----------------------------------------------------------------------------
     int m_numPerson;
     std::vector<string> m_names;
-//    std::string m_currentCity;
+    std::string m_currentCity;
     // -----------------------------------------------------------------------------
     Timeline* m_timeline;
     int m_drawSpeed;
@@ -109,6 +111,12 @@ private:
     TimedCounter* m_counter;
     int m_drawCycle;
     bool m_isStartScreenFirstTime;
+
+    int m_trackAlpha;
+    int m_dotAlpha;
+    int m_legendAlpha;
+    int m_startScreenDuration;
+    int m_loadOnStart;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

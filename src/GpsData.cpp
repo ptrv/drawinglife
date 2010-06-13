@@ -20,6 +20,7 @@ double GpsData::maxDrawY = -numeric_limits<double>::max();
 double GpsData::minDrawY = numeric_limits<double>::max();
 double GpsData::m_lon0Global = 0.0;
 float GpsData::m_dotSize = 3.0;
+int GpsData::m_dotAlpha = 127;
 
 GpsData::GpsData()
 :
@@ -48,7 +49,8 @@ m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo("")
 {
 	m_segments.reserve(1000); // TODO good amount.
-	m_dotColor.a = 127;
+//	m_dotColor.a = 127;
+	m_dotColor.a = m_dotAlpha;
 	m_dotColor.r = (int)ofRandom(30,255);
 	m_dotColor.g = (int)ofRandom(30,255);
 	m_dotColor.b = (int)ofRandom(30,255);
@@ -645,4 +647,13 @@ void GpsData::setGlobalValues(double minX,
 
     m_lon0Global = lon0;
     //normalizeUtmPointsGlobal();
+}
+
+void GpsData::setDotColors()
+{
+   	m_dotColor.a = m_dotAlpha;
+	m_dotColor.r = (int)ofRandom(30,255);
+	m_dotColor.g = (int)ofRandom(30,255);
+	m_dotColor.b = (int)ofRandom(30,255);
+
 }

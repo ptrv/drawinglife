@@ -27,7 +27,12 @@ DrawingLifeApp::DrawingLifeApp() :
     m_drawSpeed(1),
     m_counter(NULL),
     m_drawCycle(0),
-    m_isStartScreenFirstTime(true)
+    m_isStartScreenFirstTime(true),
+    m_trackAlpha(64),
+    m_dotAlpha(127),
+    m_legendAlpha(255),
+    m_startScreenDuration(5000),
+    m_loadOnStart(0)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -44,34 +49,24 @@ DrawingLifeApp::~DrawingLifeApp()
     SAFE_DELETE(m_timeline);
     SAFE_DELETE(m_counter);
 }
-void DrawingLifeApp::setup()
+
+void DrawingLifeApp::loadXmlSettings()
 {
-    m_counter = new TimedCounter(0,1,5000);
-
-    ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
-
-    ofSetFrameRate(60);
-    ofEnableAlphaBlending();
-
     // reading settings from xml file
     m_settings.loadFile("AppSettings.xml");
-
 	m_fontTitle.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 50);
     m_fontAuthor.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),24);
     m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 18);
     m_fontInfo.loadFont(m_settings.getValue("ui:font2", "Standard0753.ttf"), 8);
-
     ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
-//    ofSetLogLevel(OF_LOG_VERBOSE);
-
     m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
-
-    // db path must be absolute path for DBReader (true as second parameter)
+    m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
+    m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
+    m_legendAlpha = m_settings.getValue("ui:alpha:legend", 255);
+    m_startScreenDuration = m_settings.getValue("ui:startscreenduration", 5000);
     m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
     DBG_VAL(m_dbPath);
-
-    string city = m_settings.getValue("data:defaultcity", "London");
-
+    m_currentCity = m_settings.getValue("data:defaultcity", "London");
     m_settings.pushTag("data");
     m_settings.pushTag("person");
     m_numPerson = m_settings.getNumTags("name");
@@ -80,25 +75,37 @@ void DrawingLifeApp::setup()
         m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(new GpsData());
         DBG_VAL(m_names[i]);
-
-//        m_viewXOffset.push_back(0);
-//        m_viewYOffset.push_back(0);
-//        m_viewMinDimension.push_back(0);
-//        m_viewPadding.push_back(15);
     }
     m_settings.popTag();
     m_settings.popTag();
+    m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
+    m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
+}
+
+void DrawingLifeApp::setup()
+{
+    loadXmlSettings();
+//    ofSetLogLevel(OF_LOG_VERBOSE);
+
+    ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
+
+    ofSetFrameRate(60);
+    ofEnableAlphaBlending();
+
+    m_counter = new TimedCounter(0,1,m_startScreenDuration);
+
+    // db path must be absolute path for DBReader (true as second parameter)
+
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
     this->setViewAspectRatio();
     // -----------------------------------------------------------------------------
     m_timeline = new Timeline();
 
-    m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
 
-    if (m_settings.getValue("settings:loadgpsonstart",1) == 1)
+    if (m_loadOnStart == 1)
     {
-        loadGpsDataCity(m_names, city);
+        loadGpsDataCity(m_names, m_currentCity);
 
         for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
         {
@@ -107,13 +114,11 @@ void DrawingLifeApp::setup()
                 m_startScreenMode = true;
             }
         }
-//        m_counter->startCount();
     }
     else
     {
         m_isAnimation = false;
         m_startScreenMode = true;
-        //loadGpsDataCity(m_names, city);
         m_counter->startCount();
     }
 
@@ -188,7 +193,7 @@ void DrawingLifeApp::update()
 		{
 		    if (m_isStartScreenFirstTime)
 		    {
-		        loadGpsDataCity(m_names, "Leipzig");
+		        loadGpsDataCity(m_names, m_currentCity);
 		        m_isStartScreenFirstTime = false;
 		    }
 		    m_startScreenMode = false;
@@ -215,9 +220,9 @@ void DrawingLifeApp::draw()
             //---------------------------------------------------------------------------
             if (m_gpsDatas.size() > 0)
             {
-                ofSetColor(0xffffff);
-                m_fontInfo.drawString((m_gpsDatas[0]->getCurrentGpsInfo()).substr(0,10), 30, 30);
-                m_fontInfo.drawString("----------", 30, 40);
+                ofSetColor(255, 255, 255, m_legendAlpha);
+                m_fontInfo.drawString(m_currentCity + ", " + (m_gpsDatas[0]->getCurrentGpsInfo()).substr(0,10), 30, 30);
+//                m_fontInfo.drawString("----------", 30, 40);
             }
             for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
             {
@@ -235,10 +240,10 @@ void DrawingLifeApp::draw()
                     ofSetColor(m_gpsDatas[i]->getDotColor().r,
                                m_gpsDatas[i]->getDotColor().g,
                                m_gpsDatas[i]->getDotColor().b,
-                               m_gpsDatas[i]->getDotColor().a );
+                               m_legendAlpha );
                     ofFill();
                     ofCircle(15, 77 + 30*i,5);
-                    ofSetColor(0xffffff);
+                    ofSetColor(255, 255, 255, m_legendAlpha);
 //                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
 //                                          m_viewPadding + (ofGetWidth()/m_numPerson)*i ,
 //                                          m_viewYOffset + 10);
@@ -248,7 +253,7 @@ void DrawingLifeApp::draw()
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
                 //ofSetColor(FOREGROUND);
-                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 64);
+                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, m_trackAlpha);
                 ofNoFill();
                 glPushMatrix();
                 glTranslated(m_zoomX, m_zoomY, m_zoomZ);
@@ -377,6 +382,11 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 //        }
         this->calculateGlobalMinMaxValues();
 
+        GpsData::setTrackAlpha(m_dotAlpha);
+        for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+        {
+            m_gpsDatas[i]->setDotColors();
+        }
     }
 
 
@@ -490,12 +500,7 @@ void DrawingLifeApp::keyPressed  (int key)
         m_isDebugMode = !m_isDebugMode;
         break;
     case 32:
-        loadGpsDataCity(m_names, "Leipzig");
-//        if (!m_counter->isCounting())
-//        {
-//            m_counter->startCount();
-//        }
-
+        loadGpsDataCity(m_names, m_currentCity);
         break;
 //    case 49:
 //        loadGpsDataCity(m_names, "Berlin");
