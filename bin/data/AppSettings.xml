@@ -21,6 +21,7 @@
   <loadgpsonstart>0</loadgpsonstart>
   <debugmode>0</debugmode>
   <drawspeed>15</drawspeed>
+  <framerate>60</framerate>
 </settings>
 <ui>
   <font1>mono.ttf</font1>

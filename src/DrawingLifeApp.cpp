@@ -30,7 +30,8 @@ DrawingLifeApp::DrawingLifeApp() :
     m_dotAlpha(127),
     m_legendAlpha(255),
     m_startScreenDuration(5000),
-    m_loadOnStart(0)
+    m_loadOnStart(0),
+    m_frameRate(60)
 {
     m_viewXOffset = 0;
     m_viewYOffset = 0;
@@ -78,6 +79,7 @@ void DrawingLifeApp::loadXmlSettings()
     m_settings.popTag();
     m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
+    m_frameRate = m_settings.getValue("settings:framerate", 60);
 }
 
 void DrawingLifeApp::setup()
@@ -87,7 +89,7 @@ void DrawingLifeApp::setup()
 
     ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
 
-    ofSetFrameRate(60);
+    ofSetFrameRate(m_frameRate);
     ofEnableAlphaBlending();
 
     m_counter = new TimedCounter(0,1,m_startScreenDuration);

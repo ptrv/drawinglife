@@ -113,6 +113,7 @@ private:
     int m_legendAlpha;
     int m_startScreenDuration;
     int m_loadOnStart;
+    int m_frameRate;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
