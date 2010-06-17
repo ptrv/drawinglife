@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <database>leipzig.sqlite</database>
+  <database>leipzig_final.sqlite</database>
   <person>
     <name>Tim1</name>
     <name>Svenja</name>
@@ -8,11 +8,19 @@
     <name>Tim2</name>
     <name>Franca</name>
     <name>Juliane1</name>
-    <name>Juliane2</name>    
-    <name>Maria</name>    
-    <name>Matthias</name>    
-    <name>Ronja</name>    
-    <name>Marianne</name>    
+    <name>Juliane2</name>
+    <name>Maria1</name>
+    <name>Matthias</name>
+    <name>Ronja2</name>
+    <name>Marianne</name>
+    <name>AlexHenning1</name>
+    <name>AlexHenning2</name>
+    <name>Patrice</name>
+    <name>Tamara</name>
+    <name>Maria2</name>
+    <name>Sarah</name>
+    <name>Miriam</name>
+    <name>Sabrina</name>
   </person>
   <defaultcity>Leipzig</defaultcity>
 </data>
