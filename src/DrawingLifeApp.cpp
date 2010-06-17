@@ -150,7 +150,7 @@ void DrawingLifeApp::update()
                         GpsData::setDotSize(2.0);
                         break;
                     case 3:
-                        m_zoomZ += 150;
+                        m_zoomZ += 100;
                         m_zoomX = -90;
                         //m_drawCycle = 0;
                         GpsData::setDotSize(1.7);
