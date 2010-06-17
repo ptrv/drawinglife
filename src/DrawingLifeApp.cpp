@@ -280,7 +280,8 @@ void DrawingLifeApp::drawStartScreen()
     author += APP_AUTHOR_STR;
     m_fontAuthor.drawString(author, ofGetWidth()/2 - 190, ofGetHeight()/2 + 70);
 
-    m_fontText.drawString("Movement in Urban Space, 2010", ofGetWidth()/2 - 250, ofGetHeight()/2 + 250);
+    m_fontText.drawString("play! LEIPZIG", ofGetWidth()/2 - 115, ofGetHeight()/2 + 250);
+    m_fontText.drawString("Movement in Urban Space, 2010", ofGetWidth()/2 - 250, ofGetHeight()/2 + 290);
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
