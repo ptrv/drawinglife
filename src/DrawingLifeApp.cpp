@@ -238,7 +238,7 @@ void DrawingLifeApp::draw()
                                m_gpsDatas[i]->getDotColor().b,
                                m_legendAlpha );
                     ofFill();
-                    ofCircle(15, 77 + 30*i,5);
+                    ofCircle(15, 78 + 30*i,5);
                     ofSetColor(255, 255, 255, m_legendAlpha);
 
                     m_fontInfo.drawString((m_gpsDatas[i]->getCurrentGpsInfo()).substr(11), 30 , 80 + 30*i);

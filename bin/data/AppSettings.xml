@@ -39,8 +39,10 @@
     <size3>16</size3>
   </font1>
   <font2>
-    <name>Standard0753.ttf</name>
-    <size1>8</size1>
+    <!-- <name>Standard0753.ttf</name> -->
+    <!-- <size1>8</size1> -->
+    <name>consola.ttf</name>
+    <size1>11</size1>
   </font2>
   <alpha>
     <tracks>64</tracks>
