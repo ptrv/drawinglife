@@ -53,10 +53,14 @@ void DrawingLifeApp::loadXmlSettings()
 {
     // reading settings from xml file
     m_settings.loadFile("AppSettings.xml");
-	m_fontTitle.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 50);
-    m_fontAuthor.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),24);
-    m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 18);
-    m_fontInfo.loadFont(m_settings.getValue("ui:font2", "Standard0753.ttf"), 8);
+	m_fontTitle.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
+                        m_settings.getValue("ui:font1:size1", 50));
+    m_fontAuthor.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
+                          m_settings.getValue("ui:font1:size2", 24));
+    m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),
+                        m_settings.getValue("ui:font1:size3", 18));
+    m_fontInfo.loadFont(m_settings.getValue("ui:font2:name", "Standard0753.ttf"),
+                        m_settings.getValue("ui:font2:size1", 8));
     ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
     m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
     m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
