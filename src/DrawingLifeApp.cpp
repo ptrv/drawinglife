@@ -51,8 +51,10 @@ DrawingLifeApp::~DrawingLifeApp()
 
 void DrawingLifeApp::loadXmlSettings()
 {
+	// -----------------------------------------------------------------------------
     // reading settings from xml file
     m_settings.loadFile("AppSettings.xml");
+	// -----------------------------------------------------------------------------
 	m_fontTitle.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
                         m_settings.getValue("ui:font1:size1", 50));
     m_fontAuthor.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
@@ -435,47 +437,47 @@ void DrawingLifeApp::keyPressed  (int key)
     case 'd':
         m_isDebugMode = !m_isDebugMode;
         break;
-    case 32:
+//    case 32:
 //        loadGpsDataCity(m_names, m_currentCity);
-        break;
-    case 'w':
-        if(m_zoomZ > 590 && m_zoomZ < 598)
-        {
-            m_zoomZ += 1;
-        }
-        else if (m_zoomZ >= 598)
-        {
-            m_zoomZ += 0.05;
-        }
-        else if (m_zoomZ < 599)
-        {
-            m_zoomZ += 10;
-        }
-        DBG_VAL(m_zoomZ);
-        break;
-    case 's':
-        if(m_zoomZ > 590)
-        {
-            m_zoomZ -= 1;
-        }
-        else
-        {
-            m_zoomZ -= 10;
-        }
-        DBG_VAL(m_zoomZ);
-        break;
-    case OF_KEY_UP:
-        m_zoomY += 50;
-        break;
-    case OF_KEY_DOWN:
-        m_zoomY -= 50;
-        break;
-    case OF_KEY_RIGHT:
-        m_zoomX -= 50;
-        break;
-    case OF_KEY_LEFT:
-        m_zoomX += 50;
-        break;
+//        break;
+//    case 'w':
+//        if(m_zoomZ > 590 && m_zoomZ < 598)
+//        {
+//            m_zoomZ += 1;
+//        }
+//        else if (m_zoomZ >= 598)
+//        {
+//            m_zoomZ += 0.05;
+//        }
+//        else if (m_zoomZ < 599)
+//        {
+//            m_zoomZ += 10;
+//        }
+//        DBG_VAL(m_zoomZ);
+//        break;
+//    case 's':
+//        if(m_zoomZ > 590)
+//        {
+//            m_zoomZ -= 1;
+//        }
+//        else
+//        {
+//            m_zoomZ -= 10;
+//        }
+//        DBG_VAL(m_zoomZ);
+//        break;
+//    case OF_KEY_UP:
+//        m_zoomY += 50;
+//        break;
+//    case OF_KEY_DOWN:
+//        m_zoomY -= 50;
+//        break;
+//    case OF_KEY_RIGHT:
+//        m_zoomX -= 50;
+//        break;
+//    case OF_KEY_LEFT:
+//        m_zoomX += 50;
+//        break;
     default:
         break;
     }
