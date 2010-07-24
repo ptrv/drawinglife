@@ -24,7 +24,13 @@ DrawingLifeApp::DrawingLifeApp() :
     m_startScreenMode(false),
     m_numPerson(0),
     m_timeline(NULL),
-    m_drawSpeed(1)
+    m_drawSpeed(1),
+	m_trackAlpha(64),
+	m_dotAlpha(127),
+	m_legendAlpha(255),
+	m_startScreenDuration(5000),
+	m_loadOnStart(0),
+	m_frameRate(60)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -35,32 +41,29 @@ DrawingLifeApp::~DrawingLifeApp()
     }
     SAFE_DELETE(m_timeline);
 }
-void DrawingLifeApp::setup()
+
+void DrawingLifeApp::loadXmlSettings()
 {
-    ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
-
-    ofSetFrameRate(60);
-    ofEnableAlphaBlending();
-
-    // reading settings from xml file
+	// reading settings from xml file
     m_settings.loadFile("AppSettings.xml");
-
-	m_fontTitle.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 50);
-    m_fontAuthor.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),24);
-    m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"), 18);
-    m_fontInfo.loadFont(m_settings.getValue("ui:font2", "Standard0753.ttf"), 8);
-
+	
+	m_fontTitle.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
+						 m_settings.getValue("ui:font1:size1", 50));
+    m_fontAuthor.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
+                          m_settings.getValue("ui:font1:size2", 24));
+    m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),
+                        m_settings.getValue("ui:font1:size3", 18));
+    m_fontInfo.loadFont(m_settings.getValue("ui:font2:name", "Standard0753.ttf"),
+                        m_settings.getValue("ui:font2:size1", 8));
     ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
-//    ofSetLogLevel(OF_LOG_VERBOSE);
-
-    m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
-
+	m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
+	m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
+    m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
+    m_legendAlpha = m_settings.getValue("ui:alpha:legend", 255);
     // db path must be absolute path for DBReader (true as second parameter)
     m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
     DBG_VAL(m_dbPath);
-
-    string city = m_settings.getValue("data:defaultcity", "London");
-
+	m_currentCity = m_settings.getValue("data:defaultcity", "London");
     m_settings.pushTag("data");
     m_settings.pushTag("person");
     m_numPerson = m_settings.getNumTags("name");
@@ -69,7 +72,7 @@ void DrawingLifeApp::setup()
         m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(new GpsData());
         DBG_VAL(m_names[i]);
-
+		
         m_viewXOffset.push_back(0);
         m_viewYOffset.push_back(0);
         m_viewMinDimension.push_back(0);
@@ -77,17 +80,33 @@ void DrawingLifeApp::setup()
     }
     m_settings.popTag();
     m_settings.popTag();
+	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
+    m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
+    m_frameRate = m_settings.getValue("settings:framerate", 60);
+	
+	
+}
+
+void DrawingLifeApp::setup()
+{
+	loadXmlSettings();
+    ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
+
+    ofSetFrameRate(60);
+    ofEnableAlphaBlending();
+
+//    ofSetLogLevel(OF_LOG_VERBOSE);
+
+
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
     this->setViewAspectRatio();
     // -----------------------------------------------------------------------------
     m_timeline = new Timeline();
 
-    m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
-
-    if (m_settings.getValue("settings:loadgpsonstart",1) == 1)
+    if (m_loadOnStart == 1)
     {
-        loadGpsDataCity(m_names, city);
+        loadGpsDataCity(m_names, m_currentCity);
 
         for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
         {
@@ -243,19 +262,6 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         {
             for (unsigned int j = 0; j < m_gpsDatas[ii]->getSegments()[i].getPoints().size(); ++j)
             {
-    //            stringstream message;
-    //            //message << "Value i " << i << ", j " << j << ", k " << k <<": ";
-    //            message << "GpsPoint nr " << maxPoints << ": ";
-    //            message << m_gpsData->getSegments()[i].getPoints()[j].getUtmY();
-    //            message << ", ";
-    //            message << m_gpsData->getSegments()[i].getPoints()[j].getUtmX();
-    //            message << ", ";
-    //            message << m_gpsData->getSegments()[i].getPoints()[j].getElevation();
-    //            message << ", ";
-    //            message << m_gpsData->getSegments()[i].getPoints()[j].getTimestamp();
-    //            message << ", ";
-    //            message << m_gpsData->getSegments()[i].getSegmentNum();
-    //            ofLog(OF_LOG_NOTICE, message.str() );
                 ++maxPoints;
             }
         }

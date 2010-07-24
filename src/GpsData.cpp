@@ -617,13 +617,18 @@ const std::string& GpsData::getCurrentGpsInfoDebug()
 
 const std::string& GpsData::getCurrentGpsInfo()
 {
-    std::string timeString = getCurrentTimestamp();
-    int year, month, day, hour, min, sec;
-    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
-    char buf[25];
-    sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
-    m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
-    return m_currentGpsPointInfo;
+	if(getTotalGpsPoints() != 0)
+	{
+		std::string timeString = getCurrentTimestamp();
+		int year, month, day, hour, min, sec;
+		sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+		char buf[25];
+		sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
+		m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
+    }
+	return m_currentGpsPointInfo;
+
+
 }
 
 void GpsData::setGlobalValues(double minX,

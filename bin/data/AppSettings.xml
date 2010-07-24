@@ -12,8 +12,25 @@
   <loadgpsonstart>1</loadgpsonstart>
   <debugmode>0</debugmode>
   <drawspeed>5</drawspeed>
+  <framerate>60</framerate>
 </settings>
 <ui>
-  <font1>mono.ttf</font1>
-  <font2>Standard0753.ttf</font2>
+  <font1>
+    <name>mono.ttf</name>
+    <size1>50</size1>
+    <size2>24</size2>
+    <size3>16</size3>
+  </font1>
+  <font2>
+    <!-- <name>Standard0753.ttf</name> -->
+    <!-- <size1>8</size1> -->
+    <name>consola.ttf</name>
+    <size1>11</size1>
+  </font2>
+  <alpha>
+    <tracks>64</tracks>
+    <dots>200</dots>
+    <legend>255</legend>
+  </alpha>
+
 </ui>
