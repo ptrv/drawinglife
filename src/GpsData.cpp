@@ -196,7 +196,7 @@ const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
 	return loc;
 }
 // -----------------------------------------------------------------------------
-int GpsData::getTotalGpsPoints()
+int GpsData::getTotalGpsPoints() const 
 {
 	int num = 0;
 	for (unsigned int i = 0; i < m_segments.size(); ++i) {

@@ -266,20 +266,3 @@ const std::string& Walk::getCurrentGpsInfo()
 	
 	
 }
-
-//void Walk::setGlobalValues(double minX,
-//						   double maxX,
-//						   double minY,
-//						   double maxY,
-//						   double lon0)
-//{
-//    minDrawX = minX;
-//    maxDrawX = maxX;
-//    minDrawY = minY;
-//    maxDrawY = maxY;
-//	
-//	//    m_lon0Global = lon0;
-//    //normalizeUtmPointsGlobal();
-//}
-
-

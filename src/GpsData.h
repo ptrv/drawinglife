@@ -162,7 +162,7 @@ public:
 	* \brief Get total number of GpsPoints.
 	* \return number of all GpsPoints
 	*/
-	int getTotalGpsPoints();
+	int getTotalGpsPoints() const;
 	//------------------------------------------------------------------------------
 
     /**

@@ -112,7 +112,7 @@ public:
 		
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
 	
-	GpsData& getGpsData() const { return *m_gpsData; }
+	const GpsData& getGpsData() const { return *m_gpsData; }
 	
 	void setGpsData(GpsData* gpsData) { m_gpsData = 0; m_gpsData = gpsData; }
 	
