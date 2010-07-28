@@ -12,9 +12,7 @@
 #endif
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
-//    m_settings(NULL),
     m_dbReader(NULL),
-    //m_gpsData(NULL),
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
@@ -35,9 +33,10 @@ DrawingLifeApp::DrawingLifeApp() :
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
-    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    for(unsigned int i = 0; i < m_numPerson; ++i)
     {
         SAFE_DELETE(m_gpsDatas[i]);
+		SAFE_DELETE(m_walks[i]);
     }
     SAFE_DELETE(m_timeline);
 }
@@ -71,6 +70,7 @@ void DrawingLifeApp::loadXmlSettings()
     {
         m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(new GpsData());
+		m_walks.push_back(new Walk());
         DBG_VAL(m_names[i]);
 		
         m_viewXOffset.push_back(0);
@@ -108,9 +108,9 @@ void DrawingLifeApp::setup()
     {
         loadGpsDataCity(m_names, m_currentCity);
 
-        for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+        for(unsigned int i = 0; i < m_numPerson; ++i)
         {
-            if(m_gpsDatas[i]->getTotalGpsPoints() == 0)
+			if(m_walks[i]->getGpsData().getTotalGpsPoints() == 0)
             {
                 m_startScreenMode = true;
             }
@@ -130,9 +130,9 @@ void DrawingLifeApp::update()
         for(int i = 0; i < m_drawSpeed; ++i)
         {
             int id = m_timeline->getNext();
-            if (id < (int)m_gpsDatas.size())
+            if (id < m_numPerson)
             {
-                m_gpsDatas[id]->update();
+				m_walks[id]->update();
             }
         }
     }
@@ -154,33 +154,28 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             fillViewAreaUTM( VIEWBOX);
             //---------------------------------------------------------------------------
-            for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+            for(unsigned int i = 0; i < m_numPerson; ++i)
             {
                 if (m_isDebugMode)
                 {
-//                    ofFill();
-//                    int color = 0xE5A93F;
-//                    ofSetColor((color >> 16) & 0xff,(color >> 8) & 0xff, color & 0xff, 160);
-//                    ofRect(10 + (ofGetWidth()/m_numPerson)*i,10,350,200);
                     ofSetColor(0xffffff);
-                    ofDrawBitmapString(m_gpsDatas[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
+					ofDrawBitmapString(m_walks[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 }
                 else
                 {
                     ofSetColor(0xffffff);
-                    m_fontInfo.drawString(m_gpsDatas[i]->getCurrentGpsInfo(),
+                    m_fontInfo.drawString(m_walks[i]->getCurrentGpsInfo(),
                                           m_viewPadding[i] + (ofGetWidth()/m_numPerson)*i ,
                                           m_viewYOffset[i] + 10);
                 }
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                //ofSetColor(FOREGROUND);
                 ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 64);
                 ofNoFill();
                 glPushMatrix();
                 glTranslated(m_zoomX, m_zoomY, m_zoomZ);
-                m_gpsDatas[i]->draw();
+				m_walks[i]->draw();
                 glPopMatrix();
             }
         }
@@ -190,14 +185,12 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-//            ofSetColor(FOREGROUND);
             ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
             ofNoFill();
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
-            for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+            for(unsigned int i = 0; i < m_numPerson; ++i)
             {
-                m_gpsDatas[i]->draw(false);
-
+				m_walks[i]->draw(false);
             }
         }
     }
@@ -224,15 +217,18 @@ void DrawingLifeApp::drawStartScreen()
 void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 {
     m_startScreenMode = false;
-    // get GpsData from database
-//    m_gpsData->clear();
 
-    for(unsigned int ii = 0; ii < m_gpsDatas.size(); ++ii)
+    // get GpsData from database
+    for(unsigned int ii = 0; ii < m_numPerson; ++ii)
     {
         SAFE_DELETE(m_gpsDatas[ii]);
         m_gpsDatas[ii] = new GpsData();
-        m_gpsDatas[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
-        m_gpsDatas[ii]->reset();
+
+		SAFE_DELETE(m_walks[ii]);
+        m_walks[ii] = new Walk();
+
+		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
+        m_walks[ii]->reset();
 
         m_dbReader = new DBReader(m_dbPath);
         if (m_dbReader->setupDbConnection())
@@ -240,13 +236,13 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
             // -----------------------------------------------------------------------------
             // DB query
             // TODO: Query needs to match with original database query used in the setup function.
-//            if(m_dbReader->getGpsDataYear(*m_gpsDatas[ii], names[ii], 2007))
             if(m_dbReader->getGpsDataCity(*m_gpsDatas[ii], names[ii], city))
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
                 ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
+				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
             }
             else
             {
@@ -331,10 +327,10 @@ void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
     for(int i = 0; i < m_numPerson; ++i)
     {
         // Normalized value range from 0 to 1.
-        double x = m_gpsDatas[i]->getScaledUtmX(0);
-        double y = m_gpsDatas[i]->getScaledUtmY(0);
-        double w = m_gpsDatas[i]->getScaledUtmX(1) - x;
-        double h = m_gpsDatas[i]->getScaledUtmY(1) - y;
+        double x = m_walks[i]->getScaledUtmX(0);
+        double y = m_walks[i]->getScaledUtmY(0);
+        double w = m_walks[i]->getScaledUtmX(1) - x;
+        double h = m_walks[i]->getScaledUtmY(1) - y;
         ofFill();
         ofSetColor( backgroundColor);
         ofRect(x, y, w, h);
@@ -464,9 +460,9 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 void DrawingLifeApp::windowResized(int w, int h)
 {
     this->setViewAspectRatio();
-    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    for(unsigned int i = 0; i < m_numPerson; ++i)
     {
-        m_gpsDatas[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[i], m_viewYOffset[i], m_viewMinDimension[i], m_viewPadding[i]);
+		m_walks[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[i], m_viewYOffset[i], m_viewMinDimension[i], m_viewPadding[i]);
     }
 }
 

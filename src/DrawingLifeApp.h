@@ -10,6 +10,7 @@
 #include "ofxVectorMath.h"
 #include "DBReader.h"
 #include "Timeline.h"
+#include "Walk.h"
 
 /**
  *  \brief Main application class.
@@ -71,7 +72,10 @@ private:
     //---------------------------------------------------------------------------
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
+	
 	std::vector<GpsData* > m_gpsDatas;
+	std::vector<Walk* > m_walks;
+	
 	std::string m_dbPath;
 	//---------------------------------------------------------------------------
 	int maxPoints;

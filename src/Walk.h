@@ -12,7 +12,8 @@ public:
 	~Walk();
 
 	//------------------------------------------------------------------------------
-    /**
+    
+	/**
 	 * \brief Set scaling values GpsPoints.
 	 * \param screenWidth
 	 * \param screenHeight
@@ -40,7 +41,6 @@ public:
 	 * \return scaled UTM X value.
 	 */
 	double getScaledUtmX(double utmX);
-	//---------------------------------------------------------------------------
     /**
 	 * \brief Draw function for GpsData.
 	 * \param animated if true GpsPoints are drawn animated.
@@ -54,7 +54,6 @@ public:
 	 * \brief Reset counter.
 	 */
     void reset();
-	// -----------------------------------------------------------------------------
 	/**
 	 * \brief Get current GpsPoint information.
 	 * \return formatted string with info.
@@ -110,18 +109,16 @@ public:
 	 * \return UTM Y of current GpsPoint.
 	 */
 	double getCurrentUtmY();
-	
-    static void setGlobalValues(double minX,
-                                double maxX,
-                                double minY,
-                                double maxY,
-                                double lon0);
-	
+		
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
+	
+	GpsData& getGpsData() const { return *m_gpsData; }
+	
+	void setGpsData(GpsData* gpsData) { m_gpsData = 0; m_gpsData = gpsData; }
 	
 private:
 	
-	GpsData m_gpsData;
+	GpsData* m_gpsData;
 	
 	static double maxDrawX;
     static double minDrawX;
