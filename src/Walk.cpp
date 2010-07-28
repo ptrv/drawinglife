@@ -2,9 +2,37 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
+#include "DrawingLifeIncludes.h"
 #include "Walk.h"
 
+#if defined (WIN32)
+#undef max
+#undef min
+#endif
+#include <limits>
+
+
+double Walk::maxDrawX = -std::numeric_limits<double>::max();
+double Walk::minDrawX = std::numeric_limits<double>::max();
+double Walk::maxDrawY = -std::numeric_limits<double>::max();
+double Walk::minDrawY = std::numeric_limits<double>::max();
+
+float Walk::m_dotSize = 3.0;
+
 Walk::Walk()
+:
+m_currentGpsPoint(0),
+m_currentGpsSegment(0),
+m_currentPoint(-1),
+m_firstPoint(true),
+m_screenWidth(0),
+m_screenHeight(0),
+m_viewXOffset(0.0),
+m_viewYOffset(0.0),
+m_viewMinDimension(0.0),
+m_viewPadding(0.0),
+m_currentGpsPointInfoDebug(""),
+m_currentGpsPointInfo("")
 {
 }
 
@@ -15,7 +43,7 @@ Walk::~Walk()
 // -----------------------------------------------------------------------------
 // Counting through GpsSegments and GpsPoints
 // -----------------------------------------------------------------------------
-void GpsData::update()
+void Walk::update()
 {
     if (getTotalGpsPoints() > 0)
     {
@@ -55,7 +83,7 @@ void GpsData::update()
     }
 }
 
-void GpsData::reset()
+void Walk::reset()
 {
     m_currentGpsPoint = 0;
     m_currentGpsSegment = 0;
@@ -64,7 +92,7 @@ void GpsData::reset()
 }
 // -----------------------------------------------------------------------------
 
-void GpsData::draw(bool animated)
+void Walk::draw(bool animated)
 {
     if (animated)
     {
@@ -115,7 +143,7 @@ void GpsData::draw(bool animated)
 // -----------------------------------------------------------------------------
 // Set view bounds.
 // -----------------------------------------------------------------------------
-void GpsData::setViewBounds(int screenWidth,
+void Walk::setViewBounds(int screenWidth,
                             int screenHeight,
                             double viewXOffset,
                             double viewYOffset,
@@ -131,11 +159,11 @@ void GpsData::setViewBounds(int screenWidth,
 }
 
 
-const std::string GpsData::getGpsLocationCurrent()
+const std::string Walk::getGpsLocationCurrent()
 {
     return getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
-int GpsData::getCurrentSegmentNum()
+int Walk::getCurrentSegmentNum()
 {
     int segmentNum = 0;
     if(m_currentGpsSegment < (int)m_segments.size())
@@ -147,11 +175,11 @@ int GpsData::getCurrentSegmentNum()
     }
     return segmentNum;
 }
-int GpsData::getCurrentPointNum()
+int Walk::getCurrentPointNum()
 {
     return m_currentPoint;
 }
-std::string GpsData::getCurrentTimestamp()
+std::string Walk::getCurrentTimestamp()
 {
     std::string timestamp = "";
 	if (m_currentGpsSegment < (int)m_segments.size())
@@ -164,23 +192,23 @@ std::string GpsData::getCurrentTimestamp()
 	return timestamp;
 	
 }
-double GpsData::getCurrentLongitude()
+double Walk::getCurrentLongitude()
 {
     return getLongitude(m_currentGpsSegment, m_currentGpsPoint);
 }
-double GpsData::getCurrentLatitude()
+double Walk::getCurrentLatitude()
 {
     return getLatitude(m_currentGpsSegment, m_currentGpsPoint);
 }
-double GpsData::getCurrentElevation()
+double Walk::getCurrentElevation()
 {
     return getElevation(m_currentGpsSegment, m_currentGpsPoint);
 }
-double GpsData::getCurrentUtmX()
+double Walk::getCurrentUtmX()
 {
     return getUtmX(m_currentGpsSegment, m_currentGpsPoint);
 }
-double GpsData::getCurrentUtmY()
+double Walk::getCurrentUtmY()
 {
     return getUtmY(m_currentGpsSegment, m_currentGpsPoint);
 }
@@ -188,19 +216,19 @@ double GpsData::getCurrentUtmY()
 // -----------------------------------------------------------------------------
 // Scale to screen
 // -----------------------------------------------------------------------------
-double GpsData::getScaledUtmX(double normalizedUtmX)
+double Walk::getScaledUtmX(double normalizedUtmX)
 {
     return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
 }
 
-double GpsData::getScaledUtmY(double normalizedUtmY)
+double Walk::getScaledUtmY(double normalizedUtmY)
 {
 	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
     // Flip y coordinates ??
     return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
 
-const std::string& GpsData::getCurrentGpsInfoDebug()
+const std::string& Walk::getCurrentGpsInfoDebug()
 {
     m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
 	"Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
@@ -222,7 +250,7 @@ const std::string& GpsData::getCurrentGpsInfoDebug()
     return m_currentGpsPointInfoDebug;
 }
 
-const std::string& GpsData::getCurrentGpsInfo()
+const std::string& Walk::getCurrentGpsInfo()
 {
 	if(getTotalGpsPoints() != 0)
 	{
@@ -238,7 +266,7 @@ const std::string& GpsData::getCurrentGpsInfo()
 	
 }
 
-void GpsData::setGlobalValues(double minX,
+void Walk::setGlobalValues(double minX,
                               double maxX,
                               double minY,
                               double maxY,

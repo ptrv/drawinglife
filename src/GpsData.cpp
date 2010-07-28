@@ -14,12 +14,12 @@
 
 using namespace GeographicLib;
 
-double GpsData::maxDrawX = -numeric_limits<double>::max();
-double GpsData::minDrawX = numeric_limits<double>::max();
-double GpsData::maxDrawY = -numeric_limits<double>::max();
-double GpsData::minDrawY = numeric_limits<double>::max();
+//double GpsData::maxDrawX = -numeric_limits<double>::max();
+//double GpsData::minDrawX = numeric_limits<double>::max();
+//double GpsData::maxDrawY = -numeric_limits<double>::max();
+//double GpsData::minDrawY = numeric_limits<double>::max();
 double GpsData::m_lon0Global = 0.0;
-float GpsData::m_dotSize = 3.0;
+//float GpsData::m_dotSize = 3.0;
 
 GpsData::GpsData()
 :
@@ -33,19 +33,19 @@ m_minUtmX(0.0),
 m_maxUtmX(0.0),
 m_minUtmY(0.0),
 m_maxUtmY(0.0),
-m_currentGpsPoint(0),
-m_currentGpsSegment(0),
-m_currentPoint(-1),
-m_firstPoint(true),
-m_screenWidth(0),
-m_screenHeight(0),
-m_viewXOffset(0.0),
-m_viewYOffset(0.0),
-m_viewMinDimension(0.0),
-m_viewPadding(0.0),
-m_lon0(0.0),
-m_currentGpsPointInfoDebug(""),
-m_currentGpsPointInfo("")
+//m_currentGpsPoint(0),
+//m_currentGpsSegment(0),
+//m_currentPoint(-1),
+//m_firstPoint(true),
+//m_screenWidth(0),
+//m_screenHeight(0),
+//m_viewXOffset(0.0),
+//m_viewYOffset(0.0),
+//m_viewMinDimension(0.0),
+//m_viewPadding(0.0),
+m_lon0(0.0)//,
+//m_currentGpsPointInfoDebug(""),
+//m_currentGpsPointInfo("")
 {
 	m_segments.reserve(1000); // TODO good amount.
 }
@@ -371,17 +371,18 @@ double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
 // -----------------------------------------------------------------------------
 // Scale to screen
 // -----------------------------------------------------------------------------
-double GpsData::getScaledUtmX(double normalizedUtmX)
-{
-    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
-}
 
-double GpsData::getScaledUtmY(double normalizedUtmY)
-{
-	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
-    // Flip y coordinates ??
-    return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
-}
+//double GpsData::getScaledUtmX(double normalizedUtmX)
+//{
+//    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
+//}
+//
+//double GpsData::getScaledUtmY(double normalizedUtmY)
+//{
+//	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
+//    // Flip y coordinates ??
+//    return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
+//}
 
 //---------------------------------------------------------------------------
 const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
@@ -593,55 +594,55 @@ void GpsData::calculateUtmPointsGlobalLon()
     }
 }
 
-const std::string& GpsData::getCurrentGpsInfoDebug()
-{
-    m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
-                                    "Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
-                                    "Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
-                                    "UTM X             : " + ofToString(getCurrentUtmX(), 7) + "\n" +
-                                    "UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
-                                    "Time              : " + getCurrentTimestamp() + "\n" +
-                                    "Location          : " + getGpsLocationCurrent() + "\n" +
-                                    "Central meridiam  : " + ofToString(m_lon0, 7) + "\n" +
-                                    "Min/Max latitude  : " + ofToString(m_minLat, 7) + " / " + ofToString(m_maxLat, 7) + "\n" +
-                                    "Min/Max longitude : " + ofToString(m_minLon, 7) + " / " + ofToString(m_maxLon, 7) + "\n" +
-                                    "Min/Max UTM X     : " + ofToString(m_minUtmX, 7) + " / " + ofToString(m_maxUtmX, 7) + "\n" +
-                                    "Min/Max UTM Y     : " + ofToString(m_minUtmY, 7) + " / " + ofToString(m_maxUtmY, 7) + "\n" +
-                                    "Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
-                                    "Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
-                                    "Total pts.        : " + ofToString(getTotalGpsPoints()) + "\n" +
-                                    "Person            : " + m_user;
+//const std::string& GpsData::getCurrentGpsInfoDebug()
+//{
+//    m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
+//                                    "Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
+//                                    "Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
+//                                    "UTM X             : " + ofToString(getCurrentUtmX(), 7) + "\n" +
+//                                    "UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
+//                                    "Time              : " + getCurrentTimestamp() + "\n" +
+//                                    "Location          : " + getGpsLocationCurrent() + "\n" +
+//                                    "Central meridiam  : " + ofToString(m_lon0, 7) + "\n" +
+//                                    "Min/Max latitude  : " + ofToString(m_minLat, 7) + " / " + ofToString(m_maxLat, 7) + "\n" +
+//                                    "Min/Max longitude : " + ofToString(m_minLon, 7) + " / " + ofToString(m_maxLon, 7) + "\n" +
+//                                    "Min/Max UTM X     : " + ofToString(m_minUtmX, 7) + " / " + ofToString(m_maxUtmX, 7) + "\n" +
+//                                    "Min/Max UTM Y     : " + ofToString(m_minUtmY, 7) + " / " + ofToString(m_maxUtmY, 7) + "\n" +
+//                                    "Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
+//                                    "Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
+//                                    "Total pts.        : " + ofToString(getTotalGpsPoints()) + "\n" +
+//                                    "Person            : " + m_user;
+//
+//    return m_currentGpsPointInfoDebug;
+//}
 
-    return m_currentGpsPointInfoDebug;
-}
+//const std::string& GpsData::getCurrentGpsInfo()
+//{
+//	if(getTotalGpsPoints() != 0)
+//	{
+//		std::string timeString = getCurrentTimestamp();
+//		int year, month, day, hour, min, sec;
+//		sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+//		char buf[25];
+//		sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
+//		m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
+//    }
+//	return m_currentGpsPointInfo;
+//
+//
+//}
 
-const std::string& GpsData::getCurrentGpsInfo()
-{
-	if(getTotalGpsPoints() != 0)
-	{
-		std::string timeString = getCurrentTimestamp();
-		int year, month, day, hour, min, sec;
-		sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
-		char buf[25];
-		sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
-		m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
-    }
-	return m_currentGpsPointInfo;
-
-
-}
-
-void GpsData::setGlobalValues(double minX,
-                              double maxX,
-                              double minY,
-                              double maxY,
-                              double lon0)
-{
-    minDrawX = minX;
-    maxDrawX = maxX;
-    minDrawY = minY;
-    maxDrawY = maxY;
-
-    m_lon0Global = lon0;
-    //normalizeUtmPointsGlobal();
-}
+//void GpsData::setGlobalValues(double minX,
+//                              double maxX,
+//                              double minY,
+//                              double maxY,
+//                              double lon0)
+//{
+//    minDrawX = minX;
+//    maxDrawX = maxX;
+//    minDrawY = minY;
+//    maxDrawY = maxY;
+//
+//    m_lon0Global = lon0;
+//    //normalizeUtmPointsGlobal();
+//}

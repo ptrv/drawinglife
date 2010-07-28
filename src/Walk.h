@@ -2,6 +2,8 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
+#include <string>
+#include "GpsData.h"
 
 class Walk 
 {
@@ -118,6 +120,8 @@ public:
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
 	
 private:
+	
+	GpsData m_gpsData;
 	
 	static double maxDrawX;
     static double minDrawX;
