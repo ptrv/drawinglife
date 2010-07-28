@@ -102,176 +102,176 @@ void GpsData::clear()
 // -----------------------------------------------------------------------------
 // Counting through GpsSegments and GpsPoints
 // -----------------------------------------------------------------------------
-void GpsData::update()
-{
-    if (getTotalGpsPoints() > 0)
-    {
-        if (m_normalizedUtmPoints.size() > 0)
-        {
-            if ((unsigned int)m_currentGpsSegment < m_normalizedUtmPoints.size()-1)
-            {
-                if ((unsigned int)m_currentGpsPoint < m_normalizedUtmPoints[m_currentGpsSegment].size() - 1)
-                {
-                    if (!m_firstPoint)
-                        ++m_currentGpsPoint;
-                    else
-                        m_firstPoint = false;
-                }
-                else
-                {
-                    ++m_currentGpsSegment;
-                    m_currentGpsPoint = 0;
-                }
-            }
-            else
-            {
-                if ((unsigned int)m_currentGpsPoint < m_normalizedUtmPoints[m_currentGpsSegment].size() - 1)
-                {
-                    ++m_currentGpsPoint;
-                }
-                else//	void setMinMaxRatio();
 
-                {
-                    m_currentGpsPoint = 0;
-                    m_currentGpsSegment = 0;
-                    m_currentPoint = -1;
-                }
-            }
-            ++m_currentPoint;
-        }
+//void GpsData::update()
+//{
+//    if (getTotalGpsPoints() > 0)
+//    {
+//        if (m_normalizedUtmPoints.size() > 0)
+//        {
+//            if ((unsigned int)m_currentGpsSegment < m_normalizedUtmPoints.size()-1)
+//            {
+//                if ((unsigned int)m_currentGpsPoint < m_normalizedUtmPoints[m_currentGpsSegment].size() - 1)
+//                {
+//                    if (!m_firstPoint)
+//                        ++m_currentGpsPoint;
+//                    else
+//                        m_firstPoint = false;
+//                }
+//                else
+//                {
+//                    ++m_currentGpsSegment;
+//                    m_currentGpsPoint = 0;
+//                }
+//            }
+//            else
+//            {
+//                if ((unsigned int)m_currentGpsPoint < m_normalizedUtmPoints[m_currentGpsSegment].size() - 1)
+//                {
+//                    ++m_currentGpsPoint;
+//                }
+//                else//	void setMinMaxRatio();
+//
+//                {
+//                    m_currentGpsPoint = 0;
+//                    m_currentGpsSegment = 0;
+//                    m_currentPoint = -1;
+//                }
+//            }
+//            ++m_currentPoint;
+//        }
+//    }
+//}
+//
+//void GpsData::reset()
+//{
+//    m_currentGpsPoint = 0;
+//    m_currentGpsSegment = 0;
+//    m_currentPoint = -1;
+//    m_firstPoint = true;
+//}
+//// -----------------------------------------------------------------------------
 
-    }
-}
-
-void GpsData::reset()
-{
-    m_currentGpsPoint = 0;
-    m_currentGpsSegment = 0;
-    m_currentPoint = -1;
-    m_firstPoint = true;
-}
-// -----------------------------------------------------------------------------
-
-void GpsData::draw(bool animated)
-{
-    if (animated)
-    {
-        if (m_normalizedUtmPoints.size() > 0 && m_normalizedUtmPointsGlobal[m_currentGpsSegment].size() > 0)
-        {
-            // -----------------------------------------------------------------------------
-            // Draw Gps data
-            // -----------------------------------------------------------------------------
-            for (int i = 0; i <= m_currentGpsSegment; ++i)
-            {
-                glBegin(GL_LINE_STRIP);
-                int pointEnd;
-                if (i == m_currentGpsSegment)
-                    pointEnd = m_currentGpsPoint;
-                else
-                    pointEnd = (int)m_normalizedUtmPointsGlobal[i].size()-1;
-                for (int j = 0; j <= pointEnd; ++j)
-                {
-                    glVertex2d(getScaledUtmX(m_normalizedUtmPointsGlobal[i][j].x),
-                               getScaledUtmY(m_normalizedUtmPointsGlobal[i][j].y));
-                }
-                glEnd();
-            }
-            ofFill();
-            ofSetColor(0, 255, 0, 127);
-            ofCircle(getScaledUtmX(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].x),
-					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), 5);
-        }
-    }
-    else
-    {
-        // -----------------------------------------------------------------------------
-        // Draw Gps data
-        // -----------------------------------------------------------------------------
-        ofNoFill();
-        for (unsigned int i = 0; i < m_normalizedUtmPoints.size(); ++i)
-        {
-            glBegin(GL_LINE_STRIP);
-            for (unsigned int j = 0; j < m_normalizedUtmPointsGlobal[i].size(); ++j)
-            {
-				glVertex2d(getScaledUtmX(m_normalizedUtmPointsGlobal[i][j].x),
-						   getScaledUtmY(m_normalizedUtmPointsGlobal[i][j].y));
-            }
-            glEnd();
-        }
-    }
-}
-// -----------------------------------------------------------------------------
-// Set view bounds.
-// -----------------------------------------------------------------------------
-void GpsData::setViewBounds(int screenWidth,
-                            int screenHeight,
-                            double viewXOffset,
-                            double viewYOffset,
-                            double viewMinDimension,
-                            double viewPadding)
-{
-    m_screenWidth = screenWidth;
-    m_screenHeight = screenHeight;
-    m_viewXOffset = viewXOffset;
-    m_viewYOffset = viewYOffset;
-    m_viewMinDimension = viewMinDimension;
-    m_viewPadding = viewPadding;
-}
-
-
-const std::string GpsData::getGpsLocationCurrent()
-{
-    return getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
-}
-int GpsData::getCurrentSegmentNum()
-{
-    int segmentNum = 0;
-    if(m_currentGpsSegment < (int)m_segments.size())
-    {
-        if(m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
-        {
-            segmentNum = m_segments[m_currentGpsSegment].getSegmentNum();
-        }
-    }
-    return segmentNum;
-}
-int GpsData::getCurrentPointNum()
-{
-    return m_currentPoint;
-}
-std::string GpsData::getCurrentTimestamp()
-{
-    std::string timestamp = "";
-	if (m_currentGpsSegment < (int)m_segments.size())
-	{
-		if (m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
-		{
-			timestamp = m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
-		}
-	}
-	return timestamp;
-
-}
-double GpsData::getCurrentLongitude()
-{
-    return getLongitude(m_currentGpsSegment, m_currentGpsPoint);
-}
-double GpsData::getCurrentLatitude()
-{
-    return getLatitude(m_currentGpsSegment, m_currentGpsPoint);
-}
-double GpsData::getCurrentElevation()
-{
-    return getElevation(m_currentGpsSegment, m_currentGpsPoint);
-}
-double GpsData::getCurrentUtmX()
-{
-    return getUtmX(m_currentGpsSegment, m_currentGpsPoint);
-}
-double GpsData::getCurrentUtmY()
-{
-    return getUtmY(m_currentGpsSegment, m_currentGpsPoint);
-}
+//void GpsData::draw(bool animated)
+//{
+//    if (animated)
+//    {
+//        if (m_normalizedUtmPoints.size() > 0 && m_normalizedUtmPointsGlobal[m_currentGpsSegment].size() > 0)
+//        {
+//            // -----------------------------------------------------------------------------
+//            // Draw Gps data
+//            // -----------------------------------------------------------------------------
+//            for (int i = 0; i <= m_currentGpsSegment; ++i)
+//            {
+//                glBegin(GL_LINE_STRIP);
+//                int pointEnd;
+//                if (i == m_currentGpsSegment)
+//                    pointEnd = m_currentGpsPoint;
+//                else
+//                    pointEnd = (int)m_normalizedUtmPointsGlobal[i].size()-1;
+//                for (int j = 0; j <= pointEnd; ++j)
+//                {
+//                    glVertex2d(getScaledUtmX(m_normalizedUtmPointsGlobal[i][j].x),
+//                               getScaledUtmY(m_normalizedUtmPointsGlobal[i][j].y));
+//                }
+//                glEnd();
+//            }
+//            ofFill();
+//            ofSetColor(0, 255, 0, 127);
+//            ofCircle(getScaledUtmX(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].x),
+//					 getScaledUtmY(m_normalizedUtmPointsGlobal[m_currentGpsSegment][m_currentGpsPoint].y), 5);
+//        }
+//    }
+//    else
+//    {
+//        // -----------------------------------------------------------------------------
+//        // Draw Gps data
+//        // -----------------------------------------------------------------------------
+//        ofNoFill();
+//        for (unsigned int i = 0; i < m_normalizedUtmPoints.size(); ++i)
+//        {
+//            glBegin(GL_LINE_STRIP);
+//            for (unsigned int j = 0; j < m_normalizedUtmPointsGlobal[i].size(); ++j)
+//            {
+//				glVertex2d(getScaledUtmX(m_normalizedUtmPointsGlobal[i][j].x),
+//						   getScaledUtmY(m_normalizedUtmPointsGlobal[i][j].y));
+//            }
+//            glEnd();
+//        }
+//    }
+//}
+//// -----------------------------------------------------------------------------
+//// Set view bounds.
+//// -----------------------------------------------------------------------------
+//void GpsData::setViewBounds(int screenWidth,
+//                            int screenHeight,
+//                            double viewXOffset,
+//                            double viewYOffset,
+//                            double viewMinDimension,
+//                            double viewPadding)
+//{
+//    m_screenWidth = screenWidth;
+//    m_screenHeight = screenHeight;
+//    m_viewXOffset = viewXOffset;
+//    m_viewYOffset = viewYOffset;
+//    m_viewMinDimension = viewMinDimension;
+//    m_viewPadding = viewPadding;
+//}
+//
+//
+//const std::string GpsData::getGpsLocationCurrent()
+//{
+//    return getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
+//}
+//int GpsData::getCurrentSegmentNum()
+//{
+//    int segmentNum = 0;
+//    if(m_currentGpsSegment < (int)m_segments.size())
+//    {
+//        if(m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
+//        {
+//            segmentNum = m_segments[m_currentGpsSegment].getSegmentNum();
+//        }
+//    }
+//    return segmentNum;
+//}
+//int GpsData::getCurrentPointNum()
+//{
+//    return m_currentPoint;
+//}
+//std::string GpsData::getCurrentTimestamp()
+//{
+//    std::string timestamp = "";
+//	if (m_currentGpsSegment < (int)m_segments.size())
+//	{
+//		if (m_currentGpsPoint < (int)m_segments[m_currentGpsSegment].getPoints().size())
+//		{
+//			timestamp = m_segments[m_currentGpsSegment].getPoints()[m_currentGpsPoint].getTimestamp();
+//		}
+//	}
+//	return timestamp;
+//
+//}
+//double GpsData::getCurrentLongitude()
+//{
+//    return getLongitude(m_currentGpsSegment, m_currentGpsPoint);
+//}
+//double GpsData::getCurrentLatitude()
+//{
+//    return getLatitude(m_currentGpsSegment, m_currentGpsPoint);
+//}
+//double GpsData::getCurrentElevation()
+//{
+//    return getElevation(m_currentGpsSegment, m_currentGpsPoint);
+//}
+//double GpsData::getCurrentUtmX()
+//{
+//    return getUtmX(m_currentGpsSegment, m_currentGpsPoint);
+//}
+//double GpsData::getCurrentUtmY()
+//{
+//    return getUtmY(m_currentGpsSegment, m_currentGpsPoint);
+//}
 
 // -----------------------------------------------------------------------------
 // Get Gps point.

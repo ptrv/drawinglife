@@ -11,6 +11,7 @@
 		D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0355F3111A77F3D0022191B /* Timeline.cpp */; };
 		D05CA27511C59FE800B8665E /* TimedCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05CA27311C59FE800B8665E /* TimedCounter.cpp */; };
 		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
+		D077082F120089950082EEBA /* Walk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D077082E120089950082EEBA /* Walk.cpp */; };
 		D0B38854117F106F005E46BA /* libGeographicD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B38853117F1047005E46BA /* libGeographicD.a */; };
 		D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */; };
 		D0E8CF8811A6020200541164 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF7F11A6020200541164 /* sqlite3.c */; };
@@ -146,6 +147,8 @@
 		D07156AD11515155008CEA46 /* DBReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBReader.h; sourceTree = "<group>"; };
 		D07156AE11515155008CEA46 /* DBReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DBReader.cpp; sourceTree = "<group>"; };
 		D07157751151BEFD008CEA46 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		D077082D120089950082EEBA /* Walk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Walk.h; sourceTree = "<group>"; };
+		D077082E120089950082EEBA /* Walk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Walk.cpp; sourceTree = "<group>"; };
 		D07DC75411DE692D00B9617A /* AppSettings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = AppSettings.xml; path = bin/data/AppSettings.xml; sourceTree = "<group>"; };
 		D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
 		D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawingLifeApp.cpp; sourceTree = "<group>"; };
@@ -1001,6 +1004,8 @@
 				D010115E11637D870096EC19 /* GpsData.cpp */,
 				D0355F3211A77F3D0022191B /* Timeline.h */,
 				D0355F3111A77F3D0022191B /* Timeline.cpp */,
+				D077082D120089950082EEBA /* Walk.h */,
+				D077082E120089950082EEBA /* Walk.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1209,6 +1214,7 @@
 				D0E8CF8D11A6020200541164 /* sqlite3x_transaction.cpp in Sources */,
 				D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */,
 				D05CA27511C59FE800B8665E /* TimedCounter.cpp in Sources */,
+				D077082F120089950082EEBA /* Walk.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
