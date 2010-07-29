@@ -93,53 +93,51 @@ void Walk::reset()
 }
 // -----------------------------------------------------------------------------
 
-void Walk::draw(bool animated)
+void Walk::draw()
 {
-    if (animated)
-    {
-        if (m_gpsData->getNormalizedUTMPoints().size() > 0 && m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
-        {
-            // -----------------------------------------------------------------------------
-            // Draw Gps data
-            // -----------------------------------------------------------------------------
-            for (int i = 0; i <= m_currentGpsSegment; ++i)
-            {
-                glBegin(GL_LINE_STRIP);
-                int pointEnd;
-                if (i == m_currentGpsSegment)
-                    pointEnd = m_currentGpsPoint;
-                else
-                    pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
-                for (int j = 0; j <= pointEnd; ++j)
-                {
-                    glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
-                               getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
-                }
-                glEnd();
-            }
-            ofFill();
-            ofSetColor(0, 255, 0, 127);
-            ofCircle(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment][m_currentGpsPoint].x),
-					 getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment][m_currentGpsPoint].y), 5);
-        }
-    }
-    else
-    {
-        // -----------------------------------------------------------------------------
-        // Draw Gps data
-        // -----------------------------------------------------------------------------
-        ofNoFill();
-        for (unsigned int i = 0; i < m_gpsData->getNormalizedUTMPoints().size(); ++i)
-        {
-            glBegin(GL_LINE_STRIP);
-            for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
-            {
+	if (m_gpsData->getNormalizedUTMPoints().size() > 0 && m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
+	{
+		// -----------------------------------------------------------------------------
+		// Draw Gps data
+		// -----------------------------------------------------------------------------
+		for (int i = 0; i <= m_currentGpsSegment; ++i)
+		{
+			glBegin(GL_LINE_STRIP);
+			int pointEnd;
+			if (i == m_currentGpsSegment)
+				pointEnd = m_currentGpsPoint;
+			else
+				pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
+			for (int j = 0; j <= pointEnd; ++j)
+			{
 				glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
 						   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
-            }
-            glEnd();
-        }
-    }
+			}
+			glEnd();
+		}
+		ofFill();
+		ofSetColor(0, 255, 0, 127);
+		ofCircle(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment][m_currentGpsPoint].x),
+				 getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment][m_currentGpsPoint].y), 5);
+	}
+}
+
+// -----------------------------------------------------------------------------
+// Draw all Gps data
+// -----------------------------------------------------------------------------
+void Walk::drawAll()
+{
+	ofNoFill();
+	for (unsigned int i = 0; i < m_gpsData->getNormalizedUTMPoints().size(); ++i)
+	{
+		glBegin(GL_LINE_STRIP);
+		for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
+		{
+			glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
+					   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
+		}
+		glEnd();
+	}	
 }
 // -----------------------------------------------------------------------------
 // Set view bounds.
@@ -158,12 +156,12 @@ void Walk::setViewBounds(int screenWidth,
     m_viewMinDimension = viewMinDimension;
     m_viewPadding = viewPadding;
 }
-
-
+// -----------------------------------------------------------------------------
 const std::string Walk::getGpsLocationCurrent()
 {
     return m_gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
+
 int Walk::getCurrentSegmentNum()
 {
     int segmentNum = 0;
@@ -176,10 +174,12 @@ int Walk::getCurrentSegmentNum()
     }
     return segmentNum;
 }
+
 int Walk::getCurrentPointNum()
 {
     return m_currentPoint;
 }
+
 std::string Walk::getCurrentTimestamp()
 {
     std::string timestamp = "";

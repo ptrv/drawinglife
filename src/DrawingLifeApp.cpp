@@ -190,7 +190,7 @@ void DrawingLifeApp::draw()
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(unsigned int i = 0; i < m_numPerson; ++i)
             {
-				m_walks[i]->draw(false);
+				m_walks[i]->drawAll();
             }
         }
     }

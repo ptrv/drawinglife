@@ -45,7 +45,12 @@ public:
 	 * \brief Draw function for GpsData.
 	 * \param animated if true GpsPoints are drawn animated.
 	 */
-    void draw(bool animated = true);
+    void draw();
+    /**
+	 * \brief Draw function for GpsData.
+	 * \param animated if true GpsPoints are drawn animated.
+	 */
+    void drawAll();
     /**
 	 * \brief Counts through all GpsPoints.
 	 */
