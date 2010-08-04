@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <database>test2.sqlite</database>
+  <database>test.sqlite</database>
   <person>
     <name>Dan</name>
     <name>Sophia</name>

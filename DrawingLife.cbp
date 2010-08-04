@@ -413,6 +413,12 @@
 		<Unit filename="src/Timeline.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/Walk.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/Walk.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/main.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>
