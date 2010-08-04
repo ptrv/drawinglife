@@ -624,6 +624,10 @@
 				RelativePath=".\src\Timeline.h"
 				>
 			</File>
+			<File
+				RelativePath=".\src\Walk.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -646,6 +650,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Timeline.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Walk.cpp"
 				>
 			</File>
 		</Filter>
