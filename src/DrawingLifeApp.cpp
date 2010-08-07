@@ -33,7 +33,7 @@ DrawingLifeApp::DrawingLifeApp() :
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
-    for(unsigned int i = 0; i < m_numPerson; ++i)
+    for(int i = 0; i < m_numPerson; ++i)
     {
         SAFE_DELETE(m_gpsDatas[i]);
 		SAFE_DELETE(m_walks[i]);
@@ -45,7 +45,7 @@ void DrawingLifeApp::loadXmlSettings()
 {
 	// reading settings from xml file
     m_settings.loadFile("AppSettings.xml");
-	
+
 	m_fontTitle.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
 						 m_settings.getValue("ui:font1:size1", 50));
     m_fontAuthor.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
@@ -72,7 +72,7 @@ void DrawingLifeApp::loadXmlSettings()
         m_gpsDatas.push_back(new GpsData());
 		m_walks.push_back(new Walk());
         DBG_VAL(m_names[i]);
-		
+
         m_viewXOffset.push_back(0);
         m_viewYOffset.push_back(0);
         m_viewMinDimension.push_back(0);
@@ -83,8 +83,8 @@ void DrawingLifeApp::loadXmlSettings()
 	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_settings.getValue("settings:framerate", 60);
-	
-	
+
+
 }
 
 void DrawingLifeApp::setup()
@@ -108,7 +108,7 @@ void DrawingLifeApp::setup()
     {
         loadGpsDataCity(m_names, m_currentCity);
 
-        for(unsigned int i = 0; i < m_numPerson; ++i)
+        for(int i = 0; i < m_numPerson; ++i)
         {
 			if(m_walks[i]->getGpsData().getTotalGpsPoints() == 0)
             {
@@ -154,7 +154,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             fillViewAreaUTM( VIEWBOX);
             //---------------------------------------------------------------------------
-            for(unsigned int i = 0; i < m_numPerson; ++i)
+            for(int i = 0; i < m_numPerson; ++i)
             {
                 if (m_isDebugMode)
                 {
@@ -188,7 +188,7 @@ void DrawingLifeApp::draw()
             ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
             ofNoFill();
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
-            for(unsigned int i = 0; i < m_numPerson; ++i)
+            for(int i = 0; i < m_numPerson; ++i)
             {
 				m_walks[i]->drawAll();
             }
@@ -219,7 +219,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
     m_startScreenMode = false;
 
     // get GpsData from database
-    for(unsigned int ii = 0; ii < m_numPerson; ++ii)
+    for(int ii = 0; ii < m_numPerson; ++ii)
     {
         SAFE_DELETE(m_gpsDatas[ii]);
         m_gpsDatas[ii] = new GpsData();
@@ -460,7 +460,7 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 void DrawingLifeApp::windowResized(int w, int h)
 {
     this->setViewAspectRatio();
-    for(unsigned int i = 0; i < m_numPerson; ++i)
+    for(int i = 0; i < m_numPerson; ++i)
     {
 		m_walks[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[i], m_viewYOffset[i], m_viewMinDimension[i], m_viewPadding[i]);
     }
