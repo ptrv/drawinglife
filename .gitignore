@@ -1,13 +1,19 @@
 bin/*
+obj/*
+*.o
+
+# Visual studio stuff
 *.user
 *.ncb
 *.suo
-obj/*
-doc/html/*
+
+# Codeblocks stuff
 *.depend
 *.layout
 *.cbTemp
-*.o
+*.cscope_file_list
+
+doc/html/*
 libs/geographiclib-1.1/libs/*
 Path
 libs/geographiclib-1.1/windows/Debug/*

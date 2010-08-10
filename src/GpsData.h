@@ -5,19 +5,11 @@
 #ifndef _GPSDATA_H_
 #define _GPSDATA_H_
 
+#include "DrawingLifeIncludes.h"
 #include <vector>
 #include <string>
 #include "GpsSegment.h"
 
-/**
- * \brief Represents x and y value of an UTM coordinate.
- *
- */
-struct UtmPoint
-{
-    double x;
-    double y;
-};
 
 /**
  * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
