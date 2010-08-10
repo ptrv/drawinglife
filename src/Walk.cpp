@@ -33,12 +33,17 @@ m_viewYOffset(0.0),
 m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
-m_currentGpsPointInfo("")
+m_currentGpsPointInfo(""),
+m_magicBox(NULL)
 {
 }
 
 Walk::~Walk()
 {
+    if(m_gpsData)
+        m_gpsData = 0;
+    if(m_magicBox)
+        m_magicBox = 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -72,7 +77,7 @@ void Walk::update()
                     ++m_currentGpsPoint;
                 }
                 else//	void setMinMaxRatio();
-					
+
                 {
                     m_currentGpsPoint = 0;
                     m_currentGpsSegment = 0;
@@ -137,7 +142,7 @@ void Walk::drawAll()
 					   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
 		}
 		glEnd();
-	}	
+	}
 }
 // -----------------------------------------------------------------------------
 // Set view bounds.
@@ -191,7 +196,7 @@ std::string Walk::getCurrentTimestamp()
 		}
 	}
 	return timestamp;
-	
+
 }
 double Walk::getCurrentLongitude()
 {
@@ -247,7 +252,7 @@ const std::string& Walk::getCurrentGpsInfoDebug()
 	"Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
 	"Total pts.        : " + ofToString(m_gpsData->getTotalGpsPoints()) + "\n" +
 	"Person            : " + m_gpsData->getUser();
-	
+
     return m_currentGpsPointInfoDebug;
 }
 
@@ -263,6 +268,6 @@ const std::string& Walk::getCurrentGpsInfo()
 		m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
     }
 	return m_currentGpsPointInfo;
-	
-	
+
+
 }

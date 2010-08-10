@@ -4,15 +4,16 @@
 
 #include <string>
 #include "GpsData.h"
+#include "MagicBox.h"
 
-class Walk 
+class Walk
 {
 public:
 	Walk();
 	~Walk();
 
 	//------------------------------------------------------------------------------
-    
+
 	/**
 	 * \brief Set scaling values GpsPoints.
 	 * \param screenWidth
@@ -28,7 +29,7 @@ public:
 					   double viewYOffset,
 					   double viewMinDimension,
 					   double viewPadding);
-	
+
     /**
 	 * \brief Scale UTM Y to application window size.
 	 * \param utmY UTM Y value to scale.
@@ -114,17 +115,19 @@ public:
 	 * \return UTM Y of current GpsPoint.
 	 */
 	double getCurrentUtmY();
-		
+
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
-	
+
 	const GpsData& getGpsData() const { return *m_gpsData; }
-	
+
 	void setGpsData(GpsData* gpsData) { m_gpsData = 0; m_gpsData = gpsData; }
-	
+
+	void setMagicBox(MagicBox* magicBox) { m_magicBox = 0; m_magicBox = magicBox; }
+
 private:
-	
+
 	GpsData* m_gpsData;
-	
+
 	static double maxDrawX;
     static double minDrawX;
     static double maxDrawY;
@@ -136,15 +139,17 @@ private:
 	int m_currentGpsSegment;
 	int m_currentPoint;
 	bool m_firstPoint;
-	
+
 	int m_screenWidth;
 	int m_screenHeight;
 	double m_viewXOffset;
 	double m_viewYOffset;
 	double m_viewMinDimension;
 	double m_viewPadding;
-	
+
 	std::string m_currentGpsPointInfoDebug;
     std::string m_currentGpsPointInfo;
+
+    MagicBox* m_magicBox;
 
 };

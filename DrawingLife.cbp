@@ -407,6 +407,12 @@
 		<Unit filename="src/Logger.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/MagicBox.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/MagicBox.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/Timeline.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

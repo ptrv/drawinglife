@@ -65,17 +65,18 @@ private:
 	void drawStartScreen();
 
 	void calculateGlobalMinMaxValues();
-	
+
 	void loadXmlSettings();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
 	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
-	
+
 	std::vector<GpsData* > m_gpsDatas;
 	std::vector<Walk* > m_walks;
-	
+	std::vector<MagicBox* > m_magicBoxes;
+
 	std::string m_dbPath;
 	//---------------------------------------------------------------------------
 	int maxPoints;
@@ -105,7 +106,7 @@ private:
     // -----------------------------------------------------------------------------
     Timeline* m_timeline;
     int m_drawSpeed;
-	
+
 	int m_trackAlpha;
     int m_dotAlpha;
     int m_legendAlpha;

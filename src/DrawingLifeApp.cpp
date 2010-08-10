@@ -37,6 +37,7 @@ DrawingLifeApp::~DrawingLifeApp()
     {
         SAFE_DELETE(m_gpsDatas[i]);
 		SAFE_DELETE(m_walks[i]);
+		SAFE_DELETE(m_magicBoxes[i]);
     }
     SAFE_DELETE(m_timeline);
 }
@@ -71,6 +72,7 @@ void DrawingLifeApp::loadXmlSettings()
         m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(new GpsData());
 		m_walks.push_back(new Walk());
+		m_magicBoxes.push_back(new MagicBox());
         DBG_VAL(m_names[i]);
 
         m_viewXOffset.push_back(0);
@@ -224,6 +226,9 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         SAFE_DELETE(m_gpsDatas[ii]);
         m_gpsDatas[ii] = new GpsData();
 
+        SAFE_DELETE(m_magicBoxes[ii]);
+        m_magicBoxes[ii] = new MagicBox();
+
 		SAFE_DELETE(m_walks[ii]);
         m_walks[ii] = new Walk();
 
@@ -243,6 +248,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
+				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
             }
             else
             {
