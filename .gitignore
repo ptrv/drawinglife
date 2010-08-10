@@ -6,6 +6,7 @@ obj/*
 doc/html/*
 *.depend
 *.layout
+*.cbTemp
 *.o
 libs/geographiclib-1.1/libs/*
 Path
