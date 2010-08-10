@@ -28,7 +28,7 @@ class ofxPointd {
   public:
 	virtual ~ofxPointd(){}
 
-    ofxPointd( double _x=0.0f, double _y=0.0f, double _z=0.0f ) {
+    ofxPointd( double _x=0.0, double _y=0.0, double _z=0.0 ) {
         x = _x;
         y = _y;
         z = _z;
@@ -224,21 +224,21 @@ class ofxRectangled {
 	}
 
 	void setFromCenter(double px, double py, double w, double h){
-		x		= px - w*0.5f;
-		y		= py - h*0.5f;
+		x		= px - w*0.5;
+		y		= py - h*0.5;
 		width	= w;
 		height	= h;
 	}
 
 	void setFromCenter(ofxPointd pos, double w, double h){
-		x		= pos.x - w*0.5f;
-		y		= pos.y - h*0.5f;
+		x		= pos.x - w*0.5;
+		y		= pos.y - h*0.5;
 		width	= w;
 		height	= h;
 	}
 
 	ofxPointd getCenter(){
-		return ofxPointd(x + width * 0.5f, y + height * 0.5f, 0);
+		return ofxPointd(x + width * 0.5, y + height * 0.5, 0);
 	}
 
 	bool inside (ofxPointd p){
