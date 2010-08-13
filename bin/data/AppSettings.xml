@@ -11,7 +11,7 @@
   <log level="0" />
   <loadgpsonstart>1</loadgpsonstart>
   <debugmode>0</debugmode>
-  <drawspeed>5</drawspeed>
+  <drawspeed>2</drawspeed>
   <framerate>60</framerate>
 </settings>
 <ui>

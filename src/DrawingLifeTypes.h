@@ -200,7 +200,7 @@ class ofxPointd {
 
 class ofxRectangled {
   public:
-	ofxRectangled(){ x = y = width = height = 0; };
+	ofxRectangled(){ x = y = width = height = 0.0; };
 	ofxRectangled(double _x, double _y, double _w, double _h){
 		x = _x;
 		y = _y;

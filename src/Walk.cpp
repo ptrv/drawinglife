@@ -105,26 +105,49 @@ void Walk::draw()
 		// -----------------------------------------------------------------------------
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
-		for (int i = 0; i <= m_currentGpsSegment; ++i)
-		{
-			glBegin(GL_LINE_STRIP);
-			int pointEnd;
-			if (i == m_currentGpsSegment)
-				pointEnd = m_currentGpsPoint;
-			else
-				pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
-			for (int j = 0; j <= pointEnd; ++j)
-			{
-				glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
-						   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
-			}
-			glEnd();
-		}
-		ofFill();
-		ofSetColor(0, 255, 0, 127);
-		ofCircle(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment][m_currentGpsPoint].x),
-				 getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment][m_currentGpsPoint].y), 5);
+
+        m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
+                                                m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
+
+        for (int i = 0; i <= m_currentGpsSegment; ++i)
+        {
+            glBegin(GL_LINE_STRIP);
+            int pointEnd;
+            if (i == m_currentGpsSegment)
+                pointEnd = m_currentGpsPoint;
+            else
+                pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
+            for (int j = 0; j <= pointEnd; ++j)
+            {
+                bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+                if(isInBox)
+                {
+                    ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
+                    glVertex2d(getScaledUtmX(tmp.x),
+                               getScaledUtmY(tmp.y));
+                }
+            }
+            glEnd();
+        }
+        ofFill();
+        ofSetColor(0, 255, 0, 127);
+        ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
+        ofCircle(getScaledUtmX(tmp.x),
+                 getScaledUtmY(tmp.y), 5);
+
+
+
 	}
+//	ofxRectangled tmpRect = m_magicBox->getTheBox();
+//	ofNoFill();
+//	ofSetColor(255,0,0);
+//
+//    double x = getScaledUtmX(m_magicBox->getNormalizedBox().x);
+//    double y = getScaledUtmY(m_magicBox->getNormalizedBox().y);
+//    double w = getScaledUtmX(m_magicBox->getNormalizedBox().width)-x;
+//    double h = getScaledUtmY(m_magicBox->getNormalizedBox().height)-y;
+//
+//    ofRect(x, y , w, h);
 }
 
 // -----------------------------------------------------------------------------

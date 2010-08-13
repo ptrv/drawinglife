@@ -122,7 +122,17 @@ public:
 
 	void setGpsData(GpsData* gpsData) { m_gpsData = 0; m_gpsData = gpsData; }
 
-	void setMagicBox(MagicBox* magicBox) { m_magicBox = 0; m_magicBox = magicBox; }
+	void setMagicBox(MagicBox* magicBox)
+	{
+	    m_magicBox = 0;
+	    m_magicBox = magicBox;
+	    reset();
+	    ofxPointd tmpCoord;
+	    tmpCoord.x = m_gpsData->getUtmX(0,0);
+	    tmpCoord.y = m_gpsData->getUtmY(0,0);
+	    m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
+
+    }
 
 private:
 

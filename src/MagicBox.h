@@ -15,19 +15,34 @@ public:
 //    MagicBox(double x, double y, double w, double h);
     ~MagicBox();
 
-    bool isInBox(const UtmPoint& utmPoint);
+    bool isInBox(const ofxPointd utmPoint);
 
-    const UtmPoint getDrawablePoint(const UtmPoint& utmPoint);
+    const ofxPointd getDrawablePoint(const UtmPoint& utmPoint);
+
+    void setupBox(ofxPointd currUtm, double lon0);
+
+    void updateBoxIfNeeded(const ofxPointd utmPoint);
+
+    void draw();
+
+    void addToBoxSize(double newSize);
+
+    const ofxRectangled& getTheBox() const { return m_theBox; }
+    const ofxRectangled getNormalizedBox();
 
 private:
 
-    void alignViewBox();
+    // ist auch m_lon0
+    ofxPointd m_centerGps;
+    ofxPointd m_centerUtm;
+    ofxPointd m_centerUtmNormalized;
 
-    double m_center;
-    double m_x;
-    double m_y;
-    double m_width;
-    double m_height;
+    ofxRectangled m_theBox;
+
+    double m_currentSize;
+
+    double m_padding;
+
 };
 
 #endif // _MAGICBOX_H_

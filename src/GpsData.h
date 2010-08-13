@@ -170,13 +170,14 @@ public:
     * \brief Calculate UTM values for all GpsPoints with global lon0.
     */
     void calculateUtmPointsGlobalLon();
-	
+
 	static void setGlobalValues(double minX,
                                 double maxX,
                                 double minY,
                                 double maxY,
                                 double lon0);
-	
+
+	const std::vector< std::vector<UtmPoint> >& getUTMPoints() const { return m_utmPoints; };
 	const std::vector< std::vector<UtmPoint> >& getNormalizedUTMPoints() const { return m_normalizedUtmPoints; };
 	const std::vector< std::vector<UtmPoint> >& getNormalizedUTMPointsGlobal() const { return m_normalizedUtmPointsGlobal; };
 
@@ -189,10 +190,18 @@ public:
 	* \return location for given GpsSegment and GpsPoint.
 	*/
 	const std::string getGpsLocation(int segmentIndex, int pointIndex);
-	
+
 	double getLon0() const { return m_lon0; }
-	
+
+	static double getLon0Glogal() { return GpsData::m_lon0Global; }
+
 	const std::string& getUser() const { return m_user; }
+
+    /**
+    * \brief Calculate UTM values for all GpsPoints.
+    */
+    void calculateUtmPoints(double lon0);
+
 private:
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1.

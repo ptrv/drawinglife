@@ -82,7 +82,7 @@ void DrawingLifeApp::loadXmlSettings()
     }
     m_settings.popTag();
     m_settings.popTag();
-	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1);
+	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1)*m_numPerson;
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_settings.getValue("settings:framerate", 60);
 
@@ -96,9 +96,6 @@ void DrawingLifeApp::setup()
 
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
-
-//    ofSetLogLevel(OF_LOG_VERBOSE);
-
 
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
@@ -390,36 +387,21 @@ void DrawingLifeApp::keyPressed  (int key)
         loadGpsDataCity(m_names, "Banff");
         break;
     case 'w':
-        if(m_zoomZ > 590 && m_zoomZ < 598)
-        {
-            m_zoomZ += 1;
-        }
-        else if (m_zoomZ >= 598)
-        {
-            m_zoomZ += 0.05;
-        }
-        else if (m_zoomZ < 599)
-        {
-            m_zoomZ += 10;
-        }
-        DBG_VAL(m_zoomZ);
         break;
     case 's':
-        if(m_zoomZ > 590)
-        {
-            m_zoomZ -= 1;
-        }
-        else
-        {
-            m_zoomZ -= 10;
-        }
         DBG_VAL(m_zoomZ);
         break;
     case OF_KEY_UP:
-        m_zoomY += 50;
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->addToBoxSize(50.0);
+        }
         break;
     case OF_KEY_DOWN:
-        m_zoomY -= 50;
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->addToBoxSize(-50.0);
+        }
         break;
     case OF_KEY_RIGHT:
         m_zoomX -= 50;

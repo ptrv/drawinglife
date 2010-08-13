@@ -196,7 +196,7 @@ const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
 	return loc;
 }
 // -----------------------------------------------------------------------------
-int GpsData::getTotalGpsPoints() const 
+int GpsData::getTotalGpsPoints() const
 {
 	int num = 0;
 	for (unsigned int i = 0; i < m_segments.size(); ++i) {
@@ -284,6 +284,30 @@ void GpsData::setGlobalMinMaxRatioUTM()
 		maxDrawY = maxLat;
 	}
 }
+
+// -----------------------------------------------------------------------------
+void GpsData::calculateUtmPoints(double lon0)
+{
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    m_utmPoints.clear();
+    m_utmPoints.reserve(m_segments.size());
+    for(unsigned int i = 0; i < m_segments.size(); ++i)
+    {
+        std::vector<UtmPoint> utmVec;
+        utmVec.reserve( m_segments[i].getPoints().size());
+        for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+        {
+            Math::real gamma, k;
+            UtmPoint utmP;
+            TMS.Forward(Math::real(m_lon0Global),
+                        m_segments[i].getPoints()[j].getLatitude(),
+                        m_segments[i].getPoints()[j].getLongitude(),
+                        utmP.x, utmP.y, gamma, k);
+            utmVec.push_back(utmP);
+        }
+        m_utmPoints.push_back(utmVec);
+    }
+}
 // -----------------------------------------------------------------------------
 // Normalize Utm points.
 // -----------------------------------------------------------------------------
@@ -370,6 +394,7 @@ void GpsData::calculateUtmPoints()
     }
 }
 
+// TODO parameter m_lon0
 void GpsData::calculateUtmPointsGlobalLon()
 {
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
