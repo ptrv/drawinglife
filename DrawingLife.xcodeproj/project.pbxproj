@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D00055F112164236005025E1 /* MagicBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D00055EF12164236005025E1 /* MagicBox.cpp */; };
 		D010115F11637D870096EC19 /* GpsData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D010115E11637D870096EC19 /* GpsData.cpp */; };
 		D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0355F3111A77F3D0022191B /* Timeline.cpp */; };
 		D05CA27511C59FE800B8665E /* TimedCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05CA27311C59FE800B8665E /* TimedCounter.cpp */; };
@@ -134,6 +135,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D00055EF12164236005025E1 /* MagicBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MagicBox.cpp; sourceTree = "<group>"; };
+		D00055F012164236005025E1 /* MagicBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicBox.h; sourceTree = "<group>"; };
+		D00055F21216423F005025E1 /* DrawingLifeTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeTypes.h; sourceTree = "<group>"; };
 		D010115B11637D3C0096EC19 /* GpsPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsPoint.h; sourceTree = "<group>"; };
 		D010115C11637D4F0096EC19 /* GpsSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsSegment.h; sourceTree = "<group>"; };
 		D010115D11637D870096EC19 /* GpsData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsData.h; sourceTree = "<group>"; };
@@ -992,6 +996,7 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
+				D00055F21216423F005025E1 /* DrawingLifeTypes.h */,
 				D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */,
 				D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */,
 				D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */,
@@ -1006,6 +1011,8 @@
 				D0355F3111A77F3D0022191B /* Timeline.cpp */,
 				D077082D120089950082EEBA /* Walk.h */,
 				D077082E120089950082EEBA /* Walk.cpp */,
+				D00055F012164236005025E1 /* MagicBox.h */,
+				D00055EF12164236005025E1 /* MagicBox.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1215,6 +1222,7 @@
 				D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */,
 				D05CA27511C59FE800B8665E /* TimedCounter.cpp in Sources */,
 				D077082F120089950082EEBA /* Walk.cpp in Sources */,
+				D00055F112164236005025E1 /* MagicBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
