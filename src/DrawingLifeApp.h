@@ -34,11 +34,6 @@ struct DBQueryData
 
 class DrawingLifeApp : public ofBaseApp
 {
-public: /* static */
-	static const int BACKGROUND = 0x000000;
-	static const int FOREGROUND = 0xFFFFFF;
-	static const int VIEWBOX = 0x343434;
-
 public:
 	DrawingLifeApp();
 	virtual ~DrawingLifeApp();
@@ -58,12 +53,12 @@ private:
     //---------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------
-	void fillViewArea( int backgroundColor);
+	void fillViewArea();
 	/**
 	* \brief Draw a square to draw onto.
 	* \param backgroundColor color of the square.
 	*/
-	void fillViewAreaUTM( int backgroundColor);
+	void fillViewAreaUTM();
 	/**
 	* \brief
 	* \param names vector with name strings.
@@ -139,6 +134,10 @@ private:
 
     int m_logLevel;
     DBQueryData m_dbQueryData;
+
+    ofColor m_colorForeground;
+    ofColor m_colorBackground;
+    ofColor m_colorViewbox;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

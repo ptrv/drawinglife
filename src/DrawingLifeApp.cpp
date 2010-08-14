@@ -49,24 +49,45 @@ void DrawingLifeApp::loadXmlSettings()
 
 	m_fontTitle.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
 						 m_settings.getValue("ui:font1:size1", 50));
+
     m_fontAuthor.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
                           m_settings.getValue("ui:font1:size2", 24));
+
     m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),
                         m_settings.getValue("ui:font1:size3", 18));
+
     m_fontInfo.loadFont(m_settings.getValue("ui:font2:name", "Standard0753.ttf"),
                         m_settings.getValue("ui:font2:size1", 8));
+
+    m_colorForeground.r = m_settings.getAttribute("ui:color:foreround", "r", 255);
+    m_colorForeground.g = m_settings.getAttribute("ui:color:foreround", "g", 255);
+    m_colorForeground.b = m_settings.getAttribute("ui:color:foreround", "b", 255);
+
+    m_colorBackground.r = m_settings.getAttribute("ui:color:background", "r", 0);
+    m_colorBackground.g = m_settings.getAttribute("ui:color:background", "g", 0);
+    m_colorBackground.b = m_settings.getAttribute("ui:color:background", "b", 0);
+
+    m_colorViewbox.r = m_settings.getAttribute("ui:color:viewbox", "r", 50);
+    m_colorViewbox.g = m_settings.getAttribute("ui:color:viewbox", "g", 50);
+    m_colorViewbox.b = m_settings.getAttribute("ui:color:viewbox", "b", 50);
+
     m_logLevel = m_settings.getAttribute("settings:log", "level", 0);
+
 	m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
+
 	m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
     m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
     m_legendAlpha = m_settings.getValue("ui:alpha:legend", 255);
     // db path must be absolute path for DBReader (true as second parameter)
+
     m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
     DBG_VAL(m_dbPath);
+
     m_dbQueryData.type = m_settings.getValue("dbquery:type", 4);
     m_dbQueryData.yearStart = m_settings.getValue("dbquery:time:yearstart", 2009);
     m_dbQueryData.yearEnd = m_settings.getValue("dbquery:time:yearend", 2010);
     m_dbQueryData.city = m_settings.getValue("dbquery:city", "Berlin");
+
     m_settings.pushTag("data");
     m_settings.pushTag("person");
     m_numPerson = m_settings.getNumTags("name");
@@ -85,6 +106,7 @@ void DrawingLifeApp::loadXmlSettings()
     }
     m_settings.popTag();
     m_settings.popTag();
+
 	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1)*m_numPerson;
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_settings.getValue("settings:framerate", 60);
@@ -95,7 +117,7 @@ void DrawingLifeApp::loadXmlSettings()
 void DrawingLifeApp::setup()
 {
 	loadXmlSettings();
-    ofBackground((BACKGROUND >> 16) & 0xFF, (BACKGROUND >> 8) & 0xFF, (BACKGROUND) & 0xFF);
+    ofBackground(m_colorBackground.r, m_colorBackground.g, m_colorBackground.b);
 
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
@@ -163,7 +185,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw rectangle with text.
             // -----------------------------------------------------------------------------
-            fillViewAreaUTM( VIEWBOX);
+            fillViewAreaUTM();
             //---------------------------------------------------------------------------
             for(int i = 0; i < m_numPerson; ++i)
             {
@@ -175,6 +197,7 @@ void DrawingLifeApp::draw()
                 }
                 else
                 {
+                    ofSetColor(255, 255, 255, m_legendAlpha);
                     ofSetColor(0xffffff);
                     m_fontInfo.drawString(m_walks[i]->getCurrentGpsInfo(),
                                           m_viewPadding[i] + (ofGetWidth()/m_numPerson)*i ,
@@ -183,7 +206,7 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, m_trackAlpha);
+                ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
                 ofNoFill();
                 glPushMatrix();
                 glTranslated(m_zoomX, m_zoomY, m_zoomZ);
@@ -193,11 +216,11 @@ void DrawingLifeApp::draw()
         }
         else
         {
-            fillViewAreaUTM( VIEWBOX);
+            fillViewAreaUTM();
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, m_trackAlpha);
+            ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
             ofNoFill();
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(int i = 0; i < m_numPerson; ++i)
@@ -382,6 +405,13 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
 //        myfile.close();
 
         this->calculateGlobalMinMaxValues();
+
+        Walk::setTrackAlpha(m_dotAlpha);
+        for(unsigned int i = 0; i < m_walks.size(); ++i)
+        {
+            m_walks[i]->setDotColors();
+        }
+
     }
 }
 // -----------------------------------------------------------------------------
@@ -421,7 +451,7 @@ void DrawingLifeApp::setViewAspectRatio()
 //        m_viewYOffset += m_viewPadding;
     }
 }
-void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
+void DrawingLifeApp::fillViewAreaUTM()
 {
     for(int i = 0; i < m_numPerson; ++i)
     {
@@ -431,7 +461,7 @@ void DrawingLifeApp::fillViewAreaUTM( int backgroundColor)
         double w = m_walks[i]->getScaledUtmX(1) - x;
         double h = m_walks[i]->getScaledUtmY(1) - y;
         ofFill();
-        ofSetColor( backgroundColor);
+        ofSetColor(m_colorViewbox.r, m_colorViewbox.g, m_colorViewbox.b);
         ofRect(x, y, w, h);
 
     }
@@ -451,6 +481,12 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 'd':
         m_isDebugMode = !m_isDebugMode;
+        break;
+    case 'c':
+        for(unsigned int i = 0; i < m_walks.size(); ++i)
+        {
+            m_walks[i]->setDotColors();
+        }
         break;
     case 49:
     if(m_dbQueryData.type == DB_QUERY_CITY)
