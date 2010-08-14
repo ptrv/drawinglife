@@ -144,16 +144,31 @@ void Walk::draw()
 
 
 	}
-//	ofxRectangled tmpRect = m_magicBox->getTheBox();
-//	ofNoFill();
-//	ofSetColor(255,0,0);
-//
-//    double x = getScaledUtmX(m_magicBox->getNormalizedBox().x);
-//    double y = getScaledUtmY(m_magicBox->getNormalizedBox().y);
-//    double w = getScaledUtmX(m_magicBox->getNormalizedBox().width)-x;
-//    double h = getScaledUtmY(m_magicBox->getNormalizedBox().height)-y;
-//
-//    ofRect(x, y , w, h);
+
+    // draw borders of bounding boxes.
+    if(EXTRA_DEBUG_MODE)
+    {
+        ofNoFill();
+        ofSetColor(255,0,0);
+
+        double x = getScaledUtmX(m_magicBox->getNormalizedBox().x);
+        double y = getScaledUtmY(m_magicBox->getNormalizedBox().y);
+        double w = getScaledUtmX(m_magicBox->getNormalizedBox().width)-x;
+        double h = getScaledUtmY(m_magicBox->getNormalizedBox().height)-y;
+
+        ofRect(x, y , w, h);
+
+        ofNoFill();
+        ofSetColor(0,255,0);
+
+        double xp = getScaledUtmX(m_magicBox->getNormalizedPaddedBox().x);
+        double yp = getScaledUtmY(m_magicBox->getNormalizedPaddedBox().y);
+        double wp = getScaledUtmX(m_magicBox->getNormalizedPaddedBox().width)-xp;
+        double hp = getScaledUtmY(m_magicBox->getNormalizedPaddedBox().height)-yp;
+
+        ofRect(xp, yp , wp, hp);
+    }
+
 }
 
 // -----------------------------------------------------------------------------

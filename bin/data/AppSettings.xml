@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <database>test.sqlite</database>
-  <person>
-    <name>Dan</name>
-    <name>Sophia</name>
-  </person>
+	<database>test.sqlite</database>
+	<person>
+		<name>Dan</name>
+		<name>Sophia</name>
+	</person>
 </data>
 <dbquery>
 	<!-- There are four query types: -->
@@ -13,37 +13,41 @@
 	<!-- 3 = year range -->
 	<!-- 4 = city -->
 	<type>3</type>
- 	<time>
- 	<yearstart>2009</yearstart>
-  	<yearend>2010</yearend>
- 	</time>
- 	<city>Berlin</city>
+	<time>
+		<yearstart>2008</yearstart>
+		<yearend>2010</yearend>
+	</time>
+	<city>Berlin</city>
 </dbquery>
 <settings>
-  <log level="0" />
-  <loadgpsonstart>1</loadgpsonstart>
-  <debugmode>0</debugmode>
-  <drawspeed>2</drawspeed>
-  <framerate>30</framerate>
+	<log level="0" />
+	<loadgpsonstart>1</loadgpsonstart>
+	<debugmode>0</debugmode>
+	<drawspeed>2</drawspeed>
+	<framerate>30</framerate>
+	<boundingbox>
+		<size>3000.0</size>	
+		<padding>300.0</padding>
+  	</boundingbox>
 </settings>
 <ui>
-  <font1>
-    <name>mono.ttf</name>
-    <size1>50</size1>
-    <size2>24</size2>
-    <size3>16</size3>
-  </font1>
-  <font2>
-    <!-- <name>Standard0753.ttf</name> -->
-    <!-- <size1>8</size1> -->
-    <name>consola.ttf</name>
-    <size1>11</size1>
-  </font2>
-  <alpha>
-    <tracks>64</tracks>
-    <dots>200</dots>
-    <legend>255</legend>
-  </alpha>
+	<font1>
+		<name>mono.ttf</name>
+		<size1>50</size1>
+		<size2>24</size2>
+		<size3>16</size3>
+	</font1>
+	<font2>
+		<!-- <name>Standard0753.ttf</name> -->
+		<!-- <size1>8</size1> -->
+		<name>consola.ttf</name>
+		<size1>11</size1>
+	</font2>
+	<alpha>
+		<tracks>64</tracks>
+		<dots>200</dots>
+		<legend>255</legend>
+	</alpha>
 	<color>
 		<foreground r="255" g="255" b="255" />
 		<background r="0" g="0" b="0" />

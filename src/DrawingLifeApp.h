@@ -133,11 +133,15 @@ private:
     int m_frameRate;
 
     int m_logLevel;
+
     DBQueryData m_dbQueryData;
 
     ofColor m_colorForeground;
     ofColor m_colorBackground;
     ofColor m_colorViewbox;
+
+    double m_magicBoxSize;
+    double m_magicBoxPadding;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

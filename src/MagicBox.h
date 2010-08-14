@@ -11,8 +11,7 @@ class MagicBox
 {
 public:
 
-    MagicBox();
-//    MagicBox(double x, double y, double w, double h);
+    MagicBox(double size, double padding);
     ~MagicBox();
 
     bool isInBox(const ofxPointd utmPoint);
@@ -23,21 +22,24 @@ public:
 
     void updateBoxIfNeeded(const ofxPointd utmPoint);
 
-    void draw();
+    void updateBoxSize(double size);
 
     void addToBoxSize(double newSize);
 
     const ofxRectangled& getTheBox() const { return m_theBox; }
     const ofxRectangled getNormalizedBox();
+    const ofxRectangled& getPaddedBox() const { return m_theBox; }
+    const ofxRectangled getNormalizedPaddedBox();
 
 private:
 
+    bool isInPaddedBox(const ofxPointd utmPoint);
+
     // ist auch m_lon0
-    ofxPointd m_centerGps;
     ofxPointd m_centerUtm;
-    ofxPointd m_centerUtmNormalized;
 
     ofxRectangled m_theBox;
+    ofxRectangled m_paddedBox;
 
     double m_currentSize;
 

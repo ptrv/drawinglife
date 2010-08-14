@@ -10,6 +10,7 @@
 #if defined (WIN32)
 #undef max
 #endif
+
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
     m_dbReader(NULL),
@@ -28,7 +29,9 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_legendAlpha(255),
 	m_startScreenDuration(5000),
 	m_loadOnStart(0),
-	m_frameRate(60)
+	m_frameRate(60),
+	m_magicBoxSize(3000.0),
+	m_magicBoxPadding(500.0)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -75,6 +78,11 @@ void DrawingLifeApp::loadXmlSettings()
 
 	m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
 
+    m_magicBoxSize = m_settings.getValue("settings:boundingbox:size", 3000.0);
+    m_magicBoxPadding = m_settings.getValue("settings:boundingbox:padding", 500.0);
+
+
+
 	m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
     m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
     m_legendAlpha = m_settings.getValue("ui:alpha:legend", 255);
@@ -96,7 +104,7 @@ void DrawingLifeApp::loadXmlSettings()
         m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(new GpsData());
 		m_walks.push_back(new Walk());
-		m_magicBoxes.push_back(new MagicBox());
+		m_magicBoxes.push_back(new MagicBox(m_magicBoxSize, m_magicBoxPadding));
         DBG_VAL(m_names[i]);
 
         m_viewXOffset.push_back(0);
@@ -110,7 +118,6 @@ void DrawingLifeApp::loadXmlSettings()
 	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1)*m_numPerson;
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_settings.getValue("settings:framerate", 60);
-
 
 }
 
@@ -260,7 +267,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         m_gpsDatas[ii] = new GpsData();
 
         SAFE_DELETE(m_magicBoxes[ii]);
-        m_magicBoxes[ii] = new MagicBox();
+        m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
 
 		SAFE_DELETE(m_walks[ii]);
         m_walks[ii] = new Walk();
@@ -276,7 +283,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
             if(m_dbReader->getGpsDataCity(*m_gpsDatas[ii], names[ii], city))
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
-                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
+                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
@@ -338,7 +345,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
         m_gpsDatas[ii] = new GpsData();
 
         SAFE_DELETE(m_magicBoxes[ii]);
-        m_magicBoxes[ii] = new MagicBox();
+        m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
 
 		SAFE_DELETE(m_walks[ii]);
         m_walks[ii] = new Walk();
@@ -354,7 +361,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
             if(m_dbReader->getGpsDataYearRange(*m_gpsDatas[ii], names[ii], yearStart, yearEnd))
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
-                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
+                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
