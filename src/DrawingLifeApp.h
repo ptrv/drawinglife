@@ -12,6 +12,22 @@
 #include "Timeline.h"
 #include "Walk.h"
 
+#define DB_QUERY_DAY            1
+#define DB_QUERY_MONTH          2
+#define DB_QUERY_YEAR           3
+#define DB_QUERY_CITY           4
+
+struct DBQueryData
+{
+    int type;
+    int dayStart;
+    int dayEnt;
+    int monthStart;
+    int monthEnd;
+    int yearStart;
+    int yearEnd;
+    std::string city;
+};
 /**
  *  \brief Main application class.
  */
@@ -54,6 +70,13 @@ private:
 	* \param city string with city name.
 	*/
 	void loadGpsDataCity(std::vector<string> names, std::string city);
+	/**
+	* \brief
+	* \param names vector with name strings.
+	* \param yearStart start year for query.
+	* \param yearEnd end year for query.
+	*/
+	void loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd);
 	/**
 	* \brief Set square view area and center.
 	*/
@@ -113,6 +136,9 @@ private:
     int m_startScreenDuration;
     int m_loadOnStart;
     int m_frameRate;
+
+    int m_logLevel;
+    DBQueryData m_dbQueryData;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

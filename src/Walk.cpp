@@ -18,6 +18,7 @@ double Walk::maxDrawY = -std::numeric_limits<double>::max();
 double Walk::minDrawY = std::numeric_limits<double>::max();
 
 float Walk::m_dotSize = 3.0;
+int Walk::m_dotAlpha = 127;
 
 Walk::Walk()
 :
@@ -36,6 +37,11 @@ m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(NULL)
 {
+    //	m_dotColor.a = 127;
+	m_dotColor.a = m_dotAlpha;
+	m_dotColor.r = (int)ofRandom(30,255);
+	m_dotColor.g = (int)ofRandom(30,255);
+	m_dotColor.b = (int)ofRandom(30,255);
 }
 
 Walk::~Walk()
@@ -130,7 +136,7 @@ void Walk::draw()
             glEnd();
         }
         ofFill();
-        ofSetColor(0, 255, 0, 127);
+        ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
         ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
         ofCircle(getScaledUtmX(tmp.x),
                  getScaledUtmY(tmp.y), 5);
@@ -292,5 +298,13 @@ const std::string& Walk::getCurrentGpsInfo()
     }
 	return m_currentGpsPointInfo;
 
+
+}
+void Walk::setDotColors()
+{
+   	m_dotColor.a = m_dotAlpha;
+	m_dotColor.r = (int)ofRandom(30,255);
+	m_dotColor.g = (int)ofRandom(30,255);
+	m_dotColor.b = (int)ofRandom(30,255);
 
 }

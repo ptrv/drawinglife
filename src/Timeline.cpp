@@ -18,7 +18,10 @@ Timeline::~Timeline()
     //dtor
 }
 
-void Timeline::setTimeline(std::vector<GpsData*> gpsDatas)
+void Timeline::sortGpsDataVecs(std::vector<GpsData*>& gpsDatas)
+{
+}
+void Timeline::setTimeline(std::vector<GpsData*>& gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
@@ -38,7 +41,7 @@ void Timeline::setTimeline(std::vector<GpsData*> gpsDatas)
             }
         }
     }
-    sort();
+    sortTimeline();
 }
 
 int Timeline::getNext()
@@ -72,6 +75,7 @@ time_t Timeline::makeTimeObject(string timeString)
     tm = *localtime(&t);
     tm.tm_year = year - 1900;
     tm.tm_mon = month - 1;
+//    tm.tm_mon = month;
     tm.tm_mday = day;
     tm.tm_hour = hour;
     tm.tm_min = min;
@@ -81,7 +85,7 @@ time_t Timeline::makeTimeObject(string timeString)
     return t;
 }
 
-void Timeline::sort()
+void Timeline::sortTimeline()
 {
     TimelineObject compareObj;
 	std::sort(m_timeline.begin(), m_timeline.end(), compareObj);

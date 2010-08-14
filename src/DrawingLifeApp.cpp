@@ -55,7 +55,7 @@ void DrawingLifeApp::loadXmlSettings()
                         m_settings.getValue("ui:font1:size3", 18));
     m_fontInfo.loadFont(m_settings.getValue("ui:font2:name", "Standard0753.ttf"),
                         m_settings.getValue("ui:font2:size1", 8));
-    ofSetLogLevel(m_settings.getAttribute("settings:log", "level", 0));
+    m_logLevel = m_settings.getAttribute("settings:log", "level", 0);
 	m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
 	m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
     m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
@@ -63,7 +63,10 @@ void DrawingLifeApp::loadXmlSettings()
     // db path must be absolute path for DBReader (true as second parameter)
     m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
     DBG_VAL(m_dbPath);
-	m_currentCity = m_settings.getValue("data:defaultcity", "London");
+    m_dbQueryData.type = m_settings.getValue("dbquery:type", 4);
+    m_dbQueryData.yearStart = m_settings.getValue("dbquery:time:yearstart", 2009);
+    m_dbQueryData.yearEnd = m_settings.getValue("dbquery:time:yearend", 2010);
+    m_dbQueryData.city = m_settings.getValue("dbquery:city", "Berlin");
     m_settings.pushTag("data");
     m_settings.pushTag("person");
     m_numPerson = m_settings.getNumTags("name");
@@ -97,6 +100,8 @@ void DrawingLifeApp::setup()
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
 
+    ofSetLogLevel(m_logLevel);
+
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
     this->setViewAspectRatio();
@@ -105,8 +110,15 @@ void DrawingLifeApp::setup()
 
     if (m_loadOnStart == 1)
     {
-        loadGpsDataCity(m_names, m_currentCity);
-
+        switch(m_dbQueryData.type)
+        {
+            case DB_QUERY_CITY:
+            loadGpsDataCity(m_names, m_dbQueryData.city);
+            break;
+            case DB_QUERY_YEAR:
+            loadGpsDataYearRange(m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
+            break;
+        }
         for(int i = 0; i < m_numPerson; ++i)
         {
 			if(m_walks[i]->getGpsData().getTotalGpsPoints() == 0)
@@ -157,7 +169,8 @@ void DrawingLifeApp::draw()
             {
                 if (m_isDebugMode)
                 {
-                    ofSetColor(0xffffff);
+//                    ofSetColor(0xffffff);
+                    ofSetColor(255, 255, 255, m_legendAlpha);
 					ofDrawBitmapString(m_walks[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 }
                 else
@@ -170,7 +183,7 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 64);
+                ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, m_trackAlpha);
                 ofNoFill();
                 glPushMatrix();
                 glTranslated(m_zoomX, m_zoomY, m_zoomZ);
@@ -184,7 +197,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, 100);
+            ofSetColor((FOREGROUND >> 16) & 0xff, (FOREGROUND >> 8) & 0xff, FOREGROUND & 0xff, m_trackAlpha);
             ofNoFill();
             glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(int i = 0; i < m_numPerson; ++i)
@@ -208,7 +221,7 @@ void DrawingLifeApp::drawStartScreen()
 
     m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
 
-    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
+//    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
@@ -237,7 +250,6 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         {
             // -----------------------------------------------------------------------------
             // DB query
-            // TODO: Query needs to match with original database query used in the setup function.
             if(m_dbReader->getGpsDataCity(*m_gpsDatas[ii], names[ii], city))
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
@@ -284,9 +296,93 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 //        }
         this->calculateGlobalMinMaxValues();
 
+        Walk::setTrackAlpha(m_dotAlpha);
+        for(unsigned int i = 0; i < m_walks.size(); ++i)
+        {
+            m_walks[i]->setDotColors();
+        }
+
     }
+}
+void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd)
+{
+    m_startScreenMode = false;
 
+    // get GpsData from database
+    for(int ii = 0; ii < m_numPerson; ++ii)
+    {
+        SAFE_DELETE(m_gpsDatas[ii]);
+        m_gpsDatas[ii] = new GpsData();
 
+        SAFE_DELETE(m_magicBoxes[ii]);
+        m_magicBoxes[ii] = new MagicBox();
+
+		SAFE_DELETE(m_walks[ii]);
+        m_walks[ii] = new Walk();
+
+		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
+        m_walks[ii]->reset();
+
+        m_dbReader = new DBReader(m_dbPath);
+        if (m_dbReader->setupDbConnection())
+        {
+            // -----------------------------------------------------------------------------
+            // DB query
+            if(m_dbReader->getGpsDataYearRange(*m_gpsDatas[ii], names[ii], yearStart, yearEnd))
+            {
+                ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
+                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!",
+                      m_gpsDatas[ii]->getSegments().size(),
+                      m_gpsDatas[ii]->getTotalGpsPoints());
+				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
+				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
+            }
+            else
+            {
+                ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+            }
+            m_dbReader->closeDbConnection();
+        }
+        // -----------------------------------------------------------------------------
+        SAFE_DELETE(m_dbReader);
+        // test print
+        maxPoints = 0;
+        for (unsigned int i = 0; i < m_gpsDatas[ii]->getSegments().size(); ++i)
+        {
+            for (unsigned int j = 0; j < m_gpsDatas[ii]->getSegments()[i].getPoints().size(); ++j)
+            {
+                ++maxPoints;
+            }
+        }
+
+        ofLog(m_logLevel, "Start year: %d, end year: %d", yearStart, yearEnd);
+        ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
+          m_gpsDatas[ii]->getMinUtmX(),
+          m_gpsDatas[ii]->getMaxUtmX(),
+          m_gpsDatas[ii]->getMinUtmY(),
+          m_gpsDatas[ii]->getMaxUtmY());
+        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[ii]->getProjectionCentralMeridian());
+    }
+    if (m_gpsDatas.size() > 0)
+    {
+        m_timeline->setTimeline(m_gpsDatas);
+
+//        ofstream myfile;
+//        myfile.open ("timeline_output.txt");
+//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
+//        {
+////            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
+////                                                    m_timeline->getTimeline()[i].id,
+////                                                    (long)(m_timeline->getTimeline()[i].secs));
+//            myfile << m_timeline->getTimeline()[i].timeString.c_str()
+//            << " : " << m_timeline->getTimeline()[i].id
+//            << " : " << (long)(m_timeline->getTimeline()[i].secs) << "\n";
+//
+//        }
+//        myfile.close();
+
+        this->calculateGlobalMinMaxValues();
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -357,33 +453,43 @@ void DrawingLifeApp::keyPressed  (int key)
         m_isDebugMode = !m_isDebugMode;
         break;
     case 49:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Berlin");
         break;
     case 50:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "London");
         break;
     case 51:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Barcelona");
         break;
     case 52:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Hamburg");
         break;
     case 53:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Vienna");
         break;
     case 54:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names,"New York");
         break;
     case 55:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Tokyo");
         break;
     case 56:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "San Francisco");
         break;
     case 57:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Bristol");
         break;
     case 48:
+    if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Banff");
         break;
     case 'w':
@@ -394,20 +500,19 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_UP:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i]->addToBoxSize(50.0);
+            m_magicBoxes[i]->addToBoxSize(-500.0);
         }
         break;
     case OF_KEY_DOWN:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i]->addToBoxSize(-50.0);
+            m_magicBoxes[i]->addToBoxSize(500.0);
         }
         break;
     case OF_KEY_RIGHT:
-        m_zoomX -= 50;
         break;
     case OF_KEY_LEFT:
-        m_zoomX += 50;
+
         break;
     default:
         break;

@@ -118,6 +118,10 @@ public:
 
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
 
+    static void setTrackAlpha(int dotAlpha) { m_dotAlpha = dotAlpha; }
+
+    void setDotColors();
+
 	const GpsData& getGpsData() const { return *m_gpsData; }
 
 	void setGpsData(GpsData* gpsData) { m_gpsData = 0; m_gpsData = gpsData; }
@@ -144,6 +148,7 @@ private:
     static double minDrawY;
 
 	static float m_dotSize;
+    static int m_dotAlpha;
 
 	int m_currentGpsPoint;
 	int m_currentGpsSegment;
@@ -162,4 +167,5 @@ private:
 
     MagicBox* m_magicBox;
 
+    ofColor m_dotColor;
 };

@@ -187,7 +187,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int 
 	query << "-";
 	query << (day < 10 ? "0" : "");
 	query << day;
-	query << "' ORDER BY segment;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -214,7 +214,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const std::string& userName,
 	query << "-";
 	query << (dayEnd < 10 ? "0" : "");
 	query << dayEnd;
-	query << "' ORDER BY segment;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -231,7 +231,7 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const std::string& userName, in
 	query << "-";
 	query << (month < 10 ? "0" : "");
 	query << month;
-	query << "' ORDER BY segment;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -253,7 +253,7 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const std::string& userNam
 	query << "-";
 	query << (monthEnd < 10 ? "0" : "");
 	query << monthEnd;
-	query << "' ORDER BY segment;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -268,7 +268,7 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const std::string& userName, int
 	query << "' AND strftime('%Y', time) = '";
 	query << (year < 10 ? "0" : "");
 	query << year;
-	query << "' ORDER BY segment;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -286,7 +286,7 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const std::string& userName
 	query << "' AND strftime('%Y', time) <= '";
 	query << (yearEnd < 10 ? "0" : "");
 	query << yearEnd;
-	query << "' ORDER BY segment;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -300,7 +300,7 @@ bool DBReader::getGpsDataCity(GpsData& gpsData, const std::string& userName, con
 	query << userName;
 	query << "' AND c.city = '";
 	query << city;
-	query << "' ORDER BY time ASC;";
+	query << "' ORDER BY datetime(time);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }

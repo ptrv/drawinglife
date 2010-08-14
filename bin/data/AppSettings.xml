@@ -5,14 +5,26 @@
     <name>Dan</name>
     <name>Sophia</name>
   </person>
-  <defaultcity>Berlin</defaultcity>
 </data>
+<dbquery>
+	<!-- There are four query types: -->
+	<!-- 1 = day range -->
+	<!-- 2 = month range -->
+	<!-- 3 = year range -->
+	<!-- 4 = city -->
+	<type>3</type>
+ 	<time>
+ 	<yearstart>2009</yearstart>
+  	<yearend>2010</yearend>
+ 	</time>
+ 	<city>Berlin</city>
+</dbquery>
 <settings>
   <log level="0" />
   <loadgpsonstart>1</loadgpsonstart>
   <debugmode>0</debugmode>
   <drawspeed>2</drawspeed>
-  <framerate>60</framerate>
+  <framerate>30</framerate>
 </settings>
 <ui>
   <font1>
