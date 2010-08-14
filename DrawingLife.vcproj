@@ -605,6 +605,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\DrawingLifeTypes.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\GpsData.h"
 				>
 			</File>

@@ -273,7 +273,6 @@ double Walk::getScaledUtmX(double normalizedUtmX)
 
 double Walk::getScaledUtmY(double normalizedUtmY)
 {
-	//    return ( (lat - m_minUtmY) / (m_maxUtmY - m_minUtmY) * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
     // Flip y coordinates ??
     return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
@@ -287,7 +286,7 @@ const std::string& Walk::getCurrentGpsInfoDebug()
 	"UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
 	"Time              : " + getCurrentTimestamp() + "\n" +
 	"Location          : " + getGpsLocationCurrent() + "\n" +
-	"Central meridiam  : " + ofToString(m_gpsData->getLon0(), 7) + "\n" +
+	"Central meridian  : " + ofToString(m_gpsData->getLon0(), 7) + "\n" +
 	"Min/Max latitude  : " + ofToString(m_gpsData->getMinLat(), 7) + " / " + ofToString(m_gpsData->getMaxLat(), 7) + "\n" +
 	"Min/Max longitude : " + ofToString(m_gpsData->getMinLon(), 7) + " / " + ofToString(m_gpsData->getMaxLon(), 7) + "\n" +
 	"Min/Max UTM X     : " + ofToString(m_gpsData->getMinUtmX(), 7) + " / " + ofToString(m_gpsData->getMaxUtmX(), 7) + "\n" +
