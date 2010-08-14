@@ -12,22 +12,6 @@
 #include "Timeline.h"
 #include "Walk.h"
 
-#define DB_QUERY_DAY            1
-#define DB_QUERY_MONTH          2
-#define DB_QUERY_YEAR           3
-#define DB_QUERY_CITY           4
-
-struct DBQueryData
-{
-    int type;
-    int dayStart;
-    int dayEnt;
-    int monthStart;
-    int monthEnd;
-    int yearStart;
-    int yearEnd;
-    std::string city;
-};
 /**
  *  \brief Main application class.
  */

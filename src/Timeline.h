@@ -11,21 +11,6 @@
 #include "GpsData.h"
 
 /**
- * \brief Represents an entry on the timeline with time and id.
- *
- */
-struct TimelineObject
-{
-    std::string timeString;
-    time_t secs;
-    int id;
-    bool operator() (TimelineObject lhs, TimelineObject rhs)
-    {
-        return lhs.secs < rhs.secs;
-    }
-};
-
-/**
  * \brief Class for managing the timeline.
  *
  */

@@ -14,8 +14,6 @@
  *
  * Makes easy to debug values of various types.
  */
-
-
 class Logger {
 private:
 	Logger();

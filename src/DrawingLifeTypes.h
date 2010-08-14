@@ -2,11 +2,47 @@
 #define _DRAWINGLIFETYPES_H_
 
 
+/**
+ * \brief Timeline value with time and id.
+ *
+ */
+struct TimelineObject
+{
+    std::string timeString;
+    time_t secs;
+    int id;
+    bool operator() (TimelineObject lhs, TimelineObject rhs)
+    {
+        return lhs.secs < rhs.secs;
+    }
+};
+
+/**
+ * \brief Data for the database query
+ *
+ */
+struct DBQueryData
+{
+    int type;
+    int dayStart;
+    int dayEnt;
+    int monthStart;
+    int monthEnd;
+    int yearStart;
+    int yearEnd;
+    std::string city;
+};
+
+/**
+ * \brief Represents latitude and longitude value of an Gps coordinate.
+ *
+ */
 struct GpsCoord
 {
     double lat;
     double lon;
 };
+
 /**
  * \brief Represents x and y value of an UTM coordinate.
  *
