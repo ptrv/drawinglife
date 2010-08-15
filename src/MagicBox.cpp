@@ -109,16 +109,24 @@ void MagicBox::addToBoxSize(double newSize)
     double oldPadding = m_padding;
 
     m_currentSize += newSize;
-    m_theBox.x -= newSize/2;
-    m_theBox.y -= newSize/2;
-    m_theBox.width = m_theBox.height = m_currentSize;
 
-    // calcuzlates new padding with old size/padding ratio.
-    m_padding = m_currentSize/(oldSize/oldPadding);
+    if(m_currentSize > 0)
+    {
+        m_theBox.x -= newSize/2;
+        m_theBox.y -= newSize/2;
+        m_theBox.width = m_theBox.height = m_currentSize;
 
-    m_paddedBox.setFromCenter(m_theBox.getCenter(), m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
+        // calcuzlates new padding with old size/padding ratio.
+        m_padding = m_currentSize/(oldSize/oldPadding);
 
+        m_paddedBox.setFromCenter(m_theBox.getCenter(), m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
+    }
+    else
+    {
+        m_currentSize = oldSize;
+    }
 }
+
 const ofxRectangled MagicBox::getNormalizedBox()
 {
     ofxRectangled tmpRect;
