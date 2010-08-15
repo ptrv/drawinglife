@@ -282,10 +282,10 @@ class ofxRectangled {
 	}
 
 	bool inside(double px, double py){
-		if( px < x && py < y && px > x + width && py > y + height ){
-		    return false;
+		if( px > x && py > y && px < x + width && py < y + height ){
+		    return true;
 		}
-		return true;
+		return false;
 	}
 
    double x;
