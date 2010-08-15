@@ -3,9 +3,6 @@
  ==========================================================*/
 
 #include "MagicBox.h"
-#include "GeographicLib/TransverseMercatorExact.hpp"
-
-using namespace GeographicLib;
 
 MagicBox::MagicBox(double size, double padding)
 :

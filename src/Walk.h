@@ -2,6 +2,9 @@
  Copyright (c) avp::ptr, 2010
 =======================================================*/
 
+#ifndef _WALK_H_
+#define _WALK_H_
+
 #include <string>
 #include "GpsData.h"
 #include "MagicBox.h"
@@ -159,3 +162,5 @@ private:
 
     ofColor m_dotColor;
 };
+
+#endif // _WALK_H_

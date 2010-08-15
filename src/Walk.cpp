@@ -279,9 +279,6 @@ double Walk::getScaledUtmY(double normalizedUtmY)
 
 const std::string& Walk::getCurrentGpsInfoDebug()
 {
-//    double viewX = m_magicBox->getTheBox().getCenter().x;
-//    double viewY = m_magicBox->getTheBox().getCenter().y;
-//    double viewS = m_magicBox->getTheBox().width;
     m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
 	"Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
 	"Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +

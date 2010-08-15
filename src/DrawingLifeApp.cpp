@@ -76,7 +76,7 @@ void DrawingLifeApp::loadXmlSettings()
 
     m_logLevel = m_settings.getAttribute("settings:log", "level", 0);
 
-	m_isDebugMode = m_settings.getValue("settings:debugmode", 1);
+	m_isDebugMode = m_settings.getValue("settings:debugmode", 0);
 
     m_magicBoxSize = m_settings.getValue("settings:boundingbox:size", 3000.0);
     m_magicBoxPadding = m_settings.getValue("settings:boundingbox:padding", 500.0);
