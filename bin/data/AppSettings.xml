@@ -26,8 +26,8 @@
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<boundingbox>
-		<size>4000.0</size>	
-		<padding>300.0</padding>
+		<size>10000.0</size>	
+		<padding>1000.0</padding>
   	</boundingbox>
 </settings>
 <ui>
