@@ -99,6 +99,7 @@ void MagicBox::updateBoxIfNeeded(const ofxPointd utmPoint)
             m_theBox.y += utmPoint.y - m_paddedBox.y;
             m_paddedBox.y += utmPoint.y - m_paddedBox.y;
         }
+        m_centerUtm = m_theBox.getCenter();
     }
 }
 

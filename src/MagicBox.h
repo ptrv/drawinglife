@@ -30,6 +30,8 @@ public:
     const ofxRectangled getNormalizedBox();
     const ofxRectangled& getPaddedBox() const { return m_theBox; }
     const ofxRectangled getNormalizedPaddedBox();
+    const ofxPointd& getCenter() const {return m_centerUtm; }
+    const double getSize() const { return m_currentSize; }
 
 private:
 
