@@ -179,13 +179,17 @@ void DrawingLifeApp::update()
 {
     if (m_isAnimation)
     {
-        for(int i = 0; i < m_drawSpeed; ++i)
+        if(m_timeline->getTimeline().size() > 0)
         {
-            int id = m_timeline->getNext();
-            if (id < m_numPerson)
+            for(int i = 0; i < m_drawSpeed; ++i)
             {
-				m_walks[id]->update();
+                int id = m_timeline->getNext();
+                if (id < m_numPerson)
+                {
+                    m_walks[id]->update();
+                }
             }
+
         }
     }
 }
