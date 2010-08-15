@@ -287,7 +287,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
-				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
+//				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
             }
             else
             {
@@ -330,6 +330,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
             m_walks[i]->setDotColors();
+            m_walks[i]->setMagicBox(m_magicBoxes[i]);
         }
 
     }
@@ -365,7 +366,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
-				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
+//				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
             }
             else
             {
@@ -417,6 +418,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
             m_walks[i]->setDotColors();
+            m_walks[i]->setMagicBox(m_magicBoxes[i]);
         }
 
     }
