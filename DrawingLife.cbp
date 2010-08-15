@@ -5,7 +5,7 @@
 		<Option title="DrawingLife" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons/;src/;addons/ofxDirList/src/;addons/ofxNetwork/src/;addons/ofxOpenCv/src/;addons/ofxOsc/src/;addons/ofxThread/src/;addons/ofxVectorGraphics/libs/;addons/ofxVectorGraphics/src/;addons/ofxVectorMath/src/;addons/ofXmlSettings/libs/;addons/ofXmlSettings/src/;sqlite3x/;ofxTimer/;" />
+		<Option virtualFolders="addons/;src/;addons/ofxDirList/src/;addons/ofxNetwork/src/;addons/ofxOpenCv/src/;addons/ofxOsc/src/;addons/ofxThread/src/;addons/ofxVectorGraphics/libs/;addons/ofxVectorGraphics/src/;addons/ofxVectorMath/src/;addons/ofXmlSettings/libs/;addons/ofXmlSettings/src/;sqlite3x/;ofxTimer/;settings/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/DrawingLife_debug" prefix_auto="1" extension_auto="1" />
@@ -339,6 +339,9 @@
 		</Unit>
 		<Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.h">
 			<Option virtualFolder="addons/ofXmlSettings/src" />
+		</Unit>
+		<Unit filename="bin/data/AppSettings.xml">
+			<Option virtualFolder="settings/" />
 		</Unit>
 		<Unit filename="libs/ofxTimer/src/TimedCounter.cpp">
 			<Option virtualFolder="ofxTimer/" />
