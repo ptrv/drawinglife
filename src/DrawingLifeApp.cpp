@@ -48,19 +48,31 @@ DrawingLifeApp::~DrawingLifeApp()
 void DrawingLifeApp::loadXmlSettings()
 {
 	// reading settings from xml file
-    m_settings.loadFile("AppSettings.xml");
+	std::string settingsFile = "AppSettings.xml";
+    if(m_settings.loadFile(settingsFile))
+    {
+        std::cout << settingsFile << " loaded!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Loading " << settingsFile << " failed!" << std::endl;
+    }
 
-	m_fontTitle.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
-						 m_settings.getValue("ui:font1:size1", 50));
+    m_settings.pushTag("ui");
+    m_settings.pushTag("fonts");
+	m_fontTitle.loadFont(m_settings.getAttribute("font", "name","mono.ttf", 0),
+						 m_settings.getAttribute("font", "size", 50, 0));
 
-    m_fontAuthor.loadFont(m_settings.getValue("ui:font1:name", "mono.ttf"),
-                          m_settings.getValue("ui:font1:size2", 24));
+    m_fontAuthor.loadFont(m_settings.getAttribute("font", "name", "mono.ttf", 1),
+                          m_settings.getAttribute("font", "size", 24, 1));
 
-    m_fontText.loadFont(m_settings.getValue("ui:font1", "mono.ttf"),
-                        m_settings.getValue("ui:font1:size3", 18));
+    m_fontText.loadFont(m_settings.getAttribute("font", "name", "mono.ttf", 2),
+                        m_settings.getAttribute("font", "size", 16, 2));
 
-    m_fontInfo.loadFont(m_settings.getValue("ui:font2:name", "Standard0753.ttf"),
-                        m_settings.getValue("ui:font2:size1", 8));
+    m_fontInfo.loadFont(m_settings.getAttribute("font", "name", "consola.ttf", 3),
+                        m_settings.getAttribute("font", "size", 11, 3));
+    m_settings.popTag();
+    m_settings.popTag();
 
     m_colorForeground.r = m_settings.getAttribute("ui:color:foreround", "r", 255);
     m_colorForeground.g = m_settings.getAttribute("ui:color:foreround", "g", 255);

@@ -26,23 +26,18 @@
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<boundingbox>
-		<size>4000.0</size>	
-		<padding>300.0</padding>
+		<size>10000.0</size>	
+		<padding>1000.0</padding>
   	</boundingbox>
 </settings>
 <ui>
-	<font1>
-		<name>mono.ttf</name>
-		<size1>50</size1>
-		<size2>24</size2>
-		<size3>16</size3>
-	</font1>
-	<font2>
-		<!-- <name>Standard0753.ttf</name> -->
-		<!-- <size1>8</size1> -->
-		<name>consola.ttf</name>
-		<size1>11</size1>
-	</font2>
+	<fonts>
+		<font name="mono.ttf" size="50" />
+		<font name="mono.ttf" size="24" />
+		<font name="mono.ttf" size="16" />
+		<!-- <font name="Standard0753.ttf" size="8" /> -->
+		<font name="consola.ttf" size="11" />
+	</fonts>
 	<alpha>
 		<tracks>64</tracks>
 		<dots>200</dots>
