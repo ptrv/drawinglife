@@ -397,6 +397,8 @@ void GpsData::calculateUtmPoints()
 // TODO parameter m_lon0
 void GpsData::calculateUtmPointsGlobalLon()
 {
+    m_indices.clear();
+    int counter = 0;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
@@ -413,6 +415,13 @@ void GpsData::calculateUtmPointsGlobalLon()
                         m_segments[i].getPoints()[j].getLongitude(),
                         utmP.x, utmP.y, gamma, k);
             utmVec.push_back(utmP);
+
+            GpsDataIndex tmpIndex;
+            tmpIndex.point = counter;
+            tmpIndex.gpsPoint = j;
+            tmpIndex.gpsSegment = i;
+            m_indices.push_back(tmpIndex);
+            ++counter;
         }
         m_utmPoints.push_back(utmVec);
     }

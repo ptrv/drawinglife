@@ -25,6 +25,9 @@
 	<debugmode>0</debugmode>
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
+	<!-- This sets the number of points to draw.-->
+	<!-- To draw all points set 0 (very cpu intensive) -->
+	<walklength>0</walklength>
 	<boundingbox>
 		<size>10000.0</size>	
 		<padding>1000.0</padding>

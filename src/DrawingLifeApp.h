@@ -69,6 +69,8 @@ private:
 	void calculateGlobalMinMaxValues();
 
 	void loadXmlSettings();
+
+	void fpsDisplay();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -91,6 +93,7 @@ private:
 	bool m_isFullscreen;
 	bool m_isDebugMode;
 	bool m_isAnimation;
+	bool m_showFps;
 	//---------------------------------------------------------------------------
 	double m_zoomX;
 	double m_zoomY;
@@ -126,6 +129,12 @@ private:
 
     double m_magicBoxSize;
     double m_magicBoxPadding;
+
+    float timeNow, timeThen;
+    double timeSum;
+    float fpsToShow;
+
+    int m_maxPointsToDraw;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

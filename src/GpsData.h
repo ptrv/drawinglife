@@ -202,6 +202,8 @@ public:
     */
     void calculateUtmPoints(double lon0);
 
+    const std::vector<GpsDataIndex >& getIndices() const { return m_indices; };
+
 private:
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1.
@@ -247,6 +249,8 @@ private:
 	std::vector< std::vector<UtmPoint> > m_normalizedUtmPoints;
 	std::vector< std::vector<UtmPoint> > m_normalizedUtmPointsGlobal;
     double m_lon0;
+
+    std::vector<GpsDataIndex > m_indices;
 };
 
 #endif // _GPSDATA_H_

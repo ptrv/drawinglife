@@ -17,6 +17,7 @@ DrawingLifeApp::DrawingLifeApp() :
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
+    m_showFps(false),
     m_zoomX(0.0),
     m_zoomY(0.0),
     m_zoomZ(0.0),
@@ -31,7 +32,12 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_loadOnStart(0),
 	m_frameRate(60),
 	m_magicBoxSize(3000.0),
-	m_magicBoxPadding(500.0)
+	m_magicBoxPadding(500.0),
+	timeNow(0.0f),
+	timeThen(0.0f),
+	timeSum(0.0),
+	fpsToShow(0.0),
+	m_maxPointsToDraw(10000)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -90,16 +96,16 @@ void DrawingLifeApp::loadXmlSettings()
 
 	m_isDebugMode = m_settings.getValue("settings:debugmode", 0);
 
+    m_maxPointsToDraw = m_settings.getValue("settings:walklength", 10000);
+
     m_magicBoxSize = m_settings.getValue("settings:boundingbox:size", 3000.0);
     m_magicBoxPadding = m_settings.getValue("settings:boundingbox:padding", 500.0);
-
-
 
 	m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
     m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
     m_legendAlpha = m_settings.getValue("ui:alpha:legend", 255);
-    // db path must be absolute path for DBReader (true as second parameter)
 
+    // db path must be absolute path for DBReader (true as second parameter)
     m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
     DBG_VAL(m_dbPath);
 
@@ -115,7 +121,7 @@ void DrawingLifeApp::loadXmlSettings()
     {
         m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(new GpsData());
-		m_walks.push_back(new Walk());
+		m_walks.push_back(new Walk(m_maxPointsToDraw));
 		m_magicBoxes.push_back(new MagicBox(m_magicBoxSize, m_magicBoxPadding));
         DBG_VAL(m_names[i]);
 
@@ -231,10 +237,10 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
                 ofNoFill();
-                glPushMatrix();
-                glTranslated(m_zoomX, m_zoomY, m_zoomZ);
+//                glPushMatrix();
+//                glTranslated(m_zoomX, m_zoomY, m_zoomZ);
 				m_walks[i]->draw();
-                glPopMatrix();
+//                glPopMatrix();
             }
         }
         else
@@ -245,12 +251,14 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
             ofNoFill();
-            glTranslated(m_zoomX, m_zoomY, m_zoomZ);
+//            glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(int i = 0; i < m_numPerson; ++i)
             {
 				m_walks[i]->drawAll();
             }
         }
+        if(m_showFps)
+            fpsDisplay();
     }
 }
 // -----------------------------------------------------------------------------
@@ -286,7 +294,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
 
 		SAFE_DELETE(m_walks[ii]);
-        m_walks[ii] = new Walk();
+        m_walks[ii] = new Walk(m_maxPointsToDraw);
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();
@@ -365,7 +373,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
         m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
 
 		SAFE_DELETE(m_walks[ii]);
-        m_walks[ii] = new Walk();
+        m_walks[ii] = new Walk(m_maxPointsToDraw);
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();
@@ -506,6 +514,9 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 'd':
         m_isDebugMode = !m_isDebugMode;
+        break;
+    case 'p':
+        m_showFps = !m_showFps;
         break;
     case 'c':
         for(unsigned int i = 0; i < m_walks.size(); ++i)
@@ -648,4 +659,22 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
         m_gpsDatas[i]->normalizeUtmPointsGlobal();
     }
 
+}
+
+void DrawingLifeApp::fpsDisplay()
+{
+    timeNow = ofGetElapsedTimef();
+    double diff = timeNow-timeThen;
+    timeThen		= timeNow;
+
+    timeSum += diff;
+    if (timeSum > 0.5)
+    {
+        fpsToShow = 1.0/diff;
+        timeSum = 0.0;
+    }
+
+    ofSetColor(0xffffff);
+    std::string str = "FPS: "+ofToString((double)fpsToShow, 1);
+    ofDrawBitmapString(str, 20.0, ofGetHeight()-30 );
 }

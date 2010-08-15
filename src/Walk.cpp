@@ -20,7 +20,7 @@ double Walk::minDrawY = std::numeric_limits<double>::max();
 float Walk::m_dotSize = 3.0;
 int Walk::m_dotAlpha = 127;
 
-Walk::Walk()
+Walk::Walk(int maxPointsToDraw)
 :
 m_gpsData(NULL),
 m_currentGpsPoint(0),
@@ -35,7 +35,8 @@ m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
-m_magicBox(NULL)
+m_magicBox(NULL),
+m_maxPointsToDraw(maxPointsToDraw)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
@@ -114,8 +115,28 @@ void Walk::draw()
 
         m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
                                                 m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
+        int startSeg, startPoint;
+        if(m_maxPointsToDraw > 0)
+        {
+            if(m_maxPointsToDraw - m_currentPoint <= 0)
+            {
+                int startIndex = m_currentPoint-m_maxPointsToDraw;
+                startSeg = m_gpsData->getIndices()[startIndex].gpsSegment;
+                startPoint = m_gpsData->getIndices()[startIndex].gpsPoint;
+            }
+            else
+            {
+                startSeg = 0;
+                startPoint = 0;
+            }
+        }
+        else
+        {
+            startSeg = 0;
+            startPoint = 0;
+        }
 
-        for (int i = 0; i <= m_currentGpsSegment; ++i)
+        for (int i = startSeg; i <= m_currentGpsSegment; ++i)
         {
             glBegin(GL_LINE_STRIP);
             int pointEnd;
@@ -123,7 +144,8 @@ void Walk::draw()
                 pointEnd = m_currentGpsPoint;
             else
                 pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
-            for (int j = 0; j <= pointEnd; ++j)
+
+            for (int j = startPoint; j <= pointEnd; ++j)
             {
                 bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
                 if(isInBox)
@@ -134,6 +156,8 @@ void Walk::draw()
                 }
             }
             glEnd();
+
+            startPoint = 0;
         }
         ofFill();
         ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
@@ -324,6 +348,13 @@ void Walk::setDotColors()
 	m_dotColor.b = (int)ofRandom(30,255);
 
 }
+
+void Walk::setGpsData(GpsData* gpsData)
+{
+    m_gpsData = 0;
+    m_gpsData = gpsData;
+}
+
 
 void Walk::setMagicBox(MagicBox* magicBox)
 {

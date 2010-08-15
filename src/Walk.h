@@ -12,7 +12,7 @@
 class Walk
 {
 public:
-	Walk();
+	Walk(int maxPointsToDraw);
 	~Walk();
 
 	//------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ public:
 
 	const GpsData& getGpsData() const { return *m_gpsData; }
 
-	void setGpsData(GpsData* gpsData) { m_gpsData = 0; m_gpsData = gpsData; }
+	void setGpsData(GpsData* gpsData);
 
 	void setMagicBox(MagicBox* magicBox);
 
@@ -148,6 +148,8 @@ private:
 	int m_currentPoint;
 	bool m_firstPoint;
 
+    CurrentIndex m_currentIndex;
+
 	int m_screenWidth;
 	int m_screenHeight;
 	double m_viewXOffset;
@@ -161,6 +163,8 @@ private:
     MagicBox* m_magicBox;
 
     ofColor m_dotColor;
+
+    int m_maxPointsToDraw;
 };
 
 #endif // _WALK_H_
