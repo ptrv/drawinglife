@@ -37,7 +37,8 @@ DrawingLifeApp::DrawingLifeApp() :
 	timeThen(0.0f),
 	timeSum(0.0),
 	fpsToShow(0.0),
-	m_maxPointsToDraw(10000)
+	m_maxPointsToDraw(10000),
+	m_imageAsCurrentPoint(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -49,6 +50,11 @@ DrawingLifeApp::~DrawingLifeApp()
 		SAFE_DELETE(m_magicBoxes[i]);
     }
     SAFE_DELETE(m_timeline);
+    for(unsigned int i = 0; i < m_images.size(); ++i)
+    {
+        m_images[i].clear();
+    }
+    m_images.clear();
 }
 
 void DrawingLifeApp::loadXmlSettings()
@@ -135,8 +141,24 @@ void DrawingLifeApp::loadXmlSettings()
 
 	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1)*m_numPerson;
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
-    m_frameRate = m_settings.getValue("settings:framerate", 60);
+    m_frameRate = m_settings.getValue("settings:framerate", 30);
 
+    m_imageAsCurrentPoint = m_settings.getValue("ui:imageascurrent", 0) == 0 ? false : true;
+
+    if(m_imageAsCurrentPoint)
+    {
+        m_settings.pushTag("ui");
+        m_settings.pushTag("images");
+
+        int numImgTags = m_settings.getNumTags("image");
+        for(int i = 0; i < numImgTags; ++i)
+        {
+            m_imageList.push_back(m_settings.getValue("image", "", i));
+        }
+
+        m_settings.popTag();
+        m_settings.popTag();
+    }
 }
 
 void DrawingLifeApp::setup()
@@ -144,7 +166,7 @@ void DrawingLifeApp::setup()
 	loadXmlSettings();
     ofBackground(m_colorBackground.r, m_colorBackground.g, m_colorBackground.b);
 
-    ofSetFrameRate(60);
+    ofSetFrameRate(m_frameRate);
     ofEnableAlphaBlending();
 
     ofSetLogLevel(m_logLevel);
@@ -153,6 +175,8 @@ void DrawingLifeApp::setup()
     // -----------------------------------------------------------------------------
     this->setViewAspectRatio();
     // -----------------------------------------------------------------------------
+    loadCurrentPointImages();
+
     m_timeline = new Timeline();
 
     if (m_loadOnStart == 1)
@@ -220,7 +244,6 @@ void DrawingLifeApp::draw()
             {
                 if (m_isDebugMode)
                 {
-//                    ofSetColor(0xffffff);
                     ofSetColor(255, 255, 255, m_legendAlpha);
 					ofDrawBitmapString(m_walks[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 }
@@ -237,10 +260,7 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
                 ofNoFill();
-//                glPushMatrix();
-//                glTranslated(m_zoomX, m_zoomY, m_zoomZ);
 				m_walks[i]->draw();
-//                glPopMatrix();
             }
         }
         else
@@ -251,7 +271,6 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
             ofNoFill();
-//            glTranslated(m_zoomX, m_zoomY, m_zoomZ);
             for(int i = 0; i < m_numPerson; ++i)
             {
 				m_walks[i]->drawAll();
@@ -311,7 +330,6 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
-//				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
             }
             else
             {
@@ -355,8 +373,11 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         {
             m_walks[i]->setDotColors();
             m_walks[i]->setMagicBox(m_magicBoxes[i]);
+            if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
+            {
+                m_walks[i]->setCurrentPointImage(m_images[i]);
+            }
         }
-
     }
 }
 void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd)
@@ -390,7 +411,6 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
 				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
-//				m_walks[ii]->setMagicBox(m_magicBoxes[ii]);
             }
             else
             {
@@ -443,8 +463,11 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
         {
             m_walks[i]->setDotColors();
             m_walks[i]->setMagicBox(m_magicBoxes[i]);
+            if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
+            {
+                m_walks[i]->setCurrentPointImage(m_images[i]);
+            }
         }
-
     }
 }
 // -----------------------------------------------------------------------------
@@ -503,6 +526,7 @@ void DrawingLifeApp::fillViewAreaUTM()
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
+    DBG_VAL(key);
     switch (key)
     {
     case 'a':
@@ -526,20 +550,56 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 49:
     if(m_dbQueryData.type == DB_QUERY_CITY)
+    {
         loadGpsDataCity(m_names, "Berlin");
-        break;
+    }
+    else if(m_dbQueryData.type != DB_QUERY_CITY)
+    {
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->toggleZoomLevel(1);
+        }
+    }
+    break;
     case 50:
     if(m_dbQueryData.type == DB_QUERY_CITY)
+    {
         loadGpsDataCity(m_names, "London");
-        break;
+    }
+    else
+    {
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->toggleZoomLevel(2);
+        }
+    }
+    break;
     case 51:
     if(m_dbQueryData.type == DB_QUERY_CITY)
+    {
         loadGpsDataCity(m_names, "Barcelona");
-        break;
+    }
+    else
+    {
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->toggleZoomLevel(3);
+        }
+    }
+    break;
     case 52:
     if(m_dbQueryData.type == DB_QUERY_CITY)
+    {
         loadGpsDataCity(m_names, "Hamburg");
-        break;
+    }
+    else
+    {
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->toggleZoomLevel(4);
+        }
+    }
+    break;
     case 53:
     if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Vienna");
@@ -677,4 +737,23 @@ void DrawingLifeApp::fpsDisplay()
     ofSetColor(0xffffff);
     std::string str = "FPS: "+ofToString((double)fpsToShow, 1);
     ofDrawBitmapString(str, 20.0, ofGetHeight()-30 );
+}
+
+void DrawingLifeApp::loadCurrentPointImages()
+{
+    for(unsigned int i = 0; i < m_imageList.size(); ++i)
+    {
+        ofImage tmpImg;
+        std::string str = "data/currentPointImages/"+m_imageList[i];
+        if(tmpImg.loadImage(str))
+        {
+            m_images.push_back(tmpImg);
+            tmpImg.clear();
+        }
+        else
+        {
+            m_imageAsCurrentPoint = false;
+            break;
+        }
+    }
 }

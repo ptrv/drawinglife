@@ -36,7 +36,8 @@ m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(NULL),
-m_maxPointsToDraw(maxPointsToDraw)
+m_maxPointsToDraw(maxPointsToDraw),
+m_currentPointIsImage(false)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
@@ -136,6 +137,8 @@ void Walk::draw()
             startPoint = 0;
         }
 
+//        ofSetLineWidth(3.0);
+//        ofEnableSmoothing();
         for (int i = startSeg; i <= m_currentGpsSegment; ++i)
         {
             glBegin(GL_LINE_STRIP);
@@ -159,11 +162,16 @@ void Walk::draw()
 
             startPoint = 0;
         }
+//        ofDisableSmoothing();
+
         ofFill();
         ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
         ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
         ofCircle(getScaledUtmX(tmp.x),
                  getScaledUtmY(tmp.y), 5);
+
+        ofSetColor(0xffffff);
+        m_image.draw(getScaledUtmX(tmp.x)-12,getScaledUtmY(tmp.y)-12);
 
 
 
@@ -366,4 +374,10 @@ void Walk::setMagicBox(MagicBox* magicBox)
     tmpCoord.y = m_gpsData->getUtmY(0,0);
     m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
 
+}
+
+void Walk::setCurrentPointImage(ofImage img)
+{
+    m_image = img;
+    m_currentPointIsImage = true;
 }

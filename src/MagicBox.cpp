@@ -4,10 +4,13 @@
 
 #include "MagicBox.h"
 
+double MagicBox::m_zoomLevels[] = {20000.0, 30000.0, 40000.0, 50000.0};
+
 MagicBox::MagicBox(double size, double padding)
 :
 m_currentSize(size),
-m_padding(padding)
+m_padding(padding),
+m_defaultSize(10000.0)
 {
     //ctor
 }
@@ -100,17 +103,17 @@ void MagicBox::updateBoxIfNeeded(const ofxPointd utmPoint)
     }
 }
 
-void MagicBox::addToBoxSize(double newSize)
+void MagicBox::addToBoxSize(double sizeToAdd)
 {
     double oldSize = m_currentSize;
     double oldPadding = m_padding;
 
-    m_currentSize += newSize;
+    m_currentSize += sizeToAdd;
 
     if(m_currentSize > 0)
     {
-        m_theBox.x -= newSize/2;
-        m_theBox.y -= newSize/2;
+        m_theBox.x -= sizeToAdd/2;
+        m_theBox.y -= sizeToAdd/2;
         m_theBox.width = m_theBox.height = m_currentSize;
 
         // calcuzlates new padding with old size/padding ratio.
@@ -121,6 +124,55 @@ void MagicBox::addToBoxSize(double newSize)
     else
     {
         m_currentSize = oldSize;
+    }
+}
+
+void MagicBox::setSize(double newSize)
+{
+    double oldSize = m_currentSize;
+    double oldPadding = m_padding;
+
+    m_theBox.setFromCenter(m_centerUtm, newSize, newSize);
+
+    m_currentSize = newSize;
+
+    m_padding = m_currentSize/(oldSize/oldPadding);
+    m_paddedBox.setFromCenter(m_centerUtm, newSize-(2*m_padding),newSize-(2*m_padding));
+}
+
+void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
+{
+    if(zoomLevel > 4)
+        zoomLevel = 4;
+
+    switch(zoomLevel)
+    {
+        case 1:
+            if(m_currentSize != m_zoomLevels[0])
+                this->setSize(m_zoomLevels[0]);
+            else
+                this->setSize(m_defaultSize);
+        break;
+        case 2:
+            if(m_currentSize != m_zoomLevels[1])
+                this->setSize(m_zoomLevels[1]);
+            else
+                this->setSize(m_defaultSize);
+        break;
+        case 3:
+            if(m_currentSize != m_zoomLevels[2])
+                this->setSize(m_zoomLevels[2]);
+            else
+                this->setSize(m_defaultSize);
+        break;
+        case 4:
+            if(m_currentSize != m_zoomLevels[3])
+                this->setSize(m_zoomLevels[3]);
+            else
+                this->setSize(m_defaultSize);
+        break;
+        default:
+        break;
     }
 }
 

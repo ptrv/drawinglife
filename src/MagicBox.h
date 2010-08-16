@@ -24,14 +24,17 @@ public:
 
     void updateBoxSize(double size);
 
-    void addToBoxSize(double newSize);
+    void addToBoxSize(double sizeToAdd);
 
+    void setSize(double newSize);
     const ofxRectangled& getTheBox() const { return m_theBox; }
     const ofxRectangled getNormalizedBox();
     const ofxRectangled& getPaddedBox() const { return m_theBox; }
     const ofxRectangled getNormalizedPaddedBox();
     const ofxPointd& getCenter() const {return m_centerUtm; }
     const double getSize() const { return m_currentSize; }
+
+    void toggleZoomLevel(unsigned int zoomLevel);
 
 private:
 
@@ -47,6 +50,9 @@ private:
 
     double m_padding;
 
+    static double m_zoomLevels[4];
+
+    double m_defaultSize;
 };
 
 #endif // _MAGICBOX_H_

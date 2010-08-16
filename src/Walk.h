@@ -127,6 +127,8 @@ public:
 
 	const GpsData& getGpsData() const { return *m_gpsData; }
 
+    void setCurrentPointImage(ofImage img);
+
 	void setGpsData(GpsData* gpsData);
 
 	void setMagicBox(MagicBox* magicBox);
@@ -165,6 +167,10 @@ private:
     ofColor m_dotColor;
 
     int m_maxPointsToDraw;
+
+    ofImage m_image;
+
+    bool m_currentPointIsImage;
 };
 
 #endif // _WALK_H_

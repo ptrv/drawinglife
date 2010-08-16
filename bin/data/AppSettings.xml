@@ -27,7 +27,7 @@
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->
 	<!-- To draw all points set 0 (very cpu intensive) -->
-	<walklength>0</walklength>
+	<walklength>10000</walklength>
 	<boundingbox>
 		<size>10000.0</size>	
 		<padding>1000.0</padding>
@@ -51,4 +51,9 @@
 		<background r="0" g="0" b="0" />
 		<viewbox r="30" g="30" b="30" />
 	</color>
+	<imageascurrent>0</imageascurrent>
+	<images>
+		<image></image>
+		<image></image>
+	</images>
 </ui>

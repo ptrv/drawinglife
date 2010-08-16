@@ -71,6 +71,8 @@ private:
 	void loadXmlSettings();
 
 	void fpsDisplay();
+
+	void loadCurrentPointImages();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -135,6 +137,10 @@ private:
     float fpsToShow;
 
     int m_maxPointsToDraw;
+
+    std::vector<std::string > m_imageList;
+    std::vector<ofImage > m_images;
+    bool m_imageAsCurrentPoint;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
