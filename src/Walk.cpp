@@ -37,7 +37,9 @@ m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(NULL),
 m_maxPointsToDraw(maxPointsToDraw),
-m_currentPointIsImage(false)
+m_currentPointIsImage(false),
+m_imgOffsetX(0),
+m_imgOffsetY(0)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
@@ -52,6 +54,7 @@ Walk::~Walk()
         m_gpsData = 0;
     if(m_magicBox)
         m_magicBox = 0;
+	m_image.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -164,17 +167,21 @@ void Walk::draw()
         }
 //        ofDisableSmoothing();
 
-        ofFill();
-        ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
-        ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
-        ofCircle(getScaledUtmX(tmp.x),
-                 getScaledUtmY(tmp.y), 5);
+		ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
+		
+		if (m_currentPointIsImage) 
+		{
+			ofSetColor(0xffffff);
+			m_image.draw(getScaledUtmX(tmp.x)-m_imgOffsetX,getScaledUtmY(tmp.y)-m_imgOffsetY);
 
-        ofSetColor(0xffffff);
-        m_image.draw(getScaledUtmX(tmp.x)-12,getScaledUtmY(tmp.y)-12);
-
-
-
+		}
+		else 
+		{
+			ofFill();
+			ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
+			ofCircle(getScaledUtmX(tmp.x),
+					 getScaledUtmY(tmp.y), 5);
+		}
 	}
 
     // draw borders of bounding boxes.
@@ -379,5 +386,7 @@ void Walk::setMagicBox(MagicBox* magicBox)
 void Walk::setCurrentPointImage(ofImage img)
 {
     m_image = img;
+	m_imgOffsetX = m_image.getWidth()/2;
+	m_imgOffsetY = m_image.getHeight()/2;
     m_currentPointIsImage = true;
 }

@@ -526,7 +526,7 @@ void DrawingLifeApp::fillViewAreaUTM()
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
-    DBG_VAL(key);
+    //DBG_VAL(key);
     switch (key)
     {
     case 'a':
@@ -744,9 +744,10 @@ void DrawingLifeApp::loadCurrentPointImages()
     for(unsigned int i = 0; i < m_imageList.size(); ++i)
     {
         ofImage tmpImg;
-        std::string str = "data/currentPointImages/"+m_imageList[i];
+        std::string str = "currentPointImages/"+m_imageList[i];
         if(tmpImg.loadImage(str))
         {
+			tmpImg.resize(10, 10);
             m_images.push_back(tmpImg);
             tmpImg.clear();
         }

@@ -171,6 +171,8 @@ private:
     ofImage m_image;
 
     bool m_currentPointIsImage;
+	int m_imgOffsetX;
+	int m_imgOffsetY;
 };
 
 #endif // _WALK_H_
