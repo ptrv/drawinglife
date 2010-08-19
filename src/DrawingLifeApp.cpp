@@ -143,7 +143,9 @@ void DrawingLifeApp::loadXmlSettings()
     m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_settings.getValue("settings:framerate", 30);
 
-    m_imageAsCurrentPoint = m_settings.getValue("ui:imageascurrent", 0) == 0 ? false : true;
+    m_isFullscreen = m_settings.getValue("settings:fullscreen", 0) == 1 ? true : false;
+
+    m_imageAsCurrentPoint = m_settings.getValue("ui:imageascurrent", 0) == 1 ? true : false;
 
     if(m_imageAsCurrentPoint)
     {
@@ -202,6 +204,7 @@ void DrawingLifeApp::setup()
     {
         m_startScreenMode = true;
     }
+    ofSetFullscreen(m_isFullscreen);
 }
 
 //--------------------------------------------------------------

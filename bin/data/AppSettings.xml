@@ -14,8 +14,8 @@
 	<!-- 4 = city -->
 	<type>3</type>
 	<time>
-		<yearstart>2008</yearstart>
-		<yearend>2010</yearend>
+		<yearstart>2007</yearstart>
+		<yearend>2009</yearend>
 	</time>
 	<city>Berlin</city>
 </dbquery>
@@ -23,14 +23,15 @@
 	<log level="0" />
 	<loadgpsonstart>1</loadgpsonstart>
 	<debugmode>0</debugmode>
+	<fullscreen>0</fullscreen>
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->
 	<!-- To draw all points set 0 (very cpu intensive) -->
-	<walklength>10000</walklength>
+	<walklength>0</walklength>
 	<boundingbox>
-		<size>10000.0</size>	
-		<padding>1000.0</padding>
+		<size>20000.0</size>	
+		<padding>2000.0</padding>
   	</boundingbox>
 </settings>
 <ui>
