@@ -17,7 +17,7 @@ double Walk::minDrawX = std::numeric_limits<double>::max();
 double Walk::maxDrawY = -std::numeric_limits<double>::max();
 double Walk::minDrawY = std::numeric_limits<double>::max();
 
-float Walk::m_dotSize = 3.0;
+float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
 Walk::Walk(int maxPointsToDraw)
@@ -168,14 +168,14 @@ void Walk::draw()
 //        ofDisableSmoothing();
 
 		ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
-		
-		if (m_currentPointIsImage) 
+
+		if (m_currentPointIsImage)
 		{
 			ofSetColor(0xffffff);
 			m_image.draw(getScaledUtmX(tmp.x)-m_imgOffsetX,getScaledUtmY(tmp.y)-m_imgOffsetY);
 
 		}
-		else 
+		else
 		{
 			ofFill();
 			ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
