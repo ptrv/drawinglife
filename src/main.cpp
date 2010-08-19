@@ -7,10 +7,29 @@
 #include "ofAppGlutWindow.h"
 
 //========================================================================
-int main( ){
+int main(int argc, const char* argv[] ){
 
-    int w = 1024;
-    int h = 768;
+    int w;
+    int h;
+
+    if(argc > 1)
+    {
+        if(argc == 3)
+        {
+            w = atoi(argv[1]);
+            h = atoi(argv[2]);
+        }
+        else
+        {
+            std::cout << "Error: wrong command line arguments!\n" << std::endl;
+            return 1;
+        }
+    }
+    else
+    {
+        w = 1440;
+        h = 900;
+    }
 
     ofAppGlutWindow window;
 //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);
