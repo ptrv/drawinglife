@@ -1,11 +1,15 @@
+<<<<<<< HEAD
 /*==========================================================
  Copyright (c) avp::ptr, 2010
  ==========================================================*/
 
+=======
+>>>>>>> f759e18f57430e4815460119d21fb5600c13718e
 #ifndef _DRAWINGLIFETYPES_H_
 #define _DRAWINGLIFETYPES_H_
 
 
+<<<<<<< HEAD
 /**
  * \brief Timeline value with time and id.
  *
@@ -41,12 +45,17 @@ struct DBQueryData
  * \brief Represents latitude and longitude value of an Gps coordinate.
  *
  */
+=======
+>>>>>>> f759e18f57430e4815460119d21fb5600c13718e
 struct GpsCoord
 {
     double lat;
     double lon;
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> f759e18f57430e4815460119d21fb5600c13718e
 /**
  * \brief Represents x and y value of an UTM coordinate.
  *
@@ -57,6 +66,7 @@ struct UtmPoint
     double y;
 };
 
+<<<<<<< HEAD
 struct CurrentIndex
 {
     int gpsPoint;
@@ -70,6 +80,8 @@ struct GpsDataIndex
     int gpsSegment;
     int point;
 };
+=======
+>>>>>>> f759e18f57430e4815460119d21fb5600c13718e
 // -----------------------------------------------------------------------------
 // double version of openFramworks datatypes.
 // -----------------------------------------------------------------------------
@@ -253,7 +265,11 @@ class ofxPointd {
 
 class ofxRectangled {
   public:
+<<<<<<< HEAD
 	ofxRectangled(){ x = y = width = height = 0.0; };
+=======
+	ofxRectangled(){ x = y = width = height = 0; };
+>>>>>>> f759e18f57430e4815460119d21fb5600c13718e
 	ofxRectangled(double _x, double _y, double _w, double _h){
 		x = _x;
 		y = _y;
@@ -299,10 +315,17 @@ class ofxRectangled {
 	}
 
 	bool inside(double px, double py){
+<<<<<<< HEAD
 		if( px > x && py > y && px < x + width && py < y + height ){
 		    return true;
 		}
 		return false;
+=======
+		if( px < x && py < y && px > x + width && py > y + height ){
+		    return false;
+		}
+		return true;
+>>>>>>> f759e18f57430e4815460119d21fb5600c13718e
 	}
 
    double x;
