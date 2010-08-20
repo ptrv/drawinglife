@@ -63,11 +63,12 @@ void DrawingLifeApp::loadXmlSettings()
 	std::string settingsFile = "AppSettings.xml";
     if(m_settings.loadFile(settingsFile))
     {
-        std::cout << settingsFile << " loaded!" << std::endl;
+//        std::cout << settingsFile << " loaded!" << std::endl;
+        ofLog(OF_LOG_NOTICE, "%s loaded!", settingsFile.c_str());
     }
     else
     {
-        std::cout << "Loading " << settingsFile << " failed!" << std::endl;
+        ofLog(OF_LOG_WARNING, "Loading %s failed!", settingsFile.c_str());
     }
 
     m_settings.pushTag("ui");
@@ -126,9 +127,9 @@ void DrawingLifeApp::loadXmlSettings()
     for(int i = 0; i < m_numPerson; ++i)
     {
         m_names.push_back(m_settings.getValue("name", "", i));
-        m_gpsDatas.push_back(new GpsData());
-		m_walks.push_back(new Walk(m_maxPointsToDraw));
-		m_magicBoxes.push_back(new MagicBox(m_magicBoxSize, m_magicBoxPadding));
+        m_gpsDatas.push_back(NULL);
+		m_walks.push_back(new Walk(NULL));
+		m_magicBoxes.push_back(NULL);
         DBG_VAL(m_names[i]);
 
         m_viewXOffset.push_back(0);
@@ -183,20 +184,24 @@ void DrawingLifeApp::setup()
 
     if (m_loadOnStart == 1)
     {
+        bool dbOk = false;
         switch(m_dbQueryData.type)
         {
             case DB_QUERY_CITY:
             loadGpsDataCity(m_names, m_dbQueryData.city);
             break;
             case DB_QUERY_YEAR:
-            loadGpsDataYearRange(m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
-            break;
+            dbOk = loadGpsDataYearRange(m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
+//            break;
         }
         for(int i = 0; i < m_numPerson; ++i)
         {
-			if(m_walks[i]->getGpsData().getTotalGpsPoints() == 0)
+            if(dbOk)
             {
-                m_startScreenMode = true;
+                if(m_walks[i]->getGpsData().getTotalGpsPoints() == 0)
+                {
+                    m_startScreenMode = true;
+                }
             }
         }
     }
@@ -296,26 +301,33 @@ void DrawingLifeApp::drawStartScreen()
     m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
 
     m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
+    m_fontAuthor.drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
 
 //    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
 // -----------------------------------------------------------------------------
-void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
+bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 {
     m_startScreenMode = false;
+
+    for( int ii = 0; ii < m_numPerson; ++ii)
+    {
+        SAFE_DELETE(m_gpsDatas[ii]);
+        SAFE_DELETE(m_magicBoxes[ii]);
+		SAFE_DELETE(m_walks[ii]);
+    }
+
+    bool dbOk = false;
 
     // get GpsData from database
     for(int ii = 0; ii < m_numPerson; ++ii)
     {
-        SAFE_DELETE(m_gpsDatas[ii]);
         m_gpsDatas[ii] = new GpsData();
 
-        SAFE_DELETE(m_magicBoxes[ii]);
         m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
 
-		SAFE_DELETE(m_walks[ii]);
         m_walks[ii] = new Walk(m_maxPointsToDraw);
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
@@ -326,7 +338,8 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         {
             // -----------------------------------------------------------------------------
             // DB query
-            if(m_dbReader->getGpsDataCity(*m_gpsDatas[ii], names[ii], city))
+            dbOk = m_dbReader->getGpsDataCity(*m_gpsDatas[ii], names[ii], city);
+            if(dbOk)
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
                 ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
@@ -337,6 +350,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
             else
             {
                 ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+                break;
             }
             m_dbReader->closeDbConnection();
         }
@@ -360,6 +374,7 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
           m_gpsDatas[ii]->getMaxUtmY());
         ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[ii]->getProjectionCentralMeridian());
     }
+    ofLog(OF_LOG_VERBOSE, "------------------------\n");
     if (m_gpsDatas.size() > 0)
     {
         m_timeline->setTimeline(m_gpsDatas);
@@ -382,34 +397,43 @@ void DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
             }
         }
     }
+    return dbOk;
 }
-void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd)
+bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd)
 {
     m_startScreenMode = false;
 
     // get GpsData from database
-    for(int ii = 0; ii < m_numPerson; ++ii)
+    for( int ii = 0; ii < m_numPerson; ++ii)
     {
         SAFE_DELETE(m_gpsDatas[ii]);
+        SAFE_DELETE(m_magicBoxes[ii]);
+		SAFE_DELETE(m_walks[ii]);
+    }
+
+    bool dbOk = false;
+
+    for(int ii = 0; ii < m_numPerson; ++ii)
+    {
         m_gpsDatas[ii] = new GpsData();
 
-        SAFE_DELETE(m_magicBoxes[ii]);
         m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
 
-		SAFE_DELETE(m_walks[ii]);
         m_walks[ii] = new Walk(m_maxPointsToDraw);
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();
 
         m_dbReader = new DBReader(m_dbPath);
+
         if (m_dbReader->setupDbConnection())
         {
             // -----------------------------------------------------------------------------
             // DB query
-            if(m_dbReader->getGpsDataYearRange(*m_gpsDatas[ii], names[ii], yearStart, yearEnd))
+            dbOk = m_dbReader->getGpsDataYearRange(*m_gpsDatas[ii], names[ii], yearStart, yearEnd);
+            if(dbOk)
             {
-                ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
+                ofLog(OF_LOG_SILENT, "--> GpsData set %d: load ok!", ii+1);
                 ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
                       m_gpsDatas[ii]->getSegments().size(),
                       m_gpsDatas[ii]->getTotalGpsPoints());
@@ -418,6 +442,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
             else
             {
                 ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+                break;
             }
             m_dbReader->closeDbConnection();
         }
@@ -433,15 +458,16 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
             }
         }
 
-        ofLog(m_logLevel, "Start year: %d, end year: %d", yearStart, yearEnd);
+        ofLog(OF_LOG_VERBOSE, "Start year: %d, end year: %d", yearStart, yearEnd);
         ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
           m_gpsDatas[ii]->getMinUtmX(),
           m_gpsDatas[ii]->getMaxUtmX(),
           m_gpsDatas[ii]->getMinUtmY(),
           m_gpsDatas[ii]->getMaxUtmY());
-        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[ii]->getProjectionCentralMeridian());
+        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf\n", m_gpsDatas[ii]->getProjectionCentralMeridian());
     }
-    if (m_gpsDatas.size() > 0)
+    ofLog(OF_LOG_VERBOSE, "------------------------\n");
+    if (m_gpsDatas.size() > 0 && dbOk)
     {
         m_timeline->setTimeline(m_gpsDatas);
 
@@ -472,6 +498,7 @@ void DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
             }
         }
     }
+    return dbOk;
 }
 // -----------------------------------------------------------------------------
 
@@ -690,7 +717,8 @@ void DrawingLifeApp::windowResized(int w, int h)
     this->setViewAspectRatio();
     for(int i = 0; i < m_numPerson; ++i)
     {
-		m_walks[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[i], m_viewYOffset[i], m_viewMinDimension[i], m_viewPadding[i]);
+        if(m_walks[i])
+            m_walks[i]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[i], m_viewYOffset[i], m_viewMinDimension[i], m_viewPadding[i]);
     }
 }
 

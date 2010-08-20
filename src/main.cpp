@@ -9,6 +9,8 @@
 //========================================================================
 int main(int argc, const char* argv[] ){
 
+    std::cout << "DrawingLifeApp, avp::ptr, 2010" << std::endl;
+    std::cout << "The drawing of my life, plan b\n" << std::endl;
     int w;
     int h;
 

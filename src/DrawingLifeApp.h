@@ -48,14 +48,14 @@ private:
 	* \param names vector with name strings.
 	* \param city string with city name.
 	*/
-	void loadGpsDataCity(std::vector<string> names, std::string city);
+	bool loadGpsDataCity(std::vector<string> names, std::string city);
 	/**
 	* \brief
 	* \param names vector with name strings.
 	* \param yearStart start year for query.
 	* \param yearEnd end year for query.
 	*/
-	void loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd);
+	bool loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd);
 	/**
 	* \brief Set square view area and center.
 	*/

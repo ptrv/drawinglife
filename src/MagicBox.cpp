@@ -5,6 +5,7 @@
 #include "MagicBox.h"
 
 double MagicBox::m_zoomLevels[] = {20000.0, 30000.0, 40000.0, 50000.0};
+int MagicBox::m_boxNum = 0;
 
 MagicBox::MagicBox(double size, double padding)
 :
@@ -12,12 +13,13 @@ m_currentSize(size),
 m_padding(padding),
 m_defaultSize(10000.0)
 {
-    //ctor
+    m_boxId = m_boxNum;
+    ++m_boxNum;
 }
 
 MagicBox::~MagicBox()
 {
-    //dtor
+    --m_boxNum;
 }
 
 bool MagicBox::isInBox(const ofxPointd utmPoint)
@@ -40,10 +42,10 @@ const ofxPointd MagicBox::getDrawablePoint(const UtmPoint& utmPoint)
 void MagicBox::setupBox(ofxPointd currUtm, double lon0)
 {
     m_centerUtm = currUtm;
-    ofLog(OF_LOG_VERBOSE, "Center x: %lf, y: %lf\n", m_centerUtm.x, m_centerUtm.y);
+    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
 
     m_theBox.setFromCenter(m_centerUtm , m_currentSize, m_currentSize);
-    ofLog(OF_LOG_SILENT, "box x: %lf, box y: %lf, box w: %lf, box h: %lf\n", m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
+    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf", m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
 
     m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
 }

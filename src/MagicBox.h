@@ -53,6 +53,10 @@ private:
     static double m_zoomLevels[4];
 
     double m_defaultSize;
+
+    static int m_boxNum;
+
+    int m_boxId;
 };
 
 #endif // _MAGICBOX_H_
