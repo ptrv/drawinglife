@@ -22,7 +22,7 @@ public:
 
     void print();
 
-    bool shouldPrintSettings() const { return m_printSettings; }
+    //bool shouldPrintSettings() const { return m_printSettings; }
 
     const std::string& getFontTitleName() const { return m_fontTitleName; }
     int getFontTitleSize() const { return m_fontTitleSize; }

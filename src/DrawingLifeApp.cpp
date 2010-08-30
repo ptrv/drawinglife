@@ -63,9 +63,6 @@ void DrawingLifeApp::setup()
     // -----------------------------------------------------------------------------
     AppSettings& settings = AppSettings::instance();
 
-    if(settings.shouldPrintSettings())
-        settings.print();
-
     ofSetLogLevel(settings.getLogLevel());
 
 	m_fontTitle.loadFont(settings.getFontTitleName(),

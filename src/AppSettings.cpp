@@ -48,11 +48,11 @@ m_numPerson(0)
 
     if(m_xml.loadFile(settingsPath))
     {
-        ofLog(OF_LOG_SILENT, "Settings file: %s loaded!", settingsPath);
+        ofLog(OF_LOG_SILENT, "Settings file: %s loaded!\n", settingsPath);
     }
     else
     {
-        ofLog(OF_LOG_SILENT, "Loading %s failed!", settingsPath);
+        ofLog(OF_LOG_SILENT, "Loading %s failed!\n", settingsPath);
     }
 
     m_xml.pushTag("ui");
@@ -134,6 +134,11 @@ m_numPerson(0)
     }
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
+
+	if(m_printSettings)
+	{
+		this->print();
+	}
 }
 
 void AppSettings::print()
@@ -177,6 +182,6 @@ void AppSettings::print()
     {
     	ofLog(OF_LOG_SILENT, "Current point image %d: %s", i, m_imagePaths[i].c_str());
     }
-    ofLog(OF_LOG_SILENT, "------------------------------");
+    ofLog(OF_LOG_SILENT, "------------------------------\n");
 
 }

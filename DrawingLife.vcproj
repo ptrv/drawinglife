@@ -593,6 +593,10 @@
 			Name="Header Files"
 			>
 			<File
+				RelativePath=".\src\AppSettings.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\DBReader.h"
 				>
 			</File>
@@ -640,6 +644,10 @@
 		<Filter
 			Name="Source Files"
 			>
+			<File
+				RelativePath=".\src\AppSettings.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\src\DBReader.cpp"
 				>
