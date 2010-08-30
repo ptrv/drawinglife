@@ -24,20 +24,20 @@ DrawingLifeApp::DrawingLifeApp() :
     m_startScreenMode(false),
     m_numPerson(0),
     m_timeline(NULL),
-    m_drawSpeed(1),
-	m_trackAlpha(64),
-	m_dotAlpha(127),
-	m_legendAlpha(255),
-	m_startScreenDuration(5000),
-	m_loadOnStart(0),
-	m_frameRate(60),
-	m_magicBoxSize(3000.0),
-	m_magicBoxPadding(500.0),
+//    m_drawSpeed(1),
+//	m_trackAlpha(64),
+//	m_dotAlpha(127),
+//	m_legendAlpha(255),
+//	m_startScreenDuration(5000),
+//	m_loadOnStart(0),
+//	m_frameRate(60),
+//	m_magicBoxSize(3000.0),
+//	m_magicBoxPadding(500.0),
 	timeNow(0.0f),
 	timeThen(0.0f),
 	timeSum(0.0),
 	fpsToShow(0.0),
-	m_maxPointsToDraw(10000),
+//	m_maxPointsToDraw(10000),
 	m_imageAsCurrentPoint(false),
 	m_hideCursor(false)
 {
@@ -58,78 +58,51 @@ DrawingLifeApp::~DrawingLifeApp()
     m_images.clear();
 }
 
-void DrawingLifeApp::loadXmlSettings()
+void DrawingLifeApp::setup()
 {
-	// reading settings from xml file
-	std::string settingsFile = "AppSettings.xml";
-    if(m_settings.loadFile(settingsFile))
+    // -----------------------------------------------------------------------------
+    AppSettings& settings = AppSettings::instance();
+
+    if(settings.shouldPrintSettings())
+        settings.print();
+
+    ofSetLogLevel(settings.getLogLevel());
+
+	m_fontTitle.loadFont(settings.getFontTitleName(),
+						 settings.getFontTitleSize());
+
+    m_fontAuthor.loadFont(settings.getFontAuthorName(),
+                          settings.getFontAuthorSize());
+
+    m_fontText.loadFont(settings.getFontTextName(),
+                        settings.getFontTextSize());
+
+    m_fontInfo.loadFont(settings.getFontInfoName(),
+                        settings.getFontInfoSize());
+
+    m_isDebugMode = settings.isDebugMode();
+    m_isFullscreen = settings.isFullscreen();
+    m_hideCursor = settings.hideCursor();
+
+    m_dbQueryData.type = settings.getQueryType();
+    m_dbQueryData.yearStart = settings.getQueryYearStart();
+    m_dbQueryData.yearEnd = settings.getQueryYearEnd();
+    m_dbQueryData.city = settings.getQueryCity();
+
+    m_imageAsCurrentPoint = settings.isCurrentPointImage();
+
+    if(m_imageAsCurrentPoint)
     {
-//        std::cout << settingsFile << " loaded!" << std::endl;
-        ofLog(OF_LOG_NOTICE, "%s loaded!", settingsFile.c_str());
-    }
-    else
-    {
-        ofLog(OF_LOG_WARNING, "Loading %s failed!", settingsFile.c_str());
+        m_imageList = settings.getImageList();
     }
 
-    m_settings.pushTag("ui");
-    m_settings.pushTag("fonts");
-	m_fontTitle.loadFont(m_settings.getAttribute("font", "name","mono.ttf", 0),
-						 m_settings.getAttribute("font", "size", 50, 0));
-
-    m_fontAuthor.loadFont(m_settings.getAttribute("font", "name", "mono.ttf", 1),
-                          m_settings.getAttribute("font", "size", 24, 1));
-
-    m_fontText.loadFont(m_settings.getAttribute("font", "name", "mono.ttf", 2),
-                        m_settings.getAttribute("font", "size", 16, 2));
-
-    m_fontInfo.loadFont(m_settings.getAttribute("font", "name", "consola.ttf", 3),
-                        m_settings.getAttribute("font", "size", 11, 3));
-    m_settings.popTag();
-    m_settings.popTag();
-
-    m_colorForeground.r = m_settings.getAttribute("ui:color:foreround", "r", 255);
-    m_colorForeground.g = m_settings.getAttribute("ui:color:foreround", "g", 255);
-    m_colorForeground.b = m_settings.getAttribute("ui:color:foreround", "b", 255);
-
-    m_colorBackground.r = m_settings.getAttribute("ui:color:background", "r", 0);
-    m_colorBackground.g = m_settings.getAttribute("ui:color:background", "g", 0);
-    m_colorBackground.b = m_settings.getAttribute("ui:color:background", "b", 0);
-
-    m_colorViewbox.r = m_settings.getAttribute("ui:color:viewbox", "r", 50);
-    m_colorViewbox.g = m_settings.getAttribute("ui:color:viewbox", "g", 50);
-    m_colorViewbox.b = m_settings.getAttribute("ui:color:viewbox", "b", 50);
-
-    m_logLevel = m_settings.getAttribute("settings:log", "level", 0);
-
-	m_isDebugMode = m_settings.getValue("settings:debugmode", 0);
-
-    m_maxPointsToDraw = m_settings.getValue("settings:walklength", 10000);
-
-    m_magicBoxSize = m_settings.getValue("settings:boundingbox:size", 3000.0);
-    m_magicBoxPadding = m_settings.getValue("settings:boundingbox:padding", 500.0);
-
-	m_trackAlpha = m_settings.getValue("ui:alpha:tracks", 64);
-    m_dotAlpha = m_settings.getValue("ui:alpha:dots", 127);
-    m_legendAlpha = m_settings.getValue("ui:alpha:legend", 255);
-
-    // db path must be absolute path for DBReader (true as second parameter)
-    m_dbPath = ofToDataPath(m_settings.getValue("data:database", "test.sqlite"), true);
-    DBG_VAL(m_dbPath);
-
-    m_dbQueryData.type = m_settings.getValue("dbquery:type", 4);
-    m_dbQueryData.yearStart = m_settings.getValue("dbquery:time:yearstart", 2009);
-    m_dbQueryData.yearEnd = m_settings.getValue("dbquery:time:yearend", 2010);
-    m_dbQueryData.city = m_settings.getValue("dbquery:city", "Berlin");
-
-    m_settings.pushTag("data");
-    m_settings.pushTag("person");
-    m_numPerson = m_settings.getNumTags("name");
+    m_numPerson = settings.getNumPerson();
+    m_names = settings.getNames();
     for(int i = 0; i < m_numPerson; ++i)
     {
-        m_names.push_back(m_settings.getValue("name", "", i));
+//        m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(NULL);
-		m_walks.push_back(new Walk(NULL));
+		m_walks.push_back(NULL);
 		m_magicBoxes.push_back(NULL);
         DBG_VAL(m_names[i]);
 
@@ -138,44 +111,18 @@ void DrawingLifeApp::loadXmlSettings()
         m_viewMinDimension.push_back(0);
         m_viewPadding.push_back(15);
     }
-    m_settings.popTag();
-    m_settings.popTag();
 
-	m_drawSpeed = m_settings.getValue("settings:drawspeed", 1)*m_numPerson;
-    m_loadOnStart = m_settings.getValue("settings:loadgpsonstart",1);
-    m_frameRate = m_settings.getValue("settings:framerate", 30);
+    m_dbPath = settings.getDatabasePath();
+    DBG_VAL(m_dbPath);
 
-    m_isFullscreen = m_settings.getValue("settings:fullscreen", 0) == 1 ? true : false;
+    ofBackground(settings.getColorBackgroundR(),
+                 settings.getColorBackgroundG(),
+                 settings.getColorBackgroundB());
 
-    m_imageAsCurrentPoint = m_settings.getValue("ui:imageascurrent", 0) == 1 ? true : false;
+    ofSetFrameRate(settings.getFrameRate());
 
-    m_hideCursor = m_settings.getValue("settings:hidecursor", 0) == 1 ? true : false;
-
-    if(m_imageAsCurrentPoint)
-    {
-        m_settings.pushTag("ui");
-        m_settings.pushTag("images");
-
-        int numImgTags = m_settings.getNumTags("image");
-        for(int i = 0; i < numImgTags; ++i)
-        {
-            m_imageList.push_back(m_settings.getValue("image", "", i));
-        }
-
-        m_settings.popTag();
-        m_settings.popTag();
-    }
-}
-
-void DrawingLifeApp::setup()
-{
-	loadXmlSettings();
-    ofBackground(m_colorBackground.r, m_colorBackground.g, m_colorBackground.b);
-
-    ofSetFrameRate(m_frameRate);
     ofEnableAlphaBlending();
 
-    ofSetLogLevel(m_logLevel);
 
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
@@ -185,7 +132,7 @@ void DrawingLifeApp::setup()
 
     m_timeline = new Timeline();
 
-    if (m_loadOnStart == 1)
+    if (settings.loadGpsOnStart() == 1)
     {
         bool dbOk = false;
         switch(m_dbQueryData.type)
@@ -225,7 +172,7 @@ void DrawingLifeApp::update()
     {
         if(m_timeline->getTimeline().size() > 0)
         {
-            for(int i = 0; i < m_drawSpeed; ++i)
+            for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
             {
                 int id = m_timeline->getNext();
                 if (id < m_numPerson)
@@ -258,12 +205,12 @@ void DrawingLifeApp::draw()
             {
                 if (m_isDebugMode)
                 {
-                    ofSetColor(255, 255, 255, m_legendAlpha);
+                    ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
 					ofDrawBitmapString(m_walks[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 }
                 else
                 {
-                    ofSetColor(255, 255, 255, m_legendAlpha);
+                    ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
                     ofSetColor(0xffffff);
                     m_fontInfo.drawString(m_walks[i]->getCurrentGpsInfo(),
                                           m_viewPadding[i] + (ofGetWidth()/m_numPerson)*i ,
@@ -272,7 +219,10 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
+                ofSetColor(AppSettings::instance().getColorForegroundR(),
+                           AppSettings::instance().getColorForegroundG(),
+                           AppSettings::instance().getColorForegroundB(),
+                           AppSettings::instance().getAlphaTrack());
                 ofNoFill();
 				m_walks[i]->draw();
             }
@@ -283,7 +233,10 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor(m_colorForeground.r, m_colorForeground.g, m_colorForeground.b, m_trackAlpha);
+            ofSetColor(AppSettings::instance().getColorForegroundR(),
+                       AppSettings::instance().getColorForegroundG(),
+                       AppSettings::instance().getColorForegroundB(),
+                       AppSettings::instance().getAlphaTrack());
             ofNoFill();
             for(int i = 0; i < m_numPerson; ++i)
             {
@@ -332,9 +285,10 @@ bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
     {
         m_gpsDatas[ii] = new GpsData();
 
-        m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
+        m_magicBoxes[ii] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
+                                        AppSettings::instance().getBoundingBoxPadding());
 
-        m_walks[ii] = new Walk(m_maxPointsToDraw);
+        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength());
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();
@@ -392,7 +346,7 @@ bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
 //        }
         this->calculateGlobalMinMaxValues();
 
-        Walk::setTrackAlpha(m_dotAlpha);
+        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
             m_walks[i]->setDotColors();
@@ -423,9 +377,10 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
     {
         m_gpsDatas[ii] = new GpsData();
 
-        m_magicBoxes[ii] = new MagicBox(m_magicBoxSize, m_magicBoxPadding);
+        m_magicBoxes[ii] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
+                                        AppSettings::instance().getBoundingBoxPadding());
 
-        m_walks[ii] = new Walk(m_maxPointsToDraw);
+        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength());
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();
@@ -493,7 +448,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
 
         this->calculateGlobalMinMaxValues();
 
-        Walk::setTrackAlpha(m_dotAlpha);
+        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
             m_walks[i]->setDotColors();
@@ -553,7 +508,9 @@ void DrawingLifeApp::fillViewAreaUTM()
         double w = m_walks[i]->getScaledUtmX(1) - x;
         double h = m_walks[i]->getScaledUtmY(1) - y;
         ofFill();
-        ofSetColor(m_colorViewbox.r, m_colorViewbox.g, m_colorViewbox.b);
+        ofSetColor(AppSettings::instance().getColorViewboxR(),
+                   AppSettings::instance().getColorViewboxG(),
+                   AppSettings::instance().getColorViewboxB());
         ofRect(x, y, w, h);
 
     }

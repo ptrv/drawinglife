@@ -380,6 +380,12 @@
 		<Unit filename="libs/sqlite3x/sqlite3x_transaction.cpp">
 			<Option virtualFolder="sqlite3x/" />
 		</Unit>
+		<Unit filename="src/AppSettings.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/AppSettings.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/DBReader.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

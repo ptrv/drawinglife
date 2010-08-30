@@ -1,6 +1,8 @@
 #include "AppSettings.h"
 #include "ofxXmlSettings.h"
 
+static const char* settingsPath = "AppSettings.xml";
+
 AppSettings::AppSettings()
 :
 m_fontTitleName(""),
@@ -11,29 +13,30 @@ m_fontTextName(""),
 m_fontTextSize(0),
 m_fontInfoName(""),
 m_fontInfoSize(0),
-m_colorForegroundR(0),
-m_colorForegroundG(0),
-m_colorForegroundB(0),
+m_colorForegroundR(255),
+m_colorForegroundG(255),
+m_colorForegroundB(255),
 m_colorBackgroundR(0),
 m_colorBackgroundG(0),
 m_colorBackgroundB(0),
-m_colorViewboxR(0),
-m_colorViewboxG(0),
-m_colorViewboxB(0),
-m_alphaTracks(0),
-m_alphaDots(0),
-m_alphaLegend(0),
+m_colorViewboxR(30),
+m_colorViewboxG(30),
+m_colorViewboxB(30),
+m_alphaTracks(64),
+m_alphaDots(127),
+m_alphaLegend(255),
+m_printSettings(false),
 m_logLevel(0),
 m_debugMode(false),
 m_walkLength(0),
-m_drawSpeed(0),
+m_drawSpeed(1),
 m_loadOnStart(false),
-m_frameRate(0),
+m_frameRate(30),
 m_fullscreen(false),
 m_imageAsCurrentPoint(false),
 m_hideCursor(false),
-m_boundingBoxSize(0.0),
-m_boundingBoxPadding(0.0),
+m_boundingBoxSize(3000.0),
+m_boundingBoxPadding(500.0),
 m_databasePath(""),
 m_queryType(0),
 m_queryYearStart(0),
@@ -43,16 +46,13 @@ m_numPerson(0)
 {
     ofxXmlSettings m_xml;
 
-	// reading settings from xml file
-	std::string settingsFile = "AppSettings.xml";
-    if(m_xml.loadFile(settingsFile))
+    if(m_xml.loadFile(settingsPath))
     {
-//        std::cout << settingsFile << " loaded!" << std::endl;
-        ofLog(OF_LOG_SILENT, "%s loaded!", settingsFile.c_str());
+        ofLog(OF_LOG_SILENT, "Settings file: %s loaded!", settingsPath);
     }
     else
     {
-        ofLog(OF_LOG_WARNING, "Loading %s failed!", settingsFile.c_str());
+        ofLog(OF_LOG_SILENT, "Loading %s failed!", settingsPath);
     }
 
     m_xml.pushTag("ui");
@@ -132,5 +132,51 @@ m_numPerson(0)
         m_xml.popTag();
         m_xml.popTag();
     }
+
+    m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 }
 
+void AppSettings::print()
+{
+    ofLog(OF_LOG_SILENT, "------------------------------");
+    ofLog(OF_LOG_SILENT, "All loaded app setting values:");
+    ofLog(OF_LOG_SILENT, "------------------------------");
+    ofLog(OF_LOG_SILENT, "Font: title | name = %s, size = %d", m_fontTitleName.c_str(), m_fontTitleSize);
+    ofLog(OF_LOG_SILENT, "Font: author | name = %s, size = %d", m_fontAuthorName.c_str(), m_fontAuthorSize);
+    ofLog(OF_LOG_SILENT, "Font: text | name = %s, size = %d", m_fontTextName.c_str(), m_fontTextSize);
+    ofLog(OF_LOG_SILENT, "Font: info | name = %s, size = %d", m_fontInfoName.c_str(), m_fontInfoSize);
+
+    ofLog(OF_LOG_SILENT, "Foreground color: r = %d, g = %d, b = %d", m_colorForegroundR, m_colorForegroundG, m_colorForegroundB);
+    ofLog(OF_LOG_SILENT, "Background color: r = %d, g = %d, b = %d", m_colorBackgroundR, m_colorBackgroundG, m_colorBackgroundB);
+    ofLog(OF_LOG_SILENT, "Viewbox color: r = %d, g = %d, b = %d", m_colorViewboxR, m_colorViewboxG, m_colorViewboxB);
+
+    ofLog(OF_LOG_SILENT, "Alphas: tracks = %d, dots = %d, legend = %d", m_alphaTracks, m_alphaDots, m_alphaLegend);
+
+    ofLog(OF_LOG_SILENT, "Debug mode: %d", m_debugMode);
+    ofLog(OF_LOG_SILENT, "Start fullscreen: %d", m_fullscreen);
+    ofLog(OF_LOG_SILENT, "Load Gps on start: %d", m_loadOnStart);
+    ofLog(OF_LOG_SILENT, "Show image as current point: %d", m_imageAsCurrentPoint);
+    ofLog(OF_LOG_SILENT, "Hide cursor: %d", m_hideCursor);
+    ofLog(OF_LOG_SILENT, "Log level: %d", m_logLevel);
+    ofLog(OF_LOG_SILENT, "Walk length: %d", m_walkLength);
+    ofLog(OF_LOG_SILENT, "Draw speed: %d", m_drawSpeed);
+    ofLog(OF_LOG_SILENT, "Frame rate: %d", m_frameRate);
+
+    ofLog(OF_LOG_SILENT, "Bounding box: size = %lf, padding = %lf", m_boundingBoxSize, m_boundingBoxPadding);
+
+    ofLog(OF_LOG_SILENT, "Database path: %s", m_databasePath.c_str());
+
+    ofLog(OF_LOG_SILENT, "Number of person: %d", m_numPerson);
+
+    ofLog(OF_LOG_SILENT, "Query: type = %d, start year = %d, end year = %d, city = %s", m_queryType, m_queryYearStart, m_queryYearEnd, m_queryCity.c_str());
+    for (unsigned int i=0; i < m_names.size();++i)
+    {
+    	ofLog(OF_LOG_SILENT, "Name %d: %s", i, m_names[i].c_str());
+    }
+    for (unsigned int i=0; i < m_imagePaths.size();++i)
+    {
+    	ofLog(OF_LOG_SILENT, "Current point image %d: %s", i, m_imagePaths[i].c_str());
+    }
+    ofLog(OF_LOG_SILENT, "------------------------------");
+
+}

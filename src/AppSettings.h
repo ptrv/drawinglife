@@ -20,6 +20,10 @@ class AppSettings
     DEF_SINGLETON(AppSettings);
 public:
 
+    void print();
+
+    bool shouldPrintSettings() const { return m_printSettings; }
+
     const std::string& getFontTitleName() const { return m_fontTitleName; }
     int getFontTitleSize() const { return m_fontTitleSize; }
     const std::string& getFontAuthorName() const { return m_fontAuthorName; }
@@ -41,9 +45,9 @@ public:
     int getColorViewboxG () const { return m_colorViewboxG; }
     int getColorViewboxB () const { return m_colorViewboxB; }
 
-    int getAlphsTracks () const { return m_alphaTracks; }
-    int getAlphsDots () const { return m_alphaDots; }
-    int getAlphsLegend () const { return m_alphaLegend; }
+    int getAlphaTrack () const { return m_alphaTracks; }
+    int getAlphaDot () const { return m_alphaDots; }
+    int getAlphaLegend () const { return m_alphaLegend; }
 
     int getLogLevel() const { return m_logLevel; }
     int getWalkLength() const { return m_walkLength; }
@@ -106,6 +110,7 @@ private:
     // -----------------------------------------------------------------------------
     // Settings
     // -----------------------------------------------------------------------------
+    bool m_printSettings;
     int m_logLevel;
     bool m_debugMode;
     int m_walkLength;
@@ -132,10 +137,8 @@ private:
     // -----------------------------------------------------------------------------
     // Data
     // -----------------------------------------------------------------------------
-
     int m_numPerson;
     std::vector<std::string > m_names;
-
     std::vector<std::string > m_imagePaths;
 
 };

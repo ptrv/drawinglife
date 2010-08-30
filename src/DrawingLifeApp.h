@@ -6,7 +6,6 @@
 #define _DRAWINGLIFEAPP_H_
 
 #include "DrawingLifeIncludes.h"
-#include "ofxXmlSettings.h"
 #include "ofxVectorMath.h"
 #include "DBReader.h"
 #include "Timeline.h"
@@ -76,7 +75,6 @@ private:
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
-	ofxXmlSettings m_settings;
 	DBReader* m_dbReader;
 
 	std::vector<GpsData* > m_gpsDatas;
@@ -112,37 +110,19 @@ private:
 	std::string m_currentCity;
     // -----------------------------------------------------------------------------
     Timeline* m_timeline;
-    int m_drawSpeed;
-
-	int m_trackAlpha;
-    int m_dotAlpha;
-    int m_legendAlpha;
-    int m_startScreenDuration;
-    int m_loadOnStart;
-    int m_frameRate;
-
-    int m_logLevel;
 
     DBQueryData m_dbQueryData;
-
-    ofColor m_colorForeground;
-    ofColor m_colorBackground;
-    ofColor m_colorViewbox;
-
-    double m_magicBoxSize;
-    double m_magicBoxPadding;
 
     float timeNow, timeThen;
     double timeSum;
     float fpsToShow;
-
-    int m_maxPointsToDraw;
 
     std::vector<std::string > m_imageList;
     std::vector<ofImage > m_images;
     bool m_imageAsCurrentPoint;
 
     bool m_hideCursor;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_
