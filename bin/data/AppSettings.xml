@@ -24,6 +24,7 @@
 	<loadgpsonstart>1</loadgpsonstart>
 	<debugmode>0</debugmode>
 	<fullscreen>0</fullscreen>
+	<hidecursor>0</hidecursor>
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->

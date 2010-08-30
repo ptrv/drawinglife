@@ -38,7 +38,8 @@ DrawingLifeApp::DrawingLifeApp() :
 	timeSum(0.0),
 	fpsToShow(0.0),
 	m_maxPointsToDraw(10000),
-	m_imageAsCurrentPoint(false)
+	m_imageAsCurrentPoint(false),
+	m_hideCursor(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -148,6 +149,8 @@ void DrawingLifeApp::loadXmlSettings()
 
     m_imageAsCurrentPoint = m_settings.getValue("ui:imageascurrent", 0) == 1 ? true : false;
 
+    m_hideCursor = m_settings.getValue("settings:hidecursor", 0) == 1 ? true : false;
+
     if(m_imageAsCurrentPoint)
     {
         m_settings.pushTag("ui");
@@ -210,7 +213,9 @@ void DrawingLifeApp::setup()
         m_startScreenMode = true;
     }
     ofSetFullscreen(m_isFullscreen);
-    ofHideCursor();
+
+    if(m_hideCursor)
+        ofHideCursor();
 }
 
 //--------------------------------------------------------------
@@ -569,10 +574,13 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 'd':
         m_isDebugMode = !m_isDebugMode;
-        if(!m_isDebugMode)
-            ofHideCursor();
-        else
-            ofShowCursor();
+        if(m_hideCursor)
+        {
+            if(!m_isDebugMode)
+                ofHideCursor();
+            else
+                ofShowCursor();
+        }
         break;
     case 'p':
         m_showFps = !m_showFps;

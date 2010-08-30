@@ -141,6 +141,8 @@ private:
     std::vector<std::string > m_imageList;
     std::vector<ofImage > m_images;
     bool m_imageAsCurrentPoint;
+
+    bool m_hideCursor;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
