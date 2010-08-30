@@ -210,6 +210,7 @@ void DrawingLifeApp::setup()
         m_startScreenMode = true;
     }
     ofSetFullscreen(m_isFullscreen);
+    ofHideCursor();
 }
 
 //--------------------------------------------------------------
@@ -568,6 +569,10 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 'd':
         m_isDebugMode = !m_isDebugMode;
+        if(!m_isDebugMode)
+            ofHideCursor();
+        else
+            ofShowCursor();
         break;
     case 'p':
         m_showFps = !m_showFps;
