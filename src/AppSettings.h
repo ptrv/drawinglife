@@ -81,6 +81,7 @@ public:
     const std::vector<std::string >& getImageList() const { return m_imagePaths; }
 
     bool isInteractiveMode() const { return m_interactiveMode; }
+    bool drawOnlyOneSeg() const { return m_interactiveOnlyOneSeg; }
 
 private:
 
@@ -154,7 +155,7 @@ private:
     std::vector<std::string > m_imagePaths;
 
     bool m_interactiveMode;
-
+    bool m_interactiveOnlyOneSeg;
 };
 
 #endif // _APPSETTINGS_H_

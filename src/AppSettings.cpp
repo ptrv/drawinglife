@@ -45,7 +45,8 @@ m_queryYearStart(0),
 m_queryYearEnd(0),
 m_queryCity(""),
 m_numPerson(0),
-m_interactiveMode(false)
+m_interactiveMode(false),
+m_interactiveOnlyOneSeg(true)
 {
     ofxXmlSettings m_xml;
 
@@ -148,6 +149,7 @@ m_interactiveMode(false)
     }
 
     m_interactiveMode = m_xml.getValue("settings:interactivemode", 0) == 1 ? true : false;
+    m_interactiveOnlyOneSeg = m_xml.getAttribute("settings:interactivemode", "oneseg", 1) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
@@ -174,6 +176,7 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "Alphas: tracks = %d, dots = %d, legend = %d", m_alphaTracks, m_alphaDots, m_alphaLegend);
 
     ofLog(OF_LOG_SILENT, "Debug mode: %d", m_debugMode);
+    ofLog(OF_LOG_SILENT, "Interactive mode: %d, show only one segment: %d", m_interactiveMode, m_interactiveOnlyOneSeg);
     ofLog(OF_LOG_SILENT, "Start fullscreen: %d", m_fullscreen);
     ofLog(OF_LOG_SILENT, "Load Gps on start: %d", m_loadOnStart);
     ofLog(OF_LOG_SILENT, "Show image as current point: %d", m_imageAsCurrentPoint);

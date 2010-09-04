@@ -185,6 +185,9 @@ private:
 	int m_imgOffsetY;
 
 	bool m_magicBoxEnabled;
+
+	bool m_interactiveMode;
+	bool m_drawOnlyOneSeg;
 };
 
 #endif // _WALK_H_

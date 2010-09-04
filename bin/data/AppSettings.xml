@@ -22,7 +22,7 @@
 <settings>
 	<log level="0" />
 	<loadgpsonstart>1</loadgpsonstart>
-	<interactivemode>0</interactivemode>
+	<interactivemode oneseg="1">0</interactivemode>
 	<debugmode>0</debugmode>
 	<printvalues>1</printvalues>
 	<fullscreen>0</fullscreen>

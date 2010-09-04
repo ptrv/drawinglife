@@ -40,13 +40,18 @@ m_maxPointsToDraw(maxPointsToDraw),
 m_currentPointIsImage(false),
 m_imgOffsetX(0),
 m_imgOffsetY(0),
-m_magicBoxEnabled(true)
+m_magicBoxEnabled(true),
+m_interactiveMode(false),
+m_drawOnlyOneSeg(true)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
 	m_dotColor.r = dotColor.r;
 	m_dotColor.g = dotColor.g;
 	m_dotColor.b = dotColor.b;
+
+	m_interactiveMode = AppSettings::instance().isInteractiveMode();
+	m_drawOnlyOneSeg = AppSettings::instance().drawOnlyOneSeg();
 }
 
 Walk::~Walk()
@@ -180,6 +185,10 @@ void Walk::draw()
             startSeg = 0;
             startPoint = 0;
         }
+        if(m_interactiveMode && m_drawOnlyOneSeg)
+        {
+            startSeg = m_currentGpsSegment;
+        }
 
 //        ofSetLineWidth(3.0);
 //        ofEnableSmoothing();
@@ -188,9 +197,15 @@ void Walk::draw()
             glBegin(GL_LINE_STRIP);
             int pointEnd;
             if (i == m_currentGpsSegment)
+            {
                 pointEnd = m_currentGpsPoint;
+                if(m_interactiveMode && !m_drawOnlyOneSeg)
+                    ofSetColor(255,0,0);
+            }
             else
+            {
                 pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
+            }
 
             for (int j = startPoint; j <= pointEnd; ++j)
             {
@@ -216,7 +231,7 @@ void Walk::draw()
 			m_image.draw(getScaledUtmX(tmp.x)-m_imgOffsetX,getScaledUtmY(tmp.y)-m_imgOffsetY);
 
 		}
-		else
+		else if(!m_interactiveMode)
 		{
 			ofFill();
 			ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
