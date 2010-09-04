@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "ofMain.h"
+
 #define DEF_SINGLETON( NAME )    \
 public:                        \
 static NAME& instance()      \
@@ -72,6 +74,7 @@ public:
     int getNumPerson() const { return m_numPerson; }
 
     const std::vector<std::string >& getNames() const { return m_names; }
+    const std::vector<ofColor >& getNameColors() const { return m_nameColors; }
     const std::vector<std::string >& getImageList() const { return m_imagePaths; }
 
 private:
@@ -139,6 +142,7 @@ private:
     // -----------------------------------------------------------------------------
     int m_numPerson;
     std::vector<std::string > m_names;
+    std::vector<ofColor > m_nameColors;
     std::vector<std::string > m_imagePaths;
 
 };

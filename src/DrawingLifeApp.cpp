@@ -285,7 +285,7 @@ bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         m_magicBoxes[ii] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
                                         AppSettings::instance().getBoundingBoxPadding());
 
-        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength());
+        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength(), AppSettings::instance().getNameColors()[ii]);
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();
@@ -377,7 +377,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
         m_magicBoxes[ii] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
                                         AppSettings::instance().getBoundingBoxPadding());
 
-        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength());
+        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength(), AppSettings::instance().getNameColors()[ii]);
 
 		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
         m_walks[ii]->reset();

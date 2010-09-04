@@ -107,6 +107,14 @@ m_numPerson(0)
     for(int i = 0; i < m_numPerson; ++i)
     {
         m_names.push_back(m_xml.getValue("name", "", i));
+        ofColor tmpColor;
+//        tmpColor.r = m_xml.getAttribute("name", "r", ofRandom(0, 255), i);
+//        tmpColor.g = m_xml.getAttribute("name", "g", ofRandom(0, 255), i);
+//        tmpColor.b = m_xml.getAttribute("name", "b", ofRandom(0, 255), i);
+        tmpColor.r = (float)m_xml.getAttribute("name", "r", 255, i);
+        tmpColor.g = (float)m_xml.getAttribute("name", "g", 255, i);
+        tmpColor.b = (float)m_xml.getAttribute("name", "b", 255, i);
+        m_nameColors.push_back(tmpColor);
     }
     m_xml.popTag();
     m_xml.popTag();
@@ -177,6 +185,7 @@ void AppSettings::print()
     for (unsigned int i=0; i < m_names.size();++i)
     {
     	ofLog(OF_LOG_SILENT, "Name %d: %s", i, m_names[i].c_str());
+    	ofLog(OF_LOG_SILENT, "Name color %d: r=%d, g=%d, b=%d", i, (int)m_nameColors[i].r, (int)m_nameColors[i].g, (int)m_nameColors[i].b);
     }
     for (unsigned int i=0; i < m_imagePaths.size();++i)
     {

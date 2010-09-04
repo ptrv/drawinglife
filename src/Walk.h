@@ -12,7 +12,7 @@
 class Walk
 {
 public:
-	Walk(int maxPointsToDraw);
+	Walk(int maxPointsToDraw, ofColor dotColor);
 	~Walk();
 
 	//------------------------------------------------------------------------------

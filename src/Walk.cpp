@@ -20,7 +20,7 @@ double Walk::minDrawY = std::numeric_limits<double>::max();
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
-Walk::Walk(int maxPointsToDraw)
+Walk::Walk(int maxPointsToDraw, ofColor dotColor)
 :
 m_gpsData(NULL),
 m_currentGpsPoint(0),
@@ -43,9 +43,9 @@ m_imgOffsetY(0)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
-	m_dotColor.r = (int)ofRandom(30,255);
-	m_dotColor.g = (int)ofRandom(30,255);
-	m_dotColor.b = (int)ofRandom(30,255);
+	m_dotColor.r = dotColor.r;
+	m_dotColor.g = dotColor.g;
+	m_dotColor.b = dotColor.b;
 }
 
 Walk::~Walk()
@@ -358,9 +358,9 @@ const std::string& Walk::getCurrentGpsInfo()
 void Walk::setDotColors()
 {
    	m_dotColor.a = m_dotAlpha;
-	m_dotColor.r = (int)ofRandom(30,255);
-	m_dotColor.g = (int)ofRandom(30,255);
-	m_dotColor.b = (int)ofRandom(30,255);
+//	m_dotColor.r = (int)ofRandom(30,255);
+//	m_dotColor.g = (int)ofRandom(30,255);
+//	m_dotColor.b = (int)ofRandom(30,255);
 
 }
 

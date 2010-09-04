@@ -2,8 +2,8 @@
 <data>
 	<database>test.sqlite</database>
 	<person>
-		<name>Dan</name>
-		<name>Sophia</name>
+		<name r="0" g="255" b="0" >Dan</name>
+		<name r="255" g="0" b="0" >Sophia</name>
 	</person>
 </data>
 <dbquery>
