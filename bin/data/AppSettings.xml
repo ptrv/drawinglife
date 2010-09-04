@@ -37,6 +37,11 @@
 		<size>20000.0</size>	
 		<padding>2000.0</padding>
   	</boundingbox>
+	<meridian>
+		<auto>1</auto>
+		<!-- value in degrees -->
+		<lon0>0.0</lon0>
+	</meridian>
 </settings>
 <ui>
 	<fonts>

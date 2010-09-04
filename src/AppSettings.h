@@ -71,6 +71,9 @@ public:
     double getBoundingBoxSize() const { return m_boundingBoxSize; }
     double getBoundingBoxPadding() const { return m_boundingBoxPadding; }
 
+    bool isMeridianAuto() const { return m_meridianAuto; }
+    double getMeridian() const { return m_meridianVal; }
+
     const std::string& getDatabasePath() const { return m_databasePath; }
 
     int getQueryType() const { return m_queryType; }
@@ -164,6 +167,9 @@ private:
 
     bool m_interactiveMode;
     bool m_interactiveOnlyOneSeg;
+
+    bool m_meridianAuto;
+    double m_meridianVal;
 };
 
 #endif // _APPSETTINGS_H_

@@ -49,7 +49,9 @@ m_queryYearEnd(0),
 m_queryCity(""),
 m_numPerson(0),
 m_interactiveMode(false),
-m_interactiveOnlyOneSeg(true)
+m_interactiveOnlyOneSeg(true),
+m_meridianAuto(true),
+m_meridianVal(0.0)
 {
     ofxXmlSettings m_xml;
 
@@ -112,6 +114,9 @@ m_interactiveOnlyOneSeg(true)
     m_queryYearStart = m_xml.getValue("dbquery:time:yearstart", 2009);
     m_queryYearEnd = m_xml.getValue("dbquery:time:yearend", 2010);
     m_queryCity = m_xml.getValue("dbquery:city", "Berlin");
+
+    m_meridianAuto = m_xml.getValue("settings:meridian:auto", 1) == 1 ? true : false;
+    m_meridianVal = m_xml.getValue("settings:meridian:lon0", 0.0);
 
     m_xml.pushTag("data");
     m_xml.pushTag("person");
@@ -199,6 +204,8 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "Frame rate: %d", m_frameRate);
 
     ofLog(OF_LOG_SILENT, "Bounding box: size = %lf, padding = %lf", m_boundingBoxSize, m_boundingBoxPadding);
+
+    ofLog(OF_LOG_SILENT, "Meridian value: %lf, auto = %d", m_meridianVal, m_meridianAuto);
 
     ofLog(OF_LOG_SILENT, "Database path: %s", m_databasePath.c_str());
 

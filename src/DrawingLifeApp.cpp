@@ -744,7 +744,15 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
         if (m_gpsDatas[i]->getMinLat() < minLat) minLat = m_gpsDatas[i]->getMinLon();
         if (m_gpsDatas[i]->getMaxLat() > maxLat) maxLat = m_gpsDatas[i]->getMaxLon();
     }
-    GpsData::setGlobalValues(minX, maxX, minY, maxY, (minLon + (maxLon - minLon)/2));
+
+    double lon0 = 0.0;
+    lon0 = AppSettings::instance().getMeridian();
+
+    if(AppSettings::instance().isMeridianAuto())
+        GpsData::setGlobalValues(minX, maxX, minY, maxY, (minLon + (maxLon - minLon)/2));
+    else
+        GpsData::setGlobalValues(minX, maxX, minY, maxY, lon0);
+
     for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
     {
         m_gpsDatas[i]->calculateUtmPointsGlobalLon();
