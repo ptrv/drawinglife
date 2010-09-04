@@ -50,6 +50,7 @@ public:
     int getColorInteractiveSegR () const { return m_colorInteractiveSegR; }
     int getColorInteractiveSegG () const { return m_colorInteractiveSegG; }
     int getColorInteractiveSegB () const { return m_colorInteractiveSegB; }
+    int getColorInteractiveSegA () const { return m_colorInteractiveSegA; }
 
     int getAlphaTrack () const { return m_alphaTracks; }
     int getAlphaDot () const { return m_alphaDots; }
@@ -88,7 +89,7 @@ public:
     const std::vector<std::string >& getImageList() const { return m_imagePaths; }
 
     bool isInteractiveMode() const { return m_interactiveMode; }
-    bool drawOnlyOneSeg() const { return m_interactiveOnlyOneSeg; }
+    bool drawTraced() const { return m_interactiveTraced; }
 
 private:
 
@@ -122,6 +123,7 @@ private:
     int m_colorInteractiveSegR;
     int m_colorInteractiveSegG;
     int m_colorInteractiveSegB;
+    int m_colorInteractiveSegA;
 
     int m_alphaTracks;
     int m_alphaDots;
@@ -166,7 +168,7 @@ private:
     std::vector<std::string > m_imagePaths;
 
     bool m_interactiveMode;
-    bool m_interactiveOnlyOneSeg;
+    bool m_interactiveTraced;
 
     bool m_meridianAuto;
     double m_meridianVal;

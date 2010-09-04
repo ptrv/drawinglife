@@ -189,7 +189,7 @@ private:
 	bool m_magicBoxEnabled;
 
 	bool m_interactiveMode;
-	bool m_drawOnlyOneSeg;
+	bool m_drawTraced;
 
 	ofColor m_currentSegColor;
 };

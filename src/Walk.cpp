@@ -42,7 +42,7 @@ m_imgOffsetX(0),
 m_imgOffsetY(0),
 m_magicBoxEnabled(true),
 m_interactiveMode(false),
-m_drawOnlyOneSeg(true)
+m_drawTraced(true)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
@@ -51,11 +51,12 @@ m_drawOnlyOneSeg(true)
 	m_dotColor.b = dotColor.b;
 
 	m_interactiveMode = AppSettings::instance().isInteractiveMode();
-	m_drawOnlyOneSeg = AppSettings::instance().drawOnlyOneSeg();
+	m_drawTraced = AppSettings::instance().drawTraced();
 
     m_currentSegColor.r = AppSettings::instance().getColorInteractiveSegR();
     m_currentSegColor.g = AppSettings::instance().getColorInteractiveSegG();
     m_currentSegColor.b = AppSettings::instance().getColorInteractiveSegB();
+    m_currentSegColor.a = AppSettings::instance().getColorInteractiveSegA();
 }
 
 Walk::~Walk()
@@ -193,7 +194,7 @@ void Walk::draw()
             startSeg = 0;
             startPoint = 0;
         }
-        if(m_interactiveMode && m_drawOnlyOneSeg)
+        if(m_interactiveMode && !m_drawTraced)
         {
             startSeg = m_currentGpsSegment;
         }
@@ -207,10 +208,11 @@ void Walk::draw()
             if (i == m_currentGpsSegment)
             {
                 pointEnd = m_currentGpsPoint;
-                if(m_interactiveMode && !m_drawOnlyOneSeg)
+                if(m_interactiveMode && m_drawTraced)
                     ofSetColor(m_currentSegColor.r,
                                m_currentSegColor.g,
-                               m_currentSegColor.b);
+                               m_currentSegColor.b,
+                               m_currentSegColor.a);
             }
             else
             {
@@ -483,5 +485,5 @@ void Walk::setCurrentPointImage(ofImage img)
 
 void Walk::toggleTraced()
 {
-    m_drawOnlyOneSeg = !m_drawOnlyOneSeg;
+    m_drawTraced = !m_drawTraced;
 }

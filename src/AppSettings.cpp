@@ -25,6 +25,7 @@ m_colorViewboxB(30),
 m_colorInteractiveSegR(255),
 m_colorInteractiveSegG(0),
 m_colorInteractiveSegB(0),
+m_colorInteractiveSegA(255),
 m_alphaTracks(64),
 m_alphaDots(127),
 m_alphaLegend(255),
@@ -49,7 +50,7 @@ m_queryYearEnd(0),
 m_queryCity(""),
 m_numPerson(0),
 m_interactiveMode(false),
-m_interactiveOnlyOneSeg(true),
+m_interactiveTraced(true),
 m_meridianAuto(true),
 m_meridianVal(0.0)
 {
@@ -90,8 +91,9 @@ m_meridianVal(0.0)
     m_colorViewboxB = m_xml.getAttribute("ui:color:viewbox", "b", 50);
 
     m_colorInteractiveSegR = m_xml.getAttribute("ui:color:interactiveseg", "r", 255);
-    m_colorInteractiveSegG = m_xml.getAttribute("ui:color:interactiveseg", "g", 0);
+    m_colorInteractiveSegG = m_xml.getAttribute("ui:color:interactiveseg", "g", 255);
     m_colorInteractiveSegB = m_xml.getAttribute("ui:color:interactiveseg", "b", 0);
+    m_colorInteractiveSegA = m_xml.getAttribute("ui:color:interactiveseg", "a", 255);
 
     m_alphaTracks = m_xml.getValue("ui:alpha:tracks", 64);
     m_alphaDots = m_xml.getValue("ui:alpha:dots", 127);
@@ -160,7 +162,7 @@ m_meridianVal(0.0)
     }
 
     m_interactiveMode = m_xml.getValue("settings:interactivemode:enabled", 0) == 1 ? true : false;
-    m_interactiveOnlyOneSeg = m_xml.getValue("settings:interactivemode:traced", 1) == 1 ? true : false;
+    m_interactiveTraced = m_xml.getValue("settings:interactivemode:traced", 1) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
@@ -187,12 +189,13 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "Alphas: tracks = %d, dots = %d, legend = %d", m_alphaTracks, m_alphaDots, m_alphaLegend);
 
     ofLog(OF_LOG_SILENT, "Debug mode: %d", m_debugMode);
-    ofLog(OF_LOG_SILENT, "Interactive mode: %d, show only one segment: %d, seg color: r=%d, g=%d, b=%d",
+    ofLog(OF_LOG_SILENT, "Interactive mode: %d, show only one segment: %d, seg color: r=%d, g=%d, b=%d, a=%d",
           m_interactiveMode,
-          m_interactiveOnlyOneSeg,
+          m_interactiveTraced,
           m_colorInteractiveSegR,
           m_colorInteractiveSegG,
-          m_colorInteractiveSegB);
+          m_colorInteractiveSegB,
+          m_colorInteractiveSegA);
 
     ofLog(OF_LOG_SILENT, "Start fullscreen: %d", m_fullscreen);
     ofLog(OF_LOG_SILENT, "Load Gps on start: %d", m_loadOnStart);
