@@ -537,7 +537,7 @@ void DrawingLifeApp::fillViewAreaUTM()
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
-    //DBG_VAL(key);
+    DBG_VAL(key);
     switch (key)
     {
     case 'a':
@@ -560,11 +560,11 @@ void DrawingLifeApp::keyPressed  (int key)
     case 'p':
         m_showFps = !m_showFps;
         break;
-    case 'c':
-        for(unsigned int i = 0; i < m_walks.size(); ++i)
-        {
-            m_walks[i]->setDotColors();
-        }
+//    case 'c':
+//        for(unsigned int i = 0; i < m_walks.size(); ++i)
+//        {
+//            m_walks[i]->setDotColors();
+//        }
         break;
     case 49:
     if(m_dbQueryData.type == DB_QUERY_CITY)
@@ -642,24 +642,45 @@ void DrawingLifeApp::keyPressed  (int key)
     if(m_dbQueryData.type == DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Banff");
         break;
-    case 'w':
-        break;
-    case 's':
-        DBG_VAL(m_zoomZ);
-        break;
-    case OF_KEY_UP:
+    case '+':
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->addToBoxSize(-500.0);
         }
+
         break;
-    case OF_KEY_DOWN:
+    case '-':
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->addToBoxSize(500.0);
         }
         break;
+    case OF_KEY_UP:
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->goUp(500.0);
+        }
+        break;
+    case OF_KEY_DOWN:
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->goDown(500.0);
+        }
+        break;
+       break;
     case OF_KEY_RIGHT:
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->goRight(500.0);
+        }
+        break;
+    case OF_KEY_LEFT:
+        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        {
+            m_magicBoxes[i]->goLeft(500.0);
+        }
+        break;
+    case 32:
         if(m_interactiveMode)
         {
             for (unsigned int i=0; i < m_walks.size();++i)
@@ -668,12 +689,21 @@ void DrawingLifeApp::keyPressed  (int key)
             }
         }
         break;
-    case OF_KEY_LEFT:
+    case 8:
         if(m_interactiveMode)
         {
             for (unsigned int i=0; i < m_walks.size();++i)
             {
             	m_walks[i]->updateToPreviousSegment();
+            }
+        }
+        break;
+    case 't':
+        if(m_interactiveMode)
+        {
+            for (unsigned int i=0; i < m_walks.size();++i)
+            {
+            	m_walks[i]->toggleTraced();
             }
         }
         break;

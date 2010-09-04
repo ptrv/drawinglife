@@ -12,7 +12,7 @@
 	<!-- 2 = month range -->
 	<!-- 3 = year range -->
 	<!-- 4 = city -->
-	<type>3</type>
+	<type>4</type>
 	<time>
 		<yearstart>2007</yearstart>
 		<yearend>2009</yearend>
@@ -20,9 +20,12 @@
 	<city>Berlin</city>
 </dbquery>
 <settings>
+	<interactivemode>
+		<enabled>1</enabled>
+		<traced>1</traced>
+	</interactivemode>
 	<log level="0" />
 	<loadgpsonstart>1</loadgpsonstart>
-	<interactivemode oneseg="1">0</interactivemode>
 	<debugmode>0</debugmode>
 	<printvalues>1</printvalues>
 	<fullscreen>0</fullscreen>
@@ -33,7 +36,7 @@
 	<!-- To draw all points set 0 (very cpu intensive) -->
 	<walklength>0</walklength>
 	<boundingbox>
-		<enabled>1</enabled>
+		<enabled>0</enabled>
 		<size>20000.0</size>	
 		<padding>2000.0</padding>
   	</boundingbox>

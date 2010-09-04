@@ -37,10 +37,16 @@ public:
 
     void toggleZoomLevel(unsigned int zoomLevel);
 
+    void goUp(double val);
+    void goDown(double val);
+    void goLeft(double val);
+    void goRight(double val);
+
 private:
 
     bool isInPaddedBox(const ofxPointd utmPoint);
 
+    void setBoxes();
     // ist auch m_lon0
     ofxPointd m_centerUtm;
 

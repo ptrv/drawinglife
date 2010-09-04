@@ -159,8 +159,8 @@ m_meridianVal(0.0)
         m_xml.popTag();
     }
 
-    m_interactiveMode = m_xml.getValue("settings:interactivemode", 0) == 1 ? true : false;
-    m_interactiveOnlyOneSeg = m_xml.getAttribute("settings:interactivemode", "oneseg", 1) == 1 ? true : false;
+    m_interactiveMode = m_xml.getValue("settings:interactivemode:enabled", 0) == 1 ? true : false;
+    m_interactiveOnlyOneSeg = m_xml.getValue("settings:interactivemode:traced", 1) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 

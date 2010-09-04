@@ -167,8 +167,12 @@ void Walk::draw()
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
-        m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
-                                                m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
+        if(!m_interactiveMode)
+        {
+            m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
+                                                    m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
+        }
+
         int startSeg, startPoint;
         if(m_maxPointsToDraw > 0)
         {
@@ -281,10 +285,19 @@ void Walk::drawAll()
 	for (unsigned int i = 0; i < m_gpsData->getNormalizedUTMPoints().size(); ++i)
 	{
 		glBegin(GL_LINE_STRIP);
+
 		for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
 		{
-			glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
-					   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
+            bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+            if(isInBox)
+            {
+                const ofxPointd& tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
+                glVertex2d(getScaledUtmX(tmp.x),
+                           getScaledUtmY(tmp.y));
+            }
+
+//			glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
+//					   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
 		}
 		glEnd();
 	}
@@ -388,6 +401,7 @@ const std::string& Walk::getCurrentGpsInfoDebug()
 	"Time              : " + getCurrentTimestamp() + "\n" +
 	"Location          : " + getGpsLocationCurrent() + "\n" +
 	"Central meridian  : " + ofToString(m_gpsData->getLon0(), 7) + "\n" +
+	"Meridian global   : " + ofToString(GpsData::getLon0Glogal(), 7) + "\n" +
 	"Min/Max latitude  : " + ofToString(m_gpsData->getMinLat(), 7) + " / " + ofToString(m_gpsData->getMaxLat(), 7) + "\n" +
 	"Min/Max longitude : " + ofToString(m_gpsData->getMinLon(), 7) + " / " + ofToString(m_gpsData->getMaxLon(), 7) + "\n" +
 	"Min/Max UTM X     : " + ofToString(m_gpsData->getMinUtmX(), 7) + " / " + ofToString(m_gpsData->getMaxUtmX(), 7) + "\n" +
@@ -465,4 +479,9 @@ void Walk::setCurrentPointImage(ofImage img)
 	m_imgOffsetX = m_image.getWidth()/2;
 	m_imgOffsetY = m_image.getHeight()/2;
     m_currentPointIsImage = true;
+}
+
+void Walk::toggleTraced()
+{
+    m_drawOnlyOneSeg = !m_drawOnlyOneSeg;
 }

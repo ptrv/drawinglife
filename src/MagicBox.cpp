@@ -215,3 +215,28 @@ const ofxRectangled MagicBox::getNormalizedPaddedBox()
 
 }
 
+void MagicBox::setBoxes()
+{
+    m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+    m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+}
+void MagicBox::goUp(double val)
+{
+    m_centerUtm.y += val;
+    setBoxes();
+}
+void MagicBox::goDown(double val)
+{
+    m_centerUtm.y -= val;
+    setBoxes();
+}
+void MagicBox::goLeft(double val)
+{
+    m_centerUtm.x -= val;
+    setBoxes();
+}
+void MagicBox::goRight(double val)
+{
+    m_centerUtm.x += val;
+    setBoxes();
+}

@@ -12,6 +12,7 @@ obj/*
 *.layout
 *.cbTemp
 *.cscope_file_list
+cscope.out
 
 doc/html/*
 libs/geographiclib-1.1/libs/*

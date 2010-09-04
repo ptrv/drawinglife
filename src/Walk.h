@@ -143,6 +143,8 @@ public:
 
 	void setMagicBoxStatic(MagicBox* magicBox);
 
+	void toggleTraced();
+
 private:
 
 	GpsData* m_gpsData;
