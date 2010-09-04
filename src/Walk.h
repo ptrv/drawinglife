@@ -188,6 +188,8 @@ private:
 
 	bool m_interactiveMode;
 	bool m_drawOnlyOneSeg;
+
+	ofColor m_currentSegColor;
 };
 
 #endif // _WALK_H_

@@ -52,6 +52,10 @@ m_drawOnlyOneSeg(true)
 
 	m_interactiveMode = AppSettings::instance().isInteractiveMode();
 	m_drawOnlyOneSeg = AppSettings::instance().drawOnlyOneSeg();
+
+    m_currentSegColor.r = AppSettings::instance().getColorInteractiveSegR();
+    m_currentSegColor.g = AppSettings::instance().getColorInteractiveSegG();
+    m_currentSegColor.b = AppSettings::instance().getColorInteractiveSegB();
 }
 
 Walk::~Walk()
@@ -200,7 +204,9 @@ void Walk::draw()
             {
                 pointEnd = m_currentGpsPoint;
                 if(m_interactiveMode && !m_drawOnlyOneSeg)
-                    ofSetColor(255,0,0);
+                    ofSetColor(m_currentSegColor.r,
+                               m_currentSegColor.g,
+                               m_currentSegColor.b);
             }
             else
             {

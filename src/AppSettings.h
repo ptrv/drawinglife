@@ -47,6 +47,10 @@ public:
     int getColorViewboxG () const { return m_colorViewboxG; }
     int getColorViewboxB () const { return m_colorViewboxB; }
 
+    int getColorInteractiveSegR () const { return m_colorInteractiveSegR; }
+    int getColorInteractiveSegG () const { return m_colorInteractiveSegG; }
+    int getColorInteractiveSegB () const { return m_colorInteractiveSegB; }
+
     int getAlphaTrack () const { return m_alphaTracks; }
     int getAlphaDot () const { return m_alphaDots; }
     int getAlphaLegend () const { return m_alphaLegend; }
@@ -111,6 +115,10 @@ private:
     int m_colorViewboxR;
     int m_colorViewboxG;
     int m_colorViewboxB;
+
+    int m_colorInteractiveSegR;
+    int m_colorInteractiveSegG;
+    int m_colorInteractiveSegB;
 
     int m_alphaTracks;
     int m_alphaDots;
