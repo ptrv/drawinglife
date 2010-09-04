@@ -3,7 +3,7 @@
 	<database>test.sqlite</database>
 	<person>
 		<name r="0" g="255" b="0" >Dan</name>
-		<name r="255" g="0" b="0" >Sophia</name>
+		<!-- <name r="255" g="0" b="0" >Sophia</name> -->
 	</person>
 </data>
 <dbquery>
@@ -22,8 +22,9 @@
 <settings>
 	<log level="0" />
 	<loadgpsonstart>1</loadgpsonstart>
+	<interactivemode>0</interactivemode>
 	<debugmode>0</debugmode>
-	<printvalues>0</printvalues>
+	<printvalues>1</printvalues>
 	<fullscreen>0</fullscreen>
 	<hidecursor>1</hidecursor>
 	<drawspeed>2</drawspeed>
@@ -32,6 +33,7 @@
 	<!-- To draw all points set 0 (very cpu intensive) -->
 	<walklength>0</walklength>
 	<boundingbox>
+		<enabled>1</enabled>
 		<size>20000.0</size>	
 		<padding>2000.0</padding>
   	</boundingbox>
@@ -59,4 +61,5 @@
 		<image></image>
 		<image></image>
 	</images>
+	<dotsize>5</dotsize>
 </ui>

@@ -19,6 +19,7 @@ public:
     const ofxPointd getDrawablePoint(const UtmPoint& utmPoint);
 
     void setupBox(ofxPointd currUtm, double lon0);
+    void setupBoxStatic(ofxPointd currUtm, double lon0, double width, double height);
 
     void updateBoxIfNeeded(const ofxPointd utmPoint);
 

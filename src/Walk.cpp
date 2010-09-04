@@ -20,7 +20,7 @@ double Walk::minDrawY = std::numeric_limits<double>::max();
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
-Walk::Walk(int maxPointsToDraw, ofColor dotColor)
+Walk::Walk(int maxPointsToDraw, ofColor dotColor, bool magicBoxEnabled)
 :
 m_gpsData(NULL),
 m_currentGpsPoint(0),
@@ -39,7 +39,8 @@ m_magicBox(NULL),
 m_maxPointsToDraw(maxPointsToDraw),
 m_currentPointIsImage(false),
 m_imgOffsetX(0),
-m_imgOffsetY(0)
+m_imgOffsetY(0),
+m_magicBoxEnabled(true)
 {
     //	m_dotColor.a = 127;
 	m_dotColor.a = m_dotAlpha;
@@ -100,6 +101,46 @@ void Walk::update()
     }
 }
 
+void Walk::updateToNextSegment()
+{
+    if (m_gpsData->getTotalGpsPoints() > 0)
+    {
+        if (m_gpsData->getNormalizedUTMPoints().size() > 0)
+        {
+            if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size()-1)
+            {
+                ++m_currentGpsSegment;
+                m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
+            }
+            else
+            {
+                m_currentGpsPoint = 0;
+                m_currentGpsSegment = 0;
+                m_currentPoint = -1;
+            }
+        }
+    }
+}
+void Walk::updateToPreviousSegment()
+{
+    if (m_gpsData->getTotalGpsPoints() > 0)
+    {
+        if (m_gpsData->getNormalizedUTMPoints().size() > 0)
+        {
+            if ((unsigned int)m_currentGpsSegment > 0)
+            {
+                --m_currentGpsSegment;
+                m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
+            }
+            else
+            {
+                m_currentGpsPoint = 0;
+                m_currentGpsSegment = 0;
+                m_currentPoint = -1;
+            }
+        }
+    }
+}
 void Walk::reset()
 {
     m_currentGpsPoint = 0;
@@ -180,7 +221,7 @@ void Walk::draw()
 			ofFill();
 			ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
 			ofCircle(getScaledUtmX(tmp.x),
-					 getScaledUtmY(tmp.y), 5);
+					 getScaledUtmY(tmp.y), m_dotSize);
 		}
 	}
 
@@ -380,6 +421,20 @@ void Walk::setMagicBox(MagicBox* magicBox)
     tmpCoord.x = m_gpsData->getUtmX(0,0);
     tmpCoord.y = m_gpsData->getUtmY(0,0);
     m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
+
+}
+void Walk::setMagicBoxStatic(MagicBox* magicBox)
+{
+    m_magicBox = 0;
+    m_magicBox = magicBox;
+    reset();
+    ofxPointd tmpCoord;
+    tmpCoord.x = m_gpsData->getMinUtmX() + ((m_gpsData->getMaxUtmX() - m_gpsData->getMinUtmX()) / 2.0);
+    tmpCoord.y = m_gpsData->getMinUtmY() + ((m_gpsData->getMaxUtmY() - m_gpsData->getMinUtmY()) / 2.0);
+    m_magicBox->setupBoxStatic(tmpCoord,
+                               GpsData::getLon0Glogal(),
+                               (m_gpsData->getMaxUtmX() - m_gpsData->getMinUtmX()),
+                               (m_gpsData->getMaxUtmY() - m_gpsData->getMinUtmY()));
 
 }
 

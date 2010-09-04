@@ -25,6 +25,7 @@ m_colorViewboxB(30),
 m_alphaTracks(64),
 m_alphaDots(127),
 m_alphaLegend(255),
+m_dotSize(5),
 m_printSettings(false),
 m_logLevel(0),
 m_debugMode(false),
@@ -35,6 +36,7 @@ m_frameRate(30),
 m_fullscreen(false),
 m_imageAsCurrentPoint(false),
 m_hideCursor(false),
+m_boundingBoxEnabled(true),
 m_boundingBoxSize(3000.0),
 m_boundingBoxPadding(500.0),
 m_databasePath(""),
@@ -42,7 +44,8 @@ m_queryType(0),
 m_queryYearStart(0),
 m_queryYearEnd(0),
 m_queryCity(""),
-m_numPerson(0)
+m_numPerson(0),
+m_interactiveMode(false)
 {
     ofxXmlSettings m_xml;
 
@@ -85,11 +88,14 @@ m_numPerson(0)
     m_alphaDots = m_xml.getValue("ui:alpha:dots", 127);
     m_alphaLegend = m_xml.getValue("ui:alpha:legend", 255);
 
+    m_dotSize = m_xml.getValue("ui:dotsize", 5);
+
     m_logLevel = m_xml.getAttribute("settings:log", "level", 0);
     m_debugMode = m_xml.getValue("settings:debugmode", 0) == 1 ? true : false;
 
     m_walkLength = m_xml.getValue("settings:walklength", 10000);
 
+    m_boundingBoxEnabled = m_xml.getValue("settings:boundingbox:enabled", 1) == 1 ? true : false;
     m_boundingBoxSize = m_xml.getValue("settings:boundingbox:size", 3000.0);
     m_boundingBoxPadding = m_xml.getValue("settings:boundingbox:padding", 500.0);
 
@@ -140,6 +146,8 @@ m_numPerson(0)
         m_xml.popTag();
         m_xml.popTag();
     }
+
+    m_interactiveMode = m_xml.getValue("settings:interactivemode", 0) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 

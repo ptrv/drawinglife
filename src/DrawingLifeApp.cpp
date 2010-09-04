@@ -39,7 +39,8 @@ DrawingLifeApp::DrawingLifeApp() :
 	fpsToShow(0.0),
 //	m_maxPointsToDraw(10000),
 	m_imageAsCurrentPoint(false),
-	m_hideCursor(false)
+	m_hideCursor(false),
+	m_interactiveMode(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -80,6 +81,7 @@ void DrawingLifeApp::setup()
     m_isDebugMode = settings.isDebugMode();
     m_isFullscreen = settings.isFullscreen();
     m_hideCursor = settings.hideCursor();
+    m_interactiveMode = settings.isInteractiveMode();
 
     m_dbQueryData.type = settings.getQueryType();
     m_dbQueryData.yearStart = settings.getQueryYearStart();
@@ -167,17 +169,20 @@ void DrawingLifeApp::update()
 {
     if (m_isAnimation)
     {
-        if(m_timeline->getTimeline().size() > 0)
+        if(!m_interactiveMode)
         {
-            for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+            if(m_timeline->getTimeline().size() > 0)
             {
-                int id = m_timeline->getNext();
-                if (id < m_numPerson)
+                for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
                 {
-                    m_walks[id]->update();
+                    int id = m_timeline->getNext();
+                    if (id < m_numPerson)
+                    {
+                        m_walks[id]->update();
+                    }
                 }
-            }
 
+            }
         }
     }
 }
@@ -344,10 +349,18 @@ bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         this->calculateGlobalMinMaxValues();
 
         Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+
+        Walk::setDotSize(AppSettings::instance().getDotSize());
+
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
             m_walks[i]->setDotColors();
-            m_walks[i]->setMagicBox(m_magicBoxes[i]);
+
+            if(!AppSettings::instance().isBoundingBoxEnabled())
+                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+            else
+                m_walks[i]->setMagicBox(m_magicBoxes[i]);
+
             if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
             {
                 m_walks[i]->setCurrentPointImage(m_images[i]);
@@ -446,10 +459,18 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
         this->calculateGlobalMinMaxValues();
 
         Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+
+        Walk::setDotSize(AppSettings::instance().getDotSize());
+
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
             m_walks[i]->setDotColors();
-            m_walks[i]->setMagicBox(m_magicBoxes[i]);
+
+            if(!AppSettings::instance().isBoundingBoxEnabled())
+                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+            else
+                m_walks[i]->setMagicBox(m_magicBoxes[i]);
+
             if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
             {
                 m_walks[i]->setCurrentPointImage(m_images[i]);
@@ -639,9 +660,22 @@ void DrawingLifeApp::keyPressed  (int key)
         }
         break;
     case OF_KEY_RIGHT:
+        if(m_interactiveMode)
+        {
+            for (unsigned int i=0; i < m_walks.size();++i)
+            {
+            	m_walks[i]->updateToNextSegment();
+            }
+        }
         break;
     case OF_KEY_LEFT:
-
+        if(m_interactiveMode)
+        {
+            for (unsigned int i=0; i < m_walks.size();++i)
+            {
+            	m_walks[i]->updateToPreviousSegment();
+            }
+        }
         break;
     default:
         break;

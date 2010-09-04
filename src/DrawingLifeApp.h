@@ -123,6 +123,8 @@ private:
 
     bool m_hideCursor;
 
+    bool m_interactiveMode;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_

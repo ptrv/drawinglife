@@ -51,6 +51,8 @@ public:
     int getAlphaDot () const { return m_alphaDots; }
     int getAlphaLegend () const { return m_alphaLegend; }
 
+    int getDotSize() const { return m_dotSize; }
+
     int getLogLevel() const { return m_logLevel; }
     int getWalkLength() const { return m_walkLength; }
     int getDrawSpeed() const { return m_drawSpeed; }
@@ -61,6 +63,7 @@ public:
     bool isCurrentPointImage() const { return m_imageAsCurrentPoint; }
     bool hideCursor() const { return m_hideCursor; }
 
+    bool isBoundingBoxEnabled() const { return m_boundingBoxEnabled; }
     double getBoundingBoxSize() const { return m_boundingBoxSize; }
     double getBoundingBoxPadding() const { return m_boundingBoxPadding; }
 
@@ -76,6 +79,8 @@ public:
     const std::vector<std::string >& getNames() const { return m_names; }
     const std::vector<ofColor >& getNameColors() const { return m_nameColors; }
     const std::vector<std::string >& getImageList() const { return m_imagePaths; }
+
+    bool isInteractiveMode() const { return m_interactiveMode; }
 
 private:
 
@@ -110,6 +115,8 @@ private:
     int m_alphaDots;
     int m_alphaLegend;
 
+    int m_dotSize;
+
     // -----------------------------------------------------------------------------
     // Settings
     // -----------------------------------------------------------------------------
@@ -125,6 +132,7 @@ private:
     bool m_imageAsCurrentPoint;
     bool m_hideCursor;
 
+    bool m_boundingBoxEnabled;
     double m_boundingBoxSize;
     double m_boundingBoxPadding;
     // -----------------------------------------------------------------------------
@@ -144,6 +152,8 @@ private:
     std::vector<std::string > m_names;
     std::vector<ofColor > m_nameColors;
     std::vector<std::string > m_imagePaths;
+
+    bool m_interactiveMode;
 
 };
 

@@ -12,7 +12,7 @@
 class Walk
 {
 public:
-	Walk(int maxPointsToDraw, ofColor dotColor);
+	Walk(int maxPointsToDraw, ofColor dotColor, bool magicBoxEnabled=true);
 	~Walk();
 
 	//------------------------------------------------------------------------------
@@ -59,6 +59,14 @@ public:
 	 * \brief Counts through all GpsPoints.
 	 */
     void update();
+    /**
+	 * \brief Counts to next segment.
+	 */
+    void updateToNextSegment();
+    /**
+	 * \brief Counts to previous segment.
+	 */
+    void updateToPreviousSegment();
     /**
 	 * \brief Reset counter.
 	 */
@@ -133,6 +141,8 @@ public:
 
 	void setMagicBox(MagicBox* magicBox);
 
+	void setMagicBoxStatic(MagicBox* magicBox);
+
 private:
 
 	GpsData* m_gpsData;
@@ -173,6 +183,8 @@ private:
     bool m_currentPointIsImage;
 	int m_imgOffsetX;
 	int m_imgOffsetY;
+
+	bool m_magicBoxEnabled;
 };
 
 #endif // _WALK_H_
