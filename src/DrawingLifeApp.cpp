@@ -141,13 +141,13 @@ void DrawingLifeApp::setup()
         bool dbOk = false;
         switch(m_dbQueryData.type)
         {
-            case DB_QUERY_CITY:
+            case DBReader::DB_QUERY_CITY:
             loadGpsDataCity(m_names, m_dbQueryData.city);
             break;
-            case DB_QUERY_YEAR:
+            case DBReader::DB_QUERY_YEAR:
             dbOk = loadGpsDataYearRange(m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
             break;
-            case DB_QUERY_SQLFILE:
+            case DBReader::DB_QUERY_SQLFILE:
             dbOk = loadGpsDataWithSqlFile(m_names, m_sqlFilePaths);
             break;
         }
@@ -697,11 +697,11 @@ void DrawingLifeApp::keyPressed  (int key)
 //        }
         break;
     case 49:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
     {
         loadGpsDataCity(m_names, "Berlin");
     }
-    else if(m_dbQueryData.type != DB_QUERY_CITY)
+    else if(m_dbQueryData.type != DBReader::DB_QUERY_CITY)
     {
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
@@ -710,7 +710,7 @@ void DrawingLifeApp::keyPressed  (int key)
     }
     break;
     case 50:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
     {
         loadGpsDataCity(m_names, "London");
     }
@@ -723,7 +723,7 @@ void DrawingLifeApp::keyPressed  (int key)
     }
     break;
     case 51:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
     {
         loadGpsDataCity(m_names, "Barcelona");
     }
@@ -736,7 +736,7 @@ void DrawingLifeApp::keyPressed  (int key)
     }
     break;
     case 52:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
     {
         loadGpsDataCity(m_names, "Hamburg");
     }
@@ -749,27 +749,27 @@ void DrawingLifeApp::keyPressed  (int key)
     }
     break;
     case 53:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Vienna");
         break;
     case 54:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
         loadGpsDataCity(m_names,"New York");
         break;
     case 55:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Tokyo");
         break;
     case 56:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
         loadGpsDataCity(m_names, "San Francisco");
         break;
     case 57:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Bristol");
         break;
     case 48:
-    if(m_dbQueryData.type == DB_QUERY_CITY)
+    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
         loadGpsDataCity(m_names, "Banff");
         break;
     case '+':

@@ -17,14 +17,6 @@
 
 // -----------------------------------------------------------------------------
 
-#define DB_QUERY_DAY            1
-#define DB_QUERY_MONTH          2
-#define DB_QUERY_YEAR           3
-#define DB_QUERY_CITY           4
-#define DB_QUERY_SQLFILE        5
-
-// -----------------------------------------------------------------------------
-
 #define SAFE_DELETE(p) {if(p) {delete (p); (p)=NULL;}}
 #define SAFE_DELETE_ARRAY(p) {if(p) {delete[] (p); (p)=NULL;}}
 

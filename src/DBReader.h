@@ -14,8 +14,18 @@ using namespace sqlite3x;
  * \brief Class for reading from database using sqlite3x.
  *
  */
-class DBReader {
+class DBReader
+{
 public:
+
+    static const int DB_QUERY_DAY       = 0;
+    static const int DB_QUERY_MONTH     = 2;
+    static const int DB_QUERY_YEAR      = 3;
+    static const int DB_QUERY_CITY      = 4;
+    static const int DB_QUERY_SQLFILE   = 5;
+
+// -----------------------------------------------------------------------------
+
 	DBReader(const std::string& dbpath);
 	~DBReader();
 	/**
