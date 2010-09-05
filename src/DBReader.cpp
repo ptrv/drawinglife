@@ -9,6 +9,7 @@
 #include "DBReader.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 
 #include "sqlite3x.hpp"
@@ -301,6 +302,18 @@ bool DBReader::getGpsDataCity(GpsData& gpsData, const std::string& userName, con
 	query << "' AND c.city = '";
 	query << city;
 	query << "' ORDER BY datetime(time);";
+	result = getGpsData(gpsData, query.str());
+	return result;
+}
+
+bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userName, const std::string& sqlFileSource)
+{
+	bool result = false;
+	std::stringstream query;
+	query << getBasicQueryString();
+    query << sqlFileSource;
+//    query << ";";
+    DBG_VAL(query.str());
 	result = getGpsData(gpsData, query.str());
 	return result;
 }

@@ -135,6 +135,9 @@ m_meridianVal(0.0)
         tmpColor.g = (float)m_xml.getAttribute("name", "g", 255, i);
         tmpColor.b = (float)m_xml.getAttribute("name", "b", 255, i);
         m_nameColors.push_back(tmpColor);
+
+        std::string sqlFilePath = m_xml.getAttribute("name", "sql", "", i);
+        m_sqlFilePaths.push_back(sqlFilePath);
     }
     m_xml.popTag();
     m_xml.popTag();

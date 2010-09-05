@@ -92,6 +92,14 @@ public:
     * \return true if getting gpsData succeeded.
     */
 	bool getGpsDataCity(GpsData& gpsData, const std::string& userName, const std::string& city);
+    /**
+    * \brief Get Gps data with query from sql file.
+    * \param gpsData Reference to GpsData object.
+    * \param userName.
+    * \param path sql file.
+    * \return true if getting gpsData succeeded.
+    */
+	bool getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userName, const std::string& sqlFileSource);
 
 private:
     /**

@@ -131,6 +131,8 @@ void DrawingLifeApp::setup()
 
     m_timeline = new Timeline();
 
+    m_sqlFilePaths = AppSettings::instance().getSqlFilePaths();
+
     if (settings.loadGpsOnStart() == 1)
     {
         bool dbOk = false;
@@ -141,7 +143,10 @@ void DrawingLifeApp::setup()
             break;
             case DB_QUERY_YEAR:
             dbOk = loadGpsDataYearRange(m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
-//            break;
+            break;
+            case DB_QUERY_SQLFILE:
+            dbOk = loadGpsDataWithSqlFile(m_names, m_sqlFilePaths);
+            break;
         }
         for(int i = 0; i < m_numPerson; ++i)
         {
@@ -269,7 +274,7 @@ void DrawingLifeApp::drawStartScreen()
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
 // -----------------------------------------------------------------------------
-bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
+void DrawingLifeApp::prepareGpsData()
 {
     m_startScreenMode = false;
 
@@ -279,6 +284,48 @@ bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
         SAFE_DELETE(m_magicBoxes[ii]);
 		SAFE_DELETE(m_walks[ii]);
     }
+
+}
+
+void DrawingLifeApp::processGpsData()
+{
+    ofLog(OF_LOG_VERBOSE, "------------------------\n");
+    if (m_gpsDatas.size() > 0)
+    {
+        m_timeline->setTimeline(m_gpsDatas);
+//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
+//        {
+//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
+//                                                    m_timeline->getTimeline()[i].id,
+//                                                    (long)(m_timeline->getTimeline()[i].secs));
+//        }
+        this->calculateGlobalMinMaxValues();
+
+        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+
+        Walk::setDotSize(AppSettings::instance().getDotSize());
+
+        for(unsigned int i = 0; i < m_walks.size(); ++i)
+        {
+            m_walks[i]->setDotColors();
+
+            if(!AppSettings::instance().isBoundingBoxEnabled())
+                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+            else
+                m_walks[i]->setMagicBox(m_magicBoxes[i]);
+
+            if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
+            {
+                m_walks[i]->setCurrentPointImage(m_images[i]);
+            }
+        }
+    }
+
+}
+
+bool DrawingLifeApp::loadGpsDataCity(vector<std::string> names, std::string city)
+{
+    prepareGpsData();
 
     bool dbOk = false;
 
@@ -336,50 +383,24 @@ bool DrawingLifeApp::loadGpsDataCity(vector<string> names, string city)
           m_gpsDatas[ii]->getMaxUtmY());
         ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[ii]->getProjectionCentralMeridian());
     }
-    ofLog(OF_LOG_VERBOSE, "------------------------\n");
-    if (m_gpsDatas.size() > 0)
-    {
-        m_timeline->setTimeline(m_gpsDatas);
-//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
-//        {
-//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
-//                                                    m_timeline->getTimeline()[i].id,
-//                                                    (long)(m_timeline->getTimeline()[i].secs));
-//        }
-        this->calculateGlobalMinMaxValues();
 
-        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+    processGpsData();
 
-        Walk::setDotSize(AppSettings::instance().getDotSize());
-
-        for(unsigned int i = 0; i < m_walks.size(); ++i)
-        {
-            m_walks[i]->setDotColors();
-
-            if(!AppSettings::instance().isBoundingBoxEnabled())
-                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
-            else
-                m_walks[i]->setMagicBox(m_magicBoxes[i]);
-
-            if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
-            {
-                m_walks[i]->setCurrentPointImage(m_images[i]);
-            }
-        }
-    }
     return dbOk;
 }
-bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd)
+bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int yearStart, int yearEnd)
 {
-    m_startScreenMode = false;
+//    m_startScreenMode = false;
+//
+//    // get GpsData from database
+//    for( int ii = 0; ii < m_numPerson; ++ii)
+//    {
+//        SAFE_DELETE(m_gpsDatas[ii]);
+//        SAFE_DELETE(m_magicBoxes[ii]);
+//		SAFE_DELETE(m_walks[ii]);
+//    }
 
-    // get GpsData from database
-    for( int ii = 0; ii < m_numPerson; ++ii)
-    {
-        SAFE_DELETE(m_gpsDatas[ii]);
-        SAFE_DELETE(m_magicBoxes[ii]);
-		SAFE_DELETE(m_walks[ii]);
-    }
+    prepareGpsData();
 
     bool dbOk = false;
 
@@ -437,48 +458,123 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<string> names, int yearSta
           m_gpsDatas[ii]->getMaxUtmY());
         ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf\n", m_gpsDatas[ii]->getProjectionCentralMeridian());
     }
-    ofLog(OF_LOG_VERBOSE, "------------------------\n");
-    if (m_gpsDatas.size() > 0 && dbOk)
-    {
-        m_timeline->setTimeline(m_gpsDatas);
-
-//        ofstream myfile;
-//        myfile.open ("timeline_output.txt");
-//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
-//        {
-////            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
-////                                                    m_timeline->getTimeline()[i].id,
-////                                                    (long)(m_timeline->getTimeline()[i].secs));
-//            myfile << m_timeline->getTimeline()[i].timeString.c_str()
-//            << " : " << m_timeline->getTimeline()[i].id
-//            << " : " << (long)(m_timeline->getTimeline()[i].secs) << "\n";
+//    ofLog(OF_LOG_VERBOSE, "------------------------\n");
+//    if (m_gpsDatas.size() > 0 && dbOk)
+//    {
+//        m_timeline->setTimeline(m_gpsDatas);
 //
+////        ofstream myfile;
+////        myfile.open ("timeline_output.txt");
+////        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
+////        {
+//////            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
+//////                                                    m_timeline->getTimeline()[i].id,
+//////                                                    (long)(m_timeline->getTimeline()[i].secs));
+////            myfile << m_timeline->getTimeline()[i].timeString.c_str()
+////            << " : " << m_timeline->getTimeline()[i].id
+////            << " : " << (long)(m_timeline->getTimeline()[i].secs) << "\n";
+////
+////        }
+////        myfile.close();
+//
+//        this->calculateGlobalMinMaxValues();
+//
+//        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+//
+//        Walk::setDotSize(AppSettings::instance().getDotSize());
+//
+//        for(unsigned int i = 0; i < m_walks.size(); ++i)
+//        {
+//            m_walks[i]->setDotColors();
+//
+//            if(!AppSettings::instance().isBoundingBoxEnabled())
+//                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+//            else
+//                m_walks[i]->setMagicBox(m_magicBoxes[i]);
+//
+//            if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
+//            {
+//                m_walks[i]->setCurrentPointImage(m_images[i]);
+//            }
 //        }
-//        myfile.close();
+//    }
 
-        this->calculateGlobalMinMaxValues();
+    processGpsData();
 
-        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
-
-        Walk::setDotSize(AppSettings::instance().getDotSize());
-
-        for(unsigned int i = 0; i < m_walks.size(); ++i)
-        {
-            m_walks[i]->setDotColors();
-
-            if(!AppSettings::instance().isBoundingBoxEnabled())
-                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
-            else
-                m_walks[i]->setMagicBox(m_magicBoxes[i]);
-
-            if (m_imageAsCurrentPoint && (int)m_images.size() >= m_numPerson)
-            {
-                m_walks[i]->setCurrentPointImage(m_images[i]);
-            }
-        }
-    }
     return dbOk;
 }
+
+bool DrawingLifeApp::loadGpsDataWithSqlFile(vector<std::string> names, std::vector<std::string> sqlFilePaths)
+{
+    prepareGpsData();
+
+    bool dbOk = false;
+
+    // get GpsData from database
+    for(int ii = 0; ii < m_numPerson; ++ii)
+    {
+        m_gpsDatas[ii] = new GpsData();
+
+        m_magicBoxes[ii] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
+                                        AppSettings::instance().getBoundingBoxPadding());
+
+        m_walks[ii] = new Walk(AppSettings::instance().getWalkLength(), AppSettings::instance().getNameColors()[ii]);
+
+		m_walks[ii]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[ii], m_viewYOffset[ii], m_viewMinDimension[ii], m_viewPadding[ii]);
+        m_walks[ii]->reset();
+
+        std::ifstream sqlFile(ofToDataPath(sqlFilePaths[ii]).c_str(), std::ifstream::in);
+        std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile), std::istreambuf_iterator<char>());
+
+        DBG_VAL(sqlFilePaths[ii]);
+        DBG_VAL(sqlFileSource);
+
+        m_dbReader = new DBReader(m_dbPath);
+        if (m_dbReader->setupDbConnection())
+        {
+            // -----------------------------------------------------------------------------
+            // DB query
+            dbOk = m_dbReader->getGpsDataWithSqlFile(*m_gpsDatas[ii], names[ii], sqlFileSource);
+            if(dbOk)
+            {
+                ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
+                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
+                      m_gpsDatas[ii]->getSegments().size(),
+                      m_gpsDatas[ii]->getTotalGpsPoints());
+				m_walks[ii]->setGpsData(m_gpsDatas[ii]);
+            }
+            else
+            {
+                ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+                break;
+            }
+            m_dbReader->closeDbConnection();
+        }
+        // -----------------------------------------------------------------------------
+        SAFE_DELETE(m_dbReader);
+        // test print
+        maxPoints = 0;
+        for (unsigned int i = 0; i < m_gpsDatas[ii]->getSegments().size(); ++i)
+        {
+            for (unsigned int j = 0; j < m_gpsDatas[ii]->getSegments()[i].getPoints().size(); ++j)
+            {
+                ++maxPoints;
+            }
+        }
+
+        ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
+          m_gpsDatas[ii]->getMinUtmX(),
+          m_gpsDatas[ii]->getMaxUtmX(),
+          m_gpsDatas[ii]->getMinUtmY(),
+          m_gpsDatas[ii]->getMaxUtmY());
+        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[ii]->getProjectionCentralMeridian());
+    }
+
+    processGpsData();
+
+    return dbOk;
+}
+
 // -----------------------------------------------------------------------------
 
 void DrawingLifeApp::setViewAspectRatio()

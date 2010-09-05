@@ -218,7 +218,10 @@ const ofxRectangled MagicBox::getNormalizedPaddedBox()
 void MagicBox::setBoxes()
 {
     m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
-    m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+    if(AppSettings::instance().isInteractiveMode())
+        m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+    else
+        m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
 }
 void MagicBox::goUp(double val)
 {

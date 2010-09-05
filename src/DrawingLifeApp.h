@@ -54,7 +54,9 @@ private:
 	* \param yearStart start year for query.
 	* \param yearEnd end year for query.
 	*/
-	bool loadGpsDataYearRange(std::vector<string> names, int yearStart, int yearEnd);
+	bool loadGpsDataYearRange(std::vector<std::string> names, int yearStart, int yearEnd);
+
+	bool loadGpsDataWithSqlFile(std::vector<std::string> names, std::vector<std::string> m_sqlFilePaths);
 	/**
 	* \brief Set square view area and center.
 	*/
@@ -72,6 +74,10 @@ private:
 	void fpsDisplay();
 
 	void loadCurrentPointImages();
+
+	void prepareGpsData();
+
+	void processGpsData();
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -124,6 +130,8 @@ private:
     bool m_hideCursor;
 
     bool m_interactiveMode;
+
+    std::vector<std::string > m_sqlFilePaths;
 
 };
 
