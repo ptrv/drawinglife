@@ -131,7 +131,7 @@ public:
 
     static void setTrackAlpha(int dotAlpha) { m_dotAlpha = dotAlpha; }
 
-    void setDotColors();
+//    void setDotColors();
 
 	const GpsData& getGpsData() const { return *m_gpsData; }
 

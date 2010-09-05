@@ -14,5 +14,5 @@
 -- -------------------------------------------------
 -- Pleas do the query from here
 
-WHERE name = 'Dan' AND c.city = 'Berlin' ORDER BY datetime(time)
---WHERE name ='Dan' AND a.latitude < 52.55 AND a.latitude > 52.45 AND a.longitude < 13.40 AND a.longitude > 13.3 ORDER BY datetime(time)
+--WHERE name = 'Dan' AND c.city = 'Berlin' ORDER BY datetime(time)
+WHERE name ='Dan' AND a.latitude > 52.4 AND a.latitude < 52.6 AND a.longitude > 13.4 AND a.longitude < 13.54 ORDER BY datetime(time)

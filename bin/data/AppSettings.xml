@@ -2,8 +2,8 @@
 <data>
 	<database>test.sqlite</database>
 	<person>
-		<name r="0" g="255" b="0" sql="example.sql">Dan</name>
-		<!-- <name r="255" g="0" b="0" sql="example.sql" >Sophia</name> -->
+		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
+		<!-- <name r="255" g="0" b="0" a="255" sql="example.sql" >Sophia</name> -->
 	</person>
 </data>
 <dbquery>
@@ -13,7 +13,7 @@
 	<!-- 3 = year range -->
 	<!-- 4 = city -->
 	<!-- 5 = sql file for each person-->
-	<type>4</type>
+	<type>5</type>
 	<time>
 		<yearstart>2007</yearstart>
 		<yearend>2009</yearend>
@@ -22,7 +22,7 @@
 </dbquery>
 <settings>
 	<interactivemode>
-		<enabled>1</enabled>
+		<enabled>0</enabled>
 		<traced>1</traced>
 	</interactivemode>
 	<log level="0" />
@@ -31,6 +31,7 @@
 	<printvalues>1</printvalues>
 	<fullscreen>0</fullscreen>
 	<hidecursor>1</hidecursor>
+	<showinfo>1</showinfo>
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->
@@ -57,7 +58,6 @@
 	</fonts>
 	<alpha>
 		<tracks>64</tracks>
-		<dots>200</dots>
 		<legend>255</legend>
 	</alpha>
 	<color>

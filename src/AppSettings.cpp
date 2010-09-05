@@ -52,7 +52,8 @@ m_numPerson(0),
 m_interactiveMode(false),
 m_interactiveTraced(true),
 m_meridianAuto(true),
-m_meridianVal(0.0)
+m_meridianVal(0.0),
+m_showInfo(true)
 {
     ofxXmlSettings m_xml;
 
@@ -128,12 +129,10 @@ m_meridianVal(0.0)
     {
         m_names.push_back(m_xml.getValue("name", "", i));
         ofColor tmpColor;
-//        tmpColor.r = m_xml.getAttribute("name", "r", ofRandom(0, 255), i);
-//        tmpColor.g = m_xml.getAttribute("name", "g", ofRandom(0, 255), i);
-//        tmpColor.b = m_xml.getAttribute("name", "b", ofRandom(0, 255), i);
-        tmpColor.r = (float)m_xml.getAttribute("name", "r", 255, i);
-        tmpColor.g = (float)m_xml.getAttribute("name", "g", 255, i);
-        tmpColor.b = (float)m_xml.getAttribute("name", "b", 255, i);
+        tmpColor.r = (float)m_xml.getAttribute("name", "r", ofRandom(0, 255), i);
+        tmpColor.g = (float)m_xml.getAttribute("name", "g", ofRandom(0, 255), i);
+        tmpColor.b = (float)m_xml.getAttribute("name", "b", ofRandom(0, 255), i);
+        tmpColor.a = (float)m_xml.getAttribute("name", "a", ofRandom(0, 255), i);
         m_nameColors.push_back(tmpColor);
 
         std::string sqlFilePath = m_xml.getAttribute("name", "sql", "", i);
@@ -166,6 +165,8 @@ m_meridianVal(0.0)
 
     m_interactiveMode = m_xml.getValue("settings:interactivemode:enabled", 0) == 1 ? true : false;
     m_interactiveTraced = m_xml.getValue("settings:interactivemode:traced", 1) == 1 ? true : false;
+
+    m_showInfo = m_xml.getValue("settings:showinfo", 1) == 1? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
@@ -204,6 +205,7 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "Load Gps on start: %d", m_loadOnStart);
     ofLog(OF_LOG_SILENT, "Show image as current point: %d", m_imageAsCurrentPoint);
     ofLog(OF_LOG_SILENT, "Hide cursor: %d", m_hideCursor);
+    ofLog(OF_LOG_SILENT, "Show info: %d", m_showInfo);
     ofLog(OF_LOG_SILENT, "Log level: %d", m_logLevel);
     ofLog(OF_LOG_SILENT, "Walk length: %d", m_walkLength);
     ofLog(OF_LOG_SILENT, "Draw speed: %d", m_drawSpeed);

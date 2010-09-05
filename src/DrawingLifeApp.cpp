@@ -41,7 +41,8 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_imageAsCurrentPoint(false),
 	m_hideCursor(false),
 	m_interactiveMode(false),
-	m_showKeyCommands(false)
+	m_showKeyCommands(false),
+	m_showInfo(true)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -82,6 +83,7 @@ void DrawingLifeApp::setup()
     m_isDebugMode = settings.isDebugMode();
     m_isFullscreen = settings.isFullscreen();
     m_hideCursor = settings.hideCursor();
+    m_showInfo = settings.showInfo();
     m_interactiveMode = settings.isInteractiveMode();
 
     m_dbQueryData.type = settings.getQueryType();
@@ -216,7 +218,7 @@ void DrawingLifeApp::draw()
                     ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
 					ofDrawBitmapString(m_walks[i]->getCurrentGpsInfoDebug(),30 + (ofGetWidth()/m_numPerson)*i,30);
                 }
-                else
+                else if(m_showInfo)
                 {
                     ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
                     ofSetColor(0xffffff);
@@ -336,7 +338,7 @@ void DrawingLifeApp::processGpsData()
 
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
-            m_walks[i]->setDotColors();
+//            m_walks[i]->setDotColors();
 
             if(!AppSettings::instance().isBoundingBoxEnabled())
                 m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
@@ -662,7 +664,7 @@ void DrawingLifeApp::fillViewAreaUTM()
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
-    DBG_VAL(key);
+//    DBG_VAL(key);
     switch (key)
     {
     case 'a':

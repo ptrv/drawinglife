@@ -92,6 +92,8 @@ public:
     bool isInteractiveMode() const { return m_interactiveMode; }
     bool drawTraced() const { return m_interactiveTraced; }
 
+    bool showInfo() const { return m_showInfo; }
+
 private:
 
     // -----------------------------------------------------------------------------
@@ -174,6 +176,8 @@ private:
 
     bool m_meridianAuto;
     double m_meridianVal;
+
+    bool m_showInfo;
 };
 
 #endif // _APPSETTINGS_H_

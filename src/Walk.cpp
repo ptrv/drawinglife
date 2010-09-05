@@ -45,7 +45,8 @@ m_interactiveMode(false),
 m_drawTraced(true)
 {
     //	m_dotColor.a = 127;
-	m_dotColor.a = m_dotAlpha;
+//	m_dotColor.a = m_dotAlpha;
+	m_dotColor.a = dotColor.a;
 	m_dotColor.r = dotColor.r;
 	m_dotColor.g = dotColor.g;
 	m_dotColor.b = dotColor.b;
@@ -433,14 +434,14 @@ const std::string& Walk::getCurrentGpsInfo()
 
 
 }
-void Walk::setDotColors()
-{
-   	m_dotColor.a = m_dotAlpha;
-//	m_dotColor.r = (int)ofRandom(30,255);
-//	m_dotColor.g = (int)ofRandom(30,255);
-//	m_dotColor.b = (int)ofRandom(30,255);
-
-}
+//void Walk::setDotColors()
+//{
+////   	m_dotColor.a = m_dotAlpha;
+////	m_dotColor.r = (int)ofRandom(30,255);
+////	m_dotColor.g = (int)ofRandom(30,255);
+////	m_dotColor.b = (int)ofRandom(30,255);
+//
+//}
 
 void Walk::setGpsData(GpsData* gpsData)
 {

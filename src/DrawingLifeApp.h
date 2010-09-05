@@ -138,6 +138,8 @@ private:
 
     bool m_showKeyCommands;
 
+    bool m_showInfo;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_
