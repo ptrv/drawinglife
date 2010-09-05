@@ -40,7 +40,8 @@ DrawingLifeApp::DrawingLifeApp() :
 //	m_maxPointsToDraw(10000),
 	m_imageAsCurrentPoint(false),
 	m_hideCursor(false),
-	m_interactiveMode(false)
+	m_interactiveMode(false),
+	m_showKeyCommands(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -252,6 +253,9 @@ void DrawingLifeApp::draw()
         }
         if(m_showFps)
             fpsDisplay();
+
+        if(m_showKeyCommands)
+            showKeyCommands();
     }
 }
 // -----------------------------------------------------------------------------
@@ -270,6 +274,31 @@ void DrawingLifeApp::drawStartScreen()
     m_fontAuthor.drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
 
 //    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
+}
+
+void DrawingLifeApp::showKeyCommands()
+{
+    ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
+    std::stringstream stream;
+
+    stream << "a           : draw all gps points\n";
+    stream << "d           : debug mode\n";
+    stream << "f           : toggle fullscreen\n";
+    stream << "p           : show fps\n";
+    stream << "k           : show key commands\n";
+    stream << "+           : zoom in\n";
+    stream << "-           : zoom out\n";
+    stream << "left arrow  : move view left\n";
+    stream << "right arrow : move view right\n";
+    stream << "up arrow    : move view up\n";
+    stream << "down arrow  : move view down\n";
+    stream << "1 - 4       : set zoom level 1 - 4\n";
+    stream << "0 - 9       : load gps data with a city (when querying city)\n";
+    stream << "t           : toggle traced drawing (interactive mode)\n";
+    stream << "space       : go to next segment (interactive mode)\n";
+    stream << "backspace   : go to previous segment (interactive mode)\n";
+
+   ofDrawBitmapString(stream.str(), 30, ofGetHeight() - 320);
 }
 // -----------------------------------------------------------------------------
 // Retrieving new GpsData
@@ -656,6 +685,9 @@ void DrawingLifeApp::keyPressed  (int key)
     case 'p':
         m_showFps = !m_showFps;
         break;
+    case 'k':
+        m_showKeyCommands = !m_showKeyCommands;
+        break;
 //    case 'c':
 //        for(unsigned int i = 0; i < m_walks.size(); ++i)
 //        {
@@ -902,7 +934,7 @@ void DrawingLifeApp::fpsDisplay()
 
     ofSetColor(0xffffff);
     std::string str = "FPS: "+ofToString((double)fpsToShow, 1);
-    ofDrawBitmapString(str, 20.0, ofGetHeight()-30 );
+    ofDrawBitmapString(str, 30.0, ofGetHeight()-30 );
 }
 
 void DrawingLifeApp::loadCurrentPointImages()

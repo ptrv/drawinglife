@@ -67,6 +67,8 @@ private:
     */
 	void drawStartScreen();
 
+	void showKeyCommands();
+
 	void calculateGlobalMinMaxValues();
 
 	void loadXmlSettings();
@@ -78,6 +80,7 @@ private:
 	void prepareGpsData();
 
 	void processGpsData();
+
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -132,6 +135,8 @@ private:
     bool m_interactiveMode;
 
     std::vector<std::string > m_sqlFilePaths;
+
+    bool m_showKeyCommands;
 
 };
 
