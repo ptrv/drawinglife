@@ -183,11 +183,18 @@ void DrawingLifeApp::update()
             {
                 for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
                 {
-                    int id = m_timeline->getNext();
-                    if (id < m_numPerson)
-                    {
-                        m_walks[id]->update();
-                    }
+//                    if(m_timeline->isNextReady())
+//                    {
+//                        for (int i=0; i <= m_timeline->getNumberToUpdate();++i)
+//                        {
+                            int id = m_timeline->getNext();
+                            if (id < m_numPerson)
+                            {
+                                m_walks[id]->update();
+                            }
+//                        }
+//
+//                    }
                 }
 
             }

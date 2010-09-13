@@ -3,7 +3,7 @@
 	<database>test.sqlite</database>
 	<person>
 		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
-		<!-- <name r="255" g="0" b="0" a="255" sql="example.sql" >Sophia</name> -->
+		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia</name>
 	</person>
 </data>
 <dbquery>
@@ -13,7 +13,7 @@
 	<!-- 3 = year range -->
 	<!-- 4 = city -->
 	<!-- 5 = sql file for each person-->
-	<type>5</type>
+	<type>3</type>
 	<time>
 		<yearstart>2007</yearstart>
 		<yearend>2009</yearend>

@@ -45,6 +45,10 @@ public:
     */
     const std::vector<TimelineObject>& getTimeline() const { return m_timeline; }
 
+    bool isNextReady();
+
+    unsigned int getNumberToUpdate() { return m_counter - m_lastUpdatedTimelineId; }
+
 private:
     // -----------------------------------------------------------------------------
     /**
@@ -61,7 +65,14 @@ private:
     // -----------------------------------------------------------------------------
     std::vector<TimelineObject> m_timeline;
 
+    TimelineObject* m_current;
+    TimelineObject* m_last;
+
     unsigned int m_counter;
+
+    unsigned int m_indexToUpdate;
+
+    unsigned int m_lastUpdatedTimelineId;
 
     // (prevent copy constructor and operator= being generated..)
     Timeline (const Timeline&);

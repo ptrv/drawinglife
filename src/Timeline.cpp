@@ -8,14 +8,17 @@
 
 Timeline::Timeline()
 :
-m_counter(0)
+m_current(NULL),
+m_last(NULL),
+m_counter(0),
+m_indexToUpdate(0),
+m_lastUpdatedTimelineId(0)
 {
     //ctor
 }
 
 Timeline::~Timeline()
 {
-    //dtor
 }
 
 void Timeline::sortGpsDataVecs(std::vector<GpsData*>& gpsDatas)
@@ -42,6 +45,10 @@ void Timeline::setTimeline(std::vector<GpsData*>& gpsDatas)
         }
     }
     sortTimeline();
+    if(m_timeline.size() > 0)
+    {
+        m_current = &m_timeline[0];
+    }
 }
 
 int Timeline::getNext()
@@ -51,11 +58,12 @@ int Timeline::getNext()
         int id = m_timeline[m_counter].id;
         ++m_counter;
         m_counter %= m_timeline.size();
+
         return id;
     }
     else
     {
-        return 0;
+        return -1;
     }
 }
 
@@ -64,6 +72,39 @@ bool Timeline::isLast()
     return m_counter == m_timeline.size()-1;
 }
 
+bool Timeline::isNextReady()
+{
+    bool ready = true;
+//    m_current = &m_timeline[m_counter];
+//
+//    bool ready = false;
+//    if(m_last != NULL)
+//    {
+//        time_t current = m_current->secs;
+//        time_t last = m_last->secs;
+//
+//        time_t diff = current - last;
+//
+//        if (diff > 10)
+//        {
+//            m_last = m_current;
+//            m_lastUpdatedTimelineId = m_counter;
+//            ready = true;
+//        }
+//        else
+//        {
+//            ready = false;
+//        }
+//    }
+//    else
+//    {
+//        m_last = m_current;
+//        ready = true;
+//    }
+//    ++m_counter;
+//    m_counter %= m_timeline.size();
+    return ready;
+}
 time_t Timeline::makeTimeObject(string timeString)
 {
     struct tm tm;
