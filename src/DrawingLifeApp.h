@@ -6,7 +6,6 @@
 #define _DRAWINGLIFEAPP_H_
 
 #include "DrawingLifeIncludes.h"
-#include "ofxVectorMath.h"
 #include "DBReader.h"
 #include "Timeline.h"
 #include "Walk.h"

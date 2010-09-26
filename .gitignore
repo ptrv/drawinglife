@@ -14,7 +14,7 @@ obj/*
 *.cscope_file_list
 cscope.out
 
-doc/html/*
+docs/html/*
 libs/geographiclib-1.1/libs/*
 Path
 libs/geographiclib-1.1/windows/Debug/*

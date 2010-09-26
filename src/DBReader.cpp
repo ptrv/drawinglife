@@ -58,7 +58,8 @@ void DBReader::closeDbConnection()
 {
 	try {
 		m_dbconn->close();
-		m_dbconn = NULL;
+		SAFE_DELETE(m_dbconn);
+//		m_dbconn = NULL;
 	}
 	CATCHDBERRORS
 }
