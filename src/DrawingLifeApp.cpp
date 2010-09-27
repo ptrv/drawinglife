@@ -6,6 +6,7 @@
 #include "GpsData.h"
 #include <vector>
 #include <limits>
+#include <fstream>
 
 #if defined (WIN32)
 #undef max
