@@ -29,8 +29,8 @@ int main(int argc, const char* argv[] ){
     }
     else
     {
-        w = 1440;
-        h = 900;
+        w = 1024;
+        h = 768;
     }
 
     ofAppGlutWindow window;
