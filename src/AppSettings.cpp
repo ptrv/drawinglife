@@ -79,9 +79,9 @@ m_showInfo(true)
     m_xml.popTag();
     m_xml.popTag();
 
-    m_colorForegroundR = m_xml.getAttribute("ui:color:foreround", "r", 255);
-    m_colorForegroundG = m_xml.getAttribute("ui:color:foreround", "g", 255);
-    m_colorForegroundB = m_xml.getAttribute("ui:color:foreround", "b", 255);
+    m_colorForegroundR = m_xml.getAttribute("ui:color:foreground", "r", 255);
+    m_colorForegroundG = m_xml.getAttribute("ui:color:foreground", "g", 255);
+    m_colorForegroundB = m_xml.getAttribute("ui:color:foreground", "b", 255);
 
     m_colorBackgroundR = m_xml.getAttribute("ui:color:background", "r", 0);
     m_colorBackgroundG = m_xml.getAttribute("ui:color:background", "g", 0);
