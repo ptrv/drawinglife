@@ -47,7 +47,13 @@ public:
 
     bool isNextReady();
 
-    unsigned int getNumberToUpdate() { return m_counter - m_lastUpdatedTimelineId; }
+    unsigned int getNumberToUpdate()
+    {
+        unsigned int tmp = m_counter - m_lastUpdatedTimelineId;
+        return  tmp;
+    }
+
+    void countUp();
 
 private:
     // -----------------------------------------------------------------------------
@@ -73,6 +79,8 @@ private:
     unsigned int m_indexToUpdate;
 
     unsigned int m_lastUpdatedTimelineId;
+
+    bool m_currentCountWasUpdated;
 
     // (prevent copy constructor and operator= being generated..)
     Timeline (const Timeline&);

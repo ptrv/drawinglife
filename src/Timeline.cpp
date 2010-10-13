@@ -12,7 +12,8 @@ m_current(NULL),
 m_last(NULL),
 m_counter(0),
 m_indexToUpdate(0),
-m_lastUpdatedTimelineId(0)
+m_lastUpdatedTimelineId(0),
+m_currentCountWasUpdated(false)
 {
     //ctor
 }
@@ -56,8 +57,8 @@ int Timeline::getNext()
     if (m_timeline.size() > 0)
     {
         int id = m_timeline[m_counter].id;
-        ++m_counter;
-        m_counter %= m_timeline.size();
+//        ++m_counter;
+//        m_counter %= m_timeline.size();
 
         return id;
     }
@@ -74,36 +75,46 @@ bool Timeline::isLast()
 
 bool Timeline::isNextReady()
 {
-    bool ready = true;
-//    m_current = &m_timeline[m_counter];
-//
-//    bool ready = false;
-//    if(m_last != NULL)
-//    {
-//        time_t current = m_current->secs;
-//        time_t last = m_last->secs;
-//
-//        time_t diff = current - last;
-//
-//        if (diff > 10)
-//        {
-//            m_last = m_current;
-//            m_lastUpdatedTimelineId = m_counter;
-//            ready = true;
-//        }
-//        else
-//        {
-//            ready = false;
-//        }
-//    }
-//    else
-//    {
-//        m_last = m_current;
-//        ready = true;
-//    }
-//    ++m_counter;
-//    m_counter %= m_timeline.size();
+//    bool ready = true;
+    m_current = &m_timeline[m_counter];
+
+    bool ready = false;
+    if(m_last != NULL)
+    {
+        time_t current = m_current->secs;
+        time_t last = m_last->secs;
+
+        time_t diff = current - last;
+
+        if (diff > 10)
+        {
+            m_last = m_current;
+            m_currentCountWasUpdated = true;
+            ready = true;
+        }
+        else
+        {
+            m_currentCountWasUpdated = false;
+            ready = false;
+        }
+    }
+    else
+    {
+        m_last = m_current;
+        m_currentCountWasUpdated = true;
+        ready = true;
+    }
     return ready;
+}
+
+void Timeline::countUp()
+{
+    if(m_currentCountWasUpdated)
+    {
+        m_lastUpdatedTimelineId = m_counter;
+    }
+    ++m_counter;
+    m_counter %= m_timeline.size();
 }
 time_t Timeline::makeTimeObject(string timeString)
 {

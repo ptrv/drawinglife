@@ -186,7 +186,8 @@ void DrawingLifeApp::update()
                 {
 //                    if(m_timeline->isNextReady())
 //                    {
-//                        for (int i=0; i <= m_timeline->getNumberToUpdate();++i)
+//                        unsigned int numUpdate = m_timeline->getNumberToUpdate();
+//                        for (unsigned int j=0; j< numUpdate;++j)
 //                        {
                             int id = m_timeline->getNext();
                             if (id < m_numPerson)
@@ -196,6 +197,7 @@ void DrawingLifeApp::update()
 //                        }
 //
 //                    }
+                    m_timeline->countUp();
                 }
 
             }
