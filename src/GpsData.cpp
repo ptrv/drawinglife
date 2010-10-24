@@ -20,6 +20,10 @@ double GpsData::maxDrawY = -numeric_limits<double>::max();
 double GpsData::minDrawY = numeric_limits<double>::max();
 double GpsData::m_lon0Global = 0.0;
 
+double regionsLon0[5] = {-119.0, -74.0, 12.0, 116.0, 146.0};
+double regionsMinLon[5] = {-180.0, -100.0, -35.0, 65.0, 130.0};
+double regionsMaxLon[5] = {-100.0, -35.0, 65.0, 130.0, 180.0};
+
 GpsData::GpsData()
 :
 m_gpsDataId(0),
@@ -410,10 +414,36 @@ void GpsData::calculateUtmPointsGlobalLon()
         {
             Math::real gamma, k;
             UtmPoint utmP;
-            TMS.Forward(Math::real(m_lon0Global),
+
+            double lon0 = 0.0;
+            if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[0] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[0])
+            {
+                lon0 = regionsLon0[0];
+            }
+            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[1] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[1])
+            {
+                lon0 = regionsLon0[1];
+            }
+            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[2] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[2])
+            {
+                lon0 = regionsLon0[2];
+            }
+            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[3] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[3])
+            {
+                lon0 = regionsLon0[3];
+            }
+            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[4] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[4])
+            {
+                lon0 = regionsLon0[4];
+            }
+            TMS.Forward(Math::real(lon0),
                         m_segments[i].getPoints()[j].getLatitude(),
                         m_segments[i].getPoints()[j].getLongitude(),
                         utmP.x, utmP.y, gamma, k);
+//            TMS.Forward(Math::real(m_lon0Global),
+//                        m_segments[i].getPoints()[j].getLatitude(),
+//                        m_segments[i].getPoints()[j].getLongitude(),
+//                        utmP.x, utmP.y, gamma, k);
             utmVec.push_back(utmP);
 
             GpsDataIndex tmpIndex;
