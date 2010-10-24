@@ -399,13 +399,16 @@ void GpsData::calculateUtmPoints()
 }
 
 // TODO parameter m_lon0
-void GpsData::calculateUtmPointsGlobalLon()
+void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
 {
     m_indices.clear();
     int counter = 0;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
+
+    const GpsRegion* regions = AppSettings::instance().getRegions();
+
     for(unsigned int i = 0; i < m_segments.size(); ++i)
     {
         std::vector<UtmPoint> utmVec;
@@ -415,35 +418,43 @@ void GpsData::calculateUtmPointsGlobalLon()
             Math::real gamma, k;
             UtmPoint utmP;
 
-            double lon0 = 0.0;
-            if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[0] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[0])
+            if(regionsOn)
             {
-                lon0 = regionsLon0[0];
+                double lon0 = 0.0;
+                if(m_segments[i].getPoints()[j].getLongitude() >= regions[0].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[0].maxLon)
+                {
+                    lon0 = regions[0].lon0;
+                }
+                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[1].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[1].maxLon)
+                {
+                    lon0 = regions[1].lon0;
+                }
+                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[2].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[2].maxLon)
+                {
+                    lon0 = regions[2].lon0;
+                }
+                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[3].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[3].maxLon)
+                {
+                    lon0 = regions[3].lon0;
+                }
+                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[4].minLon && m_segments[i].getPoints()[j].getLongitude() <= regions[4].maxLon)
+                {
+                    lon0 = regions[4].lon0;
+                }
+                TMS.Forward(Math::real(lon0),
+                            m_segments[i].getPoints()[j].getLatitude(),
+                            m_segments[i].getPoints()[j].getLongitude(),
+                            utmP.x, utmP.y, gamma, k);
+
             }
-            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[1] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[1])
+            else
             {
-                lon0 = regionsLon0[1];
+
+                TMS.Forward(Math::real(m_lon0Global),
+                            m_segments[i].getPoints()[j].getLatitude(),
+                            m_segments[i].getPoints()[j].getLongitude(),
+                            utmP.x, utmP.y, gamma, k);
             }
-            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[2] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[2])
-            {
-                lon0 = regionsLon0[2];
-            }
-            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[3] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[3])
-            {
-                lon0 = regionsLon0[3];
-            }
-            else if(m_segments[i].getPoints()[j].getLongitude() >= regionsMinLon[4] && m_segments[i].getPoints()[j].getLongitude() < regionsMaxLon[4])
-            {
-                lon0 = regionsLon0[4];
-            }
-            TMS.Forward(Math::real(lon0),
-                        m_segments[i].getPoints()[j].getLatitude(),
-                        m_segments[i].getPoints()[j].getLongitude(),
-                        utmP.x, utmP.y, gamma, k);
-//            TMS.Forward(Math::real(m_lon0Global),
-//                        m_segments[i].getPoints()[j].getLatitude(),
-//                        m_segments[i].getPoints()[j].getLongitude(),
-//                        utmP.x, utmP.y, gamma, k);
             utmVec.push_back(utmP);
 
             GpsDataIndex tmpIndex;

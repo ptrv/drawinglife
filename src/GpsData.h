@@ -169,7 +169,7 @@ public:
     /**
     * \brief Calculate UTM values for all GpsPoints with global lon0.
     */
-    void calculateUtmPointsGlobalLon();
+    void calculateUtmPointsGlobalLon(bool regionsOn);
 
 	static void setGlobalValues(double minX,
                                 double maxX,

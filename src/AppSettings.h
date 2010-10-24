@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "ofMain.h"
+#include "DrawingLifeIncludes.h"
 
 #define DEF_SINGLETON( NAME )    \
 public:                        \
@@ -94,6 +94,9 @@ public:
 
     bool showInfo() const { return m_showInfo; }
 
+    const GpsRegion* getRegions() const { return m_regions; }
+    bool isRegionsOn() const { return m_regionsOn; }
+
 private:
 
     // -----------------------------------------------------------------------------
@@ -178,6 +181,9 @@ private:
     double m_meridianVal;
 
     bool m_showInfo;
+
+    GpsRegion m_regions[5];
+    bool m_regionsOn;
 };
 
 #endif // _APPSETTINGS_H_

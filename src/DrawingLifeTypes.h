@@ -69,6 +69,14 @@ struct GpsDataIndex
     int gpsSegment;
     int point;
 };
+
+struct GpsRegion
+{
+    double lon0;
+    double minLon;
+    double maxLon;
+};
+
 // -----------------------------------------------------------------------------
 // double version of openFramworks datatypes.
 // -----------------------------------------------------------------------------

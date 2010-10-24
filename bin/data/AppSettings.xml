@@ -43,6 +43,12 @@
 		<padding>2000.0</padding>
   	</boundingbox>
 	<meridian>
+		<regions>1</regions>
+		<region1 lon0="-119.0" minlon="-180.0" maxlon="-100.0" />
+		<region2 lon0="-74.0" minlon="-100.0" maxlon="-35.0" />
+		<region3 lon0="12.0" minlon="-35.0" maxlon="65.0" />
+		<region4 lon0="116.0" minlon="65.0" maxlon="130.0" />
+		<region5 lon0="146.0" minlon="130.0" maxlon="180.0" />
 		<auto>1</auto>
 		<!-- value in degrees -->
 		<lon0>0.0</lon0>
