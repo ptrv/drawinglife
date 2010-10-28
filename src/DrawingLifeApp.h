@@ -38,7 +38,6 @@ private:
 	void fillViewArea();
 	/**
 	* \brief Draw a square to draw onto.
-	* \param backgroundColor color of the square.
 	*/
 	void fillViewAreaUTM();
 	/**
@@ -46,7 +45,7 @@ private:
 	* \param names vector with name strings.
 	* \param city string with city name.
 	*/
-	bool loadGpsDataCity(std::vector<string> names, std::string city);
+	bool loadGpsDataCity(std::vector<std::string> names, std::string city);
 	/**
 	* \brief
 	* \param names vector with name strings.

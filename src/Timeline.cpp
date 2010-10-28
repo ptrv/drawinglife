@@ -116,7 +116,7 @@ void Timeline::countUp()
     ++m_counter;
     m_counter %= m_timeline.size();
 }
-time_t Timeline::makeTimeObject(string timeString)
+time_t Timeline::makeTimeObject(std::string timeString)
 {
     struct tm tm;
     time_t t;

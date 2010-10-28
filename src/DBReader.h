@@ -18,11 +18,11 @@ class DBReader
 {
 public:
 
-    static const int DB_QUERY_DAY       = 0; 	///< Database query type constant for day. 
-    static const int DB_QUERY_MONTH     = 2;	///< Database query type constant for month. 
-    static const int DB_QUERY_YEAR      = 3;	///< Database query type constant for year. 
-    static const int DB_QUERY_CITY      = 4;	///< Database query type constant for city. 
-    static const int DB_QUERY_SQLFILE   = 5;	///< Database query type constant for sql file. 
+    static const int DB_QUERY_DAY       = 0; 	///< Database query type constant for day.
+    static const int DB_QUERY_MONTH     = 2;	///< Database query type constant for month.
+    static const int DB_QUERY_YEAR      = 3;	///< Database query type constant for year.
+    static const int DB_QUERY_CITY      = 4;	///< Database query type constant for city.
+    static const int DB_QUERY_SQLFILE   = 5;	///< Database query type constant for sql file.
 
 // -----------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ public:
     /**
     * \brief Get Gps data for a city.
     * \param gpsData Reference to GpsData object.
-    * \param userName
+    * \param userName String name of person.
     * \param city name of city.
     * \return true if getting gpsData succeeded.
     */
@@ -105,8 +105,8 @@ public:
     /**
     * \brief Get Gps data with query from sql file.
     * \param gpsData Reference to GpsData object.
-    * \param userName.
-    * \param path sql file.
+    * \param userName String name of person.
+    * \param sqlFileSource String with path to sql file.
     * \return true if getting gpsData succeeded.
     */
 	bool getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userName, const std::string& sqlFileSource);

@@ -18,7 +18,7 @@ public:
 	//------------------------------------------------------------------------------
 
 	/**
-	 * \brief 
+	 * \brief
 	 * \param screenWidth
 	 * \param screenHeight
 	 * \param viewXOffset
@@ -136,8 +136,8 @@ public:
     void setCurrentPointImage(ofImage img);
 
 	/**
-	 * \brief Sets the GpsData. 
-	 * \param A GpsData object.
+	 * \brief Sets the GpsData.
+	 * \param gpsData Pointer to GpsData object.
 	**/
 	void setGpsData(GpsData* gpsData);
 

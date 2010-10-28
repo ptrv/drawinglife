@@ -398,7 +398,7 @@ void DrawingLifeApp::processGpsData()
 
 }
 
-bool DrawingLifeApp::loadGpsDataCity(vector<std::string> names, std::string city)
+bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string city)
 {
     prepareGpsData();
 
@@ -584,7 +584,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
     return dbOk;
 }
 
-bool DrawingLifeApp::loadGpsDataWithSqlFile(vector<std::string> names, std::vector<std::string> sqlFilePaths)
+bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std::vector<std::string> sqlFilePaths)
 {
     prepareGpsData();
 
