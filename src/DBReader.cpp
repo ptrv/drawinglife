@@ -32,8 +32,8 @@ ofLog(OF_LOG_ERROR, "Database error: %s, \nwith query: %s", ex.what(), query.c_s
 DBReader::DBReader(const std::string& dbpath)
 :
 m_dbPath(dbpath),
-m_dbconn(NULL),
-m_trans(NULL)
+m_dbconn(0),
+m_trans(0)
 {
 }
 
@@ -59,7 +59,7 @@ void DBReader::closeDbConnection()
 	try {
 		m_dbconn->close();
 		SAFE_DELETE(m_dbconn);
-//		m_dbconn = NULL;
+//		m_dbconn = 0;
 	}
 	CATCHDBERRORS
 }

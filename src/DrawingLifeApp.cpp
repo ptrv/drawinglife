@@ -14,10 +14,10 @@
 
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
-    m_dbReader(NULL),
-	m_gpsDatas(NULL),
-	m_magicBoxes(NULL),
-	m_walks(NULL),
+    m_dbReader(0),
+	m_gpsDatas(0),
+	m_walks(0),
+	m_magicBoxes(0),
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
@@ -27,7 +27,7 @@ DrawingLifeApp::DrawingLifeApp() :
     m_zoomZ(0.0),
     m_startScreenMode(false),
     m_numPerson(0),
-    m_timeline(NULL),
+    m_timeline(0),
 //    m_drawSpeed(1),
 //	m_trackAlpha(64),
 //	m_dotAlpha(127),
@@ -116,15 +116,15 @@ void DrawingLifeApp::setup()
 
     m_numPerson = settings.getNumPerson();
     m_names = settings.getNames();
-	// TODO 101028_1709_TP: Why are those vectors stuffed with NULL?
-	// This hinders to check the vectors themselves for unequal NULL later.
+	// TODO 101028_1709_TP: Why are those vectors stuffed with 0?
+	// This hinders to check the vectors themselves for unequal 0 later.
 	// See affected TODO 101028_1710_TP.
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
 //        m_names.push_back(m_settings.getValue("name", "", i));
-        m_gpsDatas.push_back(NULL);
-		m_walks.push_back(NULL);
-		m_magicBoxes.push_back(NULL);
+        m_gpsDatas.push_back(0);
+		m_walks.push_back(0);
+		m_magicBoxes.push_back(0);
         DBG_VAL(m_names[personIndex]);
 
         m_viewXOffset.push_back(0);
@@ -208,7 +208,7 @@ void DrawingLifeApp::update()
         {
             if(m_timeline->getTimeline().size() > 0)
             {
-                for(unsigned int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+                for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
                 {
 //                    if(m_timeline->isNextReady())
 //                    {
@@ -414,11 +414,11 @@ bool DrawingLifeApp::loadGpsDataCity(vector<std::string> names, std::string city
 
         m_walks[personIndex] = new Walk(AppSettings::instance().getNameColors()[personIndex]);
 
-		m_walks[personIndex]->setViewBounds(ofGetWidth(), 
-											ofGetHeight(), 
-											m_viewXOffset[personIndex], 
-											m_viewYOffset[personIndex], 
-											m_viewMinDimension[personIndex], 
+		m_walks[personIndex]->setViewBounds(ofGetWidth(),
+											ofGetHeight(),
+											m_viewXOffset[personIndex],
+											m_viewYOffset[personIndex],
+											m_viewMinDimension[personIndex],
 											m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 

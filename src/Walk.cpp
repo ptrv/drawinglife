@@ -22,7 +22,7 @@ int Walk::m_dotAlpha = 127;
 
 Walk::Walk(ofColor dotColor, bool magicBoxEnabled)
 :
-m_gpsData(NULL),
+m_gpsData(0),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
 m_currentPoint(-1),
@@ -35,7 +35,7 @@ m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
-m_magicBox(NULL),
+m_magicBox(0),
 m_maxPointsToDraw(AppSettings::instance().getWalkLength()),
 m_currentPointIsImage(false),
 m_imgOffsetX(0),

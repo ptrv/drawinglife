@@ -126,7 +126,7 @@ m_regionsOn(true)
     m_xml.pushTag("person");
 
     m_numPerson = m_xml.getNumTags("name");
-    for(int i = 0; i < m_numPerson; ++i)
+    for(unsigned int i = 0; i < m_numPerson; ++i)
     {
         m_names.push_back(m_xml.getValue("name", "", i));
         ofColor tmpColor;

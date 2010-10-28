@@ -8,8 +8,8 @@
 
 Timeline::Timeline()
 :
-m_current(NULL),
-m_last(NULL),
+m_current(0),
+m_last(0),
 m_counter(0),
 m_indexToUpdate(0),
 m_lastUpdatedTimelineId(0),
@@ -79,7 +79,7 @@ bool Timeline::isNextReady()
     m_current = &m_timeline[m_counter];
 
     bool ready = false;
-    if(m_last != NULL)
+    if(m_last != 0)
     {
         time_t current = m_current->secs;
         time_t last = m_last->secs;
