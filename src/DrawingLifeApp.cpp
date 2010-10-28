@@ -232,6 +232,10 @@ void DrawingLifeApp::update()
                             m_walks[id]->update();
                             m_timeline->countUp();
                         }
+                        else
+                        {
+                            OF_EXIT_APP(0);
+                        }
                     }
 
                 }
