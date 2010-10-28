@@ -46,7 +46,8 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_hideCursor(false),
 	m_interactiveMode(false),
 	m_showKeyCommands(false),
-	m_showInfo(true)
+	m_showInfo(true),
+    m_loopMode(true)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -95,6 +96,7 @@ void DrawingLifeApp::setup()
     m_hideCursor = settings.hideCursor();
     m_showInfo = settings.showInfo();
     m_interactiveMode = settings.isInteractiveMode();
+    m_loopMode = settings.isLoopOn();
 
 	// -----------------------------------------------------------------------------
 	// Database.
@@ -208,22 +210,30 @@ void DrawingLifeApp::update()
         {
             if(m_timeline->getTimeline().size() > 0)
             {
-                for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+                if(m_loopMode)
                 {
-//                    if(m_timeline->isNextReady())
-//                    {
-//                        unsigned int numUpdate = m_timeline->getNumberToUpdate();
-//                        for (unsigned int j=0; j< numUpdate;++j)
-//                        {
+                    for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+                    {
+                        int id = m_timeline->getNext();
+                        if (id < (int)m_numPerson)
+                        {
+                            m_walks[id]->update();
+                        }
+                        m_timeline->countUp();
+                    }
+                }
+                else
+                {
+                    for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+                    {
+                        if(!m_timeline->isLast())
+                        {
                             int id = m_timeline->getNext();
-                            if (id < (int)m_numPerson)
-                            {
-                                m_walks[id]->update();
-                            }
-//                        }
-//
-//                    }
-                    m_timeline->countUp();
+                            m_walks[id]->update();
+                            m_timeline->countUp();
+                        }
+                    }
+
                 }
 
             }

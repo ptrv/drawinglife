@@ -21,6 +21,7 @@
 	<city>Berlin</city>
 </dbquery>
 <settings>
+	<loop>1</loop>
 	<interactivemode>
 		<enabled>0</enabled>
 		<traced>1</traced>

@@ -97,6 +97,8 @@ public:
     const GpsRegion* getRegions() const { return m_regions; }
     bool isRegionsOn() const { return m_regionsOn; }
 
+    bool isLoopOn() const { return m_loop; }
+
 private:
 
     // -----------------------------------------------------------------------------
@@ -184,6 +186,8 @@ private:
 
     GpsRegion m_regions[5];
     bool m_regionsOn;
+
+    bool m_loop;
 };
 
 #endif // _APPSETTINGS_H_

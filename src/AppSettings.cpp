@@ -54,7 +54,8 @@ m_interactiveTraced(true),
 m_meridianAuto(true),
 m_meridianVal(0.0),
 m_showInfo(true),
-m_regionsOn(true)
+m_regionsOn(true),
+m_loop(true)
 {
     ofxXmlSettings m_xml;
 
@@ -186,6 +187,8 @@ m_regionsOn(true)
     m_regions[4].lon0 = m_xml.getAttribute("settings:meridian:region5", "lon0", 146.0);
     m_regions[4].minLon = m_xml.getAttribute("settings:meridian:region5", "minlon", 130.0);
     m_regions[4].maxLon = m_xml.getAttribute("settings:meridian:region5", "maxlon", 180.0);
+
+    m_loop = m_xml.getValue("settings:loop", 1) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
