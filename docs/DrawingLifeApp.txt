@@ -7,9 +7,9 @@
 
 /**
 \mainpage DrawingLifeApp
-\author avp::ptr
+\author avp::ptr - <a href="http://www.avp-ptr.de" title="avp::ptr website">www.avp-ptr.de</a>
 \version 1.0
-\date 2010-02-09
+\date Since March 2010
 
 This application draws life maps with GpsData.
 
