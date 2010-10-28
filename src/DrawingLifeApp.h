@@ -113,7 +113,7 @@ private:
 	ofTrueTypeFont m_fontText;
 	ofTrueTypeFont m_fontInfo;
     // -----------------------------------------------------------------------------
-    int m_numPerson;
+    unsigned int m_numPerson;
     std::vector<string> m_names;
 	std::string m_currentCity;
     // -----------------------------------------------------------------------------

@@ -12,13 +12,13 @@
 class Walk
 {
 public:
-	Walk(int maxPointsToDraw, ofColor dotColor, bool magicBoxEnabled=true);
+	Walk(ofColor dotColor, bool magicBoxEnabled=true);
 	~Walk();
 
 	//------------------------------------------------------------------------------
 
 	/**
-	 * \brief Set scaling values GpsPoints.
+	 * \brief 
 	 * \param screenWidth
 	 * \param screenHeight
 	 * \param viewXOffset
@@ -47,12 +47,10 @@ public:
 	double getScaledUtmX(double utmX);
     /**
 	 * \brief Draw function for GpsData.
-	 * \param animated if true GpsPoints are drawn animated.
 	 */
     void draw();
     /**
 	 * \brief Draw function for GpsData.
-	 * \param animated if true GpsPoints are drawn animated.
 	 */
     void drawAll();
     /**
@@ -137,6 +135,10 @@ public:
 
     void setCurrentPointImage(ofImage img);
 
+	/**
+	 * \brief Sets the GpsData. 
+	 * \param A GpsData object.
+	**/
 	void setGpsData(GpsData* gpsData);
 
 	void setMagicBox(MagicBox* magicBox);
@@ -161,8 +163,6 @@ private:
 	int m_currentGpsSegment;
 	int m_currentPoint;
 	bool m_firstPoint;
-
-    CurrentIndex m_currentIndex;
 
 	int m_screenWidth;
 	int m_screenHeight;

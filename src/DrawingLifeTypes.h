@@ -56,13 +56,6 @@ struct UtmPoint
     double y;
 };
 
-struct CurrentIndex
-{
-    int gpsPoint;
-    int gpsSegment;
-    int point;
-};
-
 struct GpsDataIndex
 {
     int gpsPoint;

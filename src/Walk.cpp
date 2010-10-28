@@ -20,7 +20,7 @@ double Walk::minDrawY = std::numeric_limits<double>::max();
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
-Walk::Walk(int maxPointsToDraw, ofColor dotColor, bool magicBoxEnabled)
+Walk::Walk(ofColor dotColor, bool magicBoxEnabled)
 :
 m_gpsData(NULL),
 m_currentGpsPoint(0),
@@ -36,7 +36,7 @@ m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(NULL),
-m_maxPointsToDraw(maxPointsToDraw),
+m_maxPointsToDraw(AppSettings::instance().getWalkLength()),
 m_currentPointIsImage(false),
 m_imgOffsetX(0),
 m_imgOffsetY(0),

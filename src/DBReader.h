@@ -18,11 +18,11 @@ class DBReader
 {
 public:
 
-    static const int DB_QUERY_DAY       = 0;
-    static const int DB_QUERY_MONTH     = 2;
-    static const int DB_QUERY_YEAR      = 3;
-    static const int DB_QUERY_CITY      = 4;
-    static const int DB_QUERY_SQLFILE   = 5;
+    static const int DB_QUERY_DAY       = 0; 	///< Database query type constant for day. 
+    static const int DB_QUERY_MONTH     = 2;	///< Database query type constant for month. 
+    static const int DB_QUERY_YEAR      = 3;	///< Database query type constant for year. 
+    static const int DB_QUERY_CITY      = 4;	///< Database query type constant for city. 
+    static const int DB_QUERY_SQLFILE   = 5;	///< Database query type constant for sql file. 
 
 // -----------------------------------------------------------------------------
 

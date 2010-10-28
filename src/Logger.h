@@ -27,6 +27,10 @@ public:
 	{
 		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %d\n<--", function, name, value);
 	}
+	static void logValue(const char* function, const char* name, unsigned int value)
+	{
+		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %u\n<--", function, name, value);
+	}
 	static void logValue(const char* function, const char* name, double value)
 	{
 		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %f\n<--", function, name, value);

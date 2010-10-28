@@ -82,7 +82,7 @@ public:
     int getQueryYearEnd() const { return m_queryYearEnd; }
     const std::string& getQueryCity() const { return m_queryCity; }
 
-    int getNumPerson() const { return m_numPerson; }
+    unsigned int getNumPerson() const { return m_numPerson; }
 
     const std::vector<std::string >& getNames() const { return m_names; }
     const std::vector<ofColor >& getNameColors() const { return m_nameColors; }
@@ -168,7 +168,7 @@ private:
     // -----------------------------------------------------------------------------
     // Data
     // -----------------------------------------------------------------------------
-    int m_numPerson;
+    unsigned int m_numPerson;
     std::vector<std::string > m_names;
     std::vector<ofColor > m_nameColors;
     std::vector<std::string > m_sqlFilePaths;
