@@ -46,6 +46,7 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_showInfo(true),
     m_loopMode(true)
 {
+	m_liveStatistics = new LiveStatistics();
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
@@ -314,6 +315,7 @@ void DrawingLifeApp::draw()
         if(m_showKeyCommands)
             showKeyCommands();
     }
+	m_liveStatistics->draw();
 }
 // -----------------------------------------------------------------------------
 // Start screen

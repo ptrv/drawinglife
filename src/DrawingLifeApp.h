@@ -9,6 +9,7 @@
 #include "DBReader.h"
 #include "Timeline.h"
 #include "Walk.h"
+#include "LiveStatistics.h"
 
 /**
  *  \brief Main application class.
@@ -139,6 +140,10 @@ private:
     bool m_showInfo;
 
     bool m_loopMode;
+
+	// -----------------------------------------------------------------------------
+
+	LiveStatistics* m_liveStatistics;
 
 };
 

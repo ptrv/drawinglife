@@ -70,6 +70,48 @@ struct GpsRegion
     double maxLon;
 };
 
+struct Point2D
+{
+	float x;
+	float y;
+};
+
+inline Point2D MakePoint2D( float x, float y)
+{
+	Point2D point;
+	point.x = x;
+	point.y = y;
+	return point;
+}
+
+struct ColorRGBA
+{
+	int r;
+	int g;
+	int b;
+	int a;
+};
+
+inline ColorRGBA MakeColorRGBA( int r, int g, int b, int a)
+{
+	ColorRGBA color;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+	color.a = a;
+	return color;
+}
+
+inline int MakeHexARGB( int r, int g, int b, int a)
+{
+	return 0xFF000000 | a << 24 | r << 16 | g << 8 | b;
+}
+
+inline int MakeHexARGB( ColorRGBA color)
+{
+	return 0xFF000000 | color.a << 24 | color.r << 16 | color.g << 8 | color.b;
+}
+
 // -----------------------------------------------------------------------------
 // double version of openFramworks datatypes.
 // -----------------------------------------------------------------------------
