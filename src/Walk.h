@@ -182,7 +182,7 @@ private:
 	bool m_interactiveMode;
 	bool m_drawTraced;
 
-	ofColor m_currentSegColor;
+	int m_currentSegColor;
 };
 
 #endif // _WALK_H_

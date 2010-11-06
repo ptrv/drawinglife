@@ -38,19 +38,49 @@ public:
     int getColorForegroundR () const {return m_colorForegroundR; }
     int getColorForegroundG () const {return m_colorForegroundG; }
     int getColorForegroundB () const {return m_colorForegroundB; }
+	int getColorForeground() const 
+	{ 
+		return MakeHexARGB( 
+			m_colorForegroundR, 
+			m_colorForegroundG, 
+			m_colorForegroundB, 
+			m_alphaTracks); 
+	}
 
     int getColorBackgroundR () const { return m_colorBackgroundR; }
     int getColorBackgroundG () const { return m_colorBackgroundG; }
     int getColorBackgroundB () const { return m_colorBackgroundB; }
+	int getColorBackground() const 
+	{
+		return MakeHexARGB(
+			m_colorBackgroundR,
+			m_colorForegroundG,
+			m_colorForegroundB);
+	}
 
     int getColorViewboxR () const { return m_colorViewboxR; }
     int getColorViewboxG () const { return m_colorViewboxG; }
     int getColorViewboxB () const { return m_colorViewboxB; }
+	int getColorViewbox() const
+	{
+		return MakeHexARGB(
+			m_colorViewboxR,
+			m_colorViewboxG,
+			m_colorViewboxB);
+	}
 
     int getColorInteractiveSegR () const { return m_colorInteractiveSegR; }
     int getColorInteractiveSegG () const { return m_colorInteractiveSegG; }
     int getColorInteractiveSegB () const { return m_colorInteractiveSegB; }
     int getColorInteractiveSegA () const { return m_colorInteractiveSegA; }
+	int getColorInteractiveSeg() const 
+	{
+		return MakeHexARGB(
+			m_colorInteractiveSegR,
+			m_colorInteractiveSegG,
+			m_colorInteractiveSegB,
+			m_colorInteractiveSegA);
+	}
 
     int getAlphaTrack () const { return m_alphaTracks; }
     int getAlphaDot () const { return m_alphaDots; }

@@ -53,10 +53,7 @@ m_drawTraced(true)
 	m_interactiveMode = AppSettings::instance().isInteractiveMode();
 	m_drawTraced = AppSettings::instance().drawTraced();
 
-    m_currentSegColor.r = AppSettings::instance().getColorInteractiveSegR();
-    m_currentSegColor.g = AppSettings::instance().getColorInteractiveSegG();
-    m_currentSegColor.b = AppSettings::instance().getColorInteractiveSegB();
-    m_currentSegColor.a = AppSettings::instance().getColorInteractiveSegA();
+	m_currentSegColor = AppSettings::instance().getColorInteractiveSeg();
 }
 
 Walk::~Walk()
@@ -207,11 +204,8 @@ void Walk::draw()
             {
                 pointEnd = m_currentGpsPoint;
                 if(m_interactiveMode && m_drawTraced)
-                    ofSetColor(m_currentSegColor.r,
-                               m_currentSegColor.g,
-                               m_currentSegColor.b,
-                               m_currentSegColor.a);
-            }
+					ofSetColor(m_currentSegColor);
+			}
             else
             {
                 pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;

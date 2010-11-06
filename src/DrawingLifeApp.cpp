@@ -290,10 +290,7 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                ofSetColor(AppSettings::instance().getColorForegroundR(),
-                           AppSettings::instance().getColorForegroundG(),
-                           AppSettings::instance().getColorForegroundB(),
-                           AppSettings::instance().getAlphaTrack());
+				ofSetColor(AppSettings::instance().getColorForeground());
                 ofNoFill();
 				m_walks[personIndex]->draw();
 				m_liveStatistics[0]->draw();
@@ -308,10 +305,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor(AppSettings::instance().getColorForegroundR(),
-                       AppSettings::instance().getColorForegroundG(),
-                       AppSettings::instance().getColorForegroundB(),
-                       AppSettings::instance().getAlphaTrack());
+            ofSetColor(AppSettings::instance().getColorForeground());
             ofNoFill();
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
@@ -750,9 +744,7 @@ void DrawingLifeApp::fillViewAreaUTM()
         double w = m_walks[personIndex]->getScaledUtmX(1) - x;
         double h = m_walks[personIndex]->getScaledUtmY(1) - y;
         ofFill();
-        ofSetColor(AppSettings::instance().getColorViewboxR(),
-                   AppSettings::instance().getColorViewboxG(),
-                   AppSettings::instance().getColorViewboxB());
+		ofSetColor(AppSettings::instance().getColorViewbox());
         ofRect(x, y, w, h);
 
     }
