@@ -277,6 +277,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Drawable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\DrawingLifeApp.h"
 				>
 			</File>
@@ -298,6 +302,10 @@
 			</File>
 			<File
 				RelativePath=".\src\GpsSegment.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GpsView.h"
 				>
 			</File>
 			<File
@@ -338,6 +346,10 @@
 			</File>
 			<File
 				RelativePath=".\src\GpsData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\GpsView.cpp"
 				>
 			</File>
 			<File

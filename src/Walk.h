@@ -6,14 +6,15 @@
 #define _WALK_H_
 
 #include <string>
+#include "GpsView.h"
 #include "GpsData.h"
 #include "MagicBox.h"
 
-class Walk
+class Walk : public GpsView
 {
 public:
 	Walk(ofColor dotColor, bool magicBoxEnabled=true);
-	~Walk();
+	virtual ~Walk();
 
 	//------------------------------------------------------------------------------
 
@@ -131,15 +132,7 @@ public:
 
 //    void setDotColors();
 
-	const GpsData& getGpsData() const { return *m_gpsData; }
-
     void setCurrentPointImage(ofImage img);
-
-	/**
-	 * \brief Sets the GpsData.
-	 * \param gpsData Pointer to GpsData object.
-	**/
-	void setGpsData(GpsData* gpsData);
 
 	void setMagicBox(MagicBox* magicBox);
 
@@ -148,8 +141,6 @@ public:
 	void toggleTraced();
 
 private:
-
-	GpsData* m_gpsData;
 
 	static double maxDrawX;
     static double minDrawX;

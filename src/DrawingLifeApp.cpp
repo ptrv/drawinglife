@@ -4,6 +4,7 @@
 
 #include "DrawingLifeApp.h"
 #include "GpsData.h"
+#include "LiveStatistics.h"
 #include <vector>
 #include <limits>
 #include <fstream>
@@ -15,6 +16,10 @@
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
     m_dbReader(0),
+	m_gpsDatas(0),
+	m_walks(0),
+	m_magicBoxes(0),
+	m_liveStatistics(0),
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
@@ -46,7 +51,6 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_showInfo(true),
     m_loopMode(true)
 {
-	m_liveStatistics = new LiveStatistics();
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
@@ -55,6 +59,7 @@ DrawingLifeApp::~DrawingLifeApp()
         SAFE_DELETE(m_gpsDatas[personIndex]);
 		SAFE_DELETE(m_walks[personIndex]);
 		SAFE_DELETE(m_magicBoxes[personIndex]);
+		SAFE_DELETE(m_liveStatistics[personIndex]);
     }
     SAFE_DELETE(m_timeline);
     for(unsigned int i = 0; i < m_images.size(); ++i)
@@ -125,6 +130,7 @@ void DrawingLifeApp::setup()
         m_gpsDatas.push_back(0);
 		m_walks.push_back(0);
 		m_magicBoxes.push_back(0);
+		m_liveStatistics.push_back(0);
         DBG_VAL(m_names[personIndex]);
 
         m_viewXOffset.push_back(0);
@@ -216,6 +222,7 @@ void DrawingLifeApp::update()
                         if (id < (int)m_numPerson)
                         {
                             m_walks[id]->update();
+							m_liveStatistics[id]->update();
                         }
                         m_timeline->countUp();
                     }
@@ -228,6 +235,7 @@ void DrawingLifeApp::update()
                         {
                             int id = m_timeline->getNext();
                             m_walks[id]->update();
+							m_liveStatistics[id]->update();
                             m_timeline->countUp();
                         }
                         else
@@ -288,6 +296,7 @@ void DrawingLifeApp::draw()
                            AppSettings::instance().getAlphaTrack());
                 ofNoFill();
 				m_walks[personIndex]->draw();
+				m_liveStatistics[0]->draw();
             }
         }
 		// -----------------------------------------------------------------------------
@@ -307,6 +316,7 @@ void DrawingLifeApp::draw()
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
 				m_walks[personIndex]->drawAll();
+				m_liveStatistics[0]->drawAll();
             }
         }
         if(m_showFps)
@@ -315,7 +325,6 @@ void DrawingLifeApp::draw()
         if(m_showKeyCommands)
             showKeyCommands();
     }
-	m_liveStatistics->draw();
 }
 // -----------------------------------------------------------------------------
 // Start screen
@@ -371,6 +380,7 @@ void DrawingLifeApp::prepareGpsData()
         SAFE_DELETE(m_gpsDatas[personIndex]);
         SAFE_DELETE(m_magicBoxes[personIndex]);
 		SAFE_DELETE(m_walks[personIndex]);
+		SAFE_DELETE(m_liveStatistics[personIndex]);
     }
 
 }
@@ -435,6 +445,13 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 											m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 
+		// -----------------------------------------------------------------------------
+		// Initialize live statistics.
+
+		m_liveStatistics[personIndex] = new LiveStatistics();
+
+
+
         m_dbReader = new DBReader(m_dbPath);
         if (m_dbReader->setupDbConnection())
         {
@@ -448,6 +465,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
                       m_gpsDatas[personIndex]->getSegments().size(),
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
             }
             else
             {
@@ -491,6 +509,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 //        SAFE_DELETE(m_gpsDatas[personIndex]);
 //        SAFE_DELETE(m_magicBoxes[personIndex]);
 //		SAFE_DELETE(m_walks[personIndex]);
+//		SAFE_DELETE(m_liveStatistics[personIndex]);
 //    }
 
     prepareGpsData();
@@ -509,6 +528,13 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 
+		// -----------------------------------------------------------------------------
+		// Initialize live statistics.
+
+		m_liveStatistics[personIndex] = new LiveStatistics();
+
+
+
         m_dbReader = new DBReader(m_dbPath);
 
         if (m_dbReader->setupDbConnection())
@@ -523,6 +549,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
                       m_gpsDatas[personIndex]->getSegments().size(),
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
             }
             else
             {
@@ -616,6 +643,13 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 
+		// -----------------------------------------------------------------------------
+		// Initialize live statistics.
+
+		m_liveStatistics[personIndex] = new LiveStatistics();
+
+
+
         std::ifstream sqlFile(ofToDataPath(sqlFilePaths[personIndex]).c_str(), std::ifstream::in);
         std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile), std::istreambuf_iterator<char>());
 
@@ -635,6 +669,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
                       m_gpsDatas[personIndex]->getSegments().size(),
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
             }
             else
             {

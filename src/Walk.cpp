@@ -22,7 +22,6 @@ int Walk::m_dotAlpha = 127;
 
 Walk::Walk(ofColor dotColor, bool magicBoxEnabled)
 :
-m_gpsData(0),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
 m_currentPoint(-1),
@@ -62,8 +61,6 @@ m_drawTraced(true)
 
 Walk::~Walk()
 {
-    if(m_gpsData)
-        m_gpsData = 0;
     if(m_magicBox)
         m_magicBox = 0;
 	m_image.clear();
@@ -442,12 +439,6 @@ const std::string& Walk::getCurrentGpsInfo()
 ////	m_dotColor.b = (int)ofRandom(30,255);
 //
 //}
-
-void Walk::setGpsData(GpsData* gpsData)
-{
-    m_gpsData = 0;
-    m_gpsData = gpsData;
-}
 
 
 void Walk::setMagicBox(MagicBox* magicBox)

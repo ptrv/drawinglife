@@ -8,6 +8,7 @@
 #include "DrawingLifeIncludes.h"
 #include "DBReader.h"
 #include "Timeline.h"
+#include "GpsView.h"
 #include "Walk.h"
 #include "LiveStatistics.h"
 
@@ -88,6 +89,7 @@ private:
 	std::vector<GpsData* > m_gpsDatas;
 	std::vector<Walk* > m_walks;
 	std::vector<MagicBox* > m_magicBoxes;
+	std::vector<GpsView* > m_liveStatistics;
 
 	std::string m_dbPath;
 	//---------------------------------------------------------------------------
@@ -140,10 +142,6 @@ private:
     bool m_showInfo;
 
     bool m_loopMode;
-
-	// -----------------------------------------------------------------------------
-
-	LiveStatistics* m_liveStatistics;
 
 };
 
