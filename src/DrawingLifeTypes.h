@@ -112,6 +112,46 @@ inline int MakeHexARGB( ColorRGBA color)
 	return 0xFF000000 | color.a << 24 | color.r << 16 | color.g << 8 | color.b;
 }
 
+
+inline tm MakeTimeStruct(std::string timeString)
+{
+	// Parse the date components from the string.
+	int year, month, day, hour, min, sec;
+	sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+
+	// Get current system time and initialize 
+	// the tm struct with the current time.
+	time_t t;
+	time(&t);
+	struct tm tm;
+	tm = *localtime(&t);
+
+	// Set values for the tm components.
+	tm.tm_sec = sec;
+	tm.tm_min = min;
+	tm.tm_hour = hour;
+	tm.tm_mday = day;
+	tm.tm_mon = month - 1; // Months are stored with a range from 0 to 11.
+	tm.tm_year = year - 1900; // The year is stored as a delta from the reference year 1900.
+	// tm_wday will not be set by this function and has the initialization value.
+	// tm_yday will not be set by this function and has the initialization value.
+	tm.tm_isdst = -1; // Daylight saving = Information is not available.
+
+	return tm;
+}
+
+
+
+/**
+ * \brief Returns the length of an array.
+ * \param The array variable.
+ * \return The array length. 
+**/
+template<typename T, int size>
+inline int GetArrayLength(T(&)[size]) { return size; }
+
+
+
 // -----------------------------------------------------------------------------
 // double version of openFramworks datatypes.
 // -----------------------------------------------------------------------------

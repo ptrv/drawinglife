@@ -4,6 +4,7 @@
 
 #ifndef _LIVESTATISTICS_
 #define _LIVESTATISTICS_
+#define HOURS_PER_DAY 24
 
 
 #include "GpsView.h"
@@ -31,7 +32,7 @@ protected:
 	int m_backgroundColor;
 	int m_borderColor;
 	int m_dummyCount;
-
+	unsigned int m_hoursHistogram[HOURS_PER_DAY];
 };
 
 #endif // _LIVESTATISTICS_

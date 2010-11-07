@@ -16,6 +16,11 @@ LiveStatistics::LiveStatistics( void) :
 	m_borderColor(MakeHexARGB( 255, 255, 255, 255)),
 	m_dummyCount( 0)
 {
+	// Initialize the hour histogram with zero.
+	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
+	{
+		m_hoursHistogram[hourIndex] = 0;
+	}
 }
 
 
@@ -34,20 +39,31 @@ void LiveStatistics::draw()
 	ofNoFill();
 	ofSetColor( m_borderColor);
 	ofRect( m_position.x, m_position.y, m_width, m_height);
-	ofRect( m_position.x + 10, m_position.y + 10, 50 + m_dummyCount, 10);
-	// Draw dummy line.
-	glBegin(GL_LINE_STRIP);
-	glVertex2d( m_position.x, m_position.y + m_height * 0.5f);
-	glVertex2d( m_position.x + m_dummyCount, m_position.y + m_height * 0.5f);
-	glEnd();
+
+
+	// Draw a line for each hour.
+	double yOffset = (double)m_height / (double)(HOURS_PER_DAY + 1);
+	double yPos = m_position.y + yOffset;
+	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
+	{
+		glBegin(GL_LINE_STRIP);
+		glVertex2d( m_position.x, yPos);
+		glVertex2d( m_position.x + m_hoursHistogram[hourIndex], yPos);
+		glEnd();
+		yPos += yOffset;
+	}
+
 
 	// Extract current time stamp.
 	// TODO: The current gps point needs to be addressed.
 	GpsSegment segment = m_gpsData->getSegments()[0];
 	GpsPoint point = segment.getPoints()[0];
 	const std::string timestamp = point.getTimestamp();
-
-	std::cout << "---" << timestamp << "---" << std::endl;
+	struct tm date = MakeTimeStruct(timestamp);
+	int hour = date.tm_hour;
+	int minute = date.tm_min;
+	// Print time stamp to console.
+	//std::cout << timestamp << " ---> hour: " << hour << ", minute: " << minute << std::endl;
 }
 
 
@@ -59,6 +75,11 @@ void LiveStatistics::drawAll()
 void LiveStatistics::update()
 {
 	m_dummyCount++;
+	// Create an hour histogram based on the time stamps.
+	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
+	{
+		m_hoursHistogram[hourIndex]++;
+	}
 }
 
 
