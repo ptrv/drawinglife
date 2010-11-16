@@ -88,7 +88,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		while(reader.read())
 		{
 			GpsPoint gpsPoint;
-			gpsPoint.setGpsPoint(reader.getint(0),reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7));
+			gpsPoint.setGpsPoint(reader.getint(0), reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7));
 
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);

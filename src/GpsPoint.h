@@ -5,6 +5,10 @@
 #ifndef _GPSPOINT_H_
 #define _GPSPOINT_H_
 
+
+#include <ostream>
+
+
 /**
  * \brief Holds one gps point with timestamp.
  *
@@ -17,6 +21,8 @@ class GpsPoint
 	double m_elevation;
 	std::string m_timestamp;
 	std::string m_location;
+	friend bool operator== (const GpsPoint& lhs, const GpsPoint& rhs);
+	friend std::ostream& operator<< (std::ostream& os, const GpsPoint& obj);
 
 public:
 	GpsPoint()
@@ -40,7 +46,7 @@ public:
     * \param location
     */
 	void setGpsPoint(int id,
-                     double latitude,
+					 double latitude,
 					 double longitude,
 					 double elevation,
 					 const std::string& timestamp,
@@ -54,6 +60,7 @@ public:
 		m_location = location;
 	}
 	//---------------------------------------------------------------------------
+	int getId() const { return m_gpsPointId; }
 	/**
 	* \brief Get latitude.
 	* \return latitude double value.
@@ -96,5 +103,26 @@ public:
 	}
 };
 
+// -----------------------------------------------------------------------------
+// Compare functions.
+// -----------------------------------------------------------------------------
+
+inline bool operator== (const GpsPoint& lhs, const GpsPoint& rhs)
+{
+	return lhs.m_gpsPointId == rhs.m_gpsPointId;
+}
+inline bool operator!= (const GpsPoint& lhs, const GpsPoint& rhs)
+{
+	return !operator== (lhs,rhs);
+}
+
+// -----------------------------------------------------------------------------
+// Streams. 
+// -----------------------------------------------------------------------------
+
+inline std::ostream& operator<< (std::ostream& os, const GpsPoint& obj)
+{
+	return os << "GpsPoint #" << obj.m_gpsPointId;
+}
 
 #endif // _GPSPOINT_H_

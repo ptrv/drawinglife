@@ -5,6 +5,7 @@
 #ifndef _GPSSEGMENT_H_
 #define _GPSSEGMENT_H_
 
+#include <ostream>
 #include "GpsPoint.h"
 
 /**
@@ -14,9 +15,10 @@
 
 class GpsSegment
 {
-	int m_gpsSegmentId;
+	int m_gpsSegmentId;	///< TODO: Not in use as one could think. 
 	std::vector<GpsPoint> m_points;
-	int m_segment;
+	int m_segment;	///< Identifier of the segment. 
+	friend std::ostream& operator<< (std::ostream& os, const GpsSegment& obj);
 
 public:
 
@@ -32,7 +34,7 @@ public:
 
 	/**
 	* \brief Set GpsSegment values.
-	* \param points a vecor with points.
+	* \param points a vector with points.
 	* \param segment number for segment.
 	*/
 	void setGpsSegment(const std::vector<GpsPoint>& points, int segment)
@@ -61,6 +63,25 @@ public:
 		m_segment = -1;
 		m_gpsSegmentId = 0;
 	}
+	int getPointsCount() const	{ return m_points.size();	}
+	int getId() const			{ return m_segment;			}
 };
+
+
+// -----------------------------------------------------------------------------
+// Streams. 
+// -----------------------------------------------------------------------------
+
+inline std::ostream& operator<< (std::ostream& os, const GpsSegment& obj)
+{
+	os << "GpsSegment #" << obj.m_segment;
+	//os << ": (";
+	//std::vector<GpsPoint> points = obj.m_points;
+	//for(unsigned i = 0; i < points.size(); ++i)
+	//	os << points[i] << ", ";
+	//os << ")";
+	return os;
+}
+
 
 #endif // _GPSSEGMENT_H_
