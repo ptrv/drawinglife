@@ -31,8 +31,9 @@ protected:
 	float m_height;
 	int m_backgroundColor;
 	int m_borderColor;
-	int m_dummyCount;
 	unsigned int m_hoursHistogram[HOURS_PER_DAY];
+	int m_lastGpsPointId;
+	int m_lastGpsSegmentId;
 };
 
 #endif // _LIVESTATISTICS_

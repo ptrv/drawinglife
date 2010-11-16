@@ -5,16 +5,17 @@
 #ifndef _WALK_H_
 #define _WALK_H_
 
+
 #include <string>
-#include "GpsView.h"
 #include "GpsData.h"
 #include "MagicBox.h"
 
-class Walk : public GpsView
+
+class Walk
 {
 public:
 	Walk(ofColor dotColor, bool magicBoxEnabled=true);
-	virtual ~Walk();
+	~Walk();
 
 	//------------------------------------------------------------------------------
 
@@ -85,6 +86,17 @@ public:
 	 * \return location string for current GpsPoint.
 	 */
 	const std::string getGpsLocationCurrent();
+	/**
+	 * \brief Returns the current GpsSegment.
+	 * \return The current GpsSegment. 
+	**/	
+	const GpsSegment& getCurrentSegment();
+	/**
+	 * \brief Returns the current GpsPoint.
+	 * \return The current GpsPoint. 
+	**/
+	const GpsPoint& getCurrentPoint();
+
     /**
 	 * \brief Get current GpsSegment number.
 	 * \return index of current GpsSegment.
@@ -101,7 +113,7 @@ public:
 	 */
 	std::string getCurrentTimestamp();
     /**
-	 * \brief Get current logitude for GpsPoint.
+	 * \brief Get current longitude for GpsPoint.
 	 * \return longitude of current GpsPoint.
 	 */
 	double getCurrentLongitude();
@@ -132,6 +144,14 @@ public:
 
 //    void setDotColors();
 
+	const GpsData& getGpsData() const { return *m_gpsData; }
+
+	/**
+	 * \brief Sets the GpsData.
+	 * \param gpsData Pointer to GpsData object.
+	**/
+	void setGpsData(GpsData* gpsData);
+
     void setCurrentPointImage(ofImage img);
 
 	void setMagicBox(MagicBox* magicBox);
@@ -141,6 +161,8 @@ public:
 	void toggleTraced();
 
 private:
+
+	GpsData* m_gpsData;
 
 	static double maxDrawX;
     static double minDrawX;

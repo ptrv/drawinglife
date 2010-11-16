@@ -22,6 +22,7 @@ int Walk::m_dotAlpha = 127;
 
 Walk::Walk(ofColor dotColor, bool magicBoxEnabled)
 :
+m_gpsData(0),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
 m_currentPoint(-1),
@@ -58,6 +59,8 @@ m_drawTraced(true)
 
 Walk::~Walk()
 {
+	if(m_gpsData)
+		m_gpsData = 0;
     if(m_magicBox)
         m_magicBox = 0;
 	m_image.clear();
@@ -72,8 +75,10 @@ void Walk::update()
     {
         if (m_gpsData->getNormalizedUTMPoints().size() > 0)
         {
+			// All but the last segment.
             if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size()-1)
             {
+				// All but the last point in the current segment.
                 if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size() - 1)
                 {
                     if (!m_firstPoint)
@@ -81,12 +86,14 @@ void Walk::update()
                     else
                         m_firstPoint = false;
                 }
+				// Only the last point.
                 else
                 {
                     ++m_currentGpsSegment;
                     m_currentGpsPoint = 0;
                 }
             }
+			// Only the last segment.
             else
             {
                 if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size() - 1)
@@ -337,6 +344,17 @@ int Walk::getCurrentPointNum()
     return m_currentPoint;
 }
 
+const GpsPoint& Walk::getCurrentPoint()
+{
+	const GpsSegment& segment = getCurrentSegment();
+	return segment.getPoints()[m_currentGpsPoint];
+}
+
+const GpsSegment& Walk::getCurrentSegment()
+{
+	return m_gpsData->getSegments()[m_currentGpsSegment];
+}
+
 std::string Walk::getCurrentTimestamp()
 {
     std::string timestamp = "";
@@ -434,6 +452,11 @@ const std::string& Walk::getCurrentGpsInfo()
 //
 //}
 
+void Walk::setGpsData(GpsData* gpsData)
+{
+	m_gpsData = 0;
+	m_gpsData = gpsData;
+}
 
 void Walk::setMagicBox(MagicBox* magicBox)
 {

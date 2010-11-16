@@ -14,7 +14,8 @@ LiveStatistics::LiveStatistics( void) :
 	m_position(MakePoint2D( 10, 10)),
 	m_backgroundColor(MakeHexARGB( 127, 127, 127, 127)),
 	m_borderColor(MakeHexARGB( 255, 255, 255, 255)),
-	m_dummyCount( 0)
+	m_lastGpsPointId(-1),
+	m_lastGpsSegmentId(-1)
 {
 	// Initialize the hour histogram with zero.
 	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
@@ -52,18 +53,6 @@ void LiveStatistics::draw()
 		glEnd();
 		yPos += yOffset;
 	}
-
-
-	// Extract current time stamp.
-	// TODO: The current gps point needs to be addressed.
-	GpsSegment segment = m_gpsData->getSegments()[0];
-	GpsPoint point = segment.getPoints()[0];
-	const std::string timestamp = point.getTimestamp();
-	struct tm date = MakeTimeStruct(timestamp);
-	int hour = date.tm_hour;
-	int minute = date.tm_min;
-	// Print time stamp to console.
-	//std::cout << timestamp << " ---> hour: " << hour << ", minute: " << minute << std::endl;
 }
 
 
@@ -74,12 +63,29 @@ void LiveStatistics::drawAll()
 
 void LiveStatistics::update()
 {
-	m_dummyCount++;
-	// Create an hour histogram based on the time stamps.
-	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
+	// Retrieve current segment.
+	const GpsSegment& cSegment = m_walk->getCurrentSegment();
+	if (m_lastGpsSegmentId != cSegment.getId())
 	{
-		m_hoursHistogram[hourIndex]++;
+		m_lastGpsSegmentId = cSegment.getId();
+		//std::cout << cSegment << " -----------" << std::endl;
 	}
+
+	// Retrieve current point.
+	const GpsPoint& cPoint = m_walk->getCurrentPoint();
+	m_lastGpsPointId = cPoint.getId();
+	//std::cout << cPoint << std::endl;
+
+	// Extract current time stamp.
+	const std::string timestamp = cPoint.getTimestamp();
+	struct tm date = MakeTimeStruct(timestamp);
+	int hour = date.tm_hour;
+	int minute = date.tm_min;
+	// Print time stamp to console.
+	//std::cout << timestamp << " ---> hour: " << hour << ", minute: " << minute << std::endl;
+
+	// Create an hour histogram based on the time stamps.
+	m_hoursHistogram[hour]++;
 }
 
 

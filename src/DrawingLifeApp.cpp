@@ -460,6 +460,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
 				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
             }
             else
             {
@@ -544,6 +545,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
 				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
             }
             else
             {
@@ -664,6 +666,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
 				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
             }
             else
             {

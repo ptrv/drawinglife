@@ -8,6 +8,7 @@
 
 #include "Drawable.h"
 #include "GpsData.h"
+#include "Walk.h"
 
 
 class GpsView : public Drawable
@@ -35,9 +36,11 @@ public:
 	 * \param gpsData A GpsData pointer.
 	**/
 	void setGpsData(GpsData* gpsData);
+	void setWalk( Walk* walk);
 
 protected:
 	GpsData* m_gpsData;		///< Container for gps data.
+	Walk* m_walk;
 
 };
 
