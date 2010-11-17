@@ -87,8 +87,23 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		// -----------------------------------------------------------------------------
 		while(reader.read())
 		{
+			// Codes as defined by the sql query in DBReader::getBasicQueryString().
+			// 0 = gpsdataid aka gpsPointId
+			// 1 = latitude
+			// 2 = longitude
+			// 3 = time aka timestamp
+			// 4 = elevation
+			// 5 = segment aka gpsSegmentId
+			// 6 = name aka userName
+			// 7 = location
+
 			GpsPoint gpsPoint;
-			gpsPoint.setGpsPoint(reader.getint(0), reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7));
+			gpsPoint.setGpsPoint(reader.getint(0),
+								 reader.getdouble(1),
+								 reader.getdouble(2), 
+								 reader.getdouble(4), 
+								 reader.getstring(3), 
+								 reader.getstring(7));
 
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
@@ -165,9 +180,12 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 const std::string DBReader::getBasicQueryString()
 {
 	// This is the part of the query string that all queries have common.
-	return	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
-			"a.longitude AS longitude, a.time AS time,"\
-			"a.elevation AS elevation, a.segment AS segment,"\
+	return	"SELECT a.gpsdataid AS gpsdataid,"\
+			"a.latitude AS latitude,"\
+			"a.longitude AS longitude,"\
+			"a.time AS time,"\
+			"a.elevation AS elevation,"\
+			"a.segment AS segment,"\
 			"b.name AS name,"\
 			"c.city AS location "\
 			"FROM gpsdata AS a "\
