@@ -170,10 +170,12 @@ void Walk::draw()
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
+		const std::vector<std::vector<UtmPoint>>& gpsData = m_gpsData->getUTMPoints();
+		const UtmPoint& utmPoint = gpsData[m_currentGpsSegment][m_currentGpsPoint];
+
         if(!m_interactiveMode)
         {
-            m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
-                                                    m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
+            m_magicBox->updateBoxIfNeeded(ofxPointd(utmPoint.x, utmPoint.y));
         }
 
         int startSeg, startPoint;
@@ -181,9 +183,10 @@ void Walk::draw()
         {
             if(m_maxPointsToDraw - m_currentPoint <= 0)
             {
-                int startIndex = m_currentPoint-m_maxPointsToDraw;
-                startSeg = m_gpsData->getIndices()[startIndex].gpsSegment;
-                startPoint = m_gpsData->getIndices()[startIndex].gpsPoint;
+                int startIndex = m_currentPoint - m_maxPointsToDraw;
+				const GpsDataIndex gpsDataIndex = m_gpsData->getIndices()[startIndex];
+				startSeg = gpsDataIndex.gpsSegment;
+				startPoint = gpsDataIndex.gpsPoint;
             }
             else
             {
@@ -203,11 +206,11 @@ void Walk::draw()
 
 //        ofSetLineWidth(3.0);
 //        ofEnableSmoothing();
-        for (int i = startSeg; i <= m_currentGpsSegment; ++i)
+        for (int segmentIndex = startSeg; segmentIndex <= m_currentGpsSegment; ++segmentIndex)
         {
             glBegin(GL_LINE_STRIP);
             int pointEnd;
-            if (i == m_currentGpsSegment)
+            if (segmentIndex == m_currentGpsSegment)
             {
                 pointEnd = m_currentGpsPoint;
                 if(m_interactiveMode && m_drawTraced)
@@ -215,15 +218,17 @@ void Walk::draw()
 			}
             else
             {
-                pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
+                pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[segmentIndex].size()-1;
             }
 
-            for (int j = startPoint; j <= pointEnd; ++j)
+            for (int pointIndex = startPoint; pointIndex <= pointEnd; ++pointIndex)
             {
-                bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+				const std::vector<std::vector<UtmPoint>>& gpsData = m_gpsData->getUTMPoints();
+				const UtmPoint& utmPoint = gpsData[segmentIndex][pointIndex];
+				bool isInBox = m_magicBox->isInBox(ofxPointd(utmPoint.x, utmPoint.y));
                 if(isInBox)
                 {
-                    ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
+                    ofxPointd tmp = m_magicBox->getDrawablePoint(utmPoint);
                     glVertex2d(getScaledUtmX(tmp.x),
                                getScaledUtmY(tmp.y));
                 }
@@ -234,7 +239,7 @@ void Walk::draw()
         }
 //        ofDisableSmoothing();
 
-		ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
+		ofxPointd tmp = m_magicBox->getDrawablePoint(utmPoint);
 
 		if (m_currentPointIsImage)
 		{
@@ -257,20 +262,22 @@ void Walk::draw()
         ofNoFill();
         ofSetColor(255,0,0);
 
-        double x = getScaledUtmX(m_magicBox->getNormalizedBox().x);
-        double y = getScaledUtmY(m_magicBox->getNormalizedBox().y);
-        double w = getScaledUtmX(m_magicBox->getNormalizedBox().width)-x;
-        double h = getScaledUtmY(m_magicBox->getNormalizedBox().height)-y;
+		const ofxRectangled box = m_magicBox->getNormalizedBox();
+        double x = getScaledUtmX( box.x);
+        double y = getScaledUtmY( box.y);
+        double w = getScaledUtmX( box.width) - x;
+        double h = getScaledUtmY( box.height) - y;
 
         ofRect(x, y , w, h);
 
         ofNoFill();
         ofSetColor(0,255,0);
 
-        double xp = getScaledUtmX(m_magicBox->getNormalizedPaddedBox().x);
-        double yp = getScaledUtmY(m_magicBox->getNormalizedPaddedBox().y);
-        double wp = getScaledUtmX(m_magicBox->getNormalizedPaddedBox().width)-xp;
-        double hp = getScaledUtmY(m_magicBox->getNormalizedPaddedBox().height)-yp;
+		const ofxRectangled paddedBox = m_magicBox->getNormalizedPaddedBox();
+        double xp = getScaledUtmX( paddedBox.x);
+        double yp = getScaledUtmY( paddedBox.y);
+        double wp = getScaledUtmX( paddedBox.width) - xp;
+        double hp = getScaledUtmY( paddedBox.height) - yp;
 
         ofRect(xp, yp , wp, hp);
     }
@@ -283,22 +290,23 @@ void Walk::draw()
 void Walk::drawAll()
 {
 	ofNoFill();
-	for (unsigned int i = 0; i < m_gpsData->getNormalizedUTMPoints().size(); ++i)
+	int segmentCount = m_gpsData->getNormalizedUTMPoints().size();
+	for (unsigned int segmentIndex = 0; segmentIndex < segmentCount; ++segmentIndex)
 	{
 		glBegin(GL_LINE_STRIP);
 
-		for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
+		int pointsCount = m_gpsData->getNormalizedUTMPointsGlobal()[segmentIndex].size();
+		for (unsigned int pointIndex = 0; pointIndex < pointsCount; ++pointIndex)
 		{
-            bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+			const std::vector<std::vector<UtmPoint>>& gpsData = m_gpsData->getUTMPoints();
+			const UtmPoint& utmPoint = gpsData[segmentIndex][pointIndex];
+            bool isInBox = m_magicBox->isInBox(ofxPointd(utmPoint.x, utmPoint.y));
             if(isInBox)
             {
-                const ofxPointd& tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
+                const ofxPointd& tmp = m_magicBox->getDrawablePoint(utmPoint);
                 glVertex2d(getScaledUtmX(tmp.x),
                            getScaledUtmY(tmp.y));
             }
-
-//			glVertex2d(getScaledUtmX(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].x),
-//					   getScaledUtmY(m_gpsData->getNormalizedUTMPointsGlobal()[i][j].y));
 		}
 		glEnd();
 	}

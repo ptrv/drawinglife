@@ -14,7 +14,9 @@ struct TimelineObject
 {
     std::string timeString;
     time_t secs;
-    int id;
+    int personId;
+	int segmentId;
+	int pointId;
     bool operator() (TimelineObject lhs, TimelineObject rhs)
     {
         return lhs.secs < rhs.secs;

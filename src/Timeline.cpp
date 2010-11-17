@@ -29,17 +29,22 @@ void Timeline::setTimeline(std::vector<GpsData*>& gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
-    for(unsigned int i = 0; i < gpsDatas.size(); ++i)
+    for(unsigned int personIndex = 0; personIndex < gpsDatas.size(); ++personIndex)
     {
-        for(unsigned int j = 0; j < gpsDatas[i]->getSegments().size(); ++j)
+		const std::vector<GpsSegment>& segments = gpsDatas[personIndex]->getSegments();
+        for(unsigned int segmentIndex = 0; segmentIndex < segments.size(); ++segmentIndex)
         {
-            for(unsigned int k = 0; k < gpsDatas[i]->getSegments()[j].getPoints().size(); ++k)
+			const std::vector<GpsPoint>& points = segments[segmentIndex].getPoints();
+            for(unsigned int pointIndex = 0; pointIndex < points.size(); ++pointIndex)
             {
-                std::string timeString = gpsDatas[i]->getSegments()[j].getPoints()[k].getTimestamp();
+				const GpsPoint& point = points[pointIndex];
+                std::string timeString = point.getTimestamp();
                 TimelineObject tmObj;
                 tmObj.timeString = timeString;
                 tmObj.secs = makeTimeObject(timeString);
-                tmObj.id = i;
+                tmObj.personId = personIndex;
+				tmObj.segmentId = segmentIndex;
+				tmObj.pointId = pointIndex;
                 m_timeline.push_back(tmObj);
 //                ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", tmObj.timeString.c_str(), tmObj.id, tmObj.secs);
             }
@@ -56,7 +61,7 @@ int Timeline::getNext()
 {
     if (m_timeline.size() > 0)
     {
-        int id = m_timeline[m_counter].id;
+        int id = m_timeline[m_counter].personId;
 //        ++m_counter;
 //        m_counter %= m_timeline.size();
 
