@@ -4,7 +4,6 @@
 
 #ifndef _LIVESTATISTICS_
 #define _LIVESTATISTICS_
-#define HOURS_PER_DAY 24
 
 
 #include "GpsView.h"
@@ -14,17 +13,16 @@
 class LiveStatistics : public GpsView
 {
 public:
-	LiveStatistics( unsigned int screenWidth, unsigned int screenHeight);
+	LiveStatistics( const unsigned int screenWidth, const unsigned int screenHeight);
 	virtual ~LiveStatistics( void);
-	void draw();
-	void drawAll();
-	void update();
+
+	void draw( void);
+	void drawAll( void);
+	void update( void);
 
 protected:
-	void updateHistogram( tm date);
-	unsigned int m_hoursHistogram[HOURS_PER_DAY];
-	int m_lastGpsPointId;
-	int m_lastGpsSegmentId;
+	virtual void updateHistogram( const tm date) = 0;
+	virtual void drawHistogram( void) = 0;
 };
 
 #endif // _LIVESTATISTICS_

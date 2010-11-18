@@ -309,6 +309,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\HoursStatistics.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\LiveStatistics.h"
 				>
 			</File>
@@ -350,6 +354,10 @@
 			</File>
 			<File
 				RelativePath=".\src\GpsView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\HoursStatistics.cpp"
 				>
 			</File>
 			<File

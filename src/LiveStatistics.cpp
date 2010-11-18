@@ -8,25 +8,20 @@
 #include <string>
 
 
-LiveStatistics::LiveStatistics( unsigned int screenWidth, unsigned int screenHeight) : 
-	m_lastGpsPointId(-1),
-	m_lastGpsSegmentId(-1),
+LiveStatistics::LiveStatistics( const unsigned int screenWidth, const unsigned int screenHeight) : 
 	GpsView( screenWidth, screenHeight)
 {
-	// Initialize the hour histogram with zero.
-	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
-	{
-		m_hoursHistogram[hourIndex] = 0;
-	}
+	// Nothing to initialize.
 }
 
 
 LiveStatistics::~LiveStatistics( void)
 {
+	// Nothing to delete.
 }
 
 
-void LiveStatistics::draw()
+void LiveStatistics::draw( void)
 {
 	// Draw background.
 	ofFill();
@@ -38,46 +33,26 @@ void LiveStatistics::draw()
 	ofSetColor( m_borderColor);
 	ofRect( m_positionCoordinates.x, m_positionCoordinates.y, m_width, m_height);
 
-
-	// Draw a line for each hour.
-	double yOffset = (double)m_height / (double)(HOURS_PER_DAY + 1);
-	double yPos = m_positionCoordinates.y + yOffset;
-	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
-	{
-		glBegin(GL_LINE_STRIP);
-		glVertex2d( m_positionCoordinates.x, yPos);
-		glVertex2d( m_positionCoordinates.x + m_hoursHistogram[hourIndex], yPos);
-		glEnd();
-		yPos += yOffset;
-	}
+	// Draw histogram.
+	drawHistogram();
 }
 
 
-void LiveStatistics::drawAll()
+void LiveStatistics::drawAll( void)
 {
+	// Not implemented yet.
 }
 
 
-void LiveStatistics::update()
+void LiveStatistics::update( void)
 {
-	// Retrieve current segment.
-	const GpsSegment& cSegment = m_walk->getCurrentSegment();
-
 	// Retrieve current point.
-	const GpsPoint& cPoint = m_walk->getCurrentPoint();
+	const GpsPoint& currentPoint = m_walk->getCurrentPoint();
 
 	// Extract current time stamp.
-	const std::string timestamp = cPoint.getTimestamp();
-	struct tm date = MakeTimeStruct(timestamp);
+	const std::string timestamp = currentPoint.getTimestamp();
+	struct tm date = MakeTimeStruct( timestamp);
 
 	// Update histogram.
 	updateHistogram( date);
 }
-
-
-void LiveStatistics::updateHistogram( tm date)
-{
-	// Create an hour histogram based on the time stamps.
-	++m_hoursHistogram[date.tm_hour];
-}
-

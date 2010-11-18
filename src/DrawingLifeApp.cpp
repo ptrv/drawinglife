@@ -4,7 +4,7 @@
 
 #include "DrawingLifeApp.h"
 #include "GpsData.h"
-#include "LiveStatistics.h"
+#include "HoursStatistics.h"
 #include <vector>
 #include <limits>
 #include <fstream>
@@ -442,7 +442,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
 
-		m_liveStatistics[personIndex] = new LiveStatistics( ofGetWidth(), ofGetHeight());
+		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
 		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
 
 
@@ -527,7 +527,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
 
-		m_liveStatistics[personIndex] = new LiveStatistics( ofGetWidth(), ofGetHeight());
+		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
 		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
 
 
@@ -644,7 +644,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
 
-		m_liveStatistics[personIndex] = new LiveStatistics( ofGetWidth(), ofGetHeight());
+		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
 		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
 
 

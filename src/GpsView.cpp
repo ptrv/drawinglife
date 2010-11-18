@@ -6,12 +6,12 @@
 #include <exception>
 
 
-GpsView::GpsView( unsigned int screenWidth, unsigned int screenHeight) : 
+GpsView::GpsView( const unsigned int screenWidth, const unsigned int screenHeight) : 
 	m_gpsData( 0),
 	m_walk( 0),
-	m_width( 400), 
-	m_height( 200),
-	m_margin( 10),
+	m_width( 600), 
+	m_height( 20),
+	m_margin( 15),
 	m_screenWidth( screenWidth),
 	m_screenHeight( screenHeight),
 	m_position( NORTHEAST),
@@ -19,10 +19,11 @@ GpsView::GpsView( unsigned int screenWidth, unsigned int screenHeight) :
 	m_borderColor( MakeHexARGB( 255, 255, 255, 255))
 {
 	setPosition( m_position);
+	m_fontHistogram.loadFont( "consola.ttf", 8);
 }
 
 
-GpsView::~GpsView(void)
+GpsView::~GpsView( void)
 {
 	if(m_walk)
 		m_walk = 0;
@@ -31,14 +32,14 @@ GpsView::~GpsView(void)
 }
 
 
-void GpsView::setGpsData(GpsData* gpsData)
+void GpsView::setGpsData( const GpsData* gpsData)
 {
 	m_gpsData = 0;
 	m_gpsData = gpsData;
 }
 
 
-void GpsView::setWalk(Walk* walk)
+void GpsView::setWalk( Walk* walk)
 {
 	m_walk = walk;
 }
@@ -84,7 +85,7 @@ void GpsView::setPosition( const Position position)
 		m_positionCoordinates = MakePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_screenHeight * 0.5f - m_height * 0.5f);
 		break;
 	default:
-		throw std::runtime_error("Undefined position");
+		throw std::runtime_error("Undefined position for statistic view.");
 		break;
 	}
 }
@@ -103,6 +104,13 @@ void GpsView::setDimensions( const float width, const float height)
 }
 
 
+void GpsView::setDimensions( const Point2D dimensions)
+{
+	m_width = dimensions.x;
+	m_height = dimensions.y;
+}
+
+
 void GpsView::setBackgroundColor( const ColorRGBA backgroundColor)
 {
 	m_backgroundColor = MakeHexARGB( backgroundColor);
@@ -115,9 +123,16 @@ void GpsView::setBorderColor( const ColorRGBA borderColor)
 }
 
 
-void GpsView::setScreenDimensions( unsigned int screenWidth, unsigned int screenHeight)
+void GpsView::setScreenDimensions( const unsigned int screenWidth, const unsigned int screenHeight)
 {
 	m_screenWidth = screenWidth;
 	m_screenHeight = screenHeight;
+	// Update position of the frame.
 	setPosition( m_position);
+}
+
+
+void GpsView::setFontForHistogram( const ofTrueTypeFont fontHistogram)
+{
+	m_fontHistogram = fontHistogram;
 }

@@ -9,9 +9,9 @@
 class Drawable
 {
 public:
-	virtual void draw() = 0;
-	virtual void drawAll() = 0;
-	virtual void update() = 0;
+	virtual void draw( void) = 0;
+	virtual void drawAll( void) = 0;
+	virtual void update( void) = 0;
 };
 
 

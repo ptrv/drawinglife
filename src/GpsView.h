@@ -21,12 +21,12 @@ public:
 	/**
 	 * \brief Default constructor. 
 	**/
-	GpsView( unsigned int screenWidth, unsigned int screenHeight);
+	GpsView( const unsigned int screenWidth, const unsigned int screenHeight);
 
 	/**
 	 * \brief Destructor. 
 	**/
-	virtual ~GpsView(void);
+	virtual ~GpsView( void);
 
 	/**
 	 * \brief Returns a GpsData object. 
@@ -38,18 +38,20 @@ public:
 	 * \brief Sets the GpsData.
 	 * \param gpsData A GpsData pointer.
 	**/
-	void setGpsData( GpsData* gpsData);
+	void setGpsData( const GpsData* gpsData);
 	void setWalk( Walk* walk);
 	void setPosition( const Point2D positionCoordinates);
 	void setPosition( const Position position);
 	void setMargin( const float margin);
 	void setDimensions( const float width, const float height);
+	void setDimensions( const Point2D dimensions);
 	void setBackgroundColor( const ColorRGBA backgroundColor);
 	void setBorderColor( const ColorRGBA borderColor);
-	void setScreenDimensions( unsigned int screenWidth, unsigned int screenHeight);
+	void setScreenDimensions( const unsigned int screenWidth, const unsigned int screenHeight);
+	void setFontForHistogram( const ofTrueTypeFont fontHistogram);
 
 protected:
-	GpsData* m_gpsData;		///< Container for gps data.
+	const GpsData* m_gpsData;		///< Container for gps data.
 	Walk* m_walk;
 
 	// Visual members.
@@ -63,6 +65,7 @@ protected:
 	unsigned int m_screenHeight;
 	int m_backgroundColor;
 	int m_borderColor;
+	ofTrueTypeFont m_fontHistogram;
 };
 
 
