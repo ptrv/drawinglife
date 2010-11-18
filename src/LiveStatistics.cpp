@@ -28,13 +28,13 @@ void LiveStatistics::draw( void)
 	ofSetColor( m_backgroundColor);
 	ofRect( m_positionCoordinates.x, m_positionCoordinates.y, m_width, m_height);
 
+	// Draw histogram.
+	drawHistogram();
+
 	// Draw border.
 	ofNoFill();
 	ofSetColor( m_borderColor);
 	ofRect( m_positionCoordinates.x, m_positionCoordinates.y, m_width, m_height);
-
-	// Draw histogram.
-	drawHistogram();
 }
 
 

@@ -4,6 +4,7 @@
 
 #ifndef _GPSVIEW_H_
 #define _GPSVIEW_H_
+#define MIN_HEIGHT 20
 
 
 #include "Drawable.h"
@@ -45,12 +46,20 @@ public:
 	void setMargin( const float margin);
 	void setDimensions( const float width, const float height);
 	void setDimensions( const Point2D dimensions);
+	/**
+	 * \brief Option to synchronize the width with the width of the walk.
+	 * The function must be called after setWalk() has been called.
+	 * \param syncWithWidthWalk Boolean switch.
+	**/
+	void setSyncWidthWithWalk( bool syncWithWidthWalk);
 	void setBackgroundColor( const ColorRGBA backgroundColor);
 	void setBorderColor( const ColorRGBA borderColor);
 	void setScreenDimensions( const unsigned int screenWidth, const unsigned int screenHeight);
 	void setFontForHistogram( const ofTrueTypeFont fontHistogram);
 
 protected:
+	void setWidthAsWalk( void);
+
 	const GpsData* m_gpsData;		///< Container for gps data.
 	Walk* m_walk;
 
@@ -63,6 +72,7 @@ protected:
 	float m_margin;
 	unsigned int m_screenWidth;
 	unsigned int m_screenHeight;
+	bool m_syncWidthWithWalk;
 	int m_backgroundColor;
 	int m_borderColor;
 	ofTrueTypeFont m_fontHistogram;

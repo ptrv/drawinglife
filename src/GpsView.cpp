@@ -9,8 +9,9 @@
 GpsView::GpsView( const unsigned int screenWidth, const unsigned int screenHeight) : 
 	m_gpsData( 0),
 	m_walk( 0),
-	m_width( 600), 
-	m_height( 20),
+	m_width( 600), // Default setting can be overwritten by setWidthAsWalk().
+	m_syncWidthWithWalk( true),
+	m_height( MIN_HEIGHT),
 	m_margin( 15),
 	m_screenWidth( screenWidth),
 	m_screenHeight( screenHeight),
@@ -100,14 +101,33 @@ void GpsView::setMargin( const float margin)
 void GpsView::setDimensions( const float width, const float height)
 {
 	m_width = width;
-	m_height = height;
+	if( height > MIN_HEIGHT)
+		m_height = height;
 }
 
 
 void GpsView::setDimensions( const Point2D dimensions)
 {
-	m_width = dimensions.x;
-	m_height = dimensions.y;
+	setDimensions( dimensions.x, dimensions.y);
+}
+
+
+void GpsView::setWidthAsWalk( void)
+{
+	if( m_walk)
+	{
+		// Set width as read from walk.
+		Point2D dim = m_walk->getDimensions();
+		m_width = dim.x;
+		// Update position of the frame.
+		setPosition( m_position);
+	}
+}
+
+
+void GpsView::setSyncWidthWithWalk( bool syncWithWidthWalk)
+{
+	m_syncWidthWithWalk = syncWithWidthWalk;
 }
 
 
@@ -127,6 +147,10 @@ void GpsView::setScreenDimensions( const unsigned int screenWidth, const unsigne
 {
 	m_screenWidth = screenWidth;
 	m_screenHeight = screenHeight;
+	if( m_syncWidthWithWalk)
+	{
+		setWidthAsWalk();
+	}
 	// Update position of the frame.
 	setPosition( m_position);
 }

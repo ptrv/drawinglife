@@ -47,6 +47,16 @@ public:
 	 * \return scaled UTM X value.
 	 */
 	double getScaledUtmX(double utmX);
+	/**
+	 * \brief Returns the position of the visible drawing area.
+	 * \return The position of the visible drawing area. 
+	**/
+	Point2D Walk::getPosition(void);
+	/**
+	 * \brief Returns the dimensions of the visible drawing area.
+	 * \return The dimensions of the visible drawing area. 
+	**/
+	Point2D Walk::getDimensions(void);
     /**
 	 * \brief Draw function for GpsData.
 	 */

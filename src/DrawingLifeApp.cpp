@@ -444,6 +444,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 
 		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
 		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
+		m_liveStatistics[personIndex]->setDimensions( 333, 120);
 
 
 
@@ -462,6 +463,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
 				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
 				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
+				m_liveStatistics[personIndex]->setSyncWidthWithWalk( true);
             }
             else
             {
