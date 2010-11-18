@@ -8,7 +8,6 @@
 #include "DrawingLifeIncludes.h"
 #include "DBReader.h"
 #include "Timeline.h"
-#include "GpsView.h"
 #include "Walk.h"
 #include "LiveStatistics.h"
 

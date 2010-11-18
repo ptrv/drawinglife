@@ -442,7 +442,8 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
 
-		m_liveStatistics[personIndex] = new LiveStatistics();
+		m_liveStatistics[personIndex] = new LiveStatistics( ofGetWidth(), ofGetHeight());
+		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
 
 
 
@@ -526,7 +527,8 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
 
-		m_liveStatistics[personIndex] = new LiveStatistics();
+		m_liveStatistics[personIndex] = new LiveStatistics( ofGetWidth(), ofGetHeight());
+		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
 
 
 
@@ -642,7 +644,8 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
 
-		m_liveStatistics[personIndex] = new LiveStatistics();
+		m_liveStatistics[personIndex] = new LiveStatistics( ofGetWidth(), ofGetHeight());
+		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
 
 
 
@@ -971,8 +974,10 @@ void DrawingLifeApp::windowResized(int w, int h)
     this->setViewAspectRatio();
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        if(m_walks[personIndex])
-            m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
+        if( m_walks[personIndex])
+            m_walks[personIndex]->setViewBounds( ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
+		if( m_liveStatistics[personIndex])
+			m_liveStatistics[personIndex]->setScreenDimensions( ofGetWidth(), ofGetHeight());
     }
 }
 
