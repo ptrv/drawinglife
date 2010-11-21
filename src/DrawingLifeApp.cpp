@@ -15,9 +15,6 @@
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp() :
     m_dbReader(0),
-	m_gpsDatas(0),
-	m_walks(0),
-	m_magicBoxes(0),
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
@@ -724,6 +721,7 @@ void DrawingLifeApp::fillViewAreaUTM()
     }
 }
 
+// TODO Add function for processing keys
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {

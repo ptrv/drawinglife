@@ -39,13 +39,14 @@ public:
     * \param timestamp
     * \param location
     */
-	void setGpsPoint(double latitude,
+	void setGpsPoint(int id,
+                     double latitude,
 					 double longitude,
 					 double elevation,
 					 const std::string& timestamp,
 					 const std::string& location)
 	{
-		++m_gpsPointId;
+		m_gpsPointId = id;
 		m_latitude = latitude;
 		m_longitude = longitude;
 		m_elevation = elevation;
