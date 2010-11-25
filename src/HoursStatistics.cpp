@@ -43,7 +43,7 @@ void HoursStatistics::drawHistogram( void)
 	double yPosTextBottom = bottom - 10;
 
 	// Horizontal line above the bottom.
-	ofSetColorWithAlpha( 0xffff0000);
+	ofSetColorWithHexColorARGB( 0xffff0000);
 	glBegin(GL_LINE_STRIP);
 	glVertex2d( left, yPosSpacerLine);
 	glVertex2d( right, yPosSpacerLine);
@@ -57,7 +57,7 @@ void HoursStatistics::drawHistogram( void)
 		// The actual value for the current hour.
 		unsigned int val = m_histogram[ hourIndex];
 
-		ofSetColorWithAlpha( m_lineColor);
+		ofSetColorWithHexColorARGB( m_lineColor);
 
 		// Draw statistic lines only if data is available.
 		// This avoids by-zero-devision.
@@ -77,7 +77,7 @@ void HoursStatistics::drawHistogram( void)
 
 			glEnd();
 
-			ofSetColorWithAlpha( m_textColor);
+			ofSetColorWithHexColorARGB( m_textColor);
 
 			// Centering the horizontal position of the top text up to three digits.
 			unsigned int xShiftValue = ( val < 10) ? 4 : ( val < 99) ? 7 : 10;
@@ -90,10 +90,10 @@ void HoursStatistics::drawHistogram( void)
 		else
 		{
 			// Placeholder text if no data can be displayed.
-			ofSetColorWithAlpha( m_textColor);
+			ofSetColorWithHexColorARGB( m_textColor);
 			m_fontHistogram.drawString( "No data available.", left + m_width * 0.5 - 50, top + availableHeight * 0.5);
 		}
-		ofSetColorWithAlpha( m_textColor);
+		ofSetColorWithHexColorARGB( m_textColor);
 
 		// Centering the horizontal position of the bottom text up to three digits.		
 		unsigned int xShiftHour = ( hourIndex < 10) ? 4 : (hourIndex < 99) ? 7 : 10;

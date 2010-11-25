@@ -40,7 +40,7 @@ public:
     int getColorForegroundB () const {return m_colorForegroundB; }
 	int getColorForeground() const 
 	{ 
-		return MakeHexARGB( 
+		return makeHexColorARGB( 
 			m_colorForegroundR, 
 			m_colorForegroundG, 
 			m_colorForegroundB, 
@@ -52,7 +52,7 @@ public:
     int getColorBackgroundB () const { return m_colorBackgroundB; }
 	int getColorBackground() const 
 	{
-		return MakeHexARGB(
+		return makeHexColorARGB(
 			m_colorBackgroundR,
 			m_colorForegroundG,
 			m_colorForegroundB);
@@ -63,7 +63,7 @@ public:
     int getColorViewboxB () const { return m_colorViewboxB; }
 	int getColorViewbox() const
 	{
-		return MakeHexARGB(
+		return makeHexColorARGB(
 			m_colorViewboxR,
 			m_colorViewboxG,
 			m_colorViewboxB);
@@ -75,7 +75,7 @@ public:
     int getColorInteractiveSegA () const { return m_colorInteractiveSegA; }
 	int getColorInteractiveSeg() const 
 	{
-		return MakeHexARGB(
+		return makeHexColorARGB(
 			m_colorInteractiveSegR,
 			m_colorInteractiveSegG,
 			m_colorInteractiveSegB,

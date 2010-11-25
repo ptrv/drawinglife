@@ -53,13 +53,13 @@ public:
 	 * \param syncWithWidthWalk Boolean switch.
 	**/
 	void setSyncWidthWithWalk( bool syncWithWidthWalk);
-	void setBackgroundColor( const ColorRGBA backgroundColor);
+	void setBackgroundColor( const ColorARGB backgroundColor);
 	void setBackgroundColor( const int backgroundColor);
-	void setBorderColor( const ColorRGBA borderColor);
+	void setBorderColor( const ColorARGB borderColor);
 	void setBorderColor( const int borderColor);
-	void setLineColor( const ColorRGBA lineColor);
+	void setLineColor( const ColorARGB lineColor);
 	void setLineColor( const int lineColor);
-	void setTextColor( const ColorRGBA textColor);
+	void setTextColor( const ColorARGB textColor);
 	void setTextColor( const int textColor);
 	void setScreenDimensions( const unsigned int screenWidth, const unsigned int screenHeight);
 	void setFontForHistogram( const ofTrueTypeFont fontHistogram);

@@ -416,7 +416,7 @@ Point2D Walk::getPosition(void)
 {
 	double x = getScaledUtmX( 0);
 	double y = getScaledUtmY( 0);
-	return MakePoint2D( x, y);
+	return makePoint2D( x, y);
 }
 
 
@@ -425,7 +425,7 @@ Point2D Walk::getDimensions(void)
 	Point2D pos = getPosition();
 	double w = getScaledUtmX( 1) - pos.x;
 	double h = getScaledUtmY( 1) - pos.y;
-	return MakePoint2D(w, h);
+	return makePoint2D(w, h);
 }
 
 

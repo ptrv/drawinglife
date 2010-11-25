@@ -27,7 +27,7 @@ void LiveStatistics::draw( void)
 
 	// Draw background.
 	ofFill();
-	ofSetColorWithAlpha( m_backgroundColor);
+	ofSetColorWithHexColorARGB( m_backgroundColor);
 	ofRect( m_positionCoordinates.x, m_positionCoordinates.y, m_width, m_height);
 
 	// Draw histogram.
@@ -35,7 +35,7 @@ void LiveStatistics::draw( void)
 
 	// Draw border.
 	ofNoFill();
-	ofSetColorWithAlpha( m_borderColor);
+	ofSetColorWithHexColorARGB( m_borderColor);
 	ofRect( m_positionCoordinates.x, m_positionCoordinates.y, m_width, m_height);
 
 	ofDisableAlphaBlending();

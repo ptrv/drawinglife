@@ -16,10 +16,10 @@ GpsView::GpsView( const unsigned int screenWidth, const unsigned int screenHeigh
 	m_screenWidth( screenWidth),
 	m_screenHeight( screenHeight),
 	m_position( NORTHEAST),
-	m_backgroundColor( MakeHexARGB( 127, 127, 127, 127)),
-	m_borderColor( MakeHexARGB( 255, 255, 255, 255)),
-	m_lineColor( MakeHexARGB( 255, 255, 255, 255)),
-	m_textColor( MakeHexARGB( 255, 255, 255, 255)),
+	m_backgroundColor( makeHexColorARGB( 127, 127, 127, 127)),
+	m_borderColor( makeHexColorARGB( 255, 255, 255, 255)),
+	m_lineColor( makeHexColorARGB( 255, 255, 255, 255)),
+	m_textColor( makeHexColorARGB( 255, 255, 255, 255)),
 	m_maxWidth( m_screenWidth - 2 * m_margin),
 	m_maxHeight( m_screenHeight - 2 * m_margin)
 {
@@ -63,31 +63,31 @@ void GpsView::setPosition( const Position position)
 	switch( position)
 	{
 	case NORTHWEST:
-		m_positionCoordinates = MakePoint2D( m_margin, m_margin);
+		m_positionCoordinates = makePoint2D( m_margin, m_margin);
 		break;
 	case NORTHEAST:
-		m_positionCoordinates = MakePoint2D( m_screenWidth - m_width - m_margin, m_margin);
+		m_positionCoordinates = makePoint2D( m_screenWidth - m_width - m_margin, m_margin);
 		break;
 	case SOUTHWEST:
-		m_positionCoordinates = MakePoint2D( m_margin, m_screenHeight - m_height - m_margin);
+		m_positionCoordinates = makePoint2D( m_margin, m_screenHeight - m_height - m_margin);
 		break;
 	case SOUTHEAST:
-		m_positionCoordinates = MakePoint2D( m_screenWidth - m_width - m_margin, m_screenHeight - m_height - m_margin);
+		m_positionCoordinates = makePoint2D( m_screenWidth - m_width - m_margin, m_screenHeight - m_height - m_margin);
 		break;
 	case NORTH:
-		m_positionCoordinates = MakePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_margin);
+		m_positionCoordinates = makePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_margin);
 		break;
 	case WEST:
-		m_positionCoordinates = MakePoint2D( m_margin, m_screenHeight * 0.5f - m_height * 0.5f);
+		m_positionCoordinates = makePoint2D( m_margin, m_screenHeight * 0.5f - m_height * 0.5f);
 		break;
 	case EAST:
-		m_positionCoordinates = MakePoint2D( m_screenWidth - m_width - m_margin, m_screenHeight * 0.5f - m_height * 0.5f);
+		m_positionCoordinates = makePoint2D( m_screenWidth - m_width - m_margin, m_screenHeight * 0.5f - m_height * 0.5f);
 		break;
 	case SOUTH:
-		m_positionCoordinates = MakePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_screenHeight - m_height - m_margin);
+		m_positionCoordinates = makePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_screenHeight - m_height - m_margin);
 		break;
 	case CENTER:
-		m_positionCoordinates = MakePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_screenHeight * 0.5f - m_height * 0.5f);
+		m_positionCoordinates = makePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_screenHeight * 0.5f - m_height * 0.5f);
 		break;
 	default:
 		throw std::runtime_error("Undefined position for statistic view.");
@@ -134,9 +134,9 @@ void GpsView::setSyncWidthWithWalk( bool syncWithWidthWalk)
 }
 
 
-void GpsView::setBackgroundColor( const ColorRGBA backgroundColor)
+void GpsView::setBackgroundColor( const ColorARGB backgroundColor)
 {
-	m_backgroundColor = MakeHexARGB( backgroundColor);
+	m_backgroundColor = makeHexColorARGB( backgroundColor);
 }
 
 
@@ -146,9 +146,9 @@ void GpsView::setBackgroundColor( const int backgroundColor)
 }
 
 
-void GpsView::setBorderColor( const ColorRGBA borderColor)
+void GpsView::setBorderColor( const ColorARGB borderColor)
 {
-	m_borderColor = MakeHexARGB( borderColor);
+	m_borderColor = makeHexColorARGB( borderColor);
 }
 
 
@@ -158,9 +158,9 @@ void GpsView::setBorderColor( const int borderColor)
 }
 
 
-void GpsView::setLineColor( const ColorRGBA lineColor)
+void GpsView::setLineColor( const ColorARGB lineColor)
 {
-	m_lineColor = MakeHexARGB( lineColor);
+	m_lineColor = makeHexColorARGB( lineColor);
 }
 
 
@@ -170,9 +170,9 @@ void GpsView::setLineColor( const int lineColor)
 }
 
 
-void GpsView::setTextColor( const ColorRGBA textColor)
+void GpsView::setTextColor( const ColorARGB textColor)
 {
-	m_textColor = MakeHexARGB( textColor);
+	m_textColor = makeHexColorARGB( textColor);
 }
 
 

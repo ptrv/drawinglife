@@ -72,13 +72,29 @@ struct GpsRegion
     double maxLon;
 };
 
+
+
+
+// -----------------------------------------------------------------------------
+// A struct for a 2 dimensional point.
+// -----------------------------------------------------------------------------
+
+/**
+ * \brief A point struct containing 2 dimensions.
+**/
 struct Point2D
 {
 	float x;
 	float y;
 };
 
-inline Point2D MakePoint2D( float x, float y)
+/**
+ * \brief Creates a point struct from 2 dimensions. 
+ * \param x	The x coordinate. 
+ * \param y	The y coordinate. 
+ * \return A point struct containing 2 dimensions. 
+**/
+inline Point2D makePoint2D( float x, float y)
 {
 	Point2D point;
 	point.x = x;
@@ -86,7 +102,16 @@ inline Point2D MakePoint2D( float x, float y)
 	return point;
 }
 
-struct ColorRGBA
+
+
+// -----------------------------------------------------------------------------
+// A color struct for 4 channels and conversion helpers.
+// -----------------------------------------------------------------------------
+
+/**
+ * \brief A color struct containing 4 channels.
+**/
+struct ColorARGB
 {
 	int r;
 	int g;
@@ -94,34 +119,74 @@ struct ColorRGBA
 	int a;
 };
 
-inline ColorRGBA MakeColorRGBA( int r, int g, int b, int a)
+/**
+ * \brief Creates a color struct from 4 channels.
+ * \param r	The red channel value.
+ * \param g	The green channel value. 
+ * \param b The blue channel value. 
+ * \param a	The alpha channel value. 
+ * \return A color struct containing 4 channels. 
+**/
+inline ColorARGB makeColorARGB( int r, int g, int b, int a)
 {
-	ColorRGBA color;
+	ColorARGB color;
+	color.a = a;
 	color.r = r;
 	color.g = g;
 	color.b = b;
-	color.a = a;
 	return color;
 }
 
-inline int MakeHexARGB( int r, int g, int b, int a = 255)
+/**
+ * \brief Creates a color struct from a hexadecimal color.
+ * \param hexColorARGB A hexadecimal color value containing 4 channels. 
+ * \return A color struct containing 4 channels. 
+**/
+inline ColorARGB makeColorARGB( int hexColorARGB)
 {
-	return 0xFF000000 | a << 24 | r << 16 | g << 8 | b;
+	int a = ( hexColorARGB >> 24) & 0xff;
+	int r = ( hexColorARGB >> 16) & 0xff;
+	int g = ( hexColorARGB >>  8) & 0xff;
+	int b = ( hexColorARGB >>  0) & 0xff;
+	return makeColorARGB( r, g, b, a);
 }
 
-inline int MakeHexARGB( ColorRGBA color)
+/**
+ * \brief Creates a hexadecimal color value from 3 or 4 channels.
+ * \param r	The red channel value.
+ * \param g	The green channel value. 
+ * \param b The blue channel value. 
+ * \param a	The optional alpha channel value with a default value. 
+ * \return A hexadecimal color value containing 4 channels. 
+**/
+inline int makeHexColorARGB( int r, int g, int b, int a = 255)
 {
-	return 0xFF000000 | color.a << 24 | color.r << 16 | color.g << 8 | color.b;
+	return a << 24 | r << 16 | g << 8 | b;
 }
 
-inline void ofSetColorWithAlpha( int hexColor)
+/**
+ * \brief Creates a hexadecimal color value from a color struct.
+ * \param color A color struct containing 4 channels.
+ * \return A hexadecimal color value containing 4 channels. 
+**/
+inline int makeHexColorARGB( ColorARGB color)
 {
-	int a = (hexColor >> 24) & 0xff;
-	int r = (hexColor >> 16) & 0xff;
-	int g = (hexColor >>  8) & 0xff;
-	int b = (hexColor >>  0) & 0xff;
-	ofSetColor(r, g, b, a);
+	return color.a << 24 | color.r << 16 | color.g << 8 | color.b;
 }
+
+/**
+ * \brief Sets the current color. Substitutes the framework implementation.
+ * \param hexColorARGB A hexadecimal color value containing 4 channels. 
+**/
+inline void ofSetColorWithHexColorARGB( int hexColorARGB)
+{
+	ColorARGB c = makeColorARGB( hexColorARGB);
+	ofSetColor(c.r, c.g, c.b, c.a);
+}
+
+
+
+
 
 
 inline tm MakeTimeStruct(std::string timeString)
@@ -159,12 +224,12 @@ inline tm MakeTimeStruct(std::string timeString)
  * \return The array length. 
 **/
 template<typename T, int size>
-inline int GetArrayLength(T(&)[size]) { return size; }
+inline int getArrayLength(T(&)[size]) { return size; }
 
 
 
 // -----------------------------------------------------------------------------
-// double version of openFramworks datatypes.
+// double version of openFramworks data types.
 // -----------------------------------------------------------------------------
 
 //----------------------------------------------------------
