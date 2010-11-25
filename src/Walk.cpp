@@ -411,6 +411,24 @@ double Walk::getScaledUtmY(double normalizedUtmY)
     return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
 
+
+Point2D Walk::getPosition(void)
+{
+	double x = getScaledUtmX( 0);
+	double y = getScaledUtmY( 0);
+	return MakePoint2D( x, y);
+}
+
+
+Point2D Walk::getDimensions(void)
+{
+	Point2D pos = getPosition();
+	double w = getScaledUtmX( 1) - pos.x;
+	double h = getScaledUtmY( 1) - pos.y;
+	return MakePoint2D(w, h);
+}
+
+
 const std::string& Walk::getCurrentGpsInfoDebug()
 {
     m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +

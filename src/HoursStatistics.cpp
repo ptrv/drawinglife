@@ -6,7 +6,8 @@
 
 
 HoursStatistics::HoursStatistics( const unsigned int screenWidth, const unsigned int screenHeight) :
-	LiveStatistics( screenWidth, screenHeight)
+	LiveStatistics( screenWidth, screenHeight),
+	m_valuesCount( 0)
 {
 	// Initialize the hour histogram with zeros.
 	for (unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
@@ -41,39 +42,61 @@ void HoursStatistics::drawHistogram( void)
 	// Position of the text at the bottom of the line. Relative to the lower boundary of the view.
 	double yPosTextBottom = bottom - 10;
 
+	// Horizontal line above the bottom.
+	ofSetColorWithAlpha( 0xffff0000);
+	glBegin(GL_LINE_STRIP);
+	glVertex2d( left, yPosSpacerLine);
+	glVertex2d( right, yPosSpacerLine);
+	glEnd();
+
+	// Available height is total height minus height of the bottom text.
+	float availableHeight = m_height - MIN_HEIGHT;
+
 	for( unsigned int hourIndex = 0; hourIndex < HOURS_PER_DAY; ++hourIndex)
 	{
 		// The actual value for the current hour.
 		unsigned int val = m_histogram[ hourIndex];
 
-		// Horizontal line above the bottom.
-		ofSetColor( 0xff0000);
-		glBegin(GL_LINE_STRIP);
-		glVertex2d( left, yPosSpacerLine);
-		glVertex2d( right, yPosSpacerLine);
-		glEnd();
+		ofSetColorWithAlpha( m_lineColor);
 
-		ofSetColor( m_borderColor);
+		// Draw statistic lines only if data is available.
+		// This avoids by-zero-devision.
+		if (m_valuesCount > 0)
+		{
+			// Scaled value height as its probability value.
+			float scaledProbabilityHeight = (val / (float)m_valuesCount) * availableHeight;
 
-		glBegin(GL_LINE_STRIP);
-		
-		// Point at the bottom of the histogram line.
-		glVertex2d( xPosLine, yPosSpacerLine - 1);
-		
-		// Point at the top of the histogram line.
-		double yPosLineTop = yPosSpacerLine - 1 - val;
-		glVertex2d( xPosLine, yPosLineTop);
+			glBegin(GL_LINE_STRIP);
+			
+			// Point at the bottom of the histogram line.
+			glVertex2d( xPosLine, yPosSpacerLine - 1);
+			
+			// Point at the top of the histogram line.
+			double yPosLineTop = yPosSpacerLine - 1 - scaledProbabilityHeight;
+			glVertex2d( xPosLine, yPosLineTop);
 
-		glEnd();
+			glEnd();
 
-		// Centering the horizontal position of the text.		
-		unsigned int xShiftValue = ( val < 10) ? 4 : ( val < 99) ? 7 : 10;
+			ofSetColorWithAlpha( m_textColor);
+
+			// Centering the horizontal position of the top text up to three digits.
+			unsigned int xShiftValue = ( val < 10) ? 4 : ( val < 99) ? 7 : 10;
+
+			// Text on top of the histogram line.
+			// The actual histogram value.
+			if( val > 0)
+				m_fontHistogram.drawString( ofToString( (int)val), xPosLine - xShiftValue, yPosLineTop - 8);
+		}
+		else
+		{
+			// Placeholder text if no data can be displayed.
+			ofSetColorWithAlpha( m_textColor);
+			m_fontHistogram.drawString( "No data available.", left + m_width * 0.5 - 50, top + availableHeight * 0.5);
+		}
+		ofSetColorWithAlpha( m_textColor);
+
+		// Centering the horizontal position of the bottom text up to three digits.		
 		unsigned int xShiftHour = ( hourIndex < 10) ? 4 : (hourIndex < 99) ? 7 : 10;
-
-		// Text on top of the histogram line.
-		// The actual histogram value.
-		if( val > 0)
-			m_fontHistogram.drawString( ofToString( (int)val), xPosLine - xShiftValue, yPosLineTop - 8);
 
 		// Text on the bottom of the histogram line.
 		// The hour value from 0 - 23.
@@ -81,9 +104,6 @@ void HoursStatistics::drawHistogram( void)
 		
 		// Shift horizontal position.
 		xPosLine += xOffset;
-
-
-
 	}
 }
 
@@ -92,4 +112,5 @@ void HoursStatistics::updateHistogram( const tm date)
 {
 	// Create an hour histogram based on the time stamps.
 	++m_histogram[ date.tm_hour];
+	++m_valuesCount;
 }

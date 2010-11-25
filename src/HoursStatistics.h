@@ -21,6 +21,7 @@ protected:
 	void drawHistogram( void);
 
 	unsigned int m_histogram[ HOURS_PER_DAY];
+	unsigned int m_valuesCount;
 };
 
 #endif // _HOURSSTATISTICS_H_

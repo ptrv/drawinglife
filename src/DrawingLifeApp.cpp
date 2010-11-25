@@ -293,7 +293,7 @@ void DrawingLifeApp::draw()
 				ofSetColor(AppSettings::instance().getColorForeground());
                 ofNoFill();
 				m_walks[personIndex]->draw();
-				m_liveStatistics[0]->draw();
+				m_liveStatistics[personIndex]->draw();
             }
         }
 		// -----------------------------------------------------------------------------
@@ -310,7 +310,7 @@ void DrawingLifeApp::draw()
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
 				m_walks[personIndex]->drawAll();
-				m_liveStatistics[0]->drawAll();
+				m_liveStatistics[personIndex]->drawAll();
             }
         }
         if(m_showFps)
@@ -441,11 +441,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
-
-		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
-		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
-		m_liveStatistics[personIndex]->setDimensions( 333, 120);
-
+		initializeStatisticViews(personIndex);
 
 
         m_dbReader = new DBReader(m_dbPath);
@@ -461,9 +457,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
                       m_gpsDatas[personIndex]->getSegments().size(),
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
-				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
-				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
-				m_liveStatistics[personIndex]->setSyncWidthWithWalk( true);
+				configureStatisticViews(personIndex);
             }
             else
             {
@@ -528,9 +522,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
-
-		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
-		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
+		initializeStatisticViews(personIndex);
 
 
 
@@ -548,8 +540,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
                       m_gpsDatas[personIndex]->getSegments().size(),
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
-				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
-				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
+				configureStatisticViews(personIndex);
             }
             else
             {
@@ -645,9 +636,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 
 		// -----------------------------------------------------------------------------
 		// Initialize live statistics.
-
-		m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
-		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
+		initializeStatisticViews(personIndex);
 
 
 
@@ -670,8 +659,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
                       m_gpsDatas[personIndex]->getSegments().size(),
                       m_gpsDatas[personIndex]->getTotalGpsPoints());
 				m_walks[personIndex]->setGpsData(m_gpsDatas[personIndex]);
-				m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
-				m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
+				configureStatisticViews(personIndex);
             }
             else
             {
@@ -704,6 +692,31 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 
     return dbOk;
 }
+
+
+void DrawingLifeApp::initializeStatisticViews(unsigned int personIndex)
+{
+	m_liveStatistics[personIndex] = new HoursStatistics( ofGetWidth(), ofGetHeight());
+	if (personIndex == 0)
+		m_liveStatistics[personIndex]->setPosition( SOUTHWEST);
+	if (personIndex == 1)
+		m_liveStatistics[personIndex]->setPosition( SOUTHEAST);
+
+	// Set dimensions. Width setting can be overwritten by syncWidthWithWalk() function.
+	m_liveStatistics[personIndex]->setDimensions( 0, 110);
+	m_liveStatistics[personIndex]->setLineColor( 0xffffff00);
+	m_liveStatistics[personIndex]->setBackgroundColor( 0xaa000000);
+	m_liveStatistics[personIndex]->setBorderColor( 0xff444444);
+}
+
+
+void DrawingLifeApp::configureStatisticViews(unsigned int personIndex)
+{
+	m_liveStatistics[personIndex]->setGpsData(m_gpsDatas[personIndex]);
+	m_liveStatistics[personIndex]->setWalk(m_walks[personIndex]);
+	m_liveStatistics[personIndex]->setSyncWidthWithWalk( true);
+}
+
 
 // -----------------------------------------------------------------------------
 

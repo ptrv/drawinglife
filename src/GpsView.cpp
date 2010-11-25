@@ -9,15 +9,19 @@
 GpsView::GpsView( const unsigned int screenWidth, const unsigned int screenHeight) : 
 	m_gpsData( 0),
 	m_walk( 0),
-	m_width( 600), // Default setting can be overwritten by setWidthAsWalk().
-	m_syncWidthWithWalk( true),
+	m_width( MIN_WIDTH), // Default setting can be overwritten by setWidthAsWalk().
 	m_height( MIN_HEIGHT),
+	m_syncWidthWithWalk( true),
 	m_margin( 15),
 	m_screenWidth( screenWidth),
 	m_screenHeight( screenHeight),
 	m_position( NORTHEAST),
 	m_backgroundColor( MakeHexARGB( 127, 127, 127, 127)),
-	m_borderColor( MakeHexARGB( 255, 255, 255, 255))
+	m_borderColor( MakeHexARGB( 255, 255, 255, 255)),
+	m_lineColor( MakeHexARGB( 255, 255, 255, 255)),
+	m_textColor( MakeHexARGB( 255, 255, 255, 255)),
+	m_maxWidth( m_screenWidth - 2 * m_margin),
+	m_maxHeight( m_screenHeight - 2 * m_margin)
 {
 	setPosition( m_position);
 	m_fontHistogram.loadFont( "consola.ttf", 8);
@@ -73,10 +77,10 @@ void GpsView::setPosition( const Position position)
 	case NORTH:
 		m_positionCoordinates = MakePoint2D( m_screenWidth * 0.5f - m_width * 0.5f, m_margin);
 		break;
-	case EAST:
+	case WEST:
 		m_positionCoordinates = MakePoint2D( m_margin, m_screenHeight * 0.5f - m_height * 0.5f);
 		break;
-	case WEST:
+	case EAST:
 		m_positionCoordinates = MakePoint2D( m_screenWidth - m_width - m_margin, m_screenHeight * 0.5f - m_height * 0.5f);
 		break;
 	case SOUTH:
@@ -100,9 +104,8 @@ void GpsView::setMargin( const float margin)
 
 void GpsView::setDimensions( const float width, const float height)
 {
-	m_width = width;
-	if( height > MIN_HEIGHT)
-		m_height = height;
+	m_width = (width < MIN_WIDTH) ? MIN_WIDTH : (width > m_maxWidth) ? m_maxWidth : width;
+	m_height = (height < MIN_HEIGHT) ? MIN_HEIGHT : (height > m_maxHeight) ? m_maxHeight : height;
 }
 
 
@@ -137,9 +140,45 @@ void GpsView::setBackgroundColor( const ColorRGBA backgroundColor)
 }
 
 
+void GpsView::setBackgroundColor( const int backgroundColor)
+{
+	m_backgroundColor = backgroundColor;
+}
+
+
 void GpsView::setBorderColor( const ColorRGBA borderColor)
 {
 	m_borderColor = MakeHexARGB( borderColor);
+}
+
+
+void GpsView::setBorderColor( const int borderColor)
+{
+	m_borderColor = borderColor;
+}
+
+
+void GpsView::setLineColor( const ColorRGBA lineColor)
+{
+	m_lineColor = MakeHexARGB( lineColor);
+}
+
+
+void GpsView::setLineColor( const int lineColor)
+{
+	m_lineColor = lineColor;
+}
+
+
+void GpsView::setTextColor( const ColorRGBA textColor)
+{
+	m_textColor = MakeHexARGB( textColor);
+}
+
+
+void GpsView::setTextColor( const int textColor)
+{
+	m_textColor = textColor;
 }
 
 

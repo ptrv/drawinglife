@@ -4,6 +4,7 @@
 
 #ifndef _GPSVIEW_H_
 #define _GPSVIEW_H_
+#define MIN_WIDTH 400
 #define MIN_HEIGHT 20
 
 
@@ -53,7 +54,13 @@ public:
 	**/
 	void setSyncWidthWithWalk( bool syncWithWidthWalk);
 	void setBackgroundColor( const ColorRGBA backgroundColor);
+	void setBackgroundColor( const int backgroundColor);
 	void setBorderColor( const ColorRGBA borderColor);
+	void setBorderColor( const int borderColor);
+	void setLineColor( const ColorRGBA lineColor);
+	void setLineColor( const int lineColor);
+	void setTextColor( const ColorRGBA textColor);
+	void setTextColor( const int textColor);
 	void setScreenDimensions( const unsigned int screenWidth, const unsigned int screenHeight);
 	void setFontForHistogram( const ofTrueTypeFont fontHistogram);
 
@@ -75,7 +82,11 @@ protected:
 	bool m_syncWidthWithWalk;
 	int m_backgroundColor;
 	int m_borderColor;
+	int m_lineColor;
+	int m_textColor;
 	ofTrueTypeFont m_fontHistogram;
+	float m_maxWidth;
+	float m_maxHeight;
 };
 
 

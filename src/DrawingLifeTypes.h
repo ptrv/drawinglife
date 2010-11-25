@@ -114,6 +114,15 @@ inline int MakeHexARGB( ColorRGBA color)
 	return 0xFF000000 | color.a << 24 | color.r << 16 | color.g << 8 | color.b;
 }
 
+inline void ofSetColorWithAlpha( int hexColor)
+{
+	int a = (hexColor >> 24) & 0xff;
+	int r = (hexColor >> 16) & 0xff;
+	int g = (hexColor >>  8) & 0xff;
+	int b = (hexColor >>  0) & 0xff;
+	ofSetColor(r, g, b, a);
+}
+
 
 inline tm MakeTimeStruct(std::string timeString)
 {

@@ -56,6 +56,11 @@ private:
 	bool loadGpsDataYearRange(std::vector<std::string> names, int yearStart, int yearEnd);
 
 	bool loadGpsDataWithSqlFile(std::vector<std::string> names, std::vector<std::string> m_sqlFilePaths);
+
+	void initializeStatisticViews(unsigned int personIndex);
+	void configureStatisticViews(unsigned int personIndex);
+
+
 	/**
 	* \brief Set square view area and center.
 	*/
