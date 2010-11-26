@@ -7,9 +7,9 @@
 
 
 /**
- * \brief An interface declaring basic functions for drawable views. 
+ * \brief An interface declaring basic functions for drawable views.
 **/
-class Drawable
+class DrawingLifeDrawable
 {
 public:
 	virtual void draw( void) = 0;

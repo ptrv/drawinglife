@@ -19,23 +19,23 @@ enum Position { NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST, NORTH, EAST, WEST, S
 /**
  * \brief A class to implement basic functions of a drawable GpsView.
 **/
-class GpsView : public Drawable
+class GpsView : public DrawingLifeDrawable
 {
 public:
 
 	/**
-	 * \brief Default constructor. 
+	 * \brief Default constructor.
 	**/
 	GpsView( const unsigned int screenWidth, const unsigned int screenHeight);
 
 	/**
-	 * \brief Destructor. 
+	 * \brief Destructor.
 	**/
 	virtual ~GpsView( void);
 
 	/**
-	 * \brief Returns a GpsData object. 
-	 * \return A GpsData pointer. 
+	 * \brief Returns a GpsData object.
+	 * \return A GpsData pointer.
 	**/
 	const GpsData& getGpsData() const { return *m_gpsData; }
 
