@@ -170,7 +170,7 @@ void Walk::draw()
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
-		const std::vector<std::vector<UtmPoint>>& gpsData = m_gpsData->getUTMPoints();
+		const std::vector<std::vector<UtmPoint> >& gpsData = m_gpsData->getUTMPoints();
 		const UtmPoint& utmPoint = gpsData[m_currentGpsSegment][m_currentGpsPoint];
 
         if(!m_interactiveMode)
@@ -223,7 +223,7 @@ void Walk::draw()
 
             for (int pointIndex = startPoint; pointIndex <= pointEnd; ++pointIndex)
             {
-				const std::vector<std::vector<UtmPoint>>& gpsData = m_gpsData->getUTMPoints();
+				const std::vector<std::vector<UtmPoint> >& gpsData = m_gpsData->getUTMPoints();
 				const UtmPoint& utmPoint = gpsData[segmentIndex][pointIndex];
 				bool isInBox = m_magicBox->isInBox(ofxPointd(utmPoint.x, utmPoint.y));
                 if(isInBox)
@@ -298,7 +298,7 @@ void Walk::drawAll()
 		int pointsCount = m_gpsData->getNormalizedUTMPointsGlobal()[segmentIndex].size();
 		for (unsigned int pointIndex = 0; pointIndex < pointsCount; ++pointIndex)
 		{
-			const std::vector<std::vector<UtmPoint>>& gpsData = m_gpsData->getUTMPoints();
+			const std::vector<std::vector<UtmPoint> >& gpsData = m_gpsData->getUTMPoints();
 			const UtmPoint& utmPoint = gpsData[segmentIndex][pointIndex];
             bool isInBox = m_magicBox->isInBox(ofxPointd(utmPoint.x, utmPoint.y));
             if(isInBox)

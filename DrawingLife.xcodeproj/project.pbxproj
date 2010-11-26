@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		D00055F112164236005025E1 /* MagicBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D00055EF12164236005025E1 /* MagicBox.cpp */; };
 		D010115F11637D870096EC19 /* GpsData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D010115E11637D870096EC19 /* GpsData.cpp */; };
+		D01FC285129FC395000F1C68 /* LiveStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01FC27F129FC395000F1C68 /* LiveStatistics.cpp */; };
+		D01FC286129FC395000F1C68 /* HoursStatistics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01FC281129FC395000F1C68 /* HoursStatistics.cpp */; };
+		D01FC287129FC395000F1C68 /* GpsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01FC283129FC395000F1C68 /* GpsView.cpp */; };
 		D0355F3311A77F3D0022191B /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0355F3111A77F3D0022191B /* Timeline.cpp */; };
 		D05CA27511C59FE800B8665E /* TimedCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05CA27311C59FE800B8665E /* TimedCounter.cpp */; };
 		D07156AF11515155008CEA46 /* DBReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D07156AE11515155008CEA46 /* DBReader.cpp */; };
@@ -118,6 +121,13 @@
 		D010115D11637D870096EC19 /* GpsData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsData.h; sourceTree = "<group>"; };
 		D010115E11637D870096EC19 /* GpsData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GpsData.cpp; sourceTree = "<group>"; };
 		D01011C81163FBD70096EC19 /* DrawingLifeIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeIncludes.h; sourceTree = "<group>"; };
+		D01FC27E129FC395000F1C68 /* LiveStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveStatistics.h; sourceTree = "<group>"; };
+		D01FC27F129FC395000F1C68 /* LiveStatistics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LiveStatistics.cpp; sourceTree = "<group>"; };
+		D01FC280129FC395000F1C68 /* HoursStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoursStatistics.h; sourceTree = "<group>"; };
+		D01FC281129FC395000F1C68 /* HoursStatistics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoursStatistics.cpp; sourceTree = "<group>"; };
+		D01FC282129FC395000F1C68 /* GpsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsView.h; sourceTree = "<group>"; };
+		D01FC283129FC395000F1C68 /* GpsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GpsView.cpp; sourceTree = "<group>"; };
+		D01FC284129FC395000F1C68 /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		D0355F3111A77F3D0022191B /* Timeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timeline.cpp; sourceTree = "<group>"; };
 		D0355F3211A77F3D0022191B /* Timeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timeline.h; sourceTree = "<group>"; };
 		D05CA27211C59FE800B8665E /* ofxTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxTimer.h; path = libs/ofxTimer/src/ofxTimer.h; sourceTree = "<group>"; };
@@ -512,6 +522,13 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D01FC27E129FC395000F1C68 /* LiveStatistics.h */,
+				D01FC27F129FC395000F1C68 /* LiveStatistics.cpp */,
+				D01FC280129FC395000F1C68 /* HoursStatistics.h */,
+				D01FC281129FC395000F1C68 /* HoursStatistics.cpp */,
+				D01FC282129FC395000F1C68 /* GpsView.h */,
+				D01FC283129FC395000F1C68 /* GpsView.cpp */,
+				D01FC284129FC395000F1C68 /* Drawable.h */,
 				D0EA3A831251648200C3E672 /* AppSettings.h */,
 				D0EA3A841251648200C3E672 /* AppSettings.cpp */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
@@ -726,6 +743,9 @@
 				D077082F120089950082EEBA /* Walk.cpp in Sources */,
 				D00055F112164236005025E1 /* MagicBox.cpp in Sources */,
 				D0EA3A851251648200C3E672 /* AppSettings.cpp in Sources */,
+				D01FC285129FC395000F1C68 /* LiveStatistics.cpp in Sources */,
+				D01FC286129FC395000F1C68 /* HoursStatistics.cpp in Sources */,
+				D01FC287129FC395000F1C68 /* GpsView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

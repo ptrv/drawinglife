@@ -51,12 +51,12 @@ public:
 	 * \brief Returns the position of the visible drawing area.
 	 * \return The position of the visible drawing area. 
 	**/
-	Point2D Walk::getPosition(void);
+	Point2D getPosition();
 	/**
 	 * \brief Returns the dimensions of the visible drawing area.
 	 * \return The dimensions of the visible drawing area. 
 	**/
-	Point2D Walk::getDimensions(void);
+	Point2D getDimensions();
     /**
 	 * \brief Draw function for GpsData.
 	 */
