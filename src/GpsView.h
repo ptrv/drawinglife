@@ -16,6 +16,9 @@
 enum Position { NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST, NORTH, EAST, WEST, SOUTH, CENTER };
 
 
+/**
+ * \brief A class to implement basic functions of a drawable GpsView.
+**/
 class GpsView : public Drawable
 {
 public:

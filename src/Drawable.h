@@ -6,6 +6,9 @@
 #define _DRAWABLE_H_
 
 
+/**
+ * \brief An interface declaring basic functions for drawable views. 
+**/
 class Drawable
 {
 public:

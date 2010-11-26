@@ -10,6 +10,9 @@
 #include "DrawingLifeIncludes.h"
 
 
+/**
+ * \brief A class to implement basic statistic functions to draw histograms. 
+**/
 class LiveStatistics : public GpsView
 {
 public:

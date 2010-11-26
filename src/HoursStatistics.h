@@ -10,6 +10,9 @@
 #include "LiveStatistics.h"
 
 
+/**
+ * \brief A class to visualize an hours histogram.
+**/
 class HoursStatistics : public LiveStatistics
 {
 public:
