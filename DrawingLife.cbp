@@ -192,6 +192,9 @@
 		<Unit filename="src/DBReader.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/Drawable.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/DrawingLifeApp.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>
@@ -214,6 +217,24 @@
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/GpsSegment.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/GpsView.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/GpsView.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/HoursStatistics.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/HoursStatistics.h">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/LiveStatistics.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/LiveStatistics.h">
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/Logger.h">
