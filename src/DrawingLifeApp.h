@@ -147,6 +147,8 @@ private:
 
     bool m_loopMode;
 
+    bool m_showStatistics;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_

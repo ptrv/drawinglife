@@ -291,12 +291,12 @@ void Walk::drawAll()
 {
 	ofNoFill();
 	int segmentCount = m_gpsData->getNormalizedUTMPoints().size();
-	for (unsigned int segmentIndex = 0; segmentIndex < segmentCount; ++segmentIndex)
+	for (int segmentIndex = 0; segmentIndex < segmentCount; ++segmentIndex)
 	{
 		glBegin(GL_LINE_STRIP);
 
 		int pointsCount = m_gpsData->getNormalizedUTMPointsGlobal()[segmentIndex].size();
-		for (unsigned int pointIndex = 0; pointIndex < pointsCount; ++pointIndex)
+		for (int pointIndex = 0; pointIndex < pointsCount; ++pointIndex)
 		{
 			const std::vector<std::vector<UtmPoint> >& gpsData = m_gpsData->getUTMPoints();
 			const UtmPoint& utmPoint = gpsData[segmentIndex][pointIndex];

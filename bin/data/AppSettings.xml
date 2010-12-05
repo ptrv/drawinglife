@@ -33,6 +33,7 @@
 	<fullscreen>0</fullscreen>
 	<hidecursor>1</hidecursor>
 	<showinfo>1</showinfo>
+	<showstats>1</showstats>
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->

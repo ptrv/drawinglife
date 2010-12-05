@@ -129,6 +129,8 @@ public:
 
     bool isLoopOn() const { return m_loop; }
 
+    bool showStats() const { return m_stats; }
+
 private:
 
     // -----------------------------------------------------------------------------
@@ -218,6 +220,8 @@ private:
     bool m_regionsOn;
 
     bool m_loop;
+
+    bool m_stats;
 };
 
 #endif // _APPSETTINGS_H_

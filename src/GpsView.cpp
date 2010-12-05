@@ -9,13 +9,13 @@
 GpsView::GpsView( const unsigned int screenWidth, const unsigned int screenHeight) : 
 	m_gpsData( 0),
 	m_walk( 0),
+	m_position( NORTHEAST),
 	m_width( MIN_WIDTH), // Default setting can be overwritten by setWidthAsWalk().
 	m_height( MIN_HEIGHT),
-	m_syncWidthWithWalk( true),
 	m_margin( 15),
 	m_screenWidth( screenWidth),
 	m_screenHeight( screenHeight),
-	m_position( NORTHEAST),
+	m_syncWidthWithWalk( true),
 	m_backgroundColor( makeHexColorARGB( 127, 127, 127, 127)),
 	m_borderColor( makeHexColorARGB( 255, 255, 255, 255)),
 	m_lineColor( makeHexColorARGB( 255, 255, 255, 255)),

@@ -49,7 +49,8 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_interactiveMode(false),
 	m_showKeyCommands(false),
 	m_showInfo(true),
-    m_loopMode(true)
+    m_loopMode(true),
+    m_showStatistics(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -100,6 +101,7 @@ void DrawingLifeApp::setup()
     m_showInfo = settings.showInfo();
     m_interactiveMode = settings.isInteractiveMode();
     m_loopMode = settings.isLoopOn();
+    m_showStatistics = settings.showStats();
 
 	// -----------------------------------------------------------------------------
 	// Database.
@@ -290,10 +292,13 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-				ofSetColor(AppSettings::instance().getColorForeground());
+                // TODO:
+				ofSetColorWithHexColorARGB(AppSettings::instance().getColorForeground());
                 ofNoFill();
+                ofEnableAlphaBlending();
 				m_walks[personIndex]->draw();
-				m_liveStatistics[personIndex]->draw();
+				if(m_showStatistics)
+                    m_liveStatistics[personIndex]->draw();
             }
         }
 		// -----------------------------------------------------------------------------
@@ -305,12 +310,13 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor(AppSettings::instance().getColorForeground());
+            ofSetColorWithHexColorARGB(AppSettings::instance().getColorForeground());
             ofNoFill();
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
 				m_walks[personIndex]->drawAll();
-				m_liveStatistics[personIndex]->drawAll();
+				if(m_showStatistics)
+                    m_liveStatistics[personIndex]->drawAll();
             }
         }
         if(m_showFps)
@@ -348,6 +354,7 @@ void DrawingLifeApp::showKeyCommands()
     stream << "f           : toggle fullscreen\n";
     stream << "p           : show fps\n";
     stream << "k           : show key commands\n";
+    stream << "s           : show live statistics\n";
     stream << "+           : zoom in\n";
     stream << "-           : zoom out\n";
     stream << "left arrow  : move view left\n";
@@ -800,6 +807,9 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 'k':
         m_showKeyCommands = !m_showKeyCommands;
+        break;
+    case 's':
+        m_showStatistics = !m_showStatistics;
         break;
 //    case 'c':
 //        for(unsigned int i = 0; i < m_walks.size(); ++i)

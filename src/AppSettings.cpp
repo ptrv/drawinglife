@@ -55,7 +55,8 @@ m_meridianAuto(true),
 m_meridianVal(0.0),
 m_showInfo(true),
 m_regionsOn(true),
-m_loop(true)
+m_loop(true),
+m_stats(false)
 {
     ofxXmlSettings m_xml;
 
@@ -189,6 +190,8 @@ m_loop(true)
     m_regions[4].maxLon = m_xml.getAttribute("settings:meridian:region5", "maxlon", 180.0);
 
     m_loop = m_xml.getValue("settings:loop", 1) == 1 ? true : false;
+
+    m_stats = m_xml.getValue("settings:showstats", 0) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
