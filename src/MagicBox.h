@@ -11,7 +11,7 @@ class MagicBox
 {
 public:
 
-    MagicBox(double size, double padding);
+    MagicBox(AppSettings* settings, double size, double padding);
     ~MagicBox();
 
     bool isInBox(const ofxPointd utmPoint);
@@ -53,6 +53,7 @@ private:
     ofxRectangled m_theBox;
     ofxRectangled m_paddedBox;
 
+    AppSettings* m_settings;
     double m_currentSize;
 
     double m_padding;

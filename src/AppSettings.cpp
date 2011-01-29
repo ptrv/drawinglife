@@ -1,10 +1,11 @@
 #include "AppSettings.h"
 #include "ofxXmlSettings.h"
 
-static const char* settingsPath = "AppSettings.xml";
+//static const char* settingsPath = "AppSettings.xml";
 
-AppSettings::AppSettings()
+AppSettings::AppSettings(std::string path)
 :
+m_settingsFilePath(path),
 m_fontTitleName(""),
 m_fontTitleSize(0),
 m_fontAuthorName(""),
@@ -19,9 +20,9 @@ m_colorForegroundB(255),
 m_colorBackgroundR(0),
 m_colorBackgroundG(0),
 m_colorBackgroundB(0),
-m_colorViewboxR(30),
-m_colorViewboxG(30),
-m_colorViewboxB(30),
+m_colorViewboxR(0),
+m_colorViewboxG(0),
+m_colorViewboxB(0),
 m_colorInteractiveSegR(255),
 m_colorInteractiveSegG(0),
 m_colorInteractiveSegB(0),
@@ -55,17 +56,18 @@ m_meridianAuto(true),
 m_meridianVal(0.0),
 m_showInfo(true),
 m_regionsOn(true),
-m_loop(true)
+m_loop(true),
+m_multiMode(false)
 {
     ofxXmlSettings m_xml;
 
-    if(m_xml.loadFile(settingsPath))
+    if(m_xml.loadFile(path))
     {
-        ofLog(OF_LOG_SILENT, "Settings file: %s loaded!\n", settingsPath);
+        ofLog(OF_LOG_SILENT, "Settings file: "+path+" loaded!\n");
     }
     else
     {
-        ofLog(OF_LOG_SILENT, "Loading %s failed!\n", settingsPath);
+        ofLog(OF_LOG_SILENT, "Loading "+path+" failed!\n");
     }
 
     m_xml.pushTag("ui");
@@ -89,9 +91,9 @@ m_loop(true)
     m_colorBackgroundG = m_xml.getAttribute("ui:color:background", "g", 0);
     m_colorBackgroundB = m_xml.getAttribute("ui:color:background", "b", 0);
 
-    m_colorViewboxR = m_xml.getAttribute("ui:color:viewbox", "r", 50);
-    m_colorViewboxG = m_xml.getAttribute("ui:color:viewbox", "g", 50);
-    m_colorViewboxB = m_xml.getAttribute("ui:color:viewbox", "b", 50);
+    m_colorViewboxR = m_xml.getAttribute("ui:color:viewbox", "r", 0);
+    m_colorViewboxG = m_xml.getAttribute("ui:color:viewbox", "g", 0);
+    m_colorViewboxB = m_xml.getAttribute("ui:color:viewbox", "b", 0);
 
     m_colorInteractiveSegR = m_xml.getAttribute("ui:color:interactiveseg", "r", 255);
     m_colorInteractiveSegG = m_xml.getAttribute("ui:color:interactiveseg", "g", 255);
@@ -190,12 +192,18 @@ m_loop(true)
 
     m_loop = m_xml.getValue("settings:loop", 1) == 1 ? true : false;
 
+    m_multiMode = m_xml.getValue("settings:multimode", 0) == 1 ? true : false;
+
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
 	if(m_printSettings)
 	{
 		this->print();
 	}
+}
+
+AppSettings::~AppSettings()
+{
 }
 
 void AppSettings::print()

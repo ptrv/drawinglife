@@ -12,8 +12,10 @@
 #undef max
 #endif
 
+//const char* DrawingLifeApp::settingsPath = "AppSettings.xml";
 //--------------------------------------------------------------
-DrawingLifeApp::DrawingLifeApp() :
+DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
+    m_settings(new AppSettings(settingsFile)),
     m_dbReader(0),
     m_isFullscreen(false),
     m_isDebugMode(false),
@@ -44,11 +46,13 @@ DrawingLifeApp::DrawingLifeApp() :
 	m_interactiveMode(false),
 	m_showKeyCommands(false),
 	m_showInfo(true),
-    m_loopMode(true)
+    m_loopMode(true),
+    m_multiMode(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
 {
+
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
         SAFE_DELETE(m_gpsDatas[personIndex]);
@@ -56,6 +60,7 @@ DrawingLifeApp::~DrawingLifeApp()
 		SAFE_DELETE(m_magicBoxes[personIndex]);
     }
     SAFE_DELETE(m_timeline);
+    SAFE_DELETE(m_settings);
     for(unsigned int i = 0; i < m_images.size(); ++i)
     {
         m_images[i].clear();
@@ -66,55 +71,55 @@ DrawingLifeApp::~DrawingLifeApp()
 void DrawingLifeApp::setup()
 {
     // -----------------------------------------------------------------------------
-    AppSettings& settings = AppSettings::instance();
+//    AppSettings& settings = AppSettings::instance();
 
-    ofSetLogLevel(settings.getLogLevel());
+    ofSetLogLevel(m_settings->getLogLevel());
 
 	// -----------------------------------------------------------------------------
 	// Fonts.
 	// -----------------------------------------------------------------------------
-	m_fontTitle.loadFont(settings.getFontTitleName(),
-						 settings.getFontTitleSize());
+	m_fontTitle.loadFont(m_settings->getFontTitleName(),
+						 m_settings->getFontTitleSize());
 
-    m_fontAuthor.loadFont(settings.getFontAuthorName(),
-                          settings.getFontAuthorSize());
+    m_fontAuthor.loadFont(m_settings->getFontAuthorName(),
+                          m_settings->getFontAuthorSize());
 
-    m_fontText.loadFont(settings.getFontTextName(),
-                        settings.getFontTextSize());
+    m_fontText.loadFont(m_settings->getFontTextName(),
+                        m_settings->getFontTextSize());
 
-    m_fontInfo.loadFont(settings.getFontInfoName(),
-                        settings.getFontInfoSize());
+    m_fontInfo.loadFont(m_settings->getFontInfoName(),
+                        m_settings->getFontInfoSize());
 
 	// -----------------------------------------------------------------------------
 	// Settings.
 	// -----------------------------------------------------------------------------
-    m_isDebugMode = settings.isDebugMode();
-    m_isFullscreen = settings.isFullscreen();
-    m_hideCursor = settings.hideCursor();
-    m_showInfo = settings.showInfo();
-    m_interactiveMode = settings.isInteractiveMode();
-    m_loopMode = settings.isLoopOn();
+    m_isDebugMode = m_settings->isDebugMode();
+    m_isFullscreen = m_settings->isFullscreen();
+    m_hideCursor = m_settings->hideCursor();
+    m_showInfo = m_settings->showInfo();
+    m_interactiveMode = m_settings->isInteractiveMode();
+    m_loopMode = m_settings->isLoopOn();
 
 	// -----------------------------------------------------------------------------
 	// Database.
 	// -----------------------------------------------------------------------------
-    m_dbQueryData.type = settings.getQueryType();
-    m_dbQueryData.yearStart = settings.getQueryYearStart();
-    m_dbQueryData.yearEnd = settings.getQueryYearEnd();
-    m_dbQueryData.city = settings.getQueryCity();
+    m_dbQueryData.type = m_settings->getQueryType();
+    m_dbQueryData.yearStart = m_settings->getQueryYearStart();
+    m_dbQueryData.yearEnd = m_settings->getQueryYearEnd();
+    m_dbQueryData.city = m_settings->getQueryCity();
 
 	// -----------------------------------------------------------------------------
-	// Visual settings.
+	// Visual m_settings->
 	// -----------------------------------------------------------------------------
-    m_imageAsCurrentPoint = settings.isCurrentPointImage();
+    m_imageAsCurrentPoint = m_settings->isCurrentPointImage();
 
     if(m_imageAsCurrentPoint)
     {
-        m_imageList = settings.getImageList();
+        m_imageList = m_settings->getImageList();
     }
 
-    m_numPerson = settings.getNumPerson();
-    m_names = settings.getNames();
+    m_numPerson = m_settings->getNumPerson();
+    m_names = m_settings->getNames();
 	// TODO 101028_1709_TP: Why are those vectors stuffed with 0?
 	// This hinders to check the vectors themselves for unequal 0 later.
 	// See affected TODO 101028_1710_TP.
@@ -132,29 +137,31 @@ void DrawingLifeApp::setup()
         m_viewPadding.push_back(15);
     }
 
-    m_dbPath = settings.getDatabasePath();
+    m_dbPath = m_settings->getDatabasePath();
     DBG_VAL(m_dbPath);
 
-    ofBackground(settings.getColorBackgroundR(),
-                 settings.getColorBackgroundG(),
-                 settings.getColorBackgroundB());
+    ofBackground(m_settings->getColorBackgroundR(),
+                 m_settings->getColorBackgroundG(),
+                 m_settings->getColorBackgroundB());
 
-    ofSetFrameRate(settings.getFrameRate());
+    ofSetFrameRate(m_settings->getFrameRate());
 
     ofEnableAlphaBlending();
 
 
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
+    m_multiMode = m_settings->isMultiMode();
+
     this->setViewAspectRatio();
     // -----------------------------------------------------------------------------
     loadCurrentPointImages();
 
     m_timeline = new Timeline();
 
-    m_sqlFilePaths = AppSettings::instance().getSqlFilePaths();
+    m_sqlFilePaths = m_settings->getSqlFilePaths();
 
-    if (settings.loadGpsOnStart() == 1)
+    if (m_settings->loadGpsOnStart() == 1)
     {
 		bool gpsDataAreLoaded = false;
         switch(m_dbQueryData.type)
@@ -209,7 +216,7 @@ void DrawingLifeApp::update()
             {
                 if(m_loopMode)
                 {
-                    for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+                    for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
                         int id = m_timeline->getNext();
                         if (id < (int)m_numPerson)
@@ -221,7 +228,7 @@ void DrawingLifeApp::update()
                 }
                 else
                 {
-                    for(int i = 0; i < AppSettings::instance().getDrawSpeed(); ++i)
+                    for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
                         if(!m_timeline->isLast())
                         {
@@ -265,14 +272,14 @@ void DrawingLifeApp::draw()
             {
                 if (m_isDebugMode)
                 {
-                    ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
+                    ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
 					ofDrawBitmapString(m_walks[personIndex]->getCurrentGpsInfoDebug(),
 									   30 + (ofGetWidth()/m_numPerson)*personIndex,
 									   30);
                 }
                 else if(m_showInfo)
                 {
-                    ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
+                    ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                     ofSetColor(0xffffff);
                     m_fontInfo.drawString(m_walks[personIndex]->getCurrentGpsInfo(),
                                           m_viewPadding[personIndex] + (ofGetWidth()/m_numPerson)*personIndex ,
@@ -281,10 +288,10 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                ofSetColor(AppSettings::instance().getColorForegroundR(),
-                           AppSettings::instance().getColorForegroundG(),
-                           AppSettings::instance().getColorForegroundB(),
-                           AppSettings::instance().getAlphaTrack());
+                ofSetColor(m_settings->getColorForegroundR(),
+                           m_settings->getColorForegroundG(),
+                           m_settings->getColorForegroundB(),
+                           m_settings->getAlphaTrack());
                 ofNoFill();
 				m_walks[personIndex]->draw();
             }
@@ -298,10 +305,10 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
-            ofSetColor(AppSettings::instance().getColorForegroundR(),
-                       AppSettings::instance().getColorForegroundG(),
-                       AppSettings::instance().getColorForegroundB(),
-                       AppSettings::instance().getAlphaTrack());
+            ofSetColor(m_settings->getColorForegroundR(),
+                       m_settings->getColorForegroundG(),
+                       m_settings->getColorForegroundB(),
+                       m_settings->getAlphaTrack());
             ofNoFill();
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
@@ -335,7 +342,7 @@ void DrawingLifeApp::drawStartScreen()
 
 void DrawingLifeApp::showKeyCommands()
 {
-    ofSetColor(255, 255, 255, AppSettings::instance().getAlphaLegend());
+    ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
     std::stringstream stream;
 
     stream << "a           : draw all gps points\n";
@@ -387,15 +394,15 @@ void DrawingLifeApp::processGpsData()
 //        }
         this->calculateGlobalMinMaxValues();
 
-        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+        Walk::setTrackAlpha(m_settings->getAlphaDot());
 
-        Walk::setDotSize(AppSettings::instance().getDotSize());
+        Walk::setDotSize(m_settings->getDotSize());
 
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
 //            m_walks[i]->setDotColors();
 
-            if(!AppSettings::instance().isBoundingBoxEnabled())
+            if(!m_settings->isBoundingBoxEnabled())
                 m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
             else
                 m_walks[i]->setMagicBox(m_magicBoxes[i]);
@@ -418,12 +425,12 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
     // get GpsData from database
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas[personIndex] = new GpsData();
+        m_gpsDatas[personIndex] = new GpsData(m_settings);
 
-        m_magicBoxes[personIndex] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
-                                        AppSettings::instance().getBoundingBoxPadding());
+        m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+                                        m_settings->getBoundingBoxPadding());
 
-        m_walks[personIndex] = new Walk(AppSettings::instance().getNameColors()[personIndex]);
+        m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(),
 											ofGetHeight(),
@@ -497,12 +504,12 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas[personIndex] = new GpsData();
+        m_gpsDatas[personIndex] = new GpsData(m_settings);
 
-        m_magicBoxes[personIndex] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
-                                        AppSettings::instance().getBoundingBoxPadding());
+        m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+                                        m_settings->getBoundingBoxPadding());
 
-        m_walks[personIndex] = new Walk(AppSettings::instance().getNameColors()[personIndex]);
+        m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
@@ -570,15 +577,15 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 //
 //        this->calculateGlobalMinMaxValues();
 //
-//        Walk::setTrackAlpha(AppSettings::instance().getAlphaDot());
+//        Walk::setTrackAlpha(m_settings->getAlphaDot());
 //
-//        Walk::setDotSize(AppSettings::instance().getDotSize());
+//        Walk::setDotSize(m_settings->getDotSize());
 //
 //        for(unsigned int i = 0; i < m_walks.size(); ++i)
 //        {
 //            m_walks[i]->setDotColors();
 //
-//            if(!AppSettings::instance().isBoundingBoxEnabled())
+//            if(!m_settings->isBoundingBoxEnabled())
 //                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
 //            else
 //                m_walks[i]->setMagicBox(m_magicBoxes[i]);
@@ -604,12 +611,12 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
     // get GpsData from database
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas[personIndex] = new GpsData();
+        m_gpsDatas[personIndex] = new GpsData(m_settings);
 
-        m_magicBoxes[personIndex] = new MagicBox(AppSettings::instance().getBoundingBoxSize(),
-                                        AppSettings::instance().getBoundingBoxPadding());
+        m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+                                        m_settings->getBoundingBoxPadding());
 
-        m_walks[personIndex] = new Walk(AppSettings::instance().getNameColors()[personIndex]);
+        m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
@@ -670,8 +677,14 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 
 void DrawingLifeApp::setViewAspectRatio()
 {
-    double width = ofGetWidth()/(int)m_numPerson;
-    double height = ofGetHeight();
+    double width;
+    double height;
+    if(m_multiMode)
+        width = ofGetWidth();
+    else
+        width = ofGetWidth()/(int)m_numPerson;
+
+    height = ofGetHeight();
 
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
@@ -679,6 +692,15 @@ void DrawingLifeApp::setViewAspectRatio()
         m_viewXOffset[personIndex] = 0;
         m_viewYOffset[personIndex] = 0;
 
+//        if(false)
+//        {
+//            m_viewMinDimension[personIndex] = height;
+//
+//            m_viewXOffset[personIndex] += m_viewPadding[personIndex];
+//            m_viewYOffset[personIndex] += m_viewPadding[personIndex];
+//        }
+//        else
+//        {
         // Set square view area and center.
         if (height < width)
         {
@@ -699,7 +721,11 @@ void DrawingLifeApp::setViewAspectRatio()
         m_viewXOffset[personIndex] += m_viewPadding[personIndex];
         m_viewYOffset[personIndex] += m_viewPadding[personIndex];
 
-        m_viewXOffset[personIndex] += width * personIndex;
+        if(!m_multiMode)
+        {
+            m_viewXOffset[personIndex] += width * personIndex;
+        }
+
 //        m_viewYOffset += m_viewPadding;
     }
 }
@@ -713,10 +739,12 @@ void DrawingLifeApp::fillViewAreaUTM()
         double w = m_walks[personIndex]->getScaledUtmX(1) - x;
         double h = m_walks[personIndex]->getScaledUtmY(1) - y;
         ofFill();
-        ofSetColor(AppSettings::instance().getColorViewboxR(),
-                   AppSettings::instance().getColorViewboxG(),
-                   AppSettings::instance().getColorViewboxB());
+        ofSetColor(m_settings->getColorViewboxR(),
+                   m_settings->getColorViewboxG(),
+                   m_settings->getColorViewboxB());
         ofRect(x, y, w, h);
+        if(m_multiMode)
+            break;
 
     }
 }
@@ -966,19 +994,19 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
         if (m_gpsDatas[i]->getMaxLat() > maxLat) maxLat = m_gpsDatas[i]->getMaxLon();
     }
 
-    bool isRegionOn = AppSettings::instance().isRegionsOn();
+    bool isRegionOn = m_settings->isRegionsOn();
     if(isRegionOn)
     {
         GpsData::setGlobalValues(minX, maxX, minY, maxY, 0.0);
     }
     else
     {
-        if(AppSettings::instance().isMeridianAuto())
+        if(m_settings->isMeridianAuto())
             GpsData::setGlobalValues(minX, maxX, minY, maxY, (minLon + (maxLon - minLon)/2));
         else
         {
             double lon0 = 0.0;
-            lon0 = AppSettings::instance().getMeridian();
+            lon0 = m_settings->getMeridian();
             GpsData::setGlobalValues(minX, maxX, minY, maxY, lon0);
         }
     }

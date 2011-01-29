@@ -24,7 +24,7 @@ double regionsLon0[5] = {-119.0, -74.0, 12.0, 116.0, 146.0};
 double regionsMinLon[5] = {-180.0, -100.0, -35.0, 65.0, 130.0};
 double regionsMaxLon[5] = {-100.0, -35.0, 65.0, 130.0, 180.0};
 
-GpsData::GpsData()
+GpsData::GpsData(const AppSettings* settings)
 :
 m_gpsDataId(0),
 m_user(""),
@@ -407,7 +407,7 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 
-    const GpsRegion* regions = AppSettings::instance().getRegions();
+    const GpsRegion* regions = m_settings->getRegions();
 
     for(unsigned int i = 0; i < m_segments.size(); ++i)
     {

@@ -12,7 +12,7 @@
 class Walk
 {
 public:
-	Walk(ofColor dotColor, bool magicBoxEnabled=true);
+	Walk(AppSettings* settings, ofColor dotColor, bool magicBoxEnabled=true);
 	~Walk();
 
 	//------------------------------------------------------------------------------
@@ -148,6 +148,8 @@ public:
 	void toggleTraced();
 
 private:
+
+    AppSettings* m_settings;
 
 	GpsData* m_gpsData;
 

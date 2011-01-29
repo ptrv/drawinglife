@@ -7,8 +7,9 @@
 double MagicBox::m_zoomLevels[] = {20000.0, 30000.0, 40000.0, 50000.0};
 int MagicBox::m_boxNum = 0;
 
-MagicBox::MagicBox(double size, double padding)
+MagicBox::MagicBox(AppSettings* settings, double size, double padding)
 :
+m_settings(settings),
 m_currentSize(size),
 m_padding(padding),
 m_defaultSize(10000.0)
@@ -218,7 +219,7 @@ const ofxRectangled MagicBox::getNormalizedPaddedBox()
 void MagicBox::setBoxes()
 {
     m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
-    if(AppSettings::instance().isInteractiveMode())
+    if(m_settings->isInteractiveMode())
         m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
     else
         m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));

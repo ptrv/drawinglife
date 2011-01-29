@@ -6,21 +6,12 @@
 
 #include "DrawingLifeIncludes.h"
 
-#define DEF_SINGLETON( NAME )    \
-public:                        \
-static NAME& instance()      \
-{                            \
-   static NAME _instance;    \
-   return _instance;         \
-}                            \
-private:                       \
-NAME();               \
-NAME( const NAME& );
-
 class AppSettings
 {
-    DEF_SINGLETON(AppSettings);
 public:
+    AppSettings(std::string path);
+    ~AppSettings();
+
 
     void print();
 
@@ -99,8 +90,10 @@ public:
 
     bool isLoopOn() const { return m_loop; }
 
-private:
+    bool isMultiMode() const { return m_multiMode; }
 
+private:
+    std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
     // Fonts
     // -----------------------------------------------------------------------------
@@ -188,6 +181,8 @@ private:
     bool m_regionsOn;
 
     bool m_loop;
+
+    bool m_multiMode;
 };
 
 #endif // _APPSETTINGS_H_

@@ -20,8 +20,9 @@ double Walk::minDrawY = std::numeric_limits<double>::max();
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
-Walk::Walk(ofColor dotColor, bool magicBoxEnabled)
+Walk::Walk(AppSettings* settings, ofColor dotColor, bool magicBoxEnabled)
 :
+m_settings(settings),
 m_gpsData(0),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
@@ -36,7 +37,7 @@ m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(0),
-m_maxPointsToDraw(AppSettings::instance().getWalkLength()),
+m_maxPointsToDraw(m_settings->getWalkLength()),
 m_currentPointIsImage(false),
 m_imgOffsetX(0),
 m_imgOffsetY(0),
@@ -51,13 +52,13 @@ m_drawTraced(true)
 	m_dotColor.g = dotColor.g;
 	m_dotColor.b = dotColor.b;
 
-	m_interactiveMode = AppSettings::instance().isInteractiveMode();
-	m_drawTraced = AppSettings::instance().drawTraced();
+	m_interactiveMode = m_settings->isInteractiveMode();
+	m_drawTraced = m_settings->drawTraced();
 
-    m_currentSegColor.r = AppSettings::instance().getColorInteractiveSegR();
-    m_currentSegColor.g = AppSettings::instance().getColorInteractiveSegG();
-    m_currentSegColor.b = AppSettings::instance().getColorInteractiveSegB();
-    m_currentSegColor.a = AppSettings::instance().getColorInteractiveSegA();
+    m_currentSegColor.r = m_settings->getColorInteractiveSegR();
+    m_currentSegColor.g = m_settings->getColorInteractiveSegG();
+    m_currentSegColor.b = m_settings->getColorInteractiveSegB();
+    m_currentSegColor.a = m_settings->getColorInteractiveSegA();
 }
 
 Walk::~Walk()
@@ -169,7 +170,7 @@ void Walk::draw()
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
-        if(!m_interactiveMode)
+        if(!m_interactiveMode && !m_settings->isMultiMode())
         {
             m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
                                                     m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
@@ -222,7 +223,11 @@ void Walk::draw()
 
             for (int j = startPoint; j <= pointEnd; ++j)
             {
-                bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+                bool isInBox = true;
+                if(m_settings->isBoundingBoxEnabled() && !m_settings->isMultiMode())
+                    isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+//                else
+//                    isInBox = true;
                 if(isInBox)
                 {
                     ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
@@ -291,7 +296,10 @@ void Walk::drawAll()
 
 		for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
 		{
-            bool isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+            bool isInBox = true;
+            if(m_settings->isBoundingBoxEnabled() && !m_settings->isMultiMode())
+                isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+//            if(isInBox)
             if(isInBox)
             {
                 const ofxPointd& tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);

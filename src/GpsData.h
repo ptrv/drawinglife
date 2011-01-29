@@ -19,7 +19,7 @@ class GpsData
 {
 
 public:
-	GpsData();
+	GpsData(const AppSettings* settings);
 	~GpsData();
 
 	// -----------------------------------------------------------------------------
@@ -233,6 +233,7 @@ private:
 
     static double m_lon0Global;
 
+    AppSettings* m_settings;
     int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;
 	std::string m_user;

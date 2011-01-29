@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-	<database>test.sqlite</database>
+	<database>BirminghamTestSplitFiles.sqlite</database>
 	<person>
-		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
-		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia</name>
+		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan1</name>
+		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia1</name>
+		<name r="50" g="255" b="0" a="55" sql="example.sql">Dan2</name>
+		<name r="20" g="130" b="130" a="55" sql="example.sql" >Sophia2</name>
+		<name r="178" g="155" b="221" a="55" sql="example.sql">Dan3</name>
+		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia3</name>
+		<name r="150" g="55" b="80" a="55" sql="example.sql">Dan4</name>
+		<name r="200" g="10" b="10" a="55" sql="example.sql" >Sophia4</name>
+		<name r="178" g="155" b="221" a="55" sql="example.sql">Dan5</name>
+		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia5</name>
+		<name r="200" g="10" b="10" a="55" sql="example.sql" >Sophia6</name>
 	</person>
 </data>
 <dbquery>
@@ -13,12 +22,12 @@
 	<!-- 3 = year range -->
 	<!-- 4 = city -->
 	<!-- 5 = sql file for each person-->
-	<type>3</type>
+	<type>4</type>
 	<time>
 		<yearstart>2007</yearstart>
 		<yearend>2009</yearend>
 	</time>
-	<city>Berlin</city>
+	<city>Birmingham</city>
 </dbquery>
 <settings>
 	<loop>1</loop>
@@ -26,13 +35,14 @@
 		<enabled>0</enabled>
 		<traced>1</traced>
 	</interactivemode>
+	<multimode>1</multimode>
 	<log level="0" />
 	<loadgpsonstart>1</loadgpsonstart>
 	<debugmode>0</debugmode>
 	<printvalues>1</printvalues>
 	<fullscreen>0</fullscreen>
 	<hidecursor>1</hidecursor>
-	<showinfo>1</showinfo>
+	<showinfo>0</showinfo>
 	<drawspeed>2</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->
@@ -40,7 +50,7 @@
 	<walklength>0</walklength>
 	<boundingbox>
 		<enabled>1</enabled>
-		<size>20000.0</size>	
+		<size>40000.0</size>	
 		<padding>2000.0</padding>
   	</boundingbox>
 	<meridian>
@@ -70,7 +80,7 @@
 	<color>
 		<foreground r="255" g="255" b="255" />
 		<background r="0" g="0" b="0" />
-		<viewbox r="30" g="30" b="30" />
+		<!-- <viewbox r="30" g="30" b="30" /> -->
 		<interactiveseg r="255" g="255" b="0" a="255" />
 	</color>
 	<imageascurrent>0</imageascurrent>

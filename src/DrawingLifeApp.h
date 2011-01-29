@@ -17,7 +17,7 @@
 class DrawingLifeApp : public ofBaseApp
 {
 public:
-	DrawingLifeApp();
+	DrawingLifeApp(std::string settingsFile);
 	virtual ~DrawingLifeApp();
 	void setup();
 	void update();
@@ -30,6 +30,8 @@ public:
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
+
+//	static const char* settingsPath;
 
 private:
     //---------------------------------------------------------------------------
@@ -82,6 +84,7 @@ private:
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
+    AppSettings* m_settings;
 	DBReader* m_dbReader;
 
 	std::vector<GpsData* > m_gpsDatas;
@@ -139,6 +142,8 @@ private:
     bool m_showInfo;
 
     bool m_loopMode;
+
+    bool m_multiMode;
 
 };
 
