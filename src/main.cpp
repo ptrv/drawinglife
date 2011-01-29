@@ -5,13 +5,17 @@
 #include "DrawingLifeIncludes.h"
 #include "DrawingLifeApp.h"
 #include "ofAppGlutWindow.h"
+
+#ifndef TARGET_OSX
 #include <tclap/CmdLine.h>
+#endif
 
 //========================================================================
 int main(int argc, const char* argv[] ){
 
     std::cout << "DrawingLifeApp, avp::ptr, 2010" << std::endl;
     std::cout << "The drawing of my life, plan b\n" << std::endl;
+#ifndef TARGET_OSX
     try {
 
         TCLAP::CmdLine cmd("DrawingLifeApp, avp::ptr, 2010\nThe drawing of my life, plan b", ' ', APP_VERSION_STR);
@@ -39,5 +43,14 @@ int main(int argc, const char* argv[] ){
 
 	} catch (TCLAP::ArgException &e)  // catch any exceptions
 	{ std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
+#else
+	ofAppGlutWindow window;
+    //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);
+	ofSetupOpenGL(&window, 1024, 768, OF_WINDOW);			// <-------- setup the GL context
+	
+	ofRunApp( new DrawingLifeApp("AppSettings.xml"));
+	
+#endif
 
 }
+	
