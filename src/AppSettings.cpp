@@ -68,6 +68,7 @@ m_multiMode(false)
     else
     {
         ofLog(OF_LOG_SILENT, "Loading "+path+" failed!\n");
+		OF_EXIT_APP(1);
     }
 
     m_xml.pushTag("ui");
