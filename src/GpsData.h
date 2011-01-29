@@ -19,7 +19,7 @@ class GpsData
 {
 
 public:
-	GpsData(const AppSettings* settings);
+	GpsData(AppSettings* settings);
 	~GpsData();
 
 	// -----------------------------------------------------------------------------

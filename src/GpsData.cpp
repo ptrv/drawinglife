@@ -24,8 +24,9 @@ double regionsLon0[5] = {-119.0, -74.0, 12.0, 116.0, 146.0};
 double regionsMinLon[5] = {-180.0, -100.0, -35.0, 65.0, 130.0};
 double regionsMaxLon[5] = {-100.0, -35.0, 65.0, 130.0, 180.0};
 
-GpsData::GpsData(const AppSettings* settings)
+GpsData::GpsData(AppSettings* settings)
 :
+m_settings(settings),
 m_gpsDataId(0),
 m_user(""),
 m_minLon(0.0),
