@@ -18,7 +18,7 @@ int main(int argc, const char* argv[] ){
 #ifndef TARGET_OSX
     try {
 
-        TCLAP::CmdLine cmd("DrawingLifeApp, avp::ptr, 2010\nThe drawing of my life, plan b", ' ', APP_VERSION_STR);
+        TCLAP::CmdLine cmd("DrawingLifeApp, avp::ptr, 2010\nThe drawing of my life, plan b", '=', APP_VERSION_STR);
 
         TCLAP::ValueArg<int> widthArg("","width","Application window width (default: 1024)",false, 1024, "width");
         TCLAP::ValueArg<int> heightArg("","height","Application window height (default: 768)",false, 768, "height");
