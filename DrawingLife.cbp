@@ -87,6 +87,7 @@
 			<Add directory="libs/geographiclib-1.1/include" />
 			<Add directory="libs/sqlite3x" />
 			<Add directory="libs/ofxTimer/src" />
+			<Add directory="libs/tclap-1.2.0/include" />
 		</Compiler>
 		<Linker>
 			<Add library="fmodex" />
