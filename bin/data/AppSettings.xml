@@ -51,7 +51,7 @@
 	<walklength>0</walklength>
 	<boundingbox>
 		<enabled>1</enabled>
-		<size>80000.0</size>	
+		<size>80000.0</size>
 		<padding>2000.0</padding>
   	</boundingbox>
 	<meridian>
@@ -91,6 +91,21 @@
 	</images>
 	<dotsize>5</dotsize>
 	<locationimages>
-		<!-- <image path="location_images/img1.png" name= "centralStation" lat="52.47771" lon="-1.89857" width="50" height="50" /> -->
+		<image>
+			<path>location_images/img.png</path>
+			<name>test</name>
+			<lat>52.47771</lat>
+			<lon>-1.89857</lon>
+            <width>24</width>
+			<height>24</height>
+			<alpha></alpha>
+                <anchor>
+<!--                 1 = percent, 2 = point-->
+                <type>1</type>
+                <posx>0.5</posx>
+                <posy>0.5</posy>
+                <show>0</show>
+			</anchor>
+		</image>
 	</locationimages>
 </ui>

@@ -204,14 +204,22 @@ m_sleepTime(0)
     m_locationImgData.clear();
     for(int i = 0; i < numlocImgTags; ++i)
     {
+        m_xml.pushTag("image",i);
         LocationImageData lid;
-        lid.path = m_xml.getAttribute("image", "path", "", i);
-        lid.name = m_xml.getAttribute("image", "name", "", i);
-        lid.gps.lat = m_xml.getAttribute("image", "lat", 0.0, i);
-        lid.gps.lon = m_xml.getAttribute("image", "lon", 0.0, i);
-        lid.width = m_xml.getAttribute("image", "width", 0.0, i);
-        lid.height = m_xml.getAttribute("image", "height", 0.0, i);
+        lid.path = m_xml.getValue("path", "");
+        lid.name = m_xml.getValue("name", "");
+        lid.gps.lat = m_xml.getValue("lat", 0.0);
+        lid.gps.lon = m_xml.getValue("lon", 0.0);
+        lid.width = m_xml.getValue("width", 0.0);
+        lid.height = m_xml.getValue("height", 0.0);
+        lid.alpha = m_xml.getValue("alpha", 255);
+        lid.anchorType = m_xml.getValue("anchor:type", 1);
+        lid.anchorX = m_xml.getValue("anchor:posx", 0.5);
+        lid.anchorY = m_xml.getValue("anchor:posy", 0.5);
+        lid.anchorShow = m_xml.getValue("anchor:show", 0) == 1 ? true : false;
+
         m_locationImgData.push_back(lid);
+        m_xml.popTag();
     }
 
     m_xml.popTag();

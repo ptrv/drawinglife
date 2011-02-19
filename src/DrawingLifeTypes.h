@@ -64,6 +64,11 @@ struct LocationImageData
     GpsCoord gps;
     float width;
     float height;
+    int alpha;
+    int anchorType;
+    float anchorX;
+    float anchorY;
+    bool anchorShow;
 };
 
 struct GpsDataIndex
