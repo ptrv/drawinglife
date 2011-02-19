@@ -133,7 +133,7 @@ public:
 
 	const GpsData& getGpsData() const { return *m_gpsData; }
 
-    void setCurrentPointImage(ofImage img);
+    void setCurrentPointImage(ofImage img, int alpha);
 
 	/**
 	 * \brief Sets the GpsData.
@@ -185,8 +185,6 @@ private:
     ofImage m_image;
 
     bool m_currentPointIsImage;
-	int m_imgOffsetX;
-	int m_imgOffsetY;
 
 	bool m_magicBoxEnabled;
 
@@ -194,6 +192,8 @@ private:
 	bool m_drawTraced;
 
 	ofColor m_currentSegColor;
+
+	int m_imageAlpha;
 };
 
 #endif // _WALK_H_

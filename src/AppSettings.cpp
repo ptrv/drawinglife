@@ -157,12 +157,19 @@ m_sleepTime(0)
     if(m_imageAsCurrentPoint)
     {
         m_xml.pushTag("ui");
-        m_xml.pushTag("images");
+        m_xml.pushTag("currentpointimages");
 
         int numImgTags = m_xml.getNumTags("image");
         for(int i = 0; i < numImgTags; ++i)
         {
-            m_imagePaths.push_back(m_xml.getValue("image", "", i));
+            m_xml.pushTag("image", i);
+            CurrentImageData cid;
+            cid.path = m_xml.getValue("path", "");
+            cid.width = m_xml.getValue("width", 0.0);
+            cid.height = m_xml.getValue("height", 0.0);
+            cid.alpha = m_xml.getValue("alpha", 255);
+            m_currImageData.push_back(cid);
+            m_xml.popTag();
         }
 
         m_xml.popTag();
@@ -286,9 +293,9 @@ void AppSettings::print()
     	ofLog(OF_LOG_SILENT, "Name %d: %s", i, m_names[i].c_str());
     	ofLog(OF_LOG_SILENT, "Name color %d: r=%d, g=%d, b=%d", i, (int)m_nameColors[i].r, (int)m_nameColors[i].g, (int)m_nameColors[i].b);
     }
-    for (unsigned int i=0; i < m_imagePaths.size();++i)
+    for (unsigned int i=0; i < m_currImageData.size();++i)
     {
-    	ofLog(OF_LOG_SILENT, "Current point image %d: %s", i, m_imagePaths[i].c_str());
+    	ofLog(OF_LOG_SILENT, "Current point image %d: %s", i, m_currImageData[i].path.c_str());
     }
     ofLog(OF_LOG_SILENT, "------------------------------\n");
 

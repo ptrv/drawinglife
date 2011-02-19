@@ -119,7 +119,7 @@ void DrawingLifeApp::setup()
 
     if(m_imageAsCurrentPoint)
     {
-        m_imageList = m_settings->getImageList();
+        m_imageList = m_settings->getCurrentImageData();
     }
 
     m_numPerson = m_settings->getNumPerson();
@@ -467,7 +467,7 @@ void DrawingLifeApp::processGpsData()
 
             if (m_imageAsCurrentPoint && (unsigned int)m_images.size() >= m_numPerson)
             {
-                m_walks[i]->setCurrentPointImage(m_images[i]);
+                m_walks[i]->setCurrentPointImage(m_images[i], m_imageList[i].alpha);
             }
         }
     }
@@ -1104,10 +1104,13 @@ void DrawingLifeApp::loadCurrentPointImages()
     for(unsigned int i = 0; i < m_imageList.size(); ++i)
     {
         ofImage tmpImg;
-        std::string str = "currentPointImages/"+m_imageList[i];
+        std::string str = m_imageList[i].path;
+        float width = m_imageList[i].width;
+        float height= m_imageList[i].height;
+
         if(tmpImg.loadImage(str))
         {
-			tmpImg.resize(10, 10);
+			tmpImg.resize(width, height);
             m_images.push_back(tmpImg);
             tmpImg.clear();
         }

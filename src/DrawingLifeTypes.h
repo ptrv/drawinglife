@@ -71,6 +71,14 @@ struct LocationImageData
     bool anchorShow;
 };
 
+struct CurrentImageData
+{
+    std::string path;
+    float width;
+    float height;
+    int alpha;
+};
+
 struct GpsDataIndex
 {
     int gpsPoint;

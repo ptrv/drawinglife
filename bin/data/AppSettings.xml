@@ -85,10 +85,14 @@
 		<interactiveseg r="255" g="255" b="0" a="255" />
 	</color>
 	<imageascurrent>0</imageascurrent>
-	<images>
-		<image></image>
-		<image></image>
-	</images>
+	<currentpointimages>
+		<image>
+            <path></path>
+            <width></width>
+			<height></height>
+            <alpha></alpha>
+        </image>
+	</currentpointimages>
 	<dotsize>5</dotsize>
 	<locationimages>
 		<image>

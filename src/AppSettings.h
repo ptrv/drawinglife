@@ -78,7 +78,7 @@ public:
     const std::vector<std::string >& getNames() const { return m_names; }
     const std::vector<ofColor >& getNameColors() const { return m_nameColors; }
     const std::vector<std::string >& getSqlFilePaths() const { return m_sqlFilePaths; }
-    const std::vector<std::string >& getImageList() const { return m_imagePaths; }
+    const std::vector<CurrentImageData >& getCurrentImageData() const { return m_currImageData; }
 
     bool isInteractiveMode() const { return m_interactiveMode; }
     bool drawTraced() const { return m_interactiveTraced; }
@@ -171,7 +171,7 @@ private:
     std::vector<std::string > m_names;
     std::vector<ofColor > m_nameColors;
     std::vector<std::string > m_sqlFilePaths;
-    std::vector<std::string > m_imagePaths;
+    std::vector<CurrentImageData > m_currImageData;
 
     bool m_interactiveMode;
     bool m_interactiveTraced;

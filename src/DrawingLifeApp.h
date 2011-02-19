@@ -128,7 +128,7 @@ private:
     double timeSum;
     float fpsToShow;
 
-    std::vector<std::string > m_imageList;
+    std::vector<CurrentImageData > m_imageList;
     std::vector<ofImage > m_images;
     bool m_imageAsCurrentPoint;
 

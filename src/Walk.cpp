@@ -39,11 +39,10 @@ m_currentGpsPointInfo(""),
 m_magicBox(0),
 m_maxPointsToDraw(m_settings->getWalkLength()),
 m_currentPointIsImage(false),
-m_imgOffsetX(0),
-m_imgOffsetY(0),
 m_magicBoxEnabled(true),
 m_interactiveMode(false),
-m_drawTraced(true)
+m_drawTraced(true),
+m_imageAlpha(255)
 {
     //	m_dotColor.a = 127;
 //	m_dotColor.a = m_dotAlpha;
@@ -245,8 +244,8 @@ void Walk::draw()
 
 		if (m_currentPointIsImage)
 		{
-			ofSetColor(0xffffff);
-			m_image.draw(getScaledUtmX(tmp.x)-m_imgOffsetX,getScaledUtmY(tmp.y)-m_imgOffsetY);
+			ofSetColor(255, 255, 255, m_imageAlpha);
+			m_image.draw(getScaledUtmX(tmp.x),getScaledUtmY(tmp.y));
 
 		}
 		else if(!m_interactiveMode)
@@ -484,11 +483,11 @@ void Walk::setMagicBoxStatic(MagicBox* magicBox)
 
 }
 
-void Walk::setCurrentPointImage(ofImage img)
+void Walk::setCurrentPointImage(ofImage img, int alpha)
 {
     m_image = img;
-	m_imgOffsetX = m_image.getWidth()/2;
-	m_imgOffsetY = m_image.getHeight()/2;
+    m_image.setAnchorPercent(0.5f, 0.5f);
+    m_imageAlpha = alpha;
     m_currentPointIsImage = true;
 }
 
