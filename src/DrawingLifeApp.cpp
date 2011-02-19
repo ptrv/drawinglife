@@ -236,7 +236,11 @@ void DrawingLifeApp::update()
                 {
                     if(shouldSleep)
                     {
+#if defined (TARGET_WIN32)
+                        Sleep(m_settings->getSleepTime()*1000);
+#else
                         sleep(m_settings->getSleepTime());
+#endif
                         shouldSleep = false;
                     }
                     for(int i = 0; i < m_settings->getDrawSpeed(); ++i)

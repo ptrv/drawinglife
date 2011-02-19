@@ -301,6 +301,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\LocationImage.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Logger.h"
 				>
 			</File>
@@ -334,6 +338,10 @@
 			</File>
 			<File
 				RelativePath=".\src\GpsData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\LocationImage.cpp"
 				>
 			</File>
 			<File
