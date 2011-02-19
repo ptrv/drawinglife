@@ -92,6 +92,10 @@ public:
 
     bool isMultiMode() const { return m_multiMode; }
 
+    int getSleepTime() const { return m_sleepTime; }
+
+    const std::vector<LocationImageData>& getLocationImageData() const { return m_locationImgData; }
+
 private:
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
@@ -183,6 +187,10 @@ private:
     bool m_loop;
 
     bool m_multiMode;
+
+    int m_sleepTime;
+
+    std::vector<LocationImageData> m_locationImgData;
 };
 
 #endif // _APPSETTINGS_H_

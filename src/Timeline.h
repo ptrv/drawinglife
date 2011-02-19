@@ -40,6 +40,18 @@ public:
     bool isLast();
 
     /**
+    * \brief Return true if count is last in timeline.
+    * \return true if count is last.
+    */
+    bool isFirst();
+
+    /**
+    * \brief Return true if count is last in timeline.
+    * \return true if count is last.
+    */
+    bool isTimelineIndex(unsigned int index);
+
+    /**
     * \brief Get the timeline.
     * \return vector of TimelineObjects.
     */

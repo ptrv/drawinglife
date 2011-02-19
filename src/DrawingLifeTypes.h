@@ -37,6 +37,7 @@ struct DBQueryData
     std::string city;
 };
 
+
 /**
  * \brief Represents latitude and longitude value of an Gps coordinate.
  *
@@ -54,6 +55,15 @@ struct UtmPoint
 {
     double x;
     double y;
+};
+
+struct LocationImageData
+{
+    std::string name;
+    std::string path;
+    GpsCoord gps;
+    float width;
+    float height;
 };
 
 struct GpsDataIndex

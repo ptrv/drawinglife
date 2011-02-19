@@ -73,6 +73,16 @@ bool Timeline::isLast()
     return m_counter == m_timeline.size()-1;
 }
 
+bool Timeline::isFirst()
+{
+    return m_counter == 0;
+}
+
+bool Timeline::isTimelineIndex(unsigned int index)
+{
+    return m_counter == index;
+}
+
 bool Timeline::isNextReady()
 {
 //    bool ready = true;

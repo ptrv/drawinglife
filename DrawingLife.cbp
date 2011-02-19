@@ -217,6 +217,12 @@
 		<Unit filename="src/GpsSegment.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/LocationImage.cpp">
+			<Option virtualFolder="src/" />
+		</Unit>
+		<Unit filename="src/LocationImage.h">
+			<Option virtualFolder="src/" />
+		</Unit>
 		<Unit filename="src/Logger.h">
 			<Option virtualFolder="src/" />
 		</Unit>

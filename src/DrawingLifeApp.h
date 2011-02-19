@@ -9,6 +9,7 @@
 #include "DBReader.h"
 #include "Timeline.h"
 #include "Walk.h"
+#include "LocationImage.h"
 
 /**
  *  \brief Main application class.
@@ -144,6 +145,8 @@ private:
     bool m_loopMode;
 
     bool m_multiMode;
+
+    std::vector<LocationImage*> m_locationImgs;
 
 };
 

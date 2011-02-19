@@ -57,7 +57,8 @@ m_meridianVal(0.0),
 m_showInfo(true),
 m_regionsOn(true),
 m_loop(true),
-m_multiMode(false)
+m_multiMode(false),
+m_sleepTime(0)
 {
     ofxXmlSettings m_xml;
 
@@ -194,6 +195,27 @@ m_multiMode(false)
     m_loop = m_xml.getValue("settings:loop", 1) == 1 ? true : false;
 
     m_multiMode = m_xml.getValue("settings:multimode", 0) == 1 ? true : false;
+
+    m_sleepTime = m_xml.getValue("settings:sleeptime", 0);
+
+    m_xml.pushTag("ui");
+    m_xml.pushTag("locationimages");
+    int numlocImgTags = m_xml.getNumTags("image");
+    m_locationImgData.clear();
+    for(int i = 0; i < numlocImgTags; ++i)
+    {
+        LocationImageData lid;
+        lid.path = m_xml.getAttribute("image", "path", "", i);
+        lid.name = m_xml.getAttribute("image", "name", "", i);
+        lid.gps.lat = m_xml.getAttribute("image", "lat", 0.0, i);
+        lid.gps.lon = m_xml.getAttribute("image", "lon", 0.0, i);
+        lid.width = m_xml.getAttribute("image", "width", 0.0, i);
+        lid.height = m_xml.getAttribute("image", "height", 0.0, i);
+        m_locationImgData.push_back(lid);
+    }
+
+    m_xml.popTag();
+    m_xml.popTag();
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 

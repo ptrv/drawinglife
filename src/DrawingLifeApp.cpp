@@ -66,6 +66,10 @@ DrawingLifeApp::~DrawingLifeApp()
         m_images[i].clear();
     }
     m_images.clear();
+    for(unsigned int i = 0; i < m_locationImgs.size(); ++i)
+    {
+        SAFE_DELETE(m_locationImgs[i]);
+    }
 }
 
 void DrawingLifeApp::setup()
@@ -194,6 +198,18 @@ void DrawingLifeApp::setup()
                 }
             }
         }
+
+        for(unsigned int i = 0; i < m_settings->getLocationImageData().size(); ++i)
+        {
+
+            LocationImage* lImg = new LocationImage(m_magicBoxes[0],
+                                                   m_settings->getLocationImageData()[i],
+                                                   m_viewMinDimension[0],
+                                                   m_viewPadding[0],
+                                                   m_viewXOffset[0],
+                                                   m_viewYOffset[0]);
+            m_locationImgs.push_back(lImg);
+        }
     }
     else
     {
@@ -206,6 +222,7 @@ void DrawingLifeApp::setup()
 }
 
 //--------------------------------------------------------------
+bool shouldSleep = false;
 void DrawingLifeApp::update()
 {
     if (m_isAnimation)
@@ -214,10 +231,26 @@ void DrawingLifeApp::update()
         {
             if(m_timeline->getTimeline().size() > 0)
             {
+
                 if(m_loopMode)
                 {
+                    if(shouldSleep)
+                    {
+                        sleep(m_settings->getSleepTime());
+                        shouldSleep = false;
+                    }
                     for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
+                        if(m_timeline->isFirst())
+                        {
+                            std::cout << "First timeline object!" << std::endl;
+                            for(unsigned int i = 0; i < m_walks.size(); ++i)
+                            {
+                                m_walks[i]->reset();
+                            }
+                            shouldSleep = true;
+                        }
+
                         int id = m_timeline->getNext();
                         if (id < (int)m_numPerson)
                         {
@@ -268,6 +301,10 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             fillViewAreaUTM();
             //---------------------------------------------------------------------------
+            for(unsigned int i = 0; i < m_locationImgs.size(); ++i)
+            {
+                m_locationImgs[i]->draw();
+            }
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
                 if (m_isDebugMode)
@@ -285,6 +322,8 @@ void DrawingLifeApp::draw()
                                           m_viewPadding[personIndex] + (ofGetWidth()/m_numPerson)*personIndex ,
                                           m_viewYOffset[personIndex] + 10);
                 }
+
+
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
@@ -293,7 +332,8 @@ void DrawingLifeApp::draw()
                            m_settings->getColorForegroundB(),
                            m_settings->getAlphaTrack());
                 ofNoFill();
-				m_walks[personIndex]->draw();
+                if(!shouldSleep)
+                    m_walks[personIndex]->draw();
             }
         }
 		// -----------------------------------------------------------------------------
@@ -315,11 +355,16 @@ void DrawingLifeApp::draw()
 				m_walks[personIndex]->drawAll();
             }
         }
+
         if(m_showFps)
             fpsDisplay();
 
         if(m_showKeyCommands)
             showKeyCommands();
+        if(m_timeline->isLast())
+        {
+
+        }
     }
 }
 // -----------------------------------------------------------------------------
