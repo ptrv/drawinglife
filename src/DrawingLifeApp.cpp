@@ -305,6 +305,16 @@ void DrawingLifeApp::draw()
             {
                 m_locationImgs[i]->draw();
             }
+            if(m_multiMode)
+            {
+                ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
+                ofSetColor(0xffffff);
+                m_fontInfo.drawString(m_timeline->getCurrentTime(),
+                                      m_viewPadding[0],
+                                      m_viewYOffset[0] + 10);
+
+            }
+
             for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
             {
                 if (m_isDebugMode)
@@ -322,7 +332,6 @@ void DrawingLifeApp::draw()
                                           m_viewPadding[personIndex] + (ofGetWidth()/m_numPerson)*personIndex ,
                                           m_viewYOffset[personIndex] + 10);
                 }
-
 
                 // -----------------------------------------------------------------------------
                 // Draw Gps data

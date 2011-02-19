@@ -67,6 +67,8 @@ public:
 
     void countUp();
 
+    std::string getCurrentTime();
+
 private:
     // -----------------------------------------------------------------------------
     /**

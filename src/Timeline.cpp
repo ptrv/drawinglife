@@ -152,3 +152,14 @@ void Timeline::sortTimeline()
     TimelineObject compareObj;
 	std::sort(m_timeline.begin(), m_timeline.end(), compareObj);
 }
+
+std::string Timeline::getCurrentTime()
+{
+    std::string timeString = m_timeline[m_counter].timeString;
+    int year, month, day, hour, min, sec;
+    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+    char buf[25];
+    sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
+    return string(buf);
+
+}
