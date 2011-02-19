@@ -202,12 +202,12 @@ void DrawingLifeApp::setup()
         for(unsigned int i = 0; i < m_settings->getLocationImageData().size(); ++i)
         {
 
-            LocationImage* lImg = new LocationImage(m_magicBoxes[0],
-                                                   m_settings->getLocationImageData()[i],
-                                                   m_viewMinDimension[0],
-                                                   m_viewPadding[0],
-                                                   m_viewXOffset[0],
-                                                   m_viewYOffset[0]);
+            LocationImage* lImg = new LocationImage(m_magicBoxes[0], m_settings->getLocationImageData()[i]);
+            lImg->setViewBounds(m_viewMinDimension[0],
+                                m_viewPadding[0],
+                                m_viewXOffset[0],
+                                m_viewYOffset[0]);
+
             m_locationImgs.push_back(lImg);
         }
     }
@@ -243,7 +243,7 @@ void DrawingLifeApp::update()
                     {
                         if(m_timeline->isFirst())
                         {
-                            std::cout << "First timeline object!" << std::endl;
+//                            std::cout << "First timeline object!" << std::endl;
                             for(unsigned int i = 0; i < m_walks.size(); ++i)
                             {
                                 m_walks[i]->reset();
@@ -1014,6 +1014,10 @@ void DrawingLifeApp::windowResized(int w, int h)
     {
         if(m_walks[personIndex])
             m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
+    }
+    for(unsigned int i = 0; i < m_locationImgs.size(); ++i)
+    {
+        m_locationImgs[i]->setViewBounds(m_viewMinDimension[0], m_viewPadding[0], m_viewXOffset[0], m_viewYOffset[0]);
     }
 }
 

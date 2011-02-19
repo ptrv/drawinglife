@@ -3,14 +3,14 @@
 
 using namespace GeographicLib;
 
-LocationImage::LocationImage(MagicBox* magicBox, LocationImageData lid, double minDim, double padding, double offsetX, double offsetY)
+LocationImage::LocationImage(MagicBox* magicBox, LocationImageData lid)
 :
 m_magicBox(magicBox),
 m_lid(lid),
-m_viewMinDimension(minDim),
-m_viewPadding(padding),
-m_viewXOffset(offsetX),
-m_viewYOffset(offsetY)
+m_viewMinDimension(0.0),
+m_viewPadding(0.0),
+m_viewXOffset(0.0),
+m_viewYOffset(0.0)
 {
     m_image.loadImage(lid.path);
     m_image.resize(lid.width, lid.height);
@@ -38,7 +38,7 @@ void LocationImage::draw()
     const ofxPointd& tmp = m_magicBox->getDrawablePoint(m_utm);
     m_image.draw(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
 //    ofSetColor(0xff0000);
-//    ofCircle(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y), 10);
+//    ofCircle(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y), 5);
 
 }
 
@@ -52,3 +52,13 @@ double LocationImage::getScaledUtmY(double normalizedUtmY)
     // Flip y coordinates ??
     return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
+
+void LocationImage::setViewBounds(double minDim, double padding, double offsetX, double offsetY)
+{
+    m_viewMinDimension = minDim;
+    m_viewPadding = padding;
+    m_viewXOffset = offsetX;
+    m_viewYOffset = offsetY;
+
+}
+

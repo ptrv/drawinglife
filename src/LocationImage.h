@@ -7,10 +7,11 @@
 class LocationImage
 {
 public:
-    LocationImage(MagicBox* magicBox, LocationImageData lid, double minDim, double padding, double offsetX, double offsetY);
+    LocationImage(MagicBox* magicBox, LocationImageData lid);
     virtual ~LocationImage();
 
 //    void setup(double minX, double maxX, double minY, double maxY);
+    void setViewBounds(double minDim, double padding, double offsetX, double offsetY);
     void draw();
 
 protected:
