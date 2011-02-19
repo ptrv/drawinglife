@@ -51,7 +51,7 @@ public:
 
     int getLogLevel() const { return m_logLevel; }
     int getWalkLength() const { return m_walkLength; }
-    int getDrawSpeed() const { return m_drawSpeed; }
+    float getDrawSpeed() const { return m_drawSpeed; }
     int getFrameRate() const { return m_frameRate; }
     bool isDebugMode() const { return m_debugMode; }
     bool loadGpsOnStart() const { return m_loadOnStart; }
@@ -143,7 +143,7 @@ private:
     int m_logLevel;
     bool m_debugMode;
     int m_walkLength;
-    int m_drawSpeed;
+    float m_drawSpeed;
     bool m_loadOnStart;
     int m_frameRate;
 

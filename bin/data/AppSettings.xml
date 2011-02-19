@@ -44,7 +44,7 @@
 	<fullscreen>0</fullscreen>
 	<hidecursor>1</hidecursor>
 	<showinfo>0</showinfo>
-	<drawspeed>2</drawspeed>
+	<drawspeed>0.1</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->
 	<!-- To draw all points set 0 (very cpu intensive) -->

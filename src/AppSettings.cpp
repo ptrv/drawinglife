@@ -147,7 +147,7 @@ m_sleepTime(0)
     m_xml.popTag();
     m_xml.popTag();
 
-    m_drawSpeed = m_xml.getValue("settings:drawspeed", 1)*m_numPerson;
+    m_drawSpeed = m_xml.getValue("settings:drawspeed", 1.0f)*m_numPerson;
     m_loadOnStart = m_xml.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_xml.getValue("settings:framerate", 30);
     m_fullscreen = m_xml.getValue("settings:fullscreen", 0) == 1 ? true : false;
