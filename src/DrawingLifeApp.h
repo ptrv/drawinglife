@@ -148,6 +148,8 @@ private:
 
     std::vector<LocationImage*> m_locationImgs;
 
+    bool m_pause;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_

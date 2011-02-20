@@ -47,7 +47,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
 	m_showKeyCommands(false),
 	m_showInfo(true),
     m_loopMode(true),
-    m_multiMode(false)
+    m_multiMode(false),
+    m_pause(false)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -225,7 +226,7 @@ void DrawingLifeApp::setup()
 bool shouldSleep = false;
 void DrawingLifeApp::update()
 {
-    if (m_isAnimation)
+    if (m_isAnimation && !m_pause)
     {
         if(!m_interactiveMode)
         {
@@ -964,6 +965,10 @@ void DrawingLifeApp::keyPressed  (int key)
             {
             	m_walks[i]->updateToNextSegment();
             }
+        }
+        else
+        {
+            m_pause = !m_pause;
         }
         break;
     case 8:
