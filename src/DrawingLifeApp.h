@@ -149,6 +149,7 @@ private:
     std::vector<LocationImage*> m_locationImgs;
 
     bool m_pause;
+    MagicBox* m_magicBox;
 
 };
 

@@ -48,7 +48,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
 	m_showInfo(true),
     m_loopMode(true),
     m_multiMode(false),
-    m_pause(false)
+    m_pause(false),
+    m_magicBox(0)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -58,8 +59,12 @@ DrawingLifeApp::~DrawingLifeApp()
     {
         SAFE_DELETE(m_gpsDatas[personIndex]);
 		SAFE_DELETE(m_walks[personIndex]);
-		SAFE_DELETE(m_magicBoxes[personIndex]);
+		if(!m_multiMode)
+            SAFE_DELETE(m_magicBoxes[personIndex]);
     }
+    if(m_multiMode)
+        SAFE_DELETE(m_magicBox);
+
     SAFE_DELETE(m_timeline);
     SAFE_DELETE(m_settings);
     for(unsigned int i = 0; i < m_images.size(); ++i)
@@ -105,6 +110,8 @@ void DrawingLifeApp::setup()
     m_interactiveMode = m_settings->isInteractiveMode();
     m_loopMode = m_settings->isLoopOn();
 
+    m_multiMode = m_settings->isMultiMode();
+
 	// -----------------------------------------------------------------------------
 	// Database.
 	// -----------------------------------------------------------------------------
@@ -133,7 +140,10 @@ void DrawingLifeApp::setup()
 //        m_names.push_back(m_settings.getValue("name", "", i));
         m_gpsDatas.push_back(0);
 		m_walks.push_back(0);
-		m_magicBoxes.push_back(0);
+
+		if(!m_multiMode)
+            m_magicBoxes.push_back(0);
+
         DBG_VAL(m_names[personIndex]);
 
         m_viewXOffset.push_back(0);
@@ -156,7 +166,6 @@ void DrawingLifeApp::setup()
 
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
-    m_multiMode = m_settings->isMultiMode();
 
     this->setViewAspectRatio();
     // -----------------------------------------------------------------------------
@@ -202,8 +211,12 @@ void DrawingLifeApp::setup()
 
         for(unsigned int i = 0; i < m_settings->getLocationImageData().size(); ++i)
         {
+            LocationImage* lImg;
+            if(m_multiMode)
+                lImg = new LocationImage(m_magicBox, m_settings->getLocationImageData()[i]);
+            else
+                lImg = new LocationImage(m_magicBoxes[0], m_settings->getLocationImageData()[i]);
 
-            LocationImage* lImg = new LocationImage(m_magicBoxes[0], m_settings->getLocationImageData()[i]);
             lImg->setViewBounds(m_viewMinDimension[0],
                                 m_viewPadding[0],
                                 m_viewXOffset[0],
@@ -433,10 +446,12 @@ void DrawingLifeApp::prepareGpsData()
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
         SAFE_DELETE(m_gpsDatas[personIndex]);
-        SAFE_DELETE(m_magicBoxes[personIndex]);
 		SAFE_DELETE(m_walks[personIndex]);
+		if(!m_multiMode)
+            SAFE_DELETE(m_magicBoxes[personIndex]);
     }
-
+    if(m_multiMode)
+        SAFE_DELETE(m_magicBox)
 }
 
 void DrawingLifeApp::processGpsData()
@@ -461,10 +476,16 @@ void DrawingLifeApp::processGpsData()
         {
 //            m_walks[i]->setDotColors();
 
-            if(!m_settings->isBoundingBoxEnabled())
+            if(!m_settings->isBoundingBoxEnabled() && !m_multiMode)
                 m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
             else
-                m_walks[i]->setMagicBox(m_magicBoxes[i]);
+            {
+                if(m_multiMode)
+                    m_walks[i]->setMagicBox(m_magicBox);
+                else
+                    m_walks[i]->setMagicBox(m_magicBoxes[i]);
+            }
+
 
             if (m_imageAsCurrentPoint && (unsigned int)m_images.size() >= m_numPerson)
             {
@@ -482,12 +503,21 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
     bool dbOk = false;
 
     // get GpsData from database
+    if(m_multiMode)
+    {
+        m_magicBox = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+                                    m_settings->getBoundingBoxPadding());
+    }
+
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
         m_gpsDatas[personIndex] = new GpsData(m_settings);
 
-        m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+        if(!m_multiMode)
+        {
+            m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
                                         m_settings->getBoundingBoxPadding());
+        }
 
         m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
 
@@ -561,13 +591,20 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 
     bool dbOk = false;
 
+    if(m_multiMode)
+    {
+        m_magicBox = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+                                        m_settings->getBoundingBoxPadding());
+    }
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
         m_gpsDatas[personIndex] = new GpsData(m_settings);
 
-        m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+        if(!m_multiMode)
+        {
+            m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
                                         m_settings->getBoundingBoxPadding());
-
+        }
         m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
@@ -667,14 +704,21 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 
     bool dbOk = false;
 
+    if(m_multiMode)
+    {
+        m_magicBox = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+                                        m_settings->getBoundingBoxPadding());
+    }
     // get GpsData from database
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
         m_gpsDatas[personIndex] = new GpsData(m_settings);
 
-        m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
+        if(!m_multiMode)
+        {
+            m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
                                         m_settings->getBoundingBoxPadding());
-
+        }
         m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
@@ -844,119 +888,140 @@ void DrawingLifeApp::keyPressed  (int key)
 //            m_walks[i]->setDotColors();
 //        }
         break;
-    case 49:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-    {
-        loadGpsDataCity(m_names, "Berlin");
-    }
-    else if(m_dbQueryData.type != DBReader::DB_QUERY_CITY)
-    {
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->toggleZoomLevel(1);
-        }
-    }
-    break;
-    case 50:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-    {
-        loadGpsDataCity(m_names, "London");
-    }
-    else
-    {
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->toggleZoomLevel(2);
-        }
-    }
-    break;
-    case 51:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-    {
-        loadGpsDataCity(m_names, "Barcelona");
-    }
-    else
-    {
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->toggleZoomLevel(3);
-        }
-    }
-    break;
-    case 52:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-    {
-        loadGpsDataCity(m_names, "Hamburg");
-    }
-    else
-    {
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->toggleZoomLevel(4);
-        }
-    }
-    break;
-    case 53:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-        loadGpsDataCity(m_names, "Vienna");
-        break;
-    case 54:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-        loadGpsDataCity(m_names,"New York");
-        break;
-    case 55:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-        loadGpsDataCity(m_names, "Tokyo");
-        break;
-    case 56:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-        loadGpsDataCity(m_names, "San Francisco");
-        break;
-    case 57:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-        loadGpsDataCity(m_names, "Bristol");
-        break;
-    case 48:
-    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
-        loadGpsDataCity(m_names, "Banff");
-        break;
+//    case 49:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    {
+//        loadGpsDataCity(m_names, "Berlin");
+//    }
+//    else if(m_dbQueryData.type != DBReader::DB_QUERY_CITY)
+//    {
+//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        {
+//            m_magicBoxes[i]->toggleZoomLevel(1);
+//        }
+//        if(m_multiMode)
+//            m_magicBox->toggleZoomLevel(1);
+//    }
+//    break;
+//    case 50:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    {
+//        loadGpsDataCity(m_names, "London");
+//    }
+//    else
+//    {
+//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        {
+//            m_magicBoxes[i]->toggleZoomLevel(2);
+//        }
+//        if(m_multiMode)
+//            m_magicBox->toggleZoomLevel(2);
+//    }
+//    break;
+//    case 51:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    {
+//        loadGpsDataCity(m_names, "Barcelona");
+//    }
+//    else
+//    {
+//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        {
+//            m_magicBoxes[i]->toggleZoomLevel(3);
+//        }
+//        if(m_multiMode)
+//            m_magicBox->toggleZoomLevel(3);
+//    }
+//    break;
+//    case 52:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    {
+//        loadGpsDataCity(m_names, "Hamburg");
+//    }
+//    else
+//    {
+//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        {
+//            m_magicBoxes[i]->toggleZoomLevel(4);
+//        }
+//        if(m_multiMode)
+//            m_magicBox->toggleZoomLevel(4);
+//    }
+//    break;
+//    case 53:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//        loadGpsDataCity(m_names, "Vienna");
+//        break;
+//    case 54:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//        loadGpsDataCity(m_names,"New York");
+//        break;
+//    case 55:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//        loadGpsDataCity(m_names, "Tokyo");
+//        break;
+//    case 56:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//        loadGpsDataCity(m_names, "San Francisco");
+//        break;
+//    case 57:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//        loadGpsDataCity(m_names, "Bristol");
+//        break;
+//    case 48:
+//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//        loadGpsDataCity(m_names, "Banff");
+//        break;
     case '+':
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->addToBoxSize(-500.0);
-        }
 
+        }
+        if(m_multiMode)
+            m_magicBox->addToBoxSize(-500.0);
         break;
     case '-':
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->addToBoxSize(500.0);
         }
+        if(m_multiMode)
+            m_magicBox->addToBoxSize(500.0);
         break;
     case OF_KEY_UP:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->goUp(500.0);
         }
+        if(m_multiMode)
+            m_magicBox->goUp(500.0);
         break;
     case OF_KEY_DOWN:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->goDown(500.0);
         }
+        if(m_multiMode)
+            m_magicBox->goDown(500.0);
         break;
        break;
     case OF_KEY_RIGHT:
+        m_magicBox->goRight(500.0);
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->goRight(500.0);
         }
+        if(m_multiMode)
         break;
     case OF_KEY_LEFT:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->goLeft(500.0);
         }
+        if(m_multiMode)
+            m_magicBox->goLeft(500.0);
+
         break;
     case 32:
         if(m_interactiveMode)
