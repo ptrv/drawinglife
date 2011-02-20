@@ -327,7 +327,10 @@ void DrawingLifeApp::draw()
             {
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                 ofSetColor(0xffffff);
-                m_fontInfo.drawString(m_timeline->getCurrentTime(),
+                std::string infoText = m_timeline->getCurrentTime();
+                if(m_pause)
+                    infoText.append(" (stopped)");
+                m_fontInfo.drawString(infoText,
                                       m_viewPadding[0],
                                       m_viewYOffset[0] + 10);
 
@@ -346,7 +349,10 @@ void DrawingLifeApp::draw()
                 {
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                     ofSetColor(0xffffff);
-                    m_fontInfo.drawString(m_walks[personIndex]->getCurrentGpsInfo(),
+                    std::string infoText = m_walks[personIndex]->getCurrentGpsInfo();
+                    if(m_pause)
+                        infoText.append(" (stopped)");
+                    m_fontInfo.drawString(infoText,
                                           m_viewPadding[personIndex] + (ofGetWidth()/m_numPerson)*personIndex ,
                                           m_viewYOffset[personIndex] + 10);
                 }
