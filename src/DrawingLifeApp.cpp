@@ -236,7 +236,7 @@ void DrawingLifeApp::setup()
 }
 
 //--------------------------------------------------------------
-bool shouldSleep = false;
+bool firstSleep = true;
 void DrawingLifeApp::update()
 {
     if (m_isAnimation && !m_pause)
@@ -248,33 +248,30 @@ void DrawingLifeApp::update()
 
                 if(m_loopMode)
                 {
-                    if(shouldSleep)
-                    {
-#if defined (TARGET_WIN32)
-                        Sleep(m_settings->getSleepTime()*1000);
-#else
-                        sleep(m_settings->getSleepTime());
-#endif
-                        shouldSleep = false;
-                    }
                     for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
-                        if(m_timeline->isFirst())
-                        {
-//                            std::cout << "First timeline object!" << std::endl;
-                            for(unsigned int i = 0; i < m_walks.size(); ++i)
-                            {
-                                m_walks[i]->reset();
-                            }
-                            shouldSleep = true;
-                        }
-
                         int id = m_timeline->getNext();
                         if (id < (int)m_numPerson)
                         {
                             m_walks[id]->update();
                         }
                         m_timeline->countUp();
+                        if(m_timeline->isFirst())
+                        {
+
+//                            std::cout << "First timeline object!" << std::endl;
+                            for(unsigned int i = 0; i < m_walks.size(); ++i)
+                            {
+                                m_walks[i]->reset();
+                            }
+#if defined (TARGET_WIN32)
+                            Sleep(m_settings->getSleepTime()*1000);
+#else
+                            sleep(m_settings->getSleepTime());
+#endif
+
+                        }
+
                     }
                 }
                 else
@@ -328,8 +325,8 @@ void DrawingLifeApp::draw()
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                 ofSetColor(0xffffff);
                 std::string infoText = m_timeline->getCurrentTime();
-                if(m_pause)
-                    infoText.append(" (stopped)");
+//                if(m_pause)
+//                    infoText.append(" (stopped)");
                 m_fontInfo.drawString(infoText,
                                       m_viewPadding[0],
                                       m_viewYOffset[0] + 10);
@@ -350,8 +347,8 @@ void DrawingLifeApp::draw()
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                     ofSetColor(0xffffff);
                     std::string infoText = m_walks[personIndex]->getCurrentGpsInfo();
-                    if(m_pause)
-                        infoText.append(" (stopped)");
+//                    if(m_pause)
+//                        infoText.append(" (stopped)");
                     m_fontInfo.drawString(infoText,
                                           m_viewPadding[personIndex] + (ofGetWidth()/m_numPerson)*personIndex ,
                                           m_viewYOffset[personIndex] + 10);
@@ -365,8 +362,7 @@ void DrawingLifeApp::draw()
                            m_settings->getColorForegroundB(),
                            m_settings->getAlphaTrack());
                 ofNoFill();
-                if(!shouldSleep)
-                    m_walks[personIndex]->draw();
+                m_walks[personIndex]->draw();
             }
         }
 		// -----------------------------------------------------------------------------
