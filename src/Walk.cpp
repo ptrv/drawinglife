@@ -74,42 +74,37 @@ Walk::~Walk()
 // -----------------------------------------------------------------------------
 void Walk::update()
 {
-    if (m_gpsData->getTotalGpsPoints() > 0)
-    {
-        if (m_gpsData->getNormalizedUTMPoints().size() > 0)
+        if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size())
         {
-            if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size()-1)
+            if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1)
             {
-                if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size() - 1)
-                {
-                    if (!m_firstPoint)
-                        ++m_currentGpsPoint;
-                    else
-                        m_firstPoint = false;
-                }
+                if (!m_firstPoint)
+                    ++m_currentGpsPoint;
                 else
-                {
-                    ++m_currentGpsSegment;
-                    m_currentGpsPoint = 0;
-                }
+                    m_firstPoint = false;
             }
             else
             {
-                if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size() - 1)
-                {
-                    ++m_currentGpsPoint;
-                }
-                else//	void setMinMaxRatio();
-
-                {
-                    m_currentGpsPoint = 0;
-                    m_currentGpsSegment = 0;
-                    m_currentPoint = -1;
-                }
+                ++m_currentGpsSegment;
+                m_currentGpsPoint = 0;
             }
-            ++m_currentPoint;
         }
-    }
+        else
+        {
+            if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1)
+            {
+                ++m_currentGpsPoint;
+            }
+            else//	void setMinMaxRatio();
+
+            {
+                std::cout << "I'm the last gps point" << std::endl;
+                m_currentGpsPoint = 0;
+                m_currentGpsSegment = 0;
+                m_currentPoint = -1;
+            }
+        }
+        ++m_currentPoint;
 }
 
 void Walk::updateToNextSegment()
