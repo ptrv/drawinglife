@@ -58,6 +58,7 @@ m_showInfo(true),
 m_regionsOn(true),
 m_loop(true),
 m_multiMode(false),
+m_multiModeInfo(false),
 m_sleepTime(0)
 {
     ofxXmlSettings m_xml;
@@ -202,6 +203,7 @@ m_sleepTime(0)
     m_loop = m_xml.getValue("settings:loop", 1) == 1 ? true : false;
 
     m_multiMode = m_xml.getValue("settings:multimode", 0) == 1 ? true : false;
+    m_multiModeInfo = m_xml.getValue("settings:multimodeinfo", 0) == 1 ? true : false;
 
     m_sleepTime = m_xml.getValue("settings:sleeptime", 0);
 

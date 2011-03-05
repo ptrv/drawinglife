@@ -48,6 +48,7 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
 	m_showInfo(true),
     m_loopMode(true),
     m_multiMode(false),
+    m_multiModeInfo(false),
     m_pause(false),
     m_magicBox(0)
 {
@@ -111,6 +112,7 @@ void DrawingLifeApp::setup()
     m_loopMode = m_settings->isLoopOn();
 
     m_multiMode = m_settings->isMultiMode();
+    m_multiModeInfo = m_settings->isMultiModeInfo();
 
 	// -----------------------------------------------------------------------------
 	// Database.
@@ -320,7 +322,7 @@ void DrawingLifeApp::draw()
             {
                 m_locationImgs[i]->draw();
             }
-            if(m_multiMode)
+            if(m_multiMode && m_multiModeInfo)
             {
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                 ofSetColor(0xffffff);

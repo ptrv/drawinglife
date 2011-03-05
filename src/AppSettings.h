@@ -91,6 +91,7 @@ public:
     bool isLoopOn() const { return m_loop; }
 
     bool isMultiMode() const { return m_multiMode; }
+    bool isMultiModeInfo() const { return m_multiModeInfo; }
 
     int getSleepTime() const { return m_sleepTime; }
 
@@ -187,6 +188,7 @@ private:
     bool m_loop;
 
     bool m_multiMode;
+    bool m_multiModeInfo;
 
     int m_sleepTime;
 

@@ -145,6 +145,7 @@ private:
     bool m_loopMode;
 
     bool m_multiMode;
+    bool m_multiModeInfo;
 
     std::vector<LocationImage*> m_locationImgs;
 
