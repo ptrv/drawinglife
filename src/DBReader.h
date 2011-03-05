@@ -8,7 +8,6 @@
 #include "GpsData.h"
 #include <string>
 #include "sqlite3x.hpp"
-using namespace sqlite3x;
 
 /**
  * \brief Class for reading from database using sqlite3x.
@@ -26,7 +25,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-	DBReader(const std::string& dbpath);
+	DBReader(const std::string& dbpath, bool useSpeed=false);
 	~DBReader();
 	/**
 	* \brief Open connection to sqlite database.
@@ -129,8 +128,10 @@ private:
 	// -----------------------------------------------------------------------------
 
 	string m_dbPath;
-	sqlite3_connection* m_dbconn;
-	sqlite3_transaction* m_trans;
+	sqlite3x::sqlite3_connection* m_dbconn;
+	sqlite3x::sqlite3_transaction* m_trans;
+
+	bool m_useSpeed;
 
 };
 #endif // _DBREADER_H_

@@ -15,6 +15,7 @@ class GpsPoint
 	double m_latitude;
 	double m_longitude;
 	double m_elevation;
+	double m_speed;
 	std::string m_timestamp;
 	std::string m_location;
 
@@ -25,6 +26,7 @@ public:
 	m_latitude(0.0),
 	m_longitude(0.0),
 	m_elevation(0.0),
+	m_speed(0.0),
 	m_timestamp(""),
 	m_location("")
 	{};
@@ -44,7 +46,8 @@ public:
 					 double longitude,
 					 double elevation,
 					 const std::string& timestamp,
-					 const std::string& location)
+					 const std::string& location,
+					 double speed)
 	{
 		m_gpsPointId = id;
 		m_latitude = latitude;
@@ -52,6 +55,7 @@ public:
 		m_elevation = elevation;
 		m_timestamp = timestamp;
 		m_location = location;
+		m_speed = speed;
 	}
 	//---------------------------------------------------------------------------
 	/**
@@ -82,6 +86,10 @@ public:
 	*/
 	const std::string& getTimestamp() const { return m_timestamp; }
 	// -----------------------------------------------------------------------------
+
+	double getSpeed() const { return m_speed; }
+
+	// -----------------------------------------------------------------------------
 	/**
 	* \brief Clear GpsPoint object.
 	*/
@@ -93,6 +101,7 @@ public:
 		m_elevation = 0;
 		m_timestamp = "";
 		m_location = "";
+		m_speed= 0.0;
 	}
 };
 

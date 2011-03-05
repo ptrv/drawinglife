@@ -224,6 +224,7 @@ void Walk::draw()
 //                    isInBox = true;
                 if(isInBox)
                 {
+//                    ofSetColor(255, 0,0);
                     ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
                     glVertex2d(getScaledUtmX(tmp.x),
                                getScaledUtmY(tmp.y));

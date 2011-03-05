@@ -393,6 +393,9 @@ void GpsData::calculateUtmPoints()
                         m_segments[i].getPoints()[j].getLatitude(),
                         m_segments[i].getPoints()[j].getLongitude(),
                         utmP.x, utmP.y, gamma, k);
+
+            utmP.speed = m_segments[i].getPoints()[j].getSpeed();
+
             utmVec.push_back(utmP);
         }
         m_utmPoints.push_back(utmVec);
@@ -456,6 +459,9 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
                             m_segments[i].getPoints()[j].getLongitude(),
                             utmP.x, utmP.y, gamma, k);
             }
+
+            utmP.speed = m_segments[i].getPoints()[j].getSpeed();
+
             utmVec.push_back(utmP);
 
             GpsDataIndex tmpIndex;

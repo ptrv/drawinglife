@@ -29,11 +29,12 @@ ofLog(OF_LOG_ERROR, "Database error: %s, \nwith query: %s", ex.what(), query.c_s
 }																						\
 // --------------------------------------------------------------------------------------
 
-DBReader::DBReader(const std::string& dbpath)
+DBReader::DBReader(const std::string& dbpath, bool useSpeed)
 :
 m_dbPath(dbpath),
 m_dbconn(0),
-m_trans(0)
+m_trans(0),
+m_useSpeed(useSpeed)
 {
 }
 
@@ -88,7 +89,10 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		while(reader.read())
 		{
 			GpsPoint gpsPoint;
-			gpsPoint.setGpsPoint(reader.getint(0),reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7));
+			if(m_useSpeed)
+                gpsPoint.setGpsPoint(reader.getint(0),reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7), reader.getdouble(8));
+            else
+                gpsPoint.setGpsPoint(reader.getint(0),reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7), 0.0);
 
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
@@ -165,14 +169,35 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 const std::string DBReader::getBasicQueryString()
 {
 	// This is the part of the query string that all queries have common.
-	return	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
-			"a.longitude AS longitude, a.time AS time,"\
-			"a.elevation AS elevation, a.segment AS segment,"\
-			"b.name AS name,"\
-			"c.city AS location "\
-			"FROM gpsdata AS a "\
-			"JOIN user AS b ON (a.user = b.userid) "\
-			"JOIN location AS c ON (a.location = c.locationid) ";
+	std::string query;
+
+    if(m_useSpeed)
+    {
+        query =	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
+                "a.longitude AS longitude, a.time AS time,"\
+                "a.elevation AS elevation, a.segment AS segment,"\
+                "b.name AS name,"\
+                "c.city AS location, "\
+                "a.speed AS speed "\
+                "FROM gpsdata AS a "\
+                "JOIN user AS b ON (a.user = b.userid) "\
+                "JOIN location AS c ON (a.location = c.locationid) ";
+
+    }
+    else
+    {
+        query =	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
+                "a.longitude AS longitude, a.time AS time,"\
+                "a.elevation AS elevation, a.segment AS segment,"\
+                "b.name AS name,"\
+                "c.city AS location "\
+                "FROM gpsdata AS a "\
+                "JOIN user AS b ON (a.user = b.userid) "\
+                "JOIN location AS c ON (a.location = c.locationid) ";
+
+    }
+
+    return query;
 }
 bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int year, int month, int day)
 {

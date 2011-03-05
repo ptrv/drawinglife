@@ -95,6 +95,8 @@ public:
 
     int getSleepTime() const { return m_sleepTime; }
 
+    bool useSpeed() const { return m_useSpeed; }
+
     const std::vector<LocationImageData>& getLocationImageData() const { return m_locationImgData; }
 
 private:
@@ -193,6 +195,8 @@ private:
     int m_sleepTime;
 
     std::vector<LocationImageData> m_locationImgData;
+
+    bool m_useSpeed;
 };
 
 #endif // _APPSETTINGS_H_

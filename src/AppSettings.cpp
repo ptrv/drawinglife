@@ -59,7 +59,8 @@ m_regionsOn(true),
 m_loop(true),
 m_multiMode(false),
 m_multiModeInfo(false),
-m_sleepTime(0)
+m_sleepTime(0),
+m_useSpeed(false)
 {
     ofxXmlSettings m_xml;
 
@@ -206,6 +207,8 @@ m_sleepTime(0)
     m_multiModeInfo = m_xml.getValue("settings:multimodeinfo", 0) == 1 ? true : false;
 
     m_sleepTime = m_xml.getValue("settings:sleeptime", 0);
+
+    m_useSpeed = m_xml.getValue("settings:usespeed", 0) == 1 ? true : false;
 
     m_xml.pushTag("ui");
     m_xml.pushTag("locationimages");

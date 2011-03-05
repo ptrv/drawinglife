@@ -533,7 +533,7 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
 											m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 
-        m_dbReader = new DBReader(m_dbPath);
+        m_dbReader = new DBReader(m_dbPath, m_settings->useSpeed());
         if (m_dbReader->setupDbConnection())
         {
             // -----------------------------------------------------------------------------
@@ -614,7 +614,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 
-        m_dbReader = new DBReader(m_dbPath);
+        m_dbReader = new DBReader(m_dbPath, m_settings->useSpeed());
 
         if (m_dbReader->setupDbConnection())
         {
@@ -734,7 +734,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
         DBG_VAL(sqlFilePaths[personIndex]);
         DBG_VAL(sqlFileSource);
 
-        m_dbReader = new DBReader(m_dbPath);
+        m_dbReader = new DBReader(m_dbPath, m_settings->useSpeed());
         if (m_dbReader->setupDbConnection())
         {
             // -----------------------------------------------------------------------------
