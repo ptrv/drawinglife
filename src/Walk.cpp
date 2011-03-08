@@ -241,6 +241,12 @@ void Walk::draw()
                     {
                         ofColor tmpColor = m_settings->getSpeedColorUnder();
                         ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
+                        if(tmpColor.a == 0.0)
+                        {
+                            shouldNotBeDrawn = true;
+                            glEnd();
+                            glBegin(GL_LINE_STRIP);
+                        }
                     }
                     if(shouldNotBeDrawn)
                     {
@@ -273,9 +279,30 @@ void Walk::draw()
 		else if(!m_interactiveMode)
 		{
 			ofFill();
-			ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
-			ofCircle(getScaledUtmX(tmp.x),
-					 getScaledUtmY(tmp.y), m_dotSize);
+			bool shouldBeDrawn = true;
+			if(m_settings->useSpeed())
+			{
+			    if(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].speed > m_settings->getSpeedThreshold())
+			    {
+			        if(m_settings->getSpeedColorAbove().a == 0.0)
+			        {
+			            shouldBeDrawn = false;
+                    }
+                }
+                else
+                {
+                    if(m_settings->getSpeedColorUnder().a == 0.0)
+                    {
+                        shouldBeDrawn = false;
+                    }
+                }
+			}
+			if(shouldBeDrawn)
+			{
+			    ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
+			    ofCircle(getScaledUtmX(tmp.x),
+                        getScaledUtmY(tmp.y), m_dotSize);
+			}
 		}
 	}
 
