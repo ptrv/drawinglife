@@ -222,6 +222,31 @@ void Walk::draw()
                     isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
 //                else
 //                    isInBox = true;
+                if(m_settings->useSpeed())
+                {
+                    //DBG_VAL(m_gpsData->getUTMPoints()[i][j].speed);
+                    bool shouldNotBeDrawn = false;
+                    if(m_gpsData->getUTMPoints()[i][j].speed > m_settings->getSpeedThreshold())
+                    {
+                        ofColor tmpColor = m_settings->getSpeedColorAbove();
+                        ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
+                        if(tmpColor.a == 0.0)
+                        {
+                            shouldNotBeDrawn = true;
+                            glEnd();
+                            glBegin(GL_LINE_STRIP);
+                        }
+                    }
+                    else
+                    {
+                        ofColor tmpColor = m_settings->getSpeedColorUnder();
+                        ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
+                    }
+                    if(shouldNotBeDrawn)
+                    {
+                        isInBox = false;
+                    }
+                }
                 if(isInBox)
                 {
 //                    ofSetColor(255, 0,0);
@@ -229,6 +254,7 @@ void Walk::draw()
                     glVertex2d(getScaledUtmX(tmp.x),
                                getScaledUtmY(tmp.y));
                 }
+
             }
             glEnd();
 

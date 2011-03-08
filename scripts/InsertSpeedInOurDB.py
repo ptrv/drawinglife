@@ -141,16 +141,16 @@ def main():
             sql = "select gpsdataid, latitude, longitude, time from gpsdata where user = %s and segment = %d order by datetime(time)" % (user, segment)
             gpsdata = db.get_gpsdata(sql)
             for i in range(len(gpsdata)-1):
-                gpsdataid, lat1, lon1, time1 = gpsdata[i]
-                gpsdataid, lat2, lon2, time2 = gpsdata[i+1]
+                gpsdataid1, lat1, lon1, time1 = gpsdata[i]
+                gpsdataid2, lat2, lon2, time2 = gpsdata[i+1]
                 dist = EarthDistance((lat1, lon1), (lat2, lon2))
                 try:
                     timeoffset = StringConvert(time2)-StringConvert(time1)
                 except:
-                    print "StringConvert error, gpsdataid: %d" % (gpsdataid)
+                    print "StringConvert error, gpsdataid: %d" % (gpsdataid2)
                 kph = (dist/timeoffset.seconds)*3.6
                 #print i, gpsdataid, lat1, lon1, lat2, lon2, kph
-                db.insert_speed(gpsdataid,kph)
+                db.insert_speed(gpsdataid2,kph)
 
     db.commit_changes()            
 
@@ -158,7 +158,6 @@ def main():
     
     db.close_handle()
     
-
 
 if __name__ == '__main__':
     sys.exit(main())

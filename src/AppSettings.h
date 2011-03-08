@@ -97,6 +97,11 @@ public:
 
     bool useSpeed() const { return m_useSpeed; }
 
+    double getSpeedThreshold() { return m_speedThreshold; }
+
+    const ofColor& getSpeedColorUnder() const { return m_speedColorUnder; }
+    const ofColor& getSpeedColorAbove() const { return m_speedColorAbove; }
+
     const std::vector<LocationImageData>& getLocationImageData() const { return m_locationImgData; }
 
 private:
@@ -197,6 +202,9 @@ private:
     std::vector<LocationImageData> m_locationImgData;
 
     bool m_useSpeed;
+    double m_speedThreshold;
+    ofColor m_speedColorUnder;
+    ofColor m_speedColorAbove;
 };
 
 #endif // _APPSETTINGS_H_

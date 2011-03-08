@@ -60,7 +60,8 @@ m_loop(true),
 m_multiMode(false),
 m_multiModeInfo(false),
 m_sleepTime(0),
-m_useSpeed(false)
+m_useSpeed(false),
+m_speedThreshold(0.0)
 {
     ofxXmlSettings m_xml;
 
@@ -209,6 +210,17 @@ m_useSpeed(false)
     m_sleepTime = m_xml.getValue("settings:sleeptime", 0);
 
     m_useSpeed = m_xml.getValue("settings:usespeed", 0) == 1 ? true : false;
+    m_speedThreshold = m_xml.getAttribute("settings:usespeed", "threshold", 0.0);
+
+    m_speedColorUnder.r = m_xml.getAttribute("ui:speedcolors:underthreshold", "r", 255);
+    m_speedColorUnder.g = m_xml.getAttribute("ui:speedcolors:underthreshold", "g", 255);
+    m_speedColorUnder.b = m_xml.getAttribute("ui:speedcolors:underthreshold", "b", 255);
+    m_speedColorUnder.a = m_xml.getAttribute("ui:speedcolors:underthreshold", "a", 255);
+
+    m_speedColorAbove.r = m_xml.getAttribute("ui:speedcolors:abovethreshold", "r", 255);
+    m_speedColorAbove.g = m_xml.getAttribute("ui:speedcolors:abovethreshold", "g", 255);
+    m_speedColorAbove.b = m_xml.getAttribute("ui:speedcolors:abovethreshold", "b", 255);
+    m_speedColorAbove.a = m_xml.getAttribute("ui:speedcolors:abovethreshold", "a", 255);
 
     m_xml.pushTag("ui");
     m_xml.pushTag("locationimages");

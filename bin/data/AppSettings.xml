@@ -36,7 +36,9 @@
 		<traced>1</traced>
 	</interactivemode>
 	<multimode>1</multimode>
+	<multimodeinfo>1</multimodeinfo>
 	<sleeptime>0</sleeptime>
+	<usespeed threshold="10">0</usespeed>
 	<log level="0" />
 	<loadgpsonstart>1</loadgpsonstart>
 	<debugmode>0</debugmode>
@@ -84,6 +86,10 @@
 		<!-- <viewbox r="30" g="30" b="30" /> -->
 		<interactiveseg r="255" g="255" b="0" a="255" />
 	</color>
+    <speedcolors>
+	    <underthreshold r="255" g="255" b="255" a="64" />
+	    <abovethreshold r="255" g="0" b="0" a="0" />
+	</speedcolors>
 	<imageascurrent>0</imageascurrent>
 	<currentpointimages>
 		<image>
