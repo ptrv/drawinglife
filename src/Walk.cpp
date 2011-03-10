@@ -219,7 +219,14 @@ void Walk::draw()
             {
                 bool isInBox = true;
                 if(m_settings->isBoundingBoxEnabled() && !m_settings->isMultiMode())
+                {
                     isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+                    if(!isInBox)
+                    {
+                        glEnd();
+                        glBegin(GL_LINE_STRIP);
+                    }
+                }
 //                else
 //                    isInBox = true;
                 if(m_settings->useSpeed())
