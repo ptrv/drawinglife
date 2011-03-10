@@ -17,13 +17,15 @@
     See also: gpxreplace.py
 """
 
-import sys, tkFileDialog
+import sys
+import tkFileDialog
 from datetime import datetime, timedelta
 
 # options are hard coded at the moment for brevity and ease of testing
 STARTDATE = "2010-10-15T13:13:00Z"  # when to start the first trackpoint
 INCREMENTSECS = 6                  # how many seconds between each trackpoint
 GPXORIG = "/home/daniel/Desktop/Dropbox/planb/hamburgHCU/gps/animation/igotu-animation.gpx" # path of gpx file with empty time
+
 
 def StringConvert(string):
     """
@@ -33,9 +35,10 @@ def StringConvert(string):
     string = string.replace('T', ' ')
     string = string.replace('-', ' ')
     string = string.replace(':', ' ')
-    string = string [:-1]
+    string = string[:-1]
     strlist = string.split()
     return datetime( int(strlist[0]), int(strlist[1]), int(strlist[2]), int(strlist[3]), int(strlist[4]), int(strlist[5]) )
+
 
 def main():
     print STARTDATE
@@ -47,7 +50,7 @@ def main():
         newline.append(line)
         if line.startswith('<trkpt'): count += 1
         if line.endswith('</ele>\r\n'):
-            newdate = newdate + timedelta(seconds = INCREMENTSECS)
+            newdate = newdate + timedelta(seconds=INCREMENTSECS)
             newline.append( '  <time>%s</time>\r\n' % (newdate.isoformat()+'Z'))
     print
     f2 = tkFileDialog.asksaveasfile(title='Choose a file to save to', initialdir="/home/daniel/Desktop/Dropbox")
