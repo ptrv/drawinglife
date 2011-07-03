@@ -15,6 +15,7 @@
 		D077082F120089950082EEBA /* Walk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D077082E120089950082EEBA /* Walk.cpp */; };
 		D0B38854117F106F005E46BA /* libGeographic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B38853117F1047005E46BA /* libGeographic.a */; };
 		D0B78BB2115839D3004C6A5D /* DrawingLifeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */; };
+		D0CB228F132EF58700E0B7B5 /* LocationImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0CB228D132EF58700E0B7B5 /* LocationImage.cpp */; };
 		D0E8CF8811A6020200541164 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF7F11A6020200541164 /* sqlite3.c */; };
 		D0E8CF8911A6020200541164 /* sqlite3x_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8211A6020200541164 /* sqlite3x_command.cpp */; };
 		D0E8CF8A11A6020200541164 /* sqlite3x_connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E8CF8311A6020200541164 /* sqlite3x_connection.cpp */; };
@@ -132,6 +133,8 @@
 		D0B3884B117F1047005E46BA /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
 		D0B78BB0115839D3004C6A5D /* DrawingLifeApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawingLifeApp.cpp; sourceTree = "<group>"; };
 		D0B78BB1115839D3004C6A5D /* DrawingLifeApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeApp.h; sourceTree = "<group>"; };
+		D0CB228D132EF58700E0B7B5 /* LocationImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocationImage.cpp; sourceTree = "<group>"; };
+		D0CB228E132EF58700E0B7B5 /* LocationImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationImage.h; sourceTree = "<group>"; };
 		D0E8CF7F11A6020200541164 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs/sqlite3x/sqlite3.c; sourceTree = "<group>"; };
 		D0E8CF8011A6020200541164 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs/sqlite3x/sqlite3.h; sourceTree = "<group>"; };
 		D0E8CF8111A6020200541164 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = libs/sqlite3x/sqlite3ext.h; sourceTree = "<group>"; };
@@ -171,7 +174,7 @@
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		E49DA7E210CD40AD0006B5A8 /* freeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = freeimage.a; path = ../../../libs/FreeImage/lib/osx/freeimage.a; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawingLifeDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* DrawingLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawingLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		E4C2421610CC549C004149E2 /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -497,7 +500,7 @@
 			isa = PBXGroup;
 			children = (
 				D07DC75411DE692D00B9617A /* AppSettings.xml */,
-				E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* DrawingLife.app */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				D05CA26D11C59FC200B8665E /* ofxTimer */,
@@ -512,6 +515,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D0CB228D132EF58700E0B7B5 /* LocationImage.cpp */,
+				D0CB228E132EF58700E0B7B5 /* LocationImage.h */,
 				D0EA3A831251648200C3E672 /* AppSettings.h */,
 				D0EA3A841251648200C3E672 /* AppSettings.cpp */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
@@ -631,7 +636,7 @@
 			);
 			name = DrawingLife;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* DrawingLifeDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* DrawingLife.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -726,6 +731,7 @@
 				D077082F120089950082EEBA /* Walk.cpp in Sources */,
 				D00055F112164236005025E1 /* MagicBox.cpp in Sources */,
 				D0EA3A851251648200C3E672 /* AppSettings.cpp in Sources */,
+				D0CB228F132EF58700E0B7B5 /* LocationImage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
