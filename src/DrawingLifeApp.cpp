@@ -1011,12 +1011,12 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
        break;
     case OF_KEY_RIGHT:
-        m_magicBox->goRight(500.0);
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->goRight(500.0);
         }
         if(m_multiMode)
+            m_magicBox->goRight(500.0);
         break;
     case OF_KEY_LEFT:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
