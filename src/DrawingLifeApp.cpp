@@ -15,7 +15,8 @@
 //const char* DrawingLifeApp::settingsPath = "AppSettings.xml";
 //--------------------------------------------------------------
 DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
-    m_settings(new AppSettings(settingsFile)),
+    m_settingsFile(settingsFile),
+    m_settings(0),
     m_dbReader(0),
     m_isFullscreen(false),
     m_isDebugMode(false),
@@ -84,7 +85,32 @@ void DrawingLifeApp::setup()
     // -----------------------------------------------------------------------------
 //    AppSettings& settings = AppSettings::instance();
 
-    ofSetLogLevel(m_settings->getLogLevel());
+    m_settings = new AppSettings(m_settingsFile);
+    
+    switch(m_settings->getLogLevel())
+    {
+        case 0:
+            ofSetLogLevel(OF_LOG_VERBOSE);
+            break;
+        case 1:
+            ofSetLogLevel(OF_LOG_NOTICE);
+            break;
+        case 2:
+            ofSetLogLevel(OF_LOG_WARNING);
+            break;
+        case 3:
+            ofSetLogLevel(OF_LOG_ERROR);
+            break;
+        case 4:
+            ofSetLogLevel(OF_LOG_FATAL_ERROR);
+            break;
+        case 5:
+            ofSetLogLevel(OF_LOG_SILENT);
+            break;
+        default:
+            ofSetLogLevel(OF_LOG_NOTICE);
+            break;
+    }
 
 	// -----------------------------------------------------------------------------
 	// Fonts.
@@ -325,7 +351,7 @@ void DrawingLifeApp::draw()
             if(m_multiMode && m_multiModeInfo)
             {
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
-                ofSetColor(0xffffff);
+                ofSetHexColor(0xffffff);
                 std::string infoText = m_timeline->getCurrentTime();
 //                if(m_pause)
 //                    infoText.append(" (stopped)");
@@ -347,7 +373,7 @@ void DrawingLifeApp::draw()
                 else if(m_showInfo)
                 {
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
-                    ofSetColor(0xffffff);
+                    ofSetHexColor(0xffffff);
                     std::string infoText = m_walks[personIndex]->getCurrentGpsInfo();
 //                    if(m_pause)
 //                        infoText.append(" (stopped)");
@@ -1180,7 +1206,7 @@ void DrawingLifeApp::fpsDisplay()
         timeSum = 0.0;
     }
 
-    ofSetColor(0xffffff);
+    ofSetHexColor(0xffffff);
     std::string str = "FPS: "+ofToString((double)fpsToShow, 1);
     ofDrawBitmapString(str, 30.0, ofGetHeight()-30 );
 }

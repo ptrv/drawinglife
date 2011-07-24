@@ -48,7 +48,7 @@ void LocationImage::draw()
 
     if(m_lid.anchorShow)
     {
-        ofSetColor(0xff0000);
+        ofSetHexColor(0xff0000);
         ofCircle(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y), 5);
     }
 

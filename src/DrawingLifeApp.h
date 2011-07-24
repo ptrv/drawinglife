@@ -85,6 +85,7 @@ private:
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
+    std::string m_settingsFile;
     AppSettings* m_settings;
 	DBReader* m_dbReader;
 
