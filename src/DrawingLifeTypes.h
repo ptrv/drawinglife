@@ -56,6 +56,7 @@ struct UtmPoint
     double x;
     double y;
     double speed;
+    double lon0;
 };
 
 struct LocationImageData

@@ -41,7 +41,7 @@ m_frameRate(30),
 m_fullscreen(false),
 m_imageAsCurrentPoint(false),
 m_hideCursor(false),
-m_boundingBoxEnabled(true),
+m_boundingBoxAuto(true),
 m_boundingBoxSize(3000.0),
 m_boundingBoxPadding(500.0),
 m_databasePath(""),
@@ -116,10 +116,13 @@ m_speedThreshold(0.0)
 
     m_walkLength = m_xml.getValue("settings:walklength", 10000);
 
-    m_boundingBoxEnabled = m_xml.getValue("settings:boundingbox:enabled", 1) == 1 ? true : false;
+    m_boundingBoxAuto = m_xml.getValue("settings:boundingbox:auto", 1) == 1 ? true : false;
     m_boundingBoxSize = m_xml.getValue("settings:boundingbox:size", 3000.0);
     m_boundingBoxPadding = m_xml.getValue("settings:boundingbox:padding", 500.0);
-
+    m_boundingBoxFixed = m_xml.getValue("settings:boundingbox:static", 0) == 1 ? true : false;
+    m_boundingBoxLat = m_xml.getAttribute("settings:boundingbox:position", "lat", 52.542);
+    m_boundingBoxLon = m_xml.getAttribute("settings:boundingbox:position", "lon", 13.413);
+    
     m_databasePath = ofToDataPath(m_xml.getValue("data:database", "test.sqlite"), true);
 
     m_queryType = m_xml.getValue("dbquery:type", 4);

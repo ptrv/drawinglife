@@ -143,7 +143,7 @@ public:
 
 	void setMagicBox(MagicBox* magicBox);
 
-	void setMagicBoxStatic(MagicBox* magicBox);
+    void setMagicBoxStatic(MagicBox* magicBox, double lat, double lon);
 
 	void toggleTraced();
 

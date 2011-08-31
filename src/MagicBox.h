@@ -20,7 +20,7 @@ public:
 
     void setupBox(ofxPointd currUtm, double lon0);
     void setupBoxStatic(ofxPointd currUtm, double lon0, double width, double height);
-
+    
     void updateBoxIfNeeded(const ofxPointd utmPoint);
 
     void updateBoxSize(double size);

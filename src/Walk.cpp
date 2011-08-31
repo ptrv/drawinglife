@@ -164,7 +164,7 @@ void Walk::draw()
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
-        if(!m_interactiveMode && !m_settings->isMultiMode())
+        if(!m_interactiveMode && !m_settings->isMultiMode() && !m_settings->isBoundingBoxFixed())
         {
             m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
                                                     m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
@@ -218,7 +218,7 @@ void Walk::draw()
             for (int j = startPoint; j <= pointEnd; ++j)
             {
                 bool isInBox = true;
-                if(m_settings->isBoundingBoxEnabled() && !m_settings->isMultiMode())
+                if(m_settings->isBoundingBoxAuto() && !m_settings->isMultiMode())
                 {
                     isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
                     if(!isInBox)
@@ -352,7 +352,7 @@ void Walk::drawAll()
 		for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
 		{
             bool isInBox = true;
-            if(m_settings->isBoundingBoxEnabled() && !m_settings->isMultiMode())
+            if(m_settings->isBoundingBoxAuto() && !m_settings->isMultiMode())
                 isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
 //            if(isInBox)
             if(isInBox)
@@ -524,19 +524,20 @@ void Walk::setMagicBox(MagicBox* magicBox)
     m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
 
 }
-void Walk::setMagicBoxStatic(MagicBox* magicBox)
+
+void Walk::setMagicBoxStatic(MagicBox* magicBox, double lat, double lon)
 {
+    
     m_magicBox = 0;
     m_magicBox = magicBox;
     reset();
-    ofxPointd tmpCoord;
-    tmpCoord.x = m_gpsData->getMinUtmX() + ((m_gpsData->getMaxUtmX() - m_gpsData->getMinUtmX()) / 2.0);
-    tmpCoord.y = m_gpsData->getMinUtmY() + ((m_gpsData->getMaxUtmY() - m_gpsData->getMinUtmY()) / 2.0);
-    m_magicBox->setupBoxStatic(tmpCoord,
-                               GpsData::getLon0Glogal(),
-                               (m_gpsData->getMaxUtmX() - m_gpsData->getMinUtmX()),
-                               (m_gpsData->getMaxUtmY() - m_gpsData->getMinUtmY()));
 
+    ofxPointd tmpCoord;
+    UtmPoint utmP = GpsData::getUtmPoint(lat, lon, m_settings);
+    tmpCoord.x = utmP.x;
+    tmpCoord.y = utmP.y;
+    m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
+    
 }
 
 void Walk::setCurrentPointImage(ofImage img, int alpha)

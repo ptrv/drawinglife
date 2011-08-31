@@ -59,7 +59,7 @@ public:
     bool isCurrentPointImage() const { return m_imageAsCurrentPoint; }
     bool hideCursor() const { return m_hideCursor; }
 
-    bool isBoundingBoxEnabled() const { return m_boundingBoxEnabled; }
+    bool isBoundingBoxAuto() const { return m_boundingBoxAuto; }
     double getBoundingBoxSize() const { return m_boundingBoxSize; }
     double getBoundingBoxPadding() const { return m_boundingBoxPadding; }
 
@@ -103,7 +103,11 @@ public:
     const ofColor& getSpeedColorAbove() const { return m_speedColorAbove; }
 
     const std::vector<LocationImageData>& getLocationImageData() const { return m_locationImgData; }
-
+    
+    bool isBoundingBoxFixed() const { return m_boundingBoxFixed; };
+    double getBoundingBoxLat() const { return m_boundingBoxLat; } 
+    double getBoundingBoxLon() const { return m_boundingBoxLon; }
+    
 private:
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
@@ -159,7 +163,7 @@ private:
     bool m_imageAsCurrentPoint;
     bool m_hideCursor;
 
-    bool m_boundingBoxEnabled;
+    bool m_boundingBoxAuto;
     double m_boundingBoxSize;
     double m_boundingBoxPadding;
     // -----------------------------------------------------------------------------
@@ -205,6 +209,10 @@ private:
     double m_speedThreshold;
     ofColor m_speedColorUnder;
     ofColor m_speedColorAbove;
+    
+    bool m_boundingBoxFixed;
+    double m_boundingBoxLat;
+    double m_boundingBoxLon;
 };
 
 #endif // _APPSETTINGS_H_

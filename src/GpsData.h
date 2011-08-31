@@ -170,6 +170,7 @@ public:
     * \brief Calculate UTM values for all GpsPoints with global lon0.
     */
     void calculateUtmPointsGlobalLon(bool regionsOn);
+    static UtmPoint getUtmPoint(double lat, double lon, AppSettings* settings);
 
 	static void setGlobalValues(double minX,
                                 double maxX,

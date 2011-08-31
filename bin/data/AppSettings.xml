@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-	<database>BirminghamTestSplitFiles.sqlite</database>
+	<database>test.sqlite</database>
 	<person>
-		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan1</name>
-		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia1</name>
-		<name r="50" g="255" b="0" a="55" sql="example.sql">Dan2</name>
-		<name r="20" g="130" b="130" a="55" sql="example.sql" >Sophia2</name>
-		<name r="178" g="155" b="221" a="55" sql="example.sql">Dan3</name>
-		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia3</name>
-		<name r="150" g="55" b="80" a="55" sql="example.sql">Dan4</name>
-		<name r="200" g="10" b="10" a="55" sql="example.sql" >Sophia4</name>
-		<name r="178" g="155" b="221" a="55" sql="example.sql">Dan5</name>
-		<name r="255" g="0" b="0" a="55" sql="example.sql" >Sophia5</name>
-		<name r="200" g="10" b="10" a="55" sql="example.sql" >Sophia6</name>
+		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
 	</person>
 </data>
 <dbquery>
@@ -27,7 +17,7 @@
 		<yearstart>2007</yearstart>
 		<yearend>2009</yearend>
 	</time>
-	<city>Birmingham</city>
+	<city>Berlin</city>
 </dbquery>
 <settings>
 	<loop>1</loop>
@@ -35,8 +25,8 @@
 		<enabled>0</enabled>
 		<traced>1</traced>
 	</interactivemode>
-	<multimode>1</multimode>
-	<multimodeinfo>1</multimodeinfo>
+	<multimode>0</multimode>
+	<multimodeinfo>0</multimodeinfo>
 	<sleeptime>0</sleeptime>
 	<usespeed threshold="10">0</usespeed>
 	<log level="0" />
@@ -52,8 +42,10 @@
 	<!-- To draw all points set 0 (very cpu intensive) -->
 	<walklength>0</walklength>
 	<boundingbox>
-		<enabled>1</enabled>
-		<size>80000.0</size>
+		<auto>0</auto>
+        <static>1</static>
+        <position lat="52.49734" lon="13.44594"/>
+		<size>5000.0</size>
 		<padding>2000.0</padding>
   	</boundingbox>
 	<meridian>

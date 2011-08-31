@@ -480,14 +480,26 @@ void DrawingLifeApp::processGpsData()
         {
 //            m_walks[i]->setDotColors();
 
-            if(!m_settings->isBoundingBoxEnabled() && !m_multiMode)
-                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+            if(!m_settings->isBoundingBoxAuto() && !m_multiMode)
+            {
+                //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+                double bbLat = m_settings->getBoundingBoxLat();
+                double bbLon = m_settings->getBoundingBoxLon();
+                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i], bbLat, bbLon);
+            }
             else
             {
                 if(m_multiMode)
-                    m_walks[i]->setMagicBox(m_magicBox);
+                {
+                    double bbLat = m_settings->getBoundingBoxLat();
+                    double bbLon = m_settings->getBoundingBoxLon();
+                    m_walks[i]->setMagicBoxStatic(m_magicBox, bbLat, bbLon);
+//                    m_walks[i]->setMagicBox(m_magicBox);
+                }
                 else
+                {
                     m_walks[i]->setMagicBox(m_magicBoxes[i]);
+                }
             }
 
 

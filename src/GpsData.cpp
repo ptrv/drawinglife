@@ -402,6 +402,55 @@ void GpsData::calculateUtmPoints()
     }
 }
 
+UtmPoint GpsData::getUtmPoint(double lat, double lon, AppSettings* settings)
+{
+    const GpsRegion* regions = settings->getRegions();
+    UtmPoint utmP;
+    Math::real gamma, k;
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    
+    if(settings->isRegionsOn())
+    {
+        double lon0 = 0.0;
+        if(lon >= regions[0].minLon && lon < regions[0].maxLon)
+        {
+            lon0 = regions[0].lon0;
+        }
+        else if(lon >= regions[1].minLon && lon < regions[1].maxLon)
+        {
+            lon0 = regions[1].lon0;
+        }
+        else if(lon >= regions[2].minLon && lon < regions[2].maxLon)
+        {
+            lon0 = regions[2].lon0;
+        }
+        else if(lon >= regions[3].minLon && lon < regions[3].maxLon)
+        {
+            lon0 = regions[3].lon0;
+        }
+        else if(lon >= regions[4].minLon && lon <= regions[4].maxLon)
+        {
+            lon0 = regions[4].lon0;
+        }
+        TMS.Forward(Math::real(lon0),
+                    lat,
+                    lon,
+                    utmP.x, utmP.y, gamma, k);
+        utmP.lon0 = lon0;
+        
+    }
+    else
+    {
+        
+        TMS.Forward(Math::real(m_lon0Global),
+                    lat,
+                    lon,
+                    utmP.x, utmP.y, gamma, k);
+        utmP.lon0 = m_lon0Global;
+    }
+    
+    return utmP;
+}
 // TODO parameter m_lon0
 void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
 {
@@ -419,46 +468,7 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
         utmVec.reserve( m_segments[i].getPoints().size());
         for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
         {
-            Math::real gamma, k;
-            UtmPoint utmP;
-
-            if(regionsOn)
-            {
-                double lon0 = 0.0;
-                if(m_segments[i].getPoints()[j].getLongitude() >= regions[0].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[0].maxLon)
-                {
-                    lon0 = regions[0].lon0;
-                }
-                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[1].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[1].maxLon)
-                {
-                    lon0 = regions[1].lon0;
-                }
-                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[2].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[2].maxLon)
-                {
-                    lon0 = regions[2].lon0;
-                }
-                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[3].minLon && m_segments[i].getPoints()[j].getLongitude() < regions[3].maxLon)
-                {
-                    lon0 = regions[3].lon0;
-                }
-                else if(m_segments[i].getPoints()[j].getLongitude() >= regions[4].minLon && m_segments[i].getPoints()[j].getLongitude() <= regions[4].maxLon)
-                {
-                    lon0 = regions[4].lon0;
-                }
-                TMS.Forward(Math::real(lon0),
-                            m_segments[i].getPoints()[j].getLatitude(),
-                            m_segments[i].getPoints()[j].getLongitude(),
-                            utmP.x, utmP.y, gamma, k);
-
-            }
-            else
-            {
-
-                TMS.Forward(Math::real(m_lon0Global),
-                            m_segments[i].getPoints()[j].getLatitude(),
-                            m_segments[i].getPoints()[j].getLongitude(),
-                            utmP.x, utmP.y, gamma, k);
-            }
+            UtmPoint utmP = getUtmPoint(m_segments[i].getPoints()[j].getLatitude(), m_segments[i].getPoints()[j].getLongitude(), m_settings);
 
             utmP.speed = m_segments[i].getPoints()[j].getSpeed();
 
