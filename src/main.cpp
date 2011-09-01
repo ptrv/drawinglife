@@ -13,12 +13,13 @@
 //========================================================================
 int main(int argc, const char* argv[] ){
 
-    std::cout << "DrawingLifeApp, avp::ptr, 2010" << std::endl;
+    string appStr(string(APP_NAME_STR) + string(", ") + string(APP_AUTHOR_STR) + string(", ") + string(APP_DATE));
+    std::cout << appStr << std::endl;
     std::cout << "The drawing of my life, plan b\n" << std::endl;
 #ifndef TARGET_OSX
     try {
 
-        TCLAP::CmdLine cmd("DrawingLifeApp, avp::ptr, 2010\nThe drawing of my life, plan b", '=', APP_VERSION_STR);
+        TCLAP::CmdLine cmd(appStr, '=', APP_VERSION_STR);
 
         TCLAP::ValueArg<int> widthArg("","width","Application window width (default: 1024)",false, 1024, "width");
         TCLAP::ValueArg<int> heightArg("","height","Application window height (default: 768)",false, 768, "height");
@@ -47,10 +48,9 @@ int main(int argc, const char* argv[] ){
 	ofAppGlutWindow window;
     //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);
 	ofSetupOpenGL(&window, 1024, 768, OF_WINDOW);			// <-------- setup the GL context
-	
+
 	ofRunApp( new DrawingLifeApp("AppSettings.xml"));
-	
+
 #endif
 
 }
-	
