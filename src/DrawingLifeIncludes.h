@@ -9,7 +9,8 @@
 
 #define APP_NAME_STR "DrawingLife"
 #define APP_AUTHOR_STR "avp::ptr"
-#define APP_VERSION_STR "4.3.1"
+#define APP_DATE "2011"
+#define APP_VERSION_STR "4.4.0"
 
 // -----------------------------------------------------------------------------
 
