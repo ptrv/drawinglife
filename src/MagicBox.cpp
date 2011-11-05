@@ -244,3 +244,8 @@ void MagicBox::goRight(double val)
     m_centerUtm.x += val;
     setBoxes();
 }
+
+const GpsPoint MagicBox::getCenterGps() const
+{
+    return GpsData::getGpsPoint(m_centerUtm);
+}

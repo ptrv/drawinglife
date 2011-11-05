@@ -20,7 +20,7 @@ public:
 
     void setupBox(ofxPointd currUtm, double lon0);
     void setupBoxStatic(ofxPointd currUtm, double lon0, double width, double height);
-    
+
     void updateBoxIfNeeded(const ofxPointd utmPoint);
 
     void updateBoxSize(double size);
@@ -33,6 +33,7 @@ public:
     const ofxRectangled& getPaddedBox() const { return m_theBox; }
     const ofxRectangled getNormalizedPaddedBox();
     const ofxPointd& getCenter() const {return m_centerUtm; }
+    const GpsPoint getCenterGps() const;
     const double getSize() const { return m_currentSize; }
 
     void toggleZoomLevel(unsigned int zoomLevel);

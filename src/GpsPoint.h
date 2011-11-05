@@ -57,6 +57,11 @@ public:
 		m_location = location;
 		m_speed = speed;
 	}
+	void setGpsPointFromLatLon(double lat, double lon)
+	{
+	    m_latitude = lat;
+	    m_longitude = lon;
+	}
 	//---------------------------------------------------------------------------
 	/**
 	* \brief Get latitude.

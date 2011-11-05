@@ -172,6 +172,8 @@ public:
     void calculateUtmPointsGlobalLon(bool regionsOn);
     static UtmPoint getUtmPoint(double lat, double lon, AppSettings* settings);
 
+    static GpsPoint getGpsPoint(const ofxPointd& utmP);
+
 	static void setGlobalValues(double minX,
                                 double maxX,
                                 double minY,
