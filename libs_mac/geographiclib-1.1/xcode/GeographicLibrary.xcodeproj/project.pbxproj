@@ -72,7 +72,7 @@
 		D0B387ED117F0DF0005E46BA /* TransverseMercator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransverseMercator.hpp; sourceTree = "<group>"; };
 		D0B387EE117F0DF0005E46BA /* TransverseMercatorExact.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransverseMercatorExact.hpp; sourceTree = "<group>"; };
 		D0B387EF117F0DF0005E46BA /* UTMUPS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UTMUPS.hpp; sourceTree = "<group>"; };
-		D2AAC046055464E500DB518D /* libGeographicUniversal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGeographicUniversal.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC046055464E500DB518D /* libGeographicD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGeographicD.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +122,7 @@
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC046055464E500DB518D /* libGeographicUniversal.a */,
+				D2AAC046055464E500DB518D /* libGeographicD.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,7 +201,7 @@
 			);
 			name = GeographicLibrary;
 			productName = GeographicLibrary;
-			productReference = D2AAC046055464E500DB518D /* libGeographicUniversal.a */;
+			productReference = D2AAC046055464E500DB518D /* libGeographicD.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -211,7 +211,11 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "GeographicLibrary" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* GeographicLibrary */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -261,6 +265,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = GeographicD;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -274,6 +279,7 @@
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Geographic;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
@@ -330,6 +336,7 @@
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = GeographicUniversal;
+				SDKROOT = macosx10.6;
 			};
 			name = ReleaseUniversal;
 		};
