@@ -131,9 +131,7 @@
 <sound>
     <active>0</active>
     <soundfiles>
-        <soundfile src=""/>
+        <!-- <soundfile src="test1.mp3"/> -->
+        <!-- <soundfile src="test2.mp3"/> -->
     </soundfiles>
-    <frames>
-        <frame time="0.0" sfile="" />
-    </frames>
 </sound>

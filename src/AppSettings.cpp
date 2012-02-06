@@ -273,6 +273,17 @@ m_speedThreshold(0.0)
     m_xml.popTag();
     m_xml.popTag();
 
+    m_xml.pushTag("sound");
+    m_isSoundActive = m_xml.getValue("active", 0) == 1 ? true : false;
+
+    m_xml.pushTag("soundfiles");
+    int numSoundFiles = m_xml.getNumTags("soundfile");
+    for (int i = 0; i < numSoundFiles; ++i) {
+		m_soundFiles.push_back(m_xml.getAttribute("soundfile", "src", "", i));
+	}
+    m_xml.popTag();
+	m_xml.popTag();
+
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
 	if(m_printSettings)

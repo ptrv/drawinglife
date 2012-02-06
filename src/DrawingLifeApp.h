@@ -89,6 +89,8 @@ private:
 
 	void zoomUpdate();
 
+	void soundUpdate();
+
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -160,7 +162,7 @@ private:
     bool m_pause;
     MagicBox* m_magicBox;
 
-//    ofSoundPlayer* m_soundPlayer;
+    std::vector<ofSoundPlayer*> m_soundPlayer;
 
     bool m_isZoomAnimation;
 

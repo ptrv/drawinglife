@@ -116,6 +116,8 @@ public:
     double getZoomAnimationDampCenter() const { return m_zoomAnimationDampCenter; }
     double getZoomAnimationAttractionCenter() const { return m_zoomAnimationAttractionCenter;}
 
+    bool isSoundActive() const { return m_isSoundActive; }
+    const std::vector<std::string>& getSoundFiles() const { return m_soundFiles; }
 private:
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
@@ -228,6 +230,9 @@ private:
     double m_zoomAnimationAttraction;
     double m_zoomAnimationDampCenter;
     double m_zoomAnimationAttractionCenter;
+
+    bool m_isSoundActive;
+    std::vector<std::string> m_soundFiles;
 };
 
 #endif // _APPSETTINGS_H_

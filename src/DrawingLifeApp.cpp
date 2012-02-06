@@ -192,7 +192,7 @@ void DrawingLifeApp::setup()
     ofEnableAlphaBlending();
 
 
-    int drSp = m_settings->getDrawSpeed();
+//    int drSp = m_settings->getDrawSpeed();
 
     float damp = m_settings->getZoomAnimationDamp();
     float attr = m_settings->getZoomAnimationAttraction();
@@ -210,6 +210,7 @@ void DrawingLifeApp::setup()
 
     	//    	m_zoomIntegrator->setTarget();
     }
+
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
 
@@ -281,11 +282,59 @@ void DrawingLifeApp::setup()
         ofHideCursor();
 
 
+    if(m_settings->isSoundActive())
+    {
+    	for (unsigned int i = 0; i < m_settings->getSoundFiles().size(); ++i)
+    	{
+    	    ofSoundPlayer* sndPlay = new ofSoundPlayer();
+    	    sndPlay->loadSound(m_settings->getSoundFiles()[i]);
+    	    sndPlay->setLoop(false);
+    	    m_soundPlayer.push_back(sndPlay);
+		}
+    }
+
 }
+int currentSoundFile = 0;
+void DrawingLifeApp::soundUpdate()
+{
+	if(m_settings->isSoundActive() && m_soundPlayer.size() > 0)
+	{
+		if(m_timeline->isFirst())
+		{
+			currentSoundFile = 0;
+			for (int i = 0; i < static_cast<int>(m_soundPlayer.size()); ++i)
+			{
+				m_soundPlayer[i]->stop();
+			}
+			if(m_soundPlayer.size() > 0)
+			{
+				m_soundPlayer[currentSoundFile]->play();
+			}
+		}
+		else
+		{
+			if( ! m_soundPlayer[currentSoundFile]->getIsPlaying())
+			{
+				m_soundPlayer[currentSoundFile]->stop();
+				m_soundPlayer[currentSoundFile]->setPosition(0.0);
+				if(currentSoundFile < static_cast<int>(m_soundPlayer.size()-1))
+				{
+					++currentSoundFile;
+				}
+				else
+				{
+					currentSoundFile = 0;
+				}
+				m_soundPlayer[currentSoundFile]->play();
+			}
+		}
+	}
+}
+
 int zoomFrameCount = 0;
 bool DrawingLifeApp::zoomHasChanged()
 {
-	float zoomTime = m_settings->getZoomAnimFrames()[zoomFrameCount].frameTime;
+//	float zoomTime = m_settings->getZoomAnimFrames()[zoomFrameCount].frameTime;
 
 	int current = m_timeline->getCurrentCount();
 	int all = m_timeline->getAllCount();
@@ -297,9 +346,9 @@ bool DrawingLifeApp::zoomHasChanged()
 	}
 
 	int currIndex = 0;
-	for (int i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
+	for (unsigned int i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
 	{
-		float indexRatio = current / (float)all;
+//		float indexRatio = current / (float)all;
 
 		if((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
 		{
@@ -313,7 +362,7 @@ bool DrawingLifeApp::zoomHasChanged()
 	if(zoomFrameCount != currIndex)
 	{
 		++zoomFrameCount;
-		if(zoomFrameCount >=  m_settings->getZoomAnimFrames().size())
+		if(zoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
 			--zoomFrameCount;
 		return true;
 	}
@@ -387,6 +436,7 @@ void DrawingLifeApp::update()
                         }
 
                         zoomUpdate();
+                        soundUpdate();
 
                         m_timeline->countUp();
                         if(m_timeline->isFirst())
