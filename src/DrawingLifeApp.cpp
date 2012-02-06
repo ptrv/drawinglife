@@ -78,6 +78,14 @@ DrawingLifeApp::~DrawingLifeApp()
     {
         SAFE_DELETE(m_locationImgs[i]);
     }
+    
+    SAFE_DELETE(m_zoomIntegrator);
+    SAFE_DELETE(m_integratorX);
+    SAFE_DELETE(m_integratorY);
+    
+    for (unsigned int i=0; i < m_soundPlayer.size(); ++i) {
+        SAFE_DELETE(m_soundPlayer[i]);
+    }
 }
 
 void DrawingLifeApp::setup()
