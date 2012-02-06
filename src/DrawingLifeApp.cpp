@@ -356,8 +356,6 @@ bool DrawingLifeApp::zoomHasChanged()
 	int currIndex = 0;
 	for (unsigned int i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
 	{
-//		float indexRatio = current / (float)all;
-
 		if((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
 		{
 			currIndex = i;
@@ -384,10 +382,6 @@ void DrawingLifeApp::zoomUpdate()
 {
 	if(m_isZoomAnimation)
 	{
-		// if zoom has changed
-		// them new target
-		// update
-
 		if(zoomHasChanged())
 		{
 			float zoomLevel = m_settings->getZoomAnimFrames()[zoomFrameCount].frameZoom;
@@ -411,9 +405,6 @@ void DrawingLifeApp::zoomUpdate()
 	m_integratorX->update();
 	m_integratorY->update();
 
-	// if targeting
-	// then
-
     if(m_multiMode)
     {
         m_magicBox->setSize((double)m_zoomIntegrator->getValue());
@@ -424,7 +415,6 @@ void DrawingLifeApp::zoomUpdate()
         for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
         {
             m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
-            //		UtmPoint utmP = GpsData::getUtmPoint(lat, lon, m_settings);
             m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
         }
     }

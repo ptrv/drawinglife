@@ -2,7 +2,9 @@
  * Integrator.h
  *
  *  Created on: Feb 5, 2012
- *      Author: peter
+ *      Author: Peter Vasil
+ *
+ *  Original version see Processing milkteacoffee example.
  */
 
 #ifndef INTEGRATOR_H_
@@ -68,9 +70,6 @@ public:
 	}
 
 private:
-//	const double DAMPING = 0.5f;
-//	const double ATTRACTION = 0.2f;
-
 	void init(double val, double damp, double attr)
 	{
 		value = val;
@@ -89,13 +88,10 @@ private:
 	double force;
 	double mass;// = 1;
 
-	double damping;// = DAMPING;
-	double attraction;// = ATTRACTION;
+	double damping;
+	double attraction;
 	bool targeting;
 	double target;
-
-
-
 };
 
 #endif /* INTEGRATOR_H_ */
