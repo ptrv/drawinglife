@@ -11,8 +11,7 @@
 #include "Walk.h"
 #include "LocationImage.h"
 #include "Integrator.h"
-//#include "ofxTimer.h"
-//#include "ofSoundPlayer.h"
+#include "ofSoundPlayer.h"
 
 /**
  *  \brief Main application class.

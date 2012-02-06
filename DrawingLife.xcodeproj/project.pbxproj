@@ -131,6 +131,7 @@
 		D0F86E8014DEB98F000EC12D /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs_mac/sqlite3/sqlite3.h; sourceTree = "<group>"; };
 		D0F86E8114DEB98F000EC12D /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = libs_mac/sqlite3/sqlite3ext.h; sourceTree = "<group>"; };
 		D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs_mac/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
+		D0F86E9C14DFF226000EC12D /* Integrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Integrator.h; sourceTree = "<group>"; };
 		D0FE245713DC3C9500AAA6CE /* AppSettings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = AppSettings.xml; path = bin/data/AppSettings.xml; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -329,6 +330,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D0F86E9C14DFF226000EC12D /* Integrator.h */,
 				D0E1DED813DC309C00268AD9 /* Walk.h */,
 				D0E1DED913DC309C00268AD9 /* Walk.cpp */,
 				D0E1DEDA13DC309C00268AD9 /* Timeline.h */,
