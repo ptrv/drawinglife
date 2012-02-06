@@ -406,12 +406,20 @@ void DrawingLifeApp::zoomUpdate()
 	// if targeting
 	// then
 
-	for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
-	{
-		m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
-//		UtmPoint utmP = GpsData::getUtmPoint(lat, lon, m_settings);
-		m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
-	}
+    if(m_multiMode)
+    {
+        m_magicBox->setSize((double)m_zoomIntegrator->getValue());
+        m_magicBox->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0);
+    }
+    else
+    {
+        for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
+        {
+            m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
+            //		UtmPoint utmP = GpsData::getUtmPoint(lat, lon, m_settings);
+            m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+        }
+    }
 }
 //--------------------------------------------------------------
 bool firstSleep = true;
