@@ -10,6 +10,9 @@
 #include "Timeline.h"
 #include "Walk.h"
 #include "LocationImage.h"
+#include "Integrator.h"
+//#include "ofxTimer.h"
+//#include "ofSoundPlayer.h"
 
 /**
  *  \brief Main application class.
@@ -82,6 +85,10 @@ private:
 
 	void processGpsData();
 
+	bool zoomHasChanged();
+
+	void zoomUpdate();
+
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -152,6 +159,14 @@ private:
 
     bool m_pause;
     MagicBox* m_magicBox;
+
+//    ofSoundPlayer* m_soundPlayer;
+
+    bool m_isZoomAnimation;
+
+    Integrator* m_zoomIntegrator;
+    Integrator* m_integratorX;
+    Integrator* m_integratorY;
 
 };
 

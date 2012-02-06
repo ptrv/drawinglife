@@ -163,3 +163,13 @@ std::string Timeline::getCurrentTime()
     return string(buf);
 
 }
+
+unsigned int Timeline::getCurrentCount() const
+{
+	return m_counter;
+}
+
+unsigned int Timeline::getAllCount() const
+{
+	return m_timeline.size();
+}

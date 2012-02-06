@@ -6,6 +6,13 @@
 #define _DRAWINGLIFETYPES_H_
 
 
+struct ZoomAnimFrame
+{
+	float frameTime;
+	int frameZoom;
+	double frameCenterX;
+	double frameCenterY;
+};
 /**
  * \brief Timeline value with time and id.
  *

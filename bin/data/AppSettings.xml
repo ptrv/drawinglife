@@ -35,8 +35,8 @@
 	<printvalues>1</printvalues>
 	<fullscreen>0</fullscreen>
 	<hidecursor>1</hidecursor>
-	<showinfo>0</showinfo>
-	<drawspeed>1</drawspeed>
+	<showinfo>1</showinfo>
+	<drawspeed>5</drawspeed>
 	<framerate>30</framerate>
 	<!-- This sets the number of points to draw.-->
 	<!-- To draw all points set 0 (very cpu intensive) -->
@@ -93,21 +93,47 @@
 	</currentpointimages>
 	<dotsize>5</dotsize>
 	<locationimages>
-		<image>
-			<path>location_images/img.png</path>
-			<name>test</name>
-			<lat>52.47771</lat>
-			<lon>-1.89857</lon>
-            <width>24</width>
-			<height>24</height>
-			<alpha></alpha>
-                <anchor>
+<!-- 		<image> -->
+<!-- 			<path>location_images/img.png</path> -->
+<!-- 			<name>test</name> -->
+<!-- 			<lat>52.47771</lat> -->
+<!-- 			<lon>-1.89857</lon> -->
+<!--             <width>24</width> -->
+<!-- 			<height>24</height> -->
+<!-- 			<alpha></alpha> -->
+<!--                 <anchor> -->
 <!--                 1 = percent, 2 = point-->
-                <type>1</type>
-                <posx>0.5</posx>
-                <posy>0.5</posy>
-                <show>0</show>
-			</anchor>
-		</image>
+<!--                 <type>1</type> -->
+<!--                 <posx>0.5</posx> -->
+<!--                 <posy>0.5</posy> -->
+<!--                 <show>0</show> -->
+<!-- 			</anchor> -->
+<!-- 		</image> -->
 	</locationimages>
 </ui>
+<zoomanimation>
+    <active>1</active>
+    <frames>
+        <frame time="0.0" zoom="15000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.05" zoom="1000" lat="52.49757" lon="13.44524"/>
+        <frame time="0.1" zoom="1000" lat="52.49686" lon="13.4452"/>
+        <frame time="0.2" zoom="10000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.3" zoom="2000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.4" zoom="15000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.5" zoom="3000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.6" zoom="11000" lat="52.49734" lon="13.44594"/>
+    </frames>
+    <dampzoom>0.3</dampzoom>
+    <attractionzoom>0.08</attractionzoom>
+    <dampcenter>0.2</dampcenter>
+    <attractioncenter>0.2</attractioncenter>
+</zoomanimation>
+<sound>
+    <active>0</active>
+    <soundfiles>
+        <soundfile src=""/>
+    </soundfiles>
+    <frames>
+        <frame time="0.0" sfile="" />
+    </frames>
+</sound>

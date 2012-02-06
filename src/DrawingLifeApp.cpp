@@ -192,6 +192,24 @@ void DrawingLifeApp::setup()
     ofEnableAlphaBlending();
 
 
+    int drSp = m_settings->getDrawSpeed();
+
+    float damp = m_settings->getZoomAnimationDamp();
+    float attr = m_settings->getZoomAnimationAttraction();
+    float dampCenter = damp;
+    float attrCenter = attr;
+
+    DBG_VAL((ofToString(damp) + " " + ofToString(attr)));
+    m_zoomIntegrator = new Integrator(0.0f, damp, attr);
+    m_isZoomAnimation = m_settings->isZoomAnimation();
+    m_integratorX = new Integrator(0.0f, dampCenter, attrCenter);
+    m_integratorY = new Integrator(0.0f, dampCenter, attrCenter);
+
+    if( ! m_isZoomAnimation)
+    {
+
+    	//    	m_zoomIntegrator->setTarget();
+    }
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
 
@@ -261,10 +279,94 @@ void DrawingLifeApp::setup()
 
     if(m_hideCursor)
         ofHideCursor();
+
+
+}
+int zoomFrameCount = 0;
+bool DrawingLifeApp::zoomHasChanged()
+{
+	float zoomTime = m_settings->getZoomAnimFrames()[zoomFrameCount].frameTime;
+
+	int current = m_timeline->getCurrentCount();
+	int all = m_timeline->getAllCount();
+
+	if(m_timeline->isFirst())
+	{
+		zoomFrameCount = 0;
+		return true;
+	}
+
+	int currIndex = 0;
+	for (int i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
+	{
+		float indexRatio = current / (float)all;
+
+		if((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
+		{
+			currIndex = i;
+		}
+		else
+		{
+			break;
+		}
+	}
+	if(zoomFrameCount != currIndex)
+	{
+		++zoomFrameCount;
+		if(zoomFrameCount >=  m_settings->getZoomAnimFrames().size())
+			--zoomFrameCount;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
+void DrawingLifeApp::zoomUpdate()
+{
+	if(m_isZoomAnimation)
+	{
+		// if zoom has changed
+		// them new target
+		// update
+
+		if(zoomHasChanged())
+		{
+			float zoomLevel = m_settings->getZoomAnimFrames()[zoomFrameCount].frameZoom;
+			double centerX = m_settings->getZoomAnimFrames()[zoomFrameCount].frameCenterX;
+			double centerY = m_settings->getZoomAnimFrames()[zoomFrameCount].frameCenterY;
+			UtmPoint utmP = GpsData::getUtmPoint(centerY, centerX, m_settings);
+
+			if(m_timeline->isFirst())
+			{
+				m_zoomIntegrator->set(zoomLevel);
+				m_integratorX->set(utmP.x);
+				m_integratorY->set(utmP.y);
+			}
+			m_zoomIntegrator->setTarget(zoomLevel);
+			m_integratorX->setTarget(utmP.x);
+			m_integratorY->setTarget(utmP.y);
+
+		}
+	}
+	m_zoomIntegrator->update();
+	m_integratorX->update();
+	m_integratorY->update();
+
+	// if targeting
+	// then
+
+	for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
+	{
+		m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
+//		UtmPoint utmP = GpsData::getUtmPoint(lat, lon, m_settings);
+		m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+	}
+}
 //--------------------------------------------------------------
 bool firstSleep = true;
+
 void DrawingLifeApp::update()
 {
     if (m_isAnimation && !m_pause)
@@ -273,9 +375,9 @@ void DrawingLifeApp::update()
         {
             if(m_timeline->getTimeline().size() > 0)
             {
-
                 if(m_loopMode)
                 {
+
                     for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
                         int id = m_timeline->getNext();
@@ -283,6 +385,9 @@ void DrawingLifeApp::update()
                         {
                             m_walks[id]->update();
                         }
+
+                        zoomUpdate();
+
                         m_timeline->countUp();
                         if(m_timeline->isFirst())
                         {
@@ -292,6 +397,7 @@ void DrawingLifeApp::update()
                             {
                                 m_walks[i]->reset();
                             }
+                            zoomFrameCount = 0;
 #if defined (TARGET_WIN32)
                             Sleep(m_settings->getSleepTime()*1000);
 #else
@@ -319,6 +425,7 @@ void DrawingLifeApp::update()
                     }
 
                 }
+
 
             }
         }

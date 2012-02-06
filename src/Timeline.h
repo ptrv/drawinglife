@@ -69,6 +69,9 @@ public:
 
     std::string getCurrentTime();
 
+    unsigned int getCurrentCount() const;
+    unsigned int getAllCount() const;
+
 private:
     // -----------------------------------------------------------------------------
     /**

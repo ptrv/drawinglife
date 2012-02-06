@@ -40,13 +40,17 @@ const ofxPointd MagicBox::getDrawablePoint(const UtmPoint& utmPoint)
     return normalizedPoint;
 }
 
+void MagicBox::setCenter(double x, double y)
+{
+//	m_centerUtm.
+}
 void MagicBox::setupBox(ofxPointd currUtm, double lon0)
 {
     m_centerUtm = currUtm;
-    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
+//    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
 
     m_theBox.setFromCenter(m_centerUtm , m_currentSize, m_currentSize);
-    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf", m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
+//    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf", m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
 
     m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
 }

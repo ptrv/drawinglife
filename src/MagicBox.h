@@ -28,6 +28,8 @@ public:
     void addToBoxSize(double sizeToAdd);
 
     void setSize(double newSize);
+    void setCenter(double x, double y);
+
     const ofxRectangled& getTheBox() const { return m_theBox; }
     const ofxRectangled getNormalizedBox();
     const ofxRectangled& getPaddedBox() const { return m_theBox; }
