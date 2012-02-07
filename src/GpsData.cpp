@@ -408,7 +408,7 @@ UtmPoint GpsData::getUtmPoint(double lat, double lon, AppSettings* settings)
     UtmPoint utmP;
     Math::real gamma, k;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
-    
+
     if(settings->isRegionsOn())
     {
         double lon0 = 0.0;
@@ -437,20 +437,42 @@ UtmPoint GpsData::getUtmPoint(double lat, double lon, AppSettings* settings)
                     lon,
                     utmP.x, utmP.y, gamma, k);
         utmP.lon0 = lon0;
-        
+
     }
     else
     {
-        
+
         TMS.Forward(Math::real(m_lon0Global),
                     lat,
                     lon,
                     utmP.x, utmP.y, gamma, k);
         utmP.lon0 = m_lon0Global;
     }
-    
+
     return utmP;
 }
+
+GpsPoint GpsData::getGpsPoint(const ofxPointd& utmP)
+{
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    Math::real gamma, k;
+
+    GpsPoint p;
+    double lat = 0.0;
+    double lon = 0.0;
+    // Works just for lon > -35 and lon < 65,
+    // see AppSettings.xml settings->meridian->region3
+    TMS.Reverse(Math::real(12.0),
+                utmP.x,
+                utmP.y,
+                lat, lon, gamma, k);
+    p.setGpsPointFromLatLon(lat, lon);
+
+//    std::cout << "lat: " << lat << ", lon: " << lon << std::endl;
+    return p;
+
+}
+
 // TODO parameter m_lon0
 void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
 {

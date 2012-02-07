@@ -459,6 +459,7 @@ double Walk::getScaledUtmY(double normalizedUtmY)
 
 const std::string& Walk::getCurrentGpsInfoDebug()
 {
+    GpsPoint boxCenter = m_magicBox->getCenterGps();
     m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
 	"Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
 	"Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
@@ -475,7 +476,8 @@ const std::string& Walk::getCurrentGpsInfoDebug()
 	"Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
 	"Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
 	"Total pts.        : " + ofToString(m_gpsData->getTotalGpsPoints()) + "\n" +
-	"Viewbox center    : " + ofToString(m_magicBox->getCenter().x,7) + " / " + ofToString(m_magicBox->getCenter().y, 7) + "\n" +
+//	"Viewbox center    : " + ofToString(m_magicBox->getCenter().x,7) + " / " + ofToString(m_magicBox->getCenter().y, 7) + "\n" +
+	"Viewbox center    : " + ofToString(boxCenter.getLatitude(),7) + " / " + ofToString(boxCenter.getLongitude(), 7) + "\n" +
     "Viewbox size      : " + ofToString(m_magicBox->getSize(),7) + "\n" +
 	"Person            : " + m_gpsData->getUser();
 
@@ -527,7 +529,7 @@ void Walk::setMagicBox(MagicBox* magicBox)
 
 void Walk::setMagicBoxStatic(MagicBox* magicBox, double lat, double lon)
 {
-    
+
     m_magicBox = 0;
     m_magicBox = magicBox;
     reset();
@@ -537,7 +539,7 @@ void Walk::setMagicBoxStatic(MagicBox* magicBox, double lat, double lon)
     tmpCoord.x = utmP.x;
     tmpCoord.y = utmP.y;
     m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
-    
+
 }
 
 void Walk::setCurrentPointImage(ofImage img, int alpha)

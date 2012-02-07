@@ -15,11 +15,11 @@ obj/*
 cscope.out
 
 docs/html/*
-libs/geographiclib-1.1/libs/*
+libs_mac/geographiclib-1.1/libs/*
 Path
 libs/geographiclib-1.1/windows/Debug/*
 libs/geographiclib-1.1/windows/Release/*
-libs/geographiclib-1.1/xcode/build/*
+libs_mac/geographiclib-1.1/xcode/build/*
 .DS_Store
 
 # python
