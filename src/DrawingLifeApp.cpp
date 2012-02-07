@@ -202,10 +202,10 @@ void DrawingLifeApp::setup()
 
 //    int drSp = m_settings->getDrawSpeed();
 
-    float damp = m_settings->getZoomAnimationDamp();
-    float attr = m_settings->getZoomAnimationAttraction();
-    float dampCenter = damp;
-    float attrCenter = attr;
+    double damp = m_settings->getZoomAnimationDamp();
+    double attr = m_settings->getZoomAnimationAttraction();
+    double dampCenter = m_settings->getZoomAnimationDampCenter();
+    double attrCenter = m_settings->getZoomAnimationAttractionCenter();
 
     DBG_VAL((ofToString(damp) + " " + ofToString(attr)));
     m_zoomIntegrator = new Integrator(0.0f, damp, attr);
@@ -405,17 +405,22 @@ void DrawingLifeApp::zoomUpdate()
 	m_integratorX->update();
 	m_integratorY->update();
 
-    if(m_multiMode)
+    if(m_zoomIntegrator->isTargeting() ||
+       m_integratorX->isTargeting() ||
+       m_integratorY->isTargeting())
     {
-        m_magicBox->setSize((double)m_zoomIntegrator->getValue());
-        m_magicBox->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0);
-    }
-    else
-    {
-        for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
+        if(m_multiMode)
         {
-            m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
-            m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+            m_magicBox->setSize((double)m_zoomIntegrator->getValue());
+            m_magicBox->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0);
+        }
+        else
+        {
+            for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
+            {
+                m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
+                m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+            }
         }
     }
 }
