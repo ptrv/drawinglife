@@ -16,9 +16,9 @@ public:
 	{
 		init(0.0f, 0.5f, 0.2f);
 	}
-//	Integrator(double val){
-//		init(val, 0.5f, 0.2f);
-//	}
+	Integrator(double val){
+		init(val, 0.5f, 0.2f);
+	}
 	Integrator (double val, double damp, double attr)
 	{
 		init(val,damp,attr);
