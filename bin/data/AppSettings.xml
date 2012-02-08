@@ -114,6 +114,10 @@
 <zoomanimation>
     <active>1</active>
     <type>1</type>
+     <!-- 3 zoom types: -->
+     <!-- 1 - specify time in animation where 0.0 is the beginning and 1.0 the end -->
+     <!-- 2 - specify a gpsid from database -->
+     <!-- 3 - specify a timestamp from database in iso 8601 forvmat -->
     <frames>
         <frame time="0.0" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
         <frame time="0.05" timestamp="" gpsid="" zoom="1000" lat="52.49757" lon="13.44524"/>
@@ -124,8 +128,11 @@
         <frame time="0.5" timestamp="" gpsid="" zoom="3000" lat="52.49734" lon="13.44594"/>
         <frame time="0.6" timestamp="" gpsid="" zoom="11000" lat="52.49734" lon="13.44594"/>
     </frames>
-    <dampzoom>0.3</dampzoom>
+    <!-- tweening parameters -->
+    <!-- z parameters -->
+    <dampzoom>0.1</dampzoom>
     <attractionzoom>0.08</attractionzoom>
+    <!-- x,y parameters -->
     <dampcenter>0.2</dampcenter>
     <attractioncenter>0.2</attractioncenter>
 </zoomanimation>
