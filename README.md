@@ -23,6 +23,15 @@
             * `./configure, make, sudo make install`
             * eventually `sudo ldconfig`
 
+### download drawinglife
+
+* `cd openFrameworks\_path/apps`
+* `mkdir myapps`
+* `cd myapps`
+* `git clone git://avp-ptr.de/drawinglife.git`
+* `cd drawinglife`
+* `git checkout -t origin/leuven` (for the leuven project)
+
 ### building drawinglife
 
 * On Linux:
