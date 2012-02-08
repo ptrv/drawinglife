@@ -342,16 +342,56 @@ void DrawingLifeApp::soundUpdate()
 int zoomFrameCount = 0;
 bool DrawingLifeApp::zoomHasChanged()
 {
-//	float zoomTime = m_settings->getZoomAnimFrames()[zoomFrameCount].frameTime;
-
-	int current = m_timeline->getCurrentCount();
-	int all = m_timeline->getAllCount();
-
 	if(m_timeline->isFirst())
 	{
 		zoomFrameCount = 0;
 		return true;
 	}
+
+	switch (m_settings->getZoomAnimationCriteria()) {
+		case 1:
+			return zoomHasChangedTime();
+		case 2:
+			return zoomHasChangedId();
+		case 3:
+			return zoomHasChangedTimestamp();
+		default:
+			return false;
+	}
+}
+
+bool DrawingLifeApp::zoomHasChangedId()
+{
+	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+		return false;
+	int currentId = m_timeline->getCurrentTimelineObj().gpsid;
+	int zoomChangeId = m_settings->getZoomAnimFrames()[zoomFrameCount+1].gpsId;
+	if (currentId == zoomChangeId) {
+		++zoomFrameCount;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DrawingLifeApp::zoomHasChangedTimestamp()
+{
+	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+		return false;
+	string currentTimestamp = m_timeline->getCurrentTimelineObj().timeString;
+	string zoomChangeTimestamp = m_settings->getZoomAnimFrames()[zoomFrameCount+1].timestamp;
+	if (zoomChangeTimestamp.compare(currentTimestamp) == 0) {
+		++zoomFrameCount;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DrawingLifeApp::zoomHasChangedTime()
+{
+	int current = m_timeline->getCurrentCount();
+	int all = m_timeline->getAllCount();
 
 	int currIndex = 0;
 	for (unsigned int i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)

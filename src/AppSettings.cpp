@@ -258,6 +258,8 @@ m_speedThreshold(0.0)
     m_zoomAnimationAttraction = m_xml.getValue("attractionzoom", 0.2);
     m_zoomAnimationDampCenter = m_xml.getValue("dampcenter", 0.2);
     m_zoomAnimationAttractionCenter = m_xml.getValue("attractioncenter", 0.2);
+    m_zoomAnimationAttractionCriteria = m_xml.getValue("type", 1);
+    m_zoomanimationUseOnlyZ = m_xml.getValue("onlyz", 0) == 1 ? true : false;
     m_xml.pushTag("frames");
     int numZoomFrames = m_xml.getNumTags("frame");
     for(int i = 0; i < numZoomFrames; ++i)
@@ -267,6 +269,8 @@ m_speedThreshold(0.0)
     	zaf.frameZoom = m_xml.getAttribute("frame", "zoom", 0, i);
     	zaf.frameCenterX = m_xml.getAttribute("frame", "lon", 0.0, i);
     	zaf.frameCenterY = m_xml.getAttribute("frame", "lat", 0.0, i);
+    	zaf.gpsId = m_xml.getAttribute("frame", "gpsid", -1, i);
+    	zaf.timestamp = m_xml.getAttribute("frame", "timestamp", "", i);
     	m_zoomAnimationFrames.push_back(zaf);
     }
 

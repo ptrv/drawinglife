@@ -85,6 +85,9 @@ private:
 	void processGpsData();
 
 	bool zoomHasChanged();
+	bool zoomHasChangedTime();
+	bool zoomHasChangedId();
+	bool zoomHasChangedTimestamp();
 
 	void zoomUpdate();
 

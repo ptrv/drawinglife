@@ -72,6 +72,8 @@ public:
     unsigned int getCurrentCount() const;
     unsigned int getAllCount() const;
 
+    const TimelineObject& getCurrentTimelineObj() const;
+
 private:
     // -----------------------------------------------------------------------------
     /**

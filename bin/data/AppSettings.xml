@@ -113,15 +113,16 @@
 </ui>
 <zoomanimation>
     <active>1</active>
+    <type>1</type>
     <frames>
-        <frame time="0.0" zoom="15000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.05" zoom="1000" lat="52.49757" lon="13.44524"/>
-        <frame time="0.1" zoom="1000" lat="52.49686" lon="13.4452"/>
-        <frame time="0.2" zoom="10000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.3" zoom="2000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.4" zoom="15000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.5" zoom="3000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.6" zoom="11000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.0" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.05" timestamp="" gpsid="" zoom="1000" lat="52.49757" lon="13.44524"/>
+        <frame time="0.1" timestamp="" gpsid="" zoom="1000" lat="52.49686" lon="13.4452"/>
+        <frame time="0.2" timestamp="" gpsid="" zoom="10000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.3" timestamp="" gpsid="" zoom="2000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.4" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.5" timestamp="" gpsid="" zoom="3000" lat="52.49734" lon="13.44594"/>
+        <frame time="0.6" timestamp="" gpsid="" zoom="11000" lat="52.49734" lon="13.44594"/>
     </frames>
     <dampzoom>0.3</dampzoom>
     <attractionzoom>0.08</attractionzoom>

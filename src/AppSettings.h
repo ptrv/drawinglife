@@ -116,6 +116,9 @@ public:
     double getZoomAnimationDampCenter() const { return m_zoomAnimationDampCenter; }
     double getZoomAnimationAttractionCenter() const { return m_zoomAnimationAttractionCenter;}
 
+    int getZoomAnimationCriteria() const { return m_zoomAnimationAttractionCriteria; }
+    bool getUseOnlyZ() const { return m_zoomanimationUseOnlyZ; }
+
     bool isSoundActive() const { return m_isSoundActive; }
     const std::vector<std::string>& getSoundFiles() const { return m_soundFiles; }
 private:
@@ -233,6 +236,9 @@ private:
 
     bool m_isSoundActive;
     std::vector<std::string> m_soundFiles;
+
+    int m_zoomAnimationAttractionCriteria;
+    bool m_zoomanimationUseOnlyZ;
 };
 
 #endif // _APPSETTINGS_H_

@@ -12,6 +12,9 @@ struct ZoomAnimFrame
 	int frameZoom;
 	double frameCenterX;
 	double frameCenterY;
+	std::string timestamp;
+	int gpsId;
+
 };
 /**
  * \brief Timeline value with time and id.
@@ -22,6 +25,7 @@ struct TimelineObject
     std::string timeString;
     time_t secs;
     int id;
+    int gpsid;
     bool operator() (TimelineObject lhs, TimelineObject rhs)
     {
         return lhs.secs < rhs.secs;
