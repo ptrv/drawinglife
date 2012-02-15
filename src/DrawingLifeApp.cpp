@@ -168,9 +168,7 @@ void DrawingLifeApp::setup()
 
     m_numPerson = m_settings->getNumPerson();
     m_names = m_settings->getNames();
-	// TODO 101028_1709_TP: Why are those vectors stuffed with 0?
-	// This hinders to check the vectors themselves for unequal 0 later.
-	// See affected TODO 101028_1710_TP.
+
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
 //        m_names.push_back(m_settings.getValue("name", "", i));
@@ -256,7 +254,6 @@ void DrawingLifeApp::setup()
 			// GpsData are loaded now. Drawing routine can start.
 			for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
-				// TODO 101028_1710_TP: Check for !m_walks before accessing the object.
                 if(m_walks[personIndex]->getGpsData().getTotalGpsPoints() == 0)
                 {
                     m_startScreenMode = true;
