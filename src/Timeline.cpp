@@ -40,6 +40,7 @@ void Timeline::setTimeline(std::vector<GpsData*>& gpsDatas)
                 tmObj.timeString = timeString;
                 tmObj.secs = makeTimeObject(timeString);
                 tmObj.id = i;
+                tmObj.gpsid = gpsDatas[i]->getSegments()[j].getPoints()[k].getGpsPointId();
                 m_timeline.push_back(tmObj);
 //                ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", tmObj.timeString.c_str(), tmObj.id, tmObj.secs);
             }
@@ -162,4 +163,19 @@ std::string Timeline::getCurrentTime()
     sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
     return string(buf);
 
+}
+
+unsigned int Timeline::getCurrentCount() const
+{
+	return m_counter;
+}
+
+unsigned int Timeline::getAllCount() const
+{
+	return m_timeline.size();
+}
+
+const TimelineObject& Timeline::getCurrentTimelineObj() const
+{
+	return m_timeline[m_counter];
 }

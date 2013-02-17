@@ -10,6 +10,8 @@
 #include "Timeline.h"
 #include "Walk.h"
 #include "LocationImage.h"
+#include "Integrator.h"
+#include "ofSoundPlayer.h"
 
 /**
  *  \brief Main application class.
@@ -82,6 +84,15 @@ private:
 
 	void processGpsData();
 
+	bool zoomHasChanged();
+	bool zoomHasChangedTime();
+	bool zoomHasChangedId();
+	bool zoomHasChangedTimestamp();
+
+	void zoomUpdate();
+
+	void soundUpdate();
+
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -152,6 +163,14 @@ private:
 
     bool m_pause;
     MagicBox* m_magicBox;
+
+    std::vector<ofSoundPlayer*> m_soundPlayer;
+
+    bool m_isZoomAnimation;
+
+    Integrator* m_zoomIntegrator;
+    Integrator* m_integratorX;
+    Integrator* m_integratorY;
 
 };
 

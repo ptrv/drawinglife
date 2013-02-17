@@ -153,7 +153,7 @@ m_speedThreshold(0.0)
     m_xml.popTag();
     m_xml.popTag();
 
-    m_drawSpeed = m_xml.getValue("settings:drawspeed", 1.0f)*m_numPerson;
+    m_drawSpeed = m_xml.getValue("settings:drawspeed", 1.0f);
     m_loadOnStart = m_xml.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_xml.getValue("settings:framerate", 30);
     m_fullscreen = m_xml.getValue("settings:fullscreen", 0) == 1 ? true : false;
@@ -251,6 +251,42 @@ m_speedThreshold(0.0)
 
     m_xml.popTag();
     m_xml.popTag();
+
+    m_xml.pushTag("zoomanimation");
+    m_isZoomAnimation = m_xml.getValue("active", 0) == 1 ? true : false;
+    m_zoomAnimationDamp = m_xml.getValue("dampzoom", 0.2);
+    m_zoomAnimationAttraction = m_xml.getValue("attractionzoom", 0.2);
+    m_zoomAnimationDampCenter = m_xml.getValue("dampcenter", 0.2);
+    m_zoomAnimationAttractionCenter = m_xml.getValue("attractioncenter", 0.2);
+    m_zoomAnimationAttractionCriteria = m_xml.getValue("type", 1);
+    m_zoomanimationUseOnlyZ = m_xml.getValue("onlyz", 0) == 1 ? true : false;
+    m_xml.pushTag("frames");
+    int numZoomFrames = m_xml.getNumTags("frame");
+    for(int i = 0; i < numZoomFrames; ++i)
+    {
+    	ZoomAnimFrame zaf;
+    	zaf.frameTime = m_xml.getAttribute("frame", "time", 0.0, i);
+    	zaf.frameZoom = m_xml.getAttribute("frame", "zoom", 0, i);
+    	zaf.frameCenterX = m_xml.getAttribute("frame", "lon", 0.0, i);
+    	zaf.frameCenterY = m_xml.getAttribute("frame", "lat", 0.0, i);
+    	zaf.gpsId = m_xml.getAttribute("frame", "gpsid", -1, i);
+    	zaf.timestamp = m_xml.getAttribute("frame", "timestamp", "", i);
+    	m_zoomAnimationFrames.push_back(zaf);
+    }
+
+    m_xml.popTag();
+    m_xml.popTag();
+
+    m_xml.pushTag("sound");
+    m_isSoundActive = m_xml.getValue("active", 0) == 1 ? true : false;
+
+    m_xml.pushTag("soundfiles");
+    int numSoundFiles = m_xml.getNumTags("soundfile");
+    for (int i = 0; i < numSoundFiles; ++i) {
+		m_soundFiles.push_back(m_xml.getAttribute("soundfile", "src", "", i));
+	}
+    m_xml.popTag();
+	m_xml.popTag();
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 

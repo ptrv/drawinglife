@@ -108,6 +108,19 @@ public:
     double getBoundingBoxLat() const { return m_boundingBoxLat; } 
     double getBoundingBoxLon() const { return m_boundingBoxLon; }
     
+    bool isZoomAnimation() const { return m_isZoomAnimation; }
+    const std::vector<ZoomAnimFrame>& getZoomAnimFrames() const { return m_zoomAnimationFrames; }
+
+    double getZoomAnimationDamp() const { return m_zoomAnimationDamp; }
+    double getZoomAnimationAttraction() const { return m_zoomAnimationAttraction;}
+    double getZoomAnimationDampCenter() const { return m_zoomAnimationDampCenter; }
+    double getZoomAnimationAttractionCenter() const { return m_zoomAnimationAttractionCenter;}
+
+    int getZoomAnimationCriteria() const { return m_zoomAnimationAttractionCriteria; }
+    bool getUseOnlyZ() const { return m_zoomanimationUseOnlyZ; }
+
+    bool isSoundActive() const { return m_isSoundActive; }
+    const std::vector<std::string>& getSoundFiles() const { return m_soundFiles; }
 private:
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
@@ -213,6 +226,19 @@ private:
     bool m_boundingBoxFixed;
     double m_boundingBoxLat;
     double m_boundingBoxLon;
+
+    bool m_isZoomAnimation;
+    std::vector<ZoomAnimFrame> m_zoomAnimationFrames;
+    double m_zoomAnimationDamp;
+    double m_zoomAnimationAttraction;
+    double m_zoomAnimationDampCenter;
+    double m_zoomAnimationAttractionCenter;
+
+    bool m_isSoundActive;
+    std::vector<std::string> m_soundFiles;
+
+    int m_zoomAnimationAttractionCriteria;
+    bool m_zoomanimationUseOnlyZ;
 };
 
 #endif // _APPSETTINGS_H_

@@ -94,6 +94,8 @@ public:
 
 	double getSpeed() const { return m_speed; }
 
+	int getGpsPointId() const { return m_gpsPointId; }
+
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Clear GpsPoint object.

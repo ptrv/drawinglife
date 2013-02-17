@@ -78,6 +78,14 @@ DrawingLifeApp::~DrawingLifeApp()
     {
         SAFE_DELETE(m_locationImgs[i]);
     }
+    
+    SAFE_DELETE(m_zoomIntegrator);
+    SAFE_DELETE(m_integratorX);
+    SAFE_DELETE(m_integratorY);
+    
+    for (unsigned int i=0; i < m_soundPlayer.size(); ++i) {
+        SAFE_DELETE(m_soundPlayer[i]);
+    }
 }
 
 void DrawingLifeApp::setup()
@@ -160,9 +168,7 @@ void DrawingLifeApp::setup()
 
     m_numPerson = m_settings->getNumPerson();
     m_names = m_settings->getNames();
-	// TODO 101028_1709_TP: Why are those vectors stuffed with 0?
-	// This hinders to check the vectors themselves for unequal 0 later.
-	// See affected TODO 101028_1710_TP.
+
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
 //        m_names.push_back(m_settings.getValue("name", "", i));
@@ -191,6 +197,25 @@ void DrawingLifeApp::setup()
 
     ofEnableAlphaBlending();
 
+
+//    int drSp = m_settings->getDrawSpeed();
+
+    double damp = m_settings->getZoomAnimationDamp();
+    double attr = m_settings->getZoomAnimationAttraction();
+    double dampCenter = m_settings->getZoomAnimationDampCenter();
+    double attrCenter = m_settings->getZoomAnimationAttractionCenter();
+
+    DBG_VAL((ofToString(damp) + " " + ofToString(attr)));
+    m_zoomIntegrator = new Integrator(0.0f, damp, attr);
+    m_isZoomAnimation = m_settings->isZoomAnimation();
+    m_integratorX = new Integrator(0.0f, dampCenter, attrCenter);
+    m_integratorY = new Integrator(0.0f, dampCenter, attrCenter);
+
+    if( ! m_isZoomAnimation)
+    {
+
+    	//    	m_zoomIntegrator->setTarget();
+    }
 
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
@@ -229,7 +254,6 @@ void DrawingLifeApp::setup()
 			// GpsData are loaded now. Drawing routine can start.
 			for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
-				// TODO 101028_1710_TP: Check for !m_walks before accessing the object.
                 if(m_walks[personIndex]->getGpsData().getTotalGpsPoints() == 0)
                 {
                     m_startScreenMode = true;
@@ -261,10 +285,185 @@ void DrawingLifeApp::setup()
 
     if(m_hideCursor)
         ofHideCursor();
+
+
+    if(m_settings->isSoundActive())
+    {
+    	for (unsigned int i = 0; i < m_settings->getSoundFiles().size(); ++i)
+    	{
+    	    ofSoundPlayer* sndPlay = new ofSoundPlayer();
+    	    sndPlay->loadSound(m_settings->getSoundFiles()[i]);
+    	    sndPlay->setLoop(false);
+    	    m_soundPlayer.push_back(sndPlay);
+		}
+    }
+
+}
+int currentSoundFile = 0;
+void DrawingLifeApp::soundUpdate()
+{
+	if(m_settings->isSoundActive() && m_soundPlayer.size() > 0)
+	{
+		if(m_timeline->isFirst())
+		{
+			currentSoundFile = 0;
+			for (int i = 0; i < static_cast<int>(m_soundPlayer.size()); ++i)
+			{
+				m_soundPlayer[i]->stop();
+			}
+			if(m_soundPlayer.size() > 0)
+			{
+				m_soundPlayer[currentSoundFile]->play();
+			}
+		}
+		else
+		{
+			if( ! m_soundPlayer[currentSoundFile]->getIsPlaying())
+			{
+				m_soundPlayer[currentSoundFile]->stop();
+				m_soundPlayer[currentSoundFile]->setPosition(0.0);
+				if(currentSoundFile < static_cast<int>(m_soundPlayer.size()-1))
+				{
+					++currentSoundFile;
+				}
+				else
+				{
+					currentSoundFile = 0;
+				}
+				m_soundPlayer[currentSoundFile]->play();
+			}
+		}
+	}
 }
 
+int zoomFrameCount = 0;
+bool DrawingLifeApp::zoomHasChanged()
+{
+	if(m_timeline->isFirst())
+	{
+		zoomFrameCount = 0;
+		return true;
+	}
+
+	switch (m_settings->getZoomAnimationCriteria()) {
+		case 1:
+			return zoomHasChangedTime();
+		case 2:
+			return zoomHasChangedId();
+		case 3:
+			return zoomHasChangedTimestamp();
+		default:
+			return false;
+	}
+}
+
+bool DrawingLifeApp::zoomHasChangedId()
+{
+	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+		return false;
+	int currentId = m_timeline->getCurrentTimelineObj().gpsid;
+	int zoomChangeId = m_settings->getZoomAnimFrames()[zoomFrameCount+1].gpsId;
+	if (currentId == zoomChangeId) {
+		++zoomFrameCount;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DrawingLifeApp::zoomHasChangedTimestamp()
+{
+	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+		return false;
+	string currentTimestamp = m_timeline->getCurrentTimelineObj().timeString;
+	string zoomChangeTimestamp = m_settings->getZoomAnimFrames()[zoomFrameCount+1].timestamp;
+	if (zoomChangeTimestamp.compare(currentTimestamp) == 0) {
+		++zoomFrameCount;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool DrawingLifeApp::zoomHasChangedTime()
+{
+	int current = m_timeline->getCurrentCount();
+	int all = m_timeline->getAllCount();
+
+	int currIndex = 0;
+	for (unsigned int i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
+	{
+		if((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
+		{
+			currIndex = i;
+		}
+		else
+		{
+			break;
+		}
+	}
+	if(zoomFrameCount != currIndex)
+	{
+		++zoomFrameCount;
+		if(zoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+			--zoomFrameCount;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void DrawingLifeApp::zoomUpdate()
+{
+	if(m_isZoomAnimation)
+	{
+		if(zoomHasChanged())
+		{
+			float zoomLevel = m_settings->getZoomAnimFrames()[zoomFrameCount].frameZoom;
+			double centerX = m_settings->getZoomAnimFrames()[zoomFrameCount].frameCenterX;
+			double centerY = m_settings->getZoomAnimFrames()[zoomFrameCount].frameCenterY;
+			UtmPoint utmP = GpsData::getUtmPoint(centerY, centerX, m_settings);
+
+			if(m_timeline->isFirst())
+			{
+				m_zoomIntegrator->set(zoomLevel);
+				m_integratorX->set(utmP.x);
+				m_integratorY->set(utmP.y);
+			}
+			m_zoomIntegrator->setTarget(zoomLevel);
+			m_integratorX->setTarget(utmP.x);
+			m_integratorY->setTarget(utmP.y);
+
+		}
+	}
+	m_zoomIntegrator->update();
+	m_integratorX->update();
+	m_integratorY->update();
+
+    if(m_zoomIntegrator->isTargeting() ||
+       m_integratorX->isTargeting() ||
+       m_integratorY->isTargeting())
+    {
+        if(m_multiMode)
+        {
+            m_magicBox->setSize((double)m_zoomIntegrator->getValue());
+            m_magicBox->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0);
+        }
+        else
+        {
+            for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
+            {
+                m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
+                m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+            }
+        }
+    }
+}
 //--------------------------------------------------------------
 bool firstSleep = true;
+
 void DrawingLifeApp::update()
 {
     if (m_isAnimation && !m_pause)
@@ -273,9 +472,9 @@ void DrawingLifeApp::update()
         {
             if(m_timeline->getTimeline().size() > 0)
             {
-
                 if(m_loopMode)
                 {
+
                     for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
                         int id = m_timeline->getNext();
@@ -283,6 +482,10 @@ void DrawingLifeApp::update()
                         {
                             m_walks[id]->update();
                         }
+
+                        zoomUpdate();
+                        soundUpdate();
+
                         m_timeline->countUp();
                         if(m_timeline->isFirst())
                         {
@@ -292,6 +495,7 @@ void DrawingLifeApp::update()
                             {
                                 m_walks[i]->reset();
                             }
+                            zoomFrameCount = 0;
 #if defined (TARGET_WIN32)
                             Sleep(m_settings->getSleepTime()*1000);
 #else
@@ -319,6 +523,7 @@ void DrawingLifeApp::update()
                     }
 
                 }
+
 
             }
         }

@@ -21,27 +21,33 @@ private:
 public:
 	static void logValue(const char* function, const char* name, const string& value)
 	{
-		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %s\n<--", function, name, value.c_str());
+		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %s\n<--", ofGetTimestampString().c_str(), 
+              function, name, value.c_str());
 	}
 	static void logValue(const char* function, const char* name, int value)
 	{
-		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %d\n<--", function, name, value);
+		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %d\n<--", ofGetTimestampString().c_str(), 
+              function, name, value);
 	}
 	static void logValue(const char* function, const char* name, unsigned int value)
 	{
-		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %u\n<--", function, name, value);
+		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %u\n<--", ofGetTimestampString().c_str(), 
+              function, name, value);
 	}
 	static void logValue(const char* function, const char* name, double value)
 	{
-		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %f\n<--", function, name, value);
+		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %f\n<--", ofGetTimestampString().c_str(), 
+              function, name, value);
 	}
 	static void logValue(const char* function, const char* name, float value)
 	{
-		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %f\n<--", function, name, value);
+		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %f\n<--", ofGetTimestampString().c_str(), 
+              function, name, value);
 	}
 	static void logValue(const char* function, const char* name, bool value)
 	{
-		ofLog(OF_LOG_VERBOSE, "--> %s \n%s : %s\n<--", function, name, (value ? "true" : "false"));
+		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %s\n<--", ofGetTimestampString().c_str(), 
+              function, name, (value ? "true" : "false"));
 	}
 };
 
