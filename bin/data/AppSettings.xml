@@ -1,145 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<data>
-	<database>test.sqlite</database>
-	<person>
-		<name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
-	</person>
-</data>
-<dbquery>
-	<!-- There are four query types: -->
-	<!-- 1 = day range -->
-	<!-- 2 = month range -->
-	<!-- 3 = year range -->
-	<!-- 4 = city -->
-	<!-- 5 = sql file for each person-->
-	<type>4</type>
-	<time>
-		<yearstart>2007</yearstart>
-		<yearend>2009</yearend>
-	</time>
-	<city>Berlin</city>
-</dbquery>
-<settings>
-	<loop>1</loop>
-	<interactivemode>
-		<enabled>0</enabled>
-		<traced>1</traced>
-	</interactivemode>
-	<multimode>0</multimode>
-	<multimodeinfo>0</multimodeinfo>
-	<sleeptime>0</sleeptime>
-	<usespeed threshold="10">0</usespeed>
-	<log level="0" />
-	<loadgpsonstart>1</loadgpsonstart>
-	<debugmode>0</debugmode>
-	<printvalues>1</printvalues>
-	<fullscreen>0</fullscreen>
-	<hidecursor>1</hidecursor>
-	<showinfo>1</showinfo>
-	<drawspeed>5</drawspeed>
-	<framerate>30</framerate>
-	<!-- This sets the number of points to draw.-->
-	<!-- To draw all points set 0 (very cpu intensive) -->
-	<walklength>0</walklength>
-	<boundingbox>
-		<auto>0</auto>
-        <static>1</static>
-        <position lat="52.49734" lon="13.44594"/>
-		<size>5000.0</size>
-		<padding>2000.0</padding>
-  	</boundingbox>
-	<meridian>
-		<regions>1</regions>
-		<region1 lon0="-119.0" minlon="-180.0" maxlon="-100.0" />
-		<region2 lon0="-74.0" minlon="-100.0" maxlon="-35.0" />
-		<region3 lon0="12.0" minlon="-35.0" maxlon="65.0" />
-		<region4 lon0="116.0" minlon="65.0" maxlon="130.0" />
-		<region5 lon0="146.0" minlon="130.0" maxlon="180.0" />
-		<auto>1</auto>
-		<!-- value in degrees -->
-		<lon0>0.0</lon0>
-	</meridian>
-</settings>
-<ui>
-	<fonts>
-		<font name="mono.ttf" size="50" />
-		<font name="mono.ttf" size="24" />
-		<font name="mono.ttf" size="16" />
-		<!-- <font name="Standard0753.ttf" size="8" /> -->
-		<font name="consola.ttf" size="11" />
-	</fonts>
-	<alpha>
-		<tracks>64</tracks>
-		<legend>255</legend>
-	</alpha>
-	<color>
-		<foreground r="255" g="255" b="255" />
-		<background r="0" g="0" b="0" />
-		<!-- <viewbox r="30" g="30" b="30" /> -->
-		<interactiveseg r="255" g="255" b="0" a="255" />
-	</color>
-    <speedcolors>
-	    <underthreshold r="255" g="255" b="255" a="64" />
-	    <abovethreshold r="255" g="0" b="0" a="0" />
-	</speedcolors>
-	<imageascurrent>0</imageascurrent>
-	<currentpointimages>
-		<image>
-            <path></path>
-            <width></width>
-			<height></height>
-            <alpha></alpha>
-        </image>
-	</currentpointimages>
-	<dotsize>5</dotsize>
-	<locationimages>
-<!-- 		<image> -->
-<!-- 			<path>location_images/img.png</path> -->
-<!-- 			<name>test</name> -->
-<!-- 			<lat>52.47771</lat> -->
-<!-- 			<lon>-1.89857</lon> -->
-<!--             <width>24</width> -->
-<!-- 			<height>24</height> -->
-<!-- 			<alpha></alpha> -->
-<!--                 <anchor> -->
-<!--                 1 = percent, 2 = point-->
-<!--                 <type>1</type> -->
-<!--                 <posx>0.5</posx> -->
-<!--                 <posy>0.5</posy> -->
-<!--                 <show>0</show> -->
-<!-- 			</anchor> -->
-<!-- 		</image> -->
-	</locationimages>
-</ui>
-<zoomanimation>
-    <active>1</active>
-    <type>1</type>
-     <!-- 3 zoom types: -->
-     <!-- 1 - specify time in animation where 0.0 is the beginning and 1.0 the end -->
-     <!-- 2 - specify a gpsid from database -->
-     <!-- 3 - specify a timestamp from database in iso 8601 forvmat -->
-    <frames>
-        <frame time="0.0" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.05" timestamp="" gpsid="" zoom="1000" lat="52.49757" lon="13.44524"/>
-        <frame time="0.1" timestamp="" gpsid="" zoom="1000" lat="52.49686" lon="13.4452"/>
-        <frame time="0.2" timestamp="" gpsid="" zoom="10000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.3" timestamp="" gpsid="" zoom="2000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.4" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.5" timestamp="" gpsid="" zoom="3000" lat="52.49734" lon="13.44594"/>
-        <frame time="0.6" timestamp="" gpsid="" zoom="11000" lat="52.49734" lon="13.44594"/>
-    </frames>
-    <!-- tweening parameters -->
-    <!-- z parameters -->
-    <dampzoom>0.1</dampzoom>
-    <attractionzoom>0.08</attractionzoom>
-    <!-- x,y parameters -->
-    <dampcenter>0.2</dampcenter>
-    <attractioncenter>0.2</attractioncenter>
-</zoomanimation>
-<sound>
-    <active>0</active>
-    <soundfiles>
-        <!-- <soundfile src="test1.mp3"/> -->
-        <!-- <soundfile src="test2.mp3"/> -->
-    </soundfiles>
-</sound>
+<drawinglife>
+    <data>
+        <database>test.sqlite</database>
+        <person>
+            <name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
+        </person>
+    </data>
+    <dbquery>
+        <!-- There are four query types: -->
+        <!-- 1 = day range -->
+        <!-- 2 = month range -->
+        <!-- 3 = year range -->
+        <!-- 4 = city -->
+        <!-- 5 = sql file for each person-->
+        <type>4</type>
+        <time>
+            <yearstart>2007</yearstart>
+            <yearend>2009</yearend>
+        </time>
+        <city>Berlin</city>
+    </dbquery>
+    <settings>
+        <loop>1</loop>
+        <interactivemode>
+            <enabled>0</enabled>
+            <traced>1</traced>
+        </interactivemode>
+        <multimode>0</multimode>
+        <multimodeinfo>0</multimodeinfo>
+        <sleeptime>0</sleeptime>
+        <usespeed threshold="10">0</usespeed>
+        <log level="0" />
+        <loadgpsonstart>1</loadgpsonstart>
+        <debugmode>0</debugmode>
+        <printvalues>1</printvalues>
+        <fullscreen>0</fullscreen>
+        <hidecursor>1</hidecursor>
+        <showinfo>1</showinfo>
+        <drawspeed>5</drawspeed>
+        <framerate>30</framerate>
+        <!-- This sets the number of points to draw.-->
+        <!-- To draw all points set 0 (very cpu intensive) -->
+        <walklength>0</walklength>
+        <boundingbox>
+            <auto>0</auto>
+            <static>1</static>
+            <position lat="52.49734" lon="13.44594"/>
+            <size>5000.0</size>
+            <padding>2000.0</padding>
+        </boundingbox>
+        <meridian>
+            <regions>1</regions>
+            <region1 lon0="-119.0" minlon="-180.0" maxlon="-100.0" />
+            <region2 lon0="-74.0" minlon="-100.0" maxlon="-35.0" />
+            <region3 lon0="12.0" minlon="-35.0" maxlon="65.0" />
+            <region4 lon0="116.0" minlon="65.0" maxlon="130.0" />
+            <region5 lon0="146.0" minlon="130.0" maxlon="180.0" />
+            <auto>1</auto>
+            <!-- value in degrees -->
+            <lon0>0.0</lon0>
+        </meridian>
+    </settings>
+    <ui>
+        <fonts>
+            <font name="mono.ttf" size="50" />
+            <font name="mono.ttf" size="24" />
+            <font name="mono.ttf" size="16" />
+            <!-- <font name="Standard0753.ttf" size="8" /> -->
+            <font name="consola.ttf" size="11" />
+        </fonts>
+        <alpha>
+            <tracks>64</tracks>
+            <legend>255</legend>
+        </alpha>
+        <color>
+            <foreground r="255" g="255" b="255" />
+            <background r="0" g="0" b="0" />
+            <!-- <viewbox r="30" g="30" b="30" /> -->
+            <interactiveseg r="255" g="255" b="0" a="255" />
+        </color>
+        <speedcolors>
+            <underthreshold r="255" g="255" b="255" a="64" />
+            <abovethreshold r="255" g="0" b="0" a="0" />
+        </speedcolors>
+        <imageascurrent>0</imageascurrent>
+        <currentpointimages>
+            <image>
+                <path></path>
+                <width></width>
+                <height></height>
+                <alpha></alpha>
+            </image>
+        </currentpointimages>
+        <dotsize>5</dotsize>
+        <locationimages>
+    <!--        <image> -->
+    <!--            <path>location_images/img.png</path> -->
+    <!--            <name>test</name> -->
+    <!--            <lat>52.47771</lat> -->
+    <!--            <lon>-1.89857</lon> -->
+    <!--             <width>24</width> -->
+    <!--            <height>24</height> -->
+    <!--            <alpha></alpha> -->
+    <!--                 <anchor> -->
+    <!--                 1 = percent, 2 = point-->
+    <!--                 <type>1</type> -->
+    <!--                 <posx>0.5</posx> -->
+    <!--                 <posy>0.5</posy> -->
+    <!--                 <show>0</show> -->
+    <!--            </anchor> -->
+    <!--        </image> -->
+        </locationimages>
+    </ui>
+    <zoomanimation>
+        <active>1</active>
+        <type>1</type>
+         <!-- 3 zoom types: -->
+         <!-- 1 - specify time in animation where 0.0 is the beginning and 1.0 the end -->
+         <!-- 2 - specify a gpsid from database -->
+         <!-- 3 - specify a timestamp from database in iso 8601 forvmat -->
+        <frames>
+            <frame time="0.0" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
+            <frame time="0.05" timestamp="" gpsid="" zoom="1000" lat="52.49757" lon="13.44524"/>
+            <frame time="0.1" timestamp="" gpsid="" zoom="1000" lat="52.49686" lon="13.4452"/>
+            <frame time="0.2" timestamp="" gpsid="" zoom="10000" lat="52.49734" lon="13.44594"/>
+            <frame time="0.3" timestamp="" gpsid="" zoom="2000" lat="52.49734" lon="13.44594"/>
+            <frame time="0.4" timestamp="" gpsid="" zoom="15000" lat="52.49734" lon="13.44594"/>
+            <frame time="0.5" timestamp="" gpsid="" zoom="3000" lat="52.49734" lon="13.44594"/>
+            <frame time="0.6" timestamp="" gpsid="" zoom="11000" lat="52.49734" lon="13.44594"/>
+        </frames>
+        <!-- tweening parameters -->
+        <!-- z parameters -->
+        <dampzoom>0.1</dampzoom>
+        <attractionzoom>0.08</attractionzoom>
+        <!-- x,y parameters -->
+        <dampcenter>0.2</dampcenter>
+        <attractioncenter>0.2</attractioncenter>
+    </zoomanimation>
+    <sound>
+        <active>0</active>
+        <soundfiles>
+            <!-- <soundfile src="test1.mp3"/> -->
+            <!-- <soundfile src="test2.mp3"/> -->
+        </soundfiles>
+    </sound>
+</drawinglife>

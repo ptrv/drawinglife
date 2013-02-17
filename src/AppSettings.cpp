@@ -75,6 +75,7 @@ m_speedThreshold(0.0)
 		OF_EXIT_APP(1);
     }
 
+    m_xml.pushTag("drawinglife");
     m_xml.pushTag("ui");
     m_xml.pushTag("fonts");
     m_fontTitleName = m_xml.getAttribute("font", "name","mono.ttf", 0);
@@ -294,6 +295,8 @@ m_speedThreshold(0.0)
 	{
 		this->print();
 	}
+
+    m_xml.popTag();
 }
 
 AppSettings::~AppSettings()
