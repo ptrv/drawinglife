@@ -17,13 +17,13 @@ USER_CFLAGS = -I /usr/include -I libs/sqlite3x -Ilibs/tclap-1.2.0/include -Ilibs
 # for example libraries like:
 # USER_LD_FLAGS = libs/libawesomelib.a
 
-USER_LDFLAGS = -L /usr/lib/x86_64-linux-gnu -L /usr/lib
+#USER_LDFLAGS = -L /usr/lib/x86_64-linux-gnu -L /usr/lib
 
 
 # use this to add system libraries for example:
 # USER_LIBS = -lpango
  
-USER_LIBS = -lsqlite3 -lGeographic
+USER_LIBS = -lsqlite3 -lGeographic -lspatialite
 
 
 # change this to add different compiler optimizations to your project
