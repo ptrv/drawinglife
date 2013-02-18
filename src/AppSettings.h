@@ -121,6 +121,11 @@ public:
 
     bool isSoundActive() const { return m_isSoundActive; }
     const std::vector<std::string>& getSoundFiles() const { return m_soundFiles; }
+
+    const std::string& getVertexShaderSource() const { return m_vertexShaderSource; }
+    const std::string& getFragmentShaderSource() const { return m_fragmentShaderSource; }
+    bool useShader() const { return m_useShader; }
+
 private:
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
@@ -239,6 +244,10 @@ private:
 
     int m_zoomAnimationAttractionCriteria;
     bool m_zoomanimationUseOnlyZ;
+
+    std::string m_vertexShaderSource;
+    std::string m_fragmentShaderSource;
+    bool m_useShader;
 };
 
 #endif // _APPSETTINGS_H_

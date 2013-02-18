@@ -289,6 +289,10 @@ m_speedThreshold(0.0)
     m_xml.popTag();
 	m_xml.popTag();
 
+    m_vertexShaderSource = m_xml.getValue("shader:vertex", "");
+    m_fragmentShaderSource = m_xml.getValue("shader:fragment", "");
+    m_useShader = m_xml.getValue("shader:enabled", 0) == 1 ? true : false;
+
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
 
 	if(m_printSettings)

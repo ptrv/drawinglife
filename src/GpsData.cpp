@@ -205,9 +205,10 @@ int GpsData::getTotalGpsPoints() const
 {
 	int num = 0;
 	for (unsigned int i = 0; i < m_segments.size(); ++i) {
-		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) {
-			++num;
-		}
+        num += m_segments[i].getPoints().size();
+//		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) {
+//			++num;
+//		}
 	}
 	return num;
 }
@@ -490,7 +491,9 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
         utmVec.reserve( m_segments[i].getPoints().size());
         for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
         {
-            UtmPoint utmP = getUtmPoint(m_segments[i].getPoints()[j].getLatitude(), m_segments[i].getPoints()[j].getLongitude(), m_settings);
+            UtmPoint utmP = getUtmPoint(m_segments[i].getPoints()[j].getLatitude(),
+                                        m_segments[i].getPoints()[j].getLongitude(),
+                                        m_settings);
 
             utmP.speed = m_segments[i].getPoints()[j].getSpeed();
 
