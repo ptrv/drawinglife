@@ -172,6 +172,8 @@ private:
     Integrator* m_integratorX;
     Integrator* m_integratorY;
 
+    ofShader shader;
+    bool doShader;
 };
 
 #endif // _DRAWINGLIFEAPP_H_

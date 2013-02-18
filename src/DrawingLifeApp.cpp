@@ -197,6 +197,12 @@ void DrawingLifeApp::setup()
 
     ofEnableAlphaBlending();
 
+    ofSetVerticalSync(false);
+    string shaderDir = "shaders/";
+    string vertSrc = shaderDir + m_settings->getVertexShaderSource().c_str();
+    string fragSrc = shaderDir + m_settings->getFragmentShaderSource().c_str();
+    shader.load(vertSrc, fragSrc);
+    doShader = m_settings->useShader();
 
 //    int drSp = m_settings->getDrawSpeed();
 
@@ -539,6 +545,18 @@ void DrawingLifeApp::draw()
     }
     else
     {
+        fillViewAreaUTM();
+        if(doShader)
+        {
+            shader.begin();
+            //we want to pass in some varrying values to animate our type / color
+            shader.setUniform1f("timeValX", ofGetElapsedTimef() * 0.1 );
+            shader.setUniform1f("timeValY", -ofGetElapsedTimef() * 0.18 );
+
+            //we also pass in the mouse position
+            //we have to transform the coords to what the shader is expecting which is 0,0 in the center and y axis flipped.
+            shader.setUniform2f("mouse", mouseX - ofGetWidth()/2, ofGetHeight()/2-mouseY );
+        }
 		// -----------------------------------------------------------------------------
 		// Draw Gps data as an animation.
 		// -----------------------------------------------------------------------------
@@ -547,7 +565,7 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
             // Draw rectangle with text.
             // -----------------------------------------------------------------------------
-            fillViewAreaUTM();
+//            fillViewAreaUTM();
             //---------------------------------------------------------------------------
             for(unsigned int i = 0; i < m_locationImgs.size(); ++i)
             {
@@ -603,7 +621,7 @@ void DrawingLifeApp::draw()
 		// -----------------------------------------------------------------------------
         else
         {
-            fillViewAreaUTM();
+//            fillViewAreaUTM();
             // -----------------------------------------------------------------------------
             // Draw Gps data
             // -----------------------------------------------------------------------------
@@ -626,6 +644,10 @@ void DrawingLifeApp::draw()
         if(m_timeline->isLast())
         {
 
+        }
+        if(doShader)
+        {
+            shader.end();
         }
     }
 }
@@ -1300,6 +1322,9 @@ void DrawingLifeApp::keyPressed  (int key)
             	m_walks[i]->toggleTraced();
             }
         }
+        break;
+    case 's':
+        doShader = !doShader;
         break;
     default:
         break;

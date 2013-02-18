@@ -28,7 +28,7 @@ public:
 		m_points.reserve(1000);
 	};
 
-	~GpsSegment(){};
+    ~GpsSegment(){}
 
 	/**
 	* \brief Set GpsSegment values.

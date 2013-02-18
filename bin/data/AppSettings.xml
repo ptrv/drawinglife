@@ -112,6 +112,11 @@
     <!--        </image> -->
         </locationimages>
     </ui>
+    <shader>
+        <enabled>0</enabled>
+        <vertex>noise.vert</vertex>
+        <fragment>noise.frag</fragment>
+    </shader>
     <zoomanimation>
         <active>1</active>
         <type>1</type>

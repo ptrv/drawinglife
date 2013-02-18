@@ -37,6 +37,7 @@ int main(int argc, const char* argv[] ){
         int height = heightArg.getValue();
         std::string settingsFile = settingsArg.getValue();
         ofAppGlutWindow window;
+//        window.setGlutDisplayString("rgba double samples>=4");
     //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);
         ofSetupOpenGL(&window, width, height, OF_WINDOW);			// <-------- setup the GL context
 
