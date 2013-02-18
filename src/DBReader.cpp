@@ -15,6 +15,9 @@
 #include "sqlite3x.hpp"
 using namespace sqlite3x;
 
+#include <sqlite3.h>
+#include <spatialite.h>
+
 // --------------------------------------------------------------------------------------
 #define CATCHDBERRORS																	\
 catch(exception &ex)																	\
@@ -46,6 +49,10 @@ DBReader::~DBReader()
 
 bool DBReader::setupDbConnection()
 {
+
+    spatialite_init(0);
+    ofLog() << "Spatialite version: " << spatialite_version();
+
 	bool result = false;
 	try {
 		m_dbconn = new sqlite3_connection(m_dbPath.c_str());
