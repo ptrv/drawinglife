@@ -134,7 +134,8 @@ time_t Timeline::makeTimeObject(std::string timeString)
     time(&t);
     int year, month, day, hour, min, sec;
     std::string str = timeString;
-    sscanf(str.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+//    sscanf(str.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+    sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
     tm = *localtime(&t);
     tm.tm_year = year - 1900;
     tm.tm_mon = month - 1;
@@ -158,7 +159,8 @@ std::string Timeline::getCurrentTime()
 {
     std::string timeString = m_timeline[m_counter].timeString;
     int year, month, day, hour, min, sec;
-    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+//    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
+    sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
     char buf[25];
     sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
     return string(buf);

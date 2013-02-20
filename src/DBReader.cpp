@@ -97,9 +97,30 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		{
 			GpsPoint gpsPoint;
 			if(m_useSpeed)
-                gpsPoint.setGpsPoint(reader.getint(0),reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7), reader.getdouble(8));
+            {
+                gpsPoint.setGpsPoint(reader.getint(0),
+                                     reader.getdouble(1),
+                                     reader.getdouble(2),
+                                     reader.getdouble(4),
+                                     reader.getstring(3),
+                                     reader.getstring(7),
+                                     reader.getdouble(8));
+            }
             else
-                gpsPoint.setGpsPoint(reader.getint(0),reader.getdouble(1), reader.getdouble(2), reader.getdouble(4), reader.getstring(3), reader.getstring(7), 0.0);
+//                gpsPoint.setGpsPoint(reader.getint(0),
+//                                     reader.getdouble(1),
+//                                     reader.getdouble(2),
+//                                     reader.getdouble(4),
+//                                     reader.getstring(3),
+//                                     reader.getstring(7),
+//                                     0.0);
+            gpsPoint.setGpsPoint(reader.getint(0),
+                                 reader.getdouble(1),
+                                 reader.getdouble(2),
+                                 reader.getdouble(4),
+                                 reader.getstring(3),
+                                 "no info",
+                                 0.0);
 
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
@@ -148,7 +169,8 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		size_t posS = query.find("FROM");
 		size_t posE = query.find(" ORDER");
 
-		queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
+//        queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
+        queryMinMax << "SELECT min(x(a.geom)), max(x(a.geom)), min(y(a.geom)), max(y(a.geom)) ";
 		// Retrieve select conditions from original database query.
 		queryMinMax << query.substr(posS, (posE - posS));
 
@@ -206,6 +228,20 @@ const std::string DBReader::getBasicQueryString()
 
     return query;
 }
+const std::string DBReader::getBasicQueryString2()
+{
+    // This is the part of the query string that all queries have common.
+    std::string query;
+
+    query =	"SELECT a.trackpoint_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
+            "a.utctimestamp AS time, a.ele AS elevation,"\
+            "a.trkseg_id AS segment, b.username AS name "\
+            "FROM trackpoints AS a "\
+            "JOIN users AS b ON (a.user_uid = b.user_uid) ";
+
+    return query;
+}
+
 bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int year, int month, int day)
 {
 	bool result = false;
@@ -343,7 +379,7 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userNa
 {
 	bool result = false;
 	std::stringstream query;
-	query << getBasicQueryString();
+    query << getBasicQueryString2();
     query << sqlFileSource;
 //    query << ";";
     DBG_VAL(query.str());

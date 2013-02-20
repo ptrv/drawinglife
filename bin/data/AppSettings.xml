@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <drawinglife>
     <data>
-        <database>test.sqlite</database>
+        <database>test2.sqlite</database>
         <person>
-            <name r="0" g="255" b="0" a="55" sql="example.sql">Dan</name>
+            <name r="0" g="255" b="0" a="55" sql="example2.sql">John</name>
         </person>
     </data>
     <dbquery>
@@ -13,10 +13,10 @@
         <!-- 3 = year range -->
         <!-- 4 = city -->
         <!-- 5 = sql file for each person-->
-        <type>4</type>
+        <type>5</type>
         <time>
             <yearstart>2007</yearstart>
-            <yearend>2009</yearend>
+            <yearend>2014</yearend>
         </time>
         <city>Berlin</city>
     </dbquery>
@@ -44,10 +44,10 @@
         <walklength>0</walklength>
         <boundingbox>
             <auto>0</auto>
-            <static>1</static>
+            <static>0</static>
             <position lat="52.49734" lon="13.44594"/>
-            <size>5000.0</size>
-            <padding>2000.0</padding>
+            <size>2000.0</size>
+            <padding>200.0</padding>
         </boundingbox>
         <meridian>
             <regions>1</regions>
@@ -118,7 +118,7 @@
         <fragment>noise.frag</fragment>
     </shader>
     <zoomanimation>
-        <active>1</active>
+        <active>0</active>
         <type>1</type>
          <!-- 3 zoom types: -->
          <!-- 1 - specify time in animation where 0.0 is the beginning and 1.0 the end -->

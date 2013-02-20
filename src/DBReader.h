@@ -124,6 +124,7 @@ private:
     * \return string query.
     */
     const string getBasicQueryString();
+    const string getBasicQueryString2();
 
 	// -----------------------------------------------------------------------------
 
