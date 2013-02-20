@@ -93,6 +93,8 @@ void DrawingLifeApp::setup()
     // -----------------------------------------------------------------------------
 //    AppSettings& settings = AppSettings::instance();
 
+    ofSetWindowTitle("drawinglife");
+
     m_settings = new AppSettings(m_settingsFile);
     
     switch(m_settings->getLogLevel())
