@@ -4,6 +4,6 @@ a.trkseg_id AS segment, b.username AS name,
 c.city AS city
 FROM trackpoints AS a
 JOIN users AS b ON (a.user_uid = b.user_uid)
-JOIN citydefs AS c ON (within(a.geom, c.geom))
+JOIN citydefs AS c ON (a.citydef_uid c.citydef_uid)
 --WHERE b.username = 'John'
 ORDER BY datetime(time)

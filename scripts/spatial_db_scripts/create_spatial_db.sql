@@ -36,10 +36,15 @@ course DOUBLE,
 speed DOUBLE,
 file_uid INTEGER UNSIGNED NOT NULL,
 user_uid INTEGER UNSIGNED NOT NULL,
+citydef_uid INTEGER UNSIGNED NOT NULL,
 FOREIGN KEY (file_uid)
 REFERENCES file (file_uid),
 FOREIGN KEY (user_uid)
 REFERENCES users (user_uid),
+FOREIGN KEY (trkseg_id)
+REFERENCES tracksegments (trkseg_uid),
+FOREIGN KEY (citydef_uid)
+REFERENCES citydefs (citydef_uid),
 UNIQUE (utctimestamp, user_uid));
 
 SELECT AddGeometryColumn('trackpoints', 'geom', 4326, 'POINT', 'XY');
@@ -54,7 +59,7 @@ SELECT AddGeometryColumn('trackpoints', 'geom', 4326, 'POINT', 'XY');
 
 CREATE TABLE tracklines (
 trkline_uid INTEGER PRIMARY KEY AUTOINCREMENT,
-trksegid_fm_trkpts INTEGER,
+trkseg_id INTEGER,
 name TEXT,
 --cmt TEXT,
 --desc TEXT,
@@ -72,8 +77,10 @@ FOREIGN KEY (file_uid)
 REFERENCES file (file_uid),
 FOREIGN KEY (user_uid)
 REFERENCES users (user_uid),
-UNIQUE (timestamp_start, user_uid),
-UNIQUE (trksegid_fm_trkpts));
+FOREIGN KEY (trkseg_id)
+REFERENCES tracksegments (trkseg_uid),
+UNIQUE (timestamp_start, user_uid, trkseg_id)
+);
 
 SELECT AddGeometryColumn('tracklines', 'geom', 4326, 'LINESTRING', 'XY');
 
@@ -93,5 +100,11 @@ UNIQUE(city, country)
 );
 
 SELECT AddGeometryColumn('citydefs', 'geom', 4326, 'POLYGON', 'XY');
+
+CREATE TABLE tracksegments (
+trkseg_uid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+trkseg_uuid TEXT NOT NULL,
+UNIQUE(trkseg_uuid)
+);
 
 COMMIT;
