@@ -107,21 +107,15 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
                                      reader.getdouble(8));
             }
             else
-//                gpsPoint.setGpsPoint(reader.getint(0),
-//                                     reader.getdouble(1),
-//                                     reader.getdouble(2),
-//                                     reader.getdouble(4),
-//                                     reader.getstring(3),
-//                                     reader.getstring(7),
-//                                     0.0);
-            gpsPoint.setGpsPoint(reader.getint(0),
-                                 reader.getdouble(1),
-                                 reader.getdouble(2),
-                                 reader.getdouble(4),
-                                 reader.getstring(3),
-                                 "no info",
-                                 0.0);
-
+            {
+                gpsPoint.setGpsPoint(reader.getint(0),
+                                     reader.getdouble(1),
+                                     reader.getdouble(2),
+                                     reader.getdouble(4),
+                                     reader.getstring(3),
+                                     reader.getstring(7),
+                                     0.0);
+            }
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
 
@@ -233,11 +227,13 @@ const std::string DBReader::getBasicQueryString2()
     // This is the part of the query string that all queries have common.
     std::string query;
 
-    query =	"SELECT a.trackpoint_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
+    query =	"SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
             "a.utctimestamp AS time, a.ele AS elevation,"\
-            "a.trkseg_id AS segment, b.username AS name "\
+            "a.trkseg_id AS segment, b.username AS name, "\
+            "c.city AS city "\
             "FROM trackpoints AS a "\
-            "JOIN users AS b ON (a.user_uid = b.user_uid) ";
+            "JOIN users AS b ON (a.user_uid = b.user_uid) "\
+            "JOIN citydefs AS c ON (within(a.geom, c.geom)) ";
 
     return query;
 }
