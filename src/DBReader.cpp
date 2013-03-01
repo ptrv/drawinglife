@@ -191,50 +191,30 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 
 const std::string DBReader::getBasicQueryString()
 {
-	// This is the part of the query string that all queries have common.
-	std::string query;
-
-    if(m_useSpeed)
-    {
-        query =	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
-                "a.longitude AS longitude, a.time AS time,"\
-                "a.elevation AS elevation, a.segment AS segment,"\
-                "b.name AS name,"\
-                "c.city AS location, "\
-                "a.speed AS speed "\
-                "FROM gpsdata AS a "\
-                "JOIN user AS b ON (a.user = b.userid) "\
-                "JOIN location AS c ON (a.location = c.locationid) ";
-
-    }
-    else
-    {
-        query =	"SELECT a.gpsdataid AS gpsdataid, a.latitude AS latitude,"\
-                "a.longitude AS longitude, a.time AS time,"\
-                "a.elevation AS elevation, a.segment AS segment,"\
-                "b.name AS name,"\
-                "c.city AS location "\
-                "FROM gpsdata AS a "\
-                "JOIN user AS b ON (a.user = b.userid) "\
-                "JOIN location AS c ON (a.location = c.locationid) ";
-
-    }
-
-    return query;
-}
-const std::string DBReader::getBasicQueryString2()
-{
     // This is the part of the query string that all queries have common.
     std::string query;
 
-    query =	"SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
-            "a.utctimestamp AS time, a.ele AS elevation,"\
-            "a.trkseg_id AS segment, b.username AS name, "\
-            "c.city AS city "\
-            "FROM trackpoints AS a "\
-            "JOIN users AS b ON (a.user_uid = b.user_uid) "\
-            "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
-
+    if(m_useSpeed)
+    {
+        query =	"SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
+                "a.utctimestamp AS time, a.ele AS elevation,"\
+                "a.trkseg_id AS segment, b.username AS name, "\
+                "c.city AS city "\
+                "a.speed AS speed "\
+                "FROM trackpoints AS a "\
+                "JOIN users AS b ON (a.user_uid = b.user_uid) "\
+                "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
+    }
+    else
+    {
+        query =	"SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
+                "a.utctimestamp AS time, a.ele AS elevation,"\
+                "a.trkseg_id AS segment, b.username AS name, "\
+                "c.city AS city "\
+                "FROM trackpoints AS a "\
+                "JOIN users AS b ON (a.user_uid = b.user_uid) "\
+                "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
+    }
     return query;
 }
 
@@ -243,7 +223,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int 
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND strftime('%Y-%m-%d', time) = '";
 	query << year;
@@ -253,7 +233,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int 
 	query << "-";
 	query << (day < 10 ? "0" : "");
 	query << day;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -262,7 +242,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const std::string& userName,
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND strftime('%Y-%m-%d', time) >= '";
 	query << year;
@@ -280,7 +260,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const std::string& userName,
 	query << "-";
 	query << (dayEnd < 10 ? "0" : "");
 	query << dayEnd;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -290,14 +270,14 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const std::string& userName, in
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND strftime('%Y-%m', time) = '";
 	query << year;
 	query << "-";
 	query << (month < 10 ? "0" : "");
 	query << month;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -307,7 +287,7 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const std::string& userNam
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND strftime('%Y-%m', time) >= '";
 	query << year;
@@ -319,7 +299,7 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const std::string& userNam
 	query << "-";
 	query << (monthEnd < 10 ? "0" : "");
 	query << monthEnd;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -329,12 +309,12 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const std::string& userName, int
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND strftime('%Y', time) = '";
 	query << (year < 10 ? "0" : "");
 	query << year;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -344,7 +324,7 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const std::string& userName
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND strftime('%Y', time) >= '";
 	query << (yearStart < 10 ? "0" : "");
@@ -352,7 +332,7 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const std::string& userName
 	query << "' AND strftime('%Y', time) <= '";
 	query << (yearEnd < 10 ? "0" : "");
 	query << yearEnd;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -362,11 +342,11 @@ bool DBReader::getGpsDataCity(GpsData& gpsData, const std::string& userName, con
 	bool result = false;
 	std::stringstream query;
 	query << getBasicQueryString();
-	query << "WHERE name = '";
+	query << "WHERE b.username = '";
 	query << userName;
 	query << "' AND c.city = '";
 	query << city;
-	query << "' ORDER BY datetime(time);";
+	query << "' ORDER BY datetime(a.utctimestamp);";
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
@@ -375,7 +355,7 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userNa
 {
 	bool result = false;
 	std::stringstream query;
-    query << getBasicQueryString2();
+    query << getBasicQueryString();
     query << sqlFileSource;
 //    query << ";";
     DBG_VAL(query.str());
