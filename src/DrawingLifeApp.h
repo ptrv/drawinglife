@@ -93,6 +93,9 @@ private:
 
 	void soundUpdate();
 
+    void shaderBegin();
+    void shaderEnd();
+
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -140,7 +143,7 @@ private:
     double timeSum;
     float fpsToShow;
 
-    std::vector<CurrentImageData > m_imageList;
+    std::vector<CurrentImageData> m_imageList;
     std::vector<ofImage > m_images;
     bool m_imageAsCurrentPoint;
 
@@ -148,7 +151,7 @@ private:
 
     bool m_interactiveMode;
 
-    std::vector<std::string > m_sqlFilePaths;
+    std::vector<std::string> m_sqlFilePaths;
 
     bool m_showKeyCommands;
 

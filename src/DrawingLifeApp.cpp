@@ -257,8 +257,8 @@ void DrawingLifeApp::setup()
             gpsDataAreLoaded = loadGpsDataWithSqlFile(m_names, m_sqlFilePaths);
 			break;
         }
-		if(gpsDataAreLoaded)
-		{
+        if(gpsDataAreLoaded)
+        {
 			// GpsData are loaded now. Drawing routine can start.
 			for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
@@ -539,6 +539,24 @@ void DrawingLifeApp::update()
 }
 
 //--------------------------------------------------------------
+void DrawingLifeApp::shaderBegin()
+{
+    shader.begin();
+    //we want to pass in some varrying values to animate our type / color
+    shader.setUniform1f("timeValX", ofGetElapsedTimef() * 0.1 );
+    shader.setUniform1f("timeValY", -ofGetElapsedTimef() * 0.18 );
+
+    //we also pass in the mouse position
+    //we have to transform the coords to what the shader is expecting which is 0,0 in the center and y axis flipped.
+    shader.setUniform2f("mouse", mouseX - ofGetWidth()/2, ofGetHeight()/2-mouseY );
+}
+
+void DrawingLifeApp::shaderEnd()
+{
+    shader.end();
+}
+
+//--------------------------------------------------------------
 void DrawingLifeApp::draw()
 {
     if (m_startScreenMode)
@@ -548,17 +566,6 @@ void DrawingLifeApp::draw()
     else
     {
         fillViewAreaUTM();
-        if(doShader)
-        {
-            shader.begin();
-            //we want to pass in some varrying values to animate our type / color
-            shader.setUniform1f("timeValX", ofGetElapsedTimef() * 0.1 );
-            shader.setUniform1f("timeValY", -ofGetElapsedTimef() * 0.18 );
-
-            //we also pass in the mouse position
-            //we have to transform the coords to what the shader is expecting which is 0,0 in the center and y axis flipped.
-            shader.setUniform2f("mouse", mouseX - ofGetWidth()/2, ofGetHeight()/2-mouseY );
-        }
 		// -----------------------------------------------------------------------------
 		// Draw Gps data as an animation.
 		// -----------------------------------------------------------------------------
@@ -610,12 +617,21 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
+                if(doShader)
+                {
+                    shaderBegin();
+                }
                 ofSetColor(m_settings->getColorForegroundR(),
                            m_settings->getColorForegroundG(),
                            m_settings->getColorForegroundB(),
                            m_settings->getAlphaTrack());
                 ofNoFill();
                 m_walks[personIndex]->draw();
+                if(doShader)
+                {
+                    shaderEnd();
+                }
+
             }
         }
 		// -----------------------------------------------------------------------------
@@ -646,10 +662,6 @@ void DrawingLifeApp::draw()
         if(m_timeline->isLast())
         {
 
-        }
-        if(doShader)
-        {
-            shader.end();
         }
     }
 }
