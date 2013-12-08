@@ -1,6 +1,6 @@
 # drawinglife
 
-This [openFramworks](http://www.openframeworks.cc/) application was
+This [openFrameworks](http://www.openframeworks.cc/) application was
 developed in collaboration with
 [plan b performance](http://www.planbperformance.net/) for visualizing
 GPS data.
