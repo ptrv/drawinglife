@@ -62,6 +62,10 @@
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 PROJECT_EXCLUSIONS = $(PROJECT_ROOT)/libs_mac%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/attic%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/docs%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/scripts%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/tclap-1.2.0%
 
 ################################################################################
 # PROJECT LINKER FLAGS
