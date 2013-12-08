@@ -78,11 +78,11 @@ DrawingLifeApp::~DrawingLifeApp()
     {
         SAFE_DELETE(m_locationImgs[i]);
     }
-    
+
     SAFE_DELETE(m_zoomIntegrator);
     SAFE_DELETE(m_integratorX);
     SAFE_DELETE(m_integratorY);
-    
+
     for (unsigned int i=0; i < m_soundPlayer.size(); ++i) {
         SAFE_DELETE(m_soundPlayer[i]);
     }
@@ -96,7 +96,7 @@ void DrawingLifeApp::setup()
     ofSetWindowTitle("drawinglife");
 
     m_settings = new AppSettings(m_settingsFile);
-    
+
     switch(m_settings->getLogLevel())
     {
         case 0:
@@ -273,9 +273,15 @@ void DrawingLifeApp::setup()
         {
             LocationImage* lImg;
             if(m_multiMode)
-                lImg = new LocationImage(m_magicBox, m_settings->getLocationImageData()[i]);
+            {
+                lImg = new LocationImage(m_magicBox,
+                                         m_settings->getLocationImageData()[i]);
+            }
             else
-                lImg = new LocationImage(m_magicBoxes[0], m_settings->getLocationImageData()[i]);
+            {
+                lImg = new LocationImage(m_magicBoxes[0],
+                                         m_settings->getLocationImageData()[i]);
+            }
 
             lImg->setViewBounds(m_viewMinDimension[0],
                                 m_viewPadding[0],
@@ -368,13 +374,18 @@ bool DrawingLifeApp::zoomHasChanged()
 bool DrawingLifeApp::zoomHasChangedId()
 {
 	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    {
 		return false;
+    }
 	int currentId = m_timeline->getCurrentTimelineObj().gpsid;
 	int zoomChangeId = m_settings->getZoomAnimFrames()[zoomFrameCount+1].gpsId;
-	if (currentId == zoomChangeId) {
+    if (currentId == zoomChangeId)
+    {
 		++zoomFrameCount;
 		return true;
-	} else {
+    }
+    else
+    {
 		return false;
 	}
 }
@@ -414,7 +425,9 @@ bool DrawingLifeApp::zoomHasChangedTime()
 	{
 		++zoomFrameCount;
 		if(zoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+        {
 			--zoomFrameCount;
+        }
 		return true;
 	}
 	else
@@ -429,10 +442,12 @@ void DrawingLifeApp::zoomUpdate()
 	{
 		if(zoomHasChanged())
 		{
-			float zoomLevel = m_settings->getZoomAnimFrames()[zoomFrameCount].frameZoom;
-			double centerX = m_settings->getZoomAnimFrames()[zoomFrameCount].frameCenterX;
-			double centerY = m_settings->getZoomAnimFrames()[zoomFrameCount].frameCenterY;
-			UtmPoint utmP = GpsData::getUtmPoint(centerY, centerX, m_settings);
+            const ZoomAnimFrame& zoomAnimFrame =
+                    m_settings->getZoomAnimFrames()[zoomFrameCount];
+            float zoomLevel = zoomAnimFrame.frameZoom;
+            double centerX = zoomAnimFrame.frameCenterX;
+            double centerY = zoomAnimFrame.frameCenterY;
+            UtmPoint utmP = GpsData::getUtmPoint(centerY, centerX, *m_settings);
 
 			if(m_timeline->isFirst())
 			{
@@ -457,14 +472,17 @@ void DrawingLifeApp::zoomUpdate()
         if(m_multiMode)
         {
             m_magicBox->setSize((double)m_zoomIntegrator->getValue());
-            m_magicBox->setupBox(ofxPoint<double>(m_integratorX->getValue(), m_integratorY->getValue()), 0);
+            m_magicBox->setupBox(ofxPoint<double>(m_integratorX->getValue(),
+                                                  m_integratorY->getValue()), 0);
         }
         else
         {
             for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
             {
                 m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
-                m_magicBoxes[bi]->setupBox(ofxPoint<double>(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+                m_magicBoxes[bi]->setupBox(
+                            ofxPoint<double>(m_integratorX->getValue(),
+                                             m_integratorY->getValue()), 0);
             }
         }
     }
@@ -482,7 +500,6 @@ void DrawingLifeApp::update()
             {
                 if(m_loopMode)
                 {
-
                     for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
                     {
                         int id = m_timeline->getNext();
@@ -497,7 +514,6 @@ void DrawingLifeApp::update()
                         m_timeline->countUp();
                         if(m_timeline->isFirst())
                         {
-
 //                            std::cout << "First timeline object!" << std::endl;
                             for(unsigned int i = 0; i < m_walks.size(); ++i)
                             {
@@ -509,9 +525,7 @@ void DrawingLifeApp::update()
 #else
                             sleep(m_settings->getSleepTime());
 #endif
-
                         }
-
                     }
                 }
                 else
@@ -531,8 +545,6 @@ void DrawingLifeApp::update()
                     }
 
                 }
-
-
             }
         }
     }
@@ -769,16 +781,22 @@ void DrawingLifeApp::processGpsData()
                 }
             }
 
-
             if (m_imageAsCurrentPoint && (unsigned int)m_images.size() >= m_numPerson)
             {
                 m_walks[i]->setCurrentPointImage(m_images[i], m_imageList[i].alpha);
             }
         }
     }
-
 }
 
+/**
+ *
+ *
+ * @param names
+ * @param city
+ *
+ * @return
+ */
 bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string city)
 {
     prepareGpsData();
@@ -788,21 +806,24 @@ bool DrawingLifeApp::loadGpsDataCity(std::vector<std::string> names, std::string
     // get GpsData from database
     if(m_multiMode)
     {
-        m_magicBox = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
-                                    m_settings->getBoundingBoxPadding());
+        m_magicBox = new MagicBox(*m_settings,
+                                  m_settings->getBoundingBoxSize(),
+                                  m_settings->getBoundingBoxPadding());
     }
 
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas[personIndex] = new GpsData(m_settings);
+        m_gpsDatas[personIndex] = new GpsData(*m_settings);
 
         if(!m_multiMode)
         {
-            m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
-                                        m_settings->getBoundingBoxPadding());
+            m_magicBoxes[personIndex] = new MagicBox(*m_settings,
+                                                     m_settings->getBoundingBoxSize(),
+                                                     m_settings->getBoundingBoxPadding());
         }
 
-        m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
+        m_walks[personIndex] = new Walk(*m_settings,
+                                        m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(),
 											ofGetHeight(),
@@ -876,21 +897,29 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
 
     if(m_multiMode)
     {
-        m_magicBox = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
-                                        m_settings->getBoundingBoxPadding());
+        m_magicBox = new MagicBox(*m_settings,
+                                  m_settings->getBoundingBoxSize(),
+                                  m_settings->getBoundingBoxPadding());
     }
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas[personIndex] = new GpsData(m_settings);
+        m_gpsDatas[personIndex] = new GpsData(*m_settings);
 
         if(!m_multiMode)
         {
-            m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
-                                        m_settings->getBoundingBoxPadding());
+            m_magicBoxes[personIndex] = new MagicBox(*m_settings,
+                                                     m_settings->getBoundingBoxSize(),
+                                                     m_settings->getBoundingBoxPadding());
         }
-        m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
+        m_walks[personIndex] = new Walk(*m_settings,
+                                        m_settings->getNameColors()[personIndex]);
 
-		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
+        m_walks[personIndex]->setViewBounds(ofGetWidth(),
+                                            ofGetHeight(),
+                                            m_viewXOffset[personIndex],
+                                            m_viewYOffset[personIndex],
+                                            m_viewMinDimension[personIndex],
+                                            m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();
 
         m_dbReader = new DBReader(m_dbPath, m_settings->useSpeed());
@@ -899,7 +928,10 @@ bool DrawingLifeApp::loadGpsDataYearRange(std::vector<std::string> names, int ye
         {
             // -----------------------------------------------------------------------------
             // DB query
-            dbOk = m_dbReader->getGpsDataYearRange(*m_gpsDatas[personIndex], names[personIndex], yearStart, yearEnd);
+            dbOk = m_dbReader->getGpsDataYearRange(*m_gpsDatas[personIndex],
+                                                   names[personIndex],
+                                                   yearStart,
+                                                   yearEnd);
             if(dbOk)
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData set %d: load ok!", personIndex+1);
@@ -989,20 +1021,23 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(std::vector<std::string> names, std:
 
     if(m_multiMode)
     {
-        m_magicBox = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
-                                        m_settings->getBoundingBoxPadding());
+        m_magicBox = new MagicBox(*m_settings,
+                                  m_settings->getBoundingBoxSize(),
+                                  m_settings->getBoundingBoxPadding());
     }
     // get GpsData from database
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas[personIndex] = new GpsData(m_settings);
+        m_gpsDatas[personIndex] = new GpsData(*m_settings);
 
         if(!m_multiMode)
         {
-            m_magicBoxes[personIndex] = new MagicBox(m_settings, m_settings->getBoundingBoxSize(),
-                                        m_settings->getBoundingBoxPadding());
+            m_magicBoxes[personIndex] = new MagicBox(*m_settings,
+                                                     m_settings->getBoundingBoxSize(),
+                                                     m_settings->getBoundingBoxPadding());
         }
-        m_walks[personIndex] = new Walk(m_settings, m_settings->getNameColors()[personIndex]);
+        m_walks[personIndex] = new Walk(*m_settings,
+                                        m_settings->getNameColors()[personIndex]);
 
 		m_walks[personIndex]->setViewBounds(ofGetWidth(), ofGetHeight(), m_viewXOffset[personIndex], m_viewYOffset[personIndex], m_viewMinDimension[personIndex], m_viewPadding[personIndex]);
         m_walks[personIndex]->reset();

@@ -20,7 +20,7 @@ double Walk::minDrawY = std::numeric_limits<double>::max();
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
-Walk::Walk(AppSettings* settings, ofColor dotColor, bool magicBoxEnabled)
+Walk::Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled)
 :
 m_settings(settings),
 m_gpsData(0),
@@ -37,13 +37,13 @@ m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(0),
-m_maxPointsToDraw(m_settings->getWalkLength()),
 m_currentPointIsImage(false),
 m_magicBoxEnabled(true),
 m_interactiveMode(false),
 m_drawTraced(true),
 m_imageAlpha(255)
 {
+    m_maxPointsToDraw = m_settings.getWalkLength();
     //	m_dotColor.a = 127;
 //	m_dotColor.a = m_dotAlpha;
 	m_dotColor.a = dotColor.a;
@@ -51,13 +51,13 @@ m_imageAlpha(255)
 	m_dotColor.g = dotColor.g;
 	m_dotColor.b = dotColor.b;
 
-	m_interactiveMode = m_settings->isInteractiveMode();
-	m_drawTraced = m_settings->drawTraced();
+    m_interactiveMode = m_settings.isInteractiveMode();
+    m_drawTraced = m_settings.drawTraced();
 
-    m_currentSegColor.r = m_settings->getColorInteractiveSegR();
-    m_currentSegColor.g = m_settings->getColorInteractiveSegG();
-    m_currentSegColor.b = m_settings->getColorInteractiveSegB();
-    m_currentSegColor.a = m_settings->getColorInteractiveSegA();
+    m_currentSegColor.r = m_settings.getColorInteractiveSegR();
+    m_currentSegColor.g = m_settings.getColorInteractiveSegG();
+    m_currentSegColor.b = m_settings.getColorInteractiveSegB();
+    m_currentSegColor.a = m_settings.getColorInteractiveSegA();
 }
 
 Walk::~Walk()
@@ -168,8 +168,8 @@ void Walk::draw()
         const UtmPoint& currentUtm =
                 m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint];
 
-        if(!m_interactiveMode && !m_settings->isMultiMode()
-                && !m_settings->isBoundingBoxFixed())
+        if(!m_interactiveMode && !m_settings.isMultiMode()
+                && !m_settings.isBoundingBoxFixed())
         {
             m_magicBox->updateBoxIfNeeded(ofxPoint<double>(currentUtm.x,
                                                            currentUtm.y));
@@ -226,7 +226,7 @@ void Walk::draw()
             {
                 const UtmPoint& utm = m_gpsData->getUTMPoints()[i][j];
                 bool isInBox = true;
-                if(m_settings->isBoundingBoxAuto() && !m_settings->isMultiMode())
+                if(m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
                 {
                     isInBox = m_magicBox->isInBox(ofxPoint<double>(utm.x, utm.y));
                     if(!isInBox)
@@ -237,13 +237,13 @@ void Walk::draw()
                 }
 //                else
 //                    isInBox = true;
-                if(m_settings->useSpeed())
+                if(m_settings.useSpeed())
                 {
                     //DBG_VAL(utm.speed);
                     bool shouldNotBeDrawn = false;
-                    if(utm.speed > m_settings->getSpeedThreshold())
+                    if(utm.speed > m_settings.getSpeedThreshold())
                     {
-                        ofColor tmpColor = m_settings->getSpeedColorAbove();
+                        ofColor tmpColor = m_settings.getSpeedColorAbove();
                         ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
                         if(tmpColor.a == 0.0)
                         {
@@ -254,7 +254,7 @@ void Walk::draw()
                     }
                     else
                     {
-                        ofColor tmpColor = m_settings->getSpeedColorUnder();
+                        ofColor tmpColor = m_settings.getSpeedColorUnder();
                         ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
                         if(tmpColor.a == 0.0)
                         {
@@ -283,30 +283,32 @@ void Walk::draw()
         }
 //        ofDisableSmoothing();
 
-        ofxPoint<double> tmp = m_magicBox->getDrawablePoint(currentUtm);
+        ofxPoint<double> currentDrawablePoint =
+                m_magicBox->getDrawablePoint(currentUtm);
 
 		if (m_currentPointIsImage)
 		{
 			ofSetColor(255, 255, 255, m_imageAlpha);
-			m_image.draw(getScaledUtmX(tmp.x),getScaledUtmY(tmp.y));
+            m_image.draw(getScaledUtmX(currentDrawablePoint.x),
+                         getScaledUtmY(currentDrawablePoint.y));
 
 		}
 		else if(!m_interactiveMode)
 		{
 			ofFill();
 			bool shouldBeDrawn = true;
-			if(m_settings->useSpeed())
+            if(m_settings.useSpeed())
 			{
-                if(currentUtm.speed > m_settings->getSpeedThreshold())
+                if(currentUtm.speed > m_settings.getSpeedThreshold())
 			    {
-			        if(m_settings->getSpeedColorAbove().a == 0.0)
+                    if(m_settings.getSpeedColorAbove().a == 0.0)
 			        {
 			            shouldBeDrawn = false;
                     }
                 }
                 else
                 {
-                    if(m_settings->getSpeedColorUnder().a == 0.0)
+                    if(m_settings.getSpeedColorUnder().a == 0.0)
                     {
                         shouldBeDrawn = false;
                     }
@@ -315,8 +317,9 @@ void Walk::draw()
 			if(shouldBeDrawn)
 			{
 			    ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
-			    ofCircle(getScaledUtmX(tmp.x),
-                        getScaledUtmY(tmp.y), m_dotSize);
+                ofCircle(getScaledUtmX(currentDrawablePoint.x),
+                         getScaledUtmY(currentDrawablePoint.y),
+                         m_dotSize);
 			}
 		}
 	}
@@ -364,7 +367,7 @@ void Walk::drawAll()
 		{
             const UtmPoint& utm = m_gpsData->getUTMPoints()[i][j];
             bool isInBox = true;
-            if(m_settings->isBoundingBoxAuto() && !m_settings->isMultiMode())
+            if(m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
             {
                 isInBox = m_magicBox->isInBox(ofxPoint<double>(utm.x, utm.y));
             }

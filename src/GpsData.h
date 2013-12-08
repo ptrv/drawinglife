@@ -19,7 +19,7 @@ class GpsData
 {
 
 public:
-	GpsData(AppSettings* settings);
+    GpsData(const AppSettings& settings);
 	~GpsData();
 
 	// -----------------------------------------------------------------------------
@@ -44,9 +44,9 @@ public:
 	// Get members.
 	// -----------------------------------------------------------------------------
 	/**
-	* \brief Get GpsSegment objects.
-	* \return vector with GpsSegments.
-	*/
+	 * \brief Get GpsSegment objects.
+	 * \return vector with GpsSegments.
+	 */
 	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
 	/**
 	* \brief Get minimum longitude value.
@@ -170,7 +170,7 @@ public:
     * \brief Calculate UTM values for all GpsPoints with global lon0.
     */
     void calculateUtmPointsGlobalLon(bool regionsOn);
-    static UtmPoint getUtmPoint(double lat, double lon, AppSettings* settings);
+    static UtmPoint getUtmPoint(double lat, double lon, const AppSettings& settings);
 
     static GpsPoint getGpsPoint(const ofxPoint<double>& utmP);
 
@@ -236,7 +236,7 @@ private:
 
     static double m_lon0Global;
 
-    AppSettings* m_settings;
+    const AppSettings& m_settings;
     int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;
 	std::string m_user;

@@ -12,7 +12,7 @@
 class Walk
 {
 public:
-	Walk(AppSettings* settings, ofColor dotColor, bool magicBoxEnabled=true);
+    Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled=true);
 	~Walk();
 
 	//------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ public:
 
 private:
 
-    AppSettings* m_settings;
+    const AppSettings& m_settings;
 
 	GpsData* m_gpsData;
 

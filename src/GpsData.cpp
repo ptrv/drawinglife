@@ -24,7 +24,7 @@ double regionsLon0[5] = {-119.0, -74.0, 12.0, 116.0, 146.0};
 double regionsMinLon[5] = {-180.0, -100.0, -35.0, 65.0, 130.0};
 double regionsMaxLon[5] = {-100.0, -35.0, 65.0, 130.0, 180.0};
 
-GpsData::GpsData(AppSettings* settings)
+GpsData::GpsData(const AppSettings& settings)
 :
 m_settings(settings),
 m_gpsDataId(0),
@@ -403,14 +403,14 @@ void GpsData::calculateUtmPoints()
     }
 }
 
-UtmPoint GpsData::getUtmPoint(double lat, double lon, AppSettings* settings)
+UtmPoint GpsData::getUtmPoint(double lat, double lon, const AppSettings& settings)
 {
-    const GpsRegion* regions = settings->getRegions();
+    const GpsRegion* regions = settings.getRegions();
     UtmPoint utmP;
     Math::real gamma, k;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
 
-    if(settings->isRegionsOn())
+    if(settings.isRegionsOn())
     {
         double lon0 = 0.0;
         if(lon >= regions[0].minLon && lon < regions[0].maxLon)
@@ -483,7 +483,7 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 
-    const GpsRegion* regions = m_settings->getRegions();
+    const GpsRegion* regions = m_settings.getRegions();
 
     for(unsigned int i = 0; i < m_segments.size(); ++i)
     {

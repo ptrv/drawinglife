@@ -97,7 +97,7 @@ public:
 
     bool useSpeed() const { return m_useSpeed; }
 
-    double getSpeedThreshold() { return m_speedThreshold; }
+    double getSpeedThreshold() const { return m_speedThreshold; }
 
     const ofColor& getSpeedColorUnder() const { return m_speedColorUnder; }
     const ofColor& getSpeedColorAbove() const { return m_speedColorAbove; }
