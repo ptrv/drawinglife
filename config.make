@@ -142,5 +142,5 @@ PROJECT_CFLAGS = -I /usr/include -I libs/sqlite3x -Ilibs/tclap-1.2.0/include -Il
 #		(default) PROJECT_CC = (blank)
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CXX = /usr/bin/clang++
-PROJECT_CC = /usr/bin/clang
+# PROJECT_CXX = /usr/bin/clang++
+# PROJECT_CC = /usr/bin/clang
