@@ -205,12 +205,10 @@ const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
 int GpsData::getTotalGpsPoints() const
 {
 	int num = 0;
-	for (unsigned int i = 0; i < m_segments.size(); ++i) {
-        num += m_segments[i].getPoints().size();
-//		for (unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j) {
-//			++num;
-//		}
-	}
+    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
+    {
+        num += rSegment.getPoints().size();
+    }
 	return num;
 }
 
@@ -298,17 +296,17 @@ void GpsData::calculateUtmPoints(double lon0)
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
-    for(unsigned int i = 0; i < m_segments.size(); ++i)
+    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
     {
         std::vector<UtmPoint> utmVec;
-        utmVec.reserve( m_segments[i].getPoints().size());
-        for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+        utmVec.reserve(rSegment.getPoints().size());
+        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
             Math::real gamma, k;
             UtmPoint utmP;
             TMS.Forward(Math::real(m_lon0Global),
-                        m_segments[i].getPoints()[j].getLatitude(),
-                        m_segments[i].getPoints()[j].getLongitude(),
+                        rPoint.getLatitude(),
+                        rPoint.getLongitude(),
                         utmP.x, utmP.y, gamma, k);
             utmVec.push_back(utmP);
         }
@@ -360,17 +358,18 @@ void GpsData::setMinMaxValuesUTM()
 	double maxX = -numeric_limits<double>::max();
 	double maxY = -numeric_limits<double>::max();
 
-	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
-		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
-		{
-			double x = m_utmPoints[i][j].x;
-			double y = m_utmPoints[i][j].y;
-			if (x < minX) minX = x;
-			if (x > maxX) maxX = x;
-			if (y < minY) minY = y;
-			if (y > maxY) maxY = y;
-		}
-	}
+    BOOST_FOREACH(const std::vector<UtmPoint> segments, m_utmPoints)
+    {
+        BOOST_FOREACH(const UtmPoint& utmPoint, segments)
+        {
+            double x = utmPoint.x;
+            double y = utmPoint.y;
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+        }
+    }
 
     m_minUtmX = minX;
     m_minUtmY = minY;
@@ -383,20 +382,20 @@ void GpsData::calculateUtmPoints()
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
-    for(unsigned int i = 0; i < m_segments.size(); ++i)
+    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
     {
         std::vector<UtmPoint> utmVec;
-        utmVec.reserve( m_segments[i].getPoints().size());
-        for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+        utmVec.reserve( rSegment.getPoints().size());
+        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
             Math::real gamma, k;
             UtmPoint utmP;
             TMS.Forward(Math::real(m_lon0),
-                        m_segments[i].getPoints()[j].getLatitude(),
-                        m_segments[i].getPoints()[j].getLongitude(),
+                        rPoint.getLatitude(),
+                        rPoint.getLongitude(),
                         utmP.x, utmP.y, gamma, k);
 
-            utmP.speed = m_segments[i].getPoints()[j].getSpeed();
+            utmP.speed = rPoint.getSpeed();
 
             utmVec.push_back(utmP);
         }
@@ -484,30 +483,32 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 
-    const GpsRegion* regions = m_settings.getRegions();
-
-    for(unsigned int i = 0; i < m_segments.size(); ++i)
+//    const GpsRegion* regions = m_settings.getRegions();
+    int i = 0;
+    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
     {
+        int j = 0;
         std::vector<UtmPoint> utmVec;
-        utmVec.reserve( m_segments[i].getPoints().size());
-        for(unsigned int j = 0; j < m_segments[i].getPoints().size(); ++j)
+        utmVec.reserve( rSegment.getPoints().size());
+        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
-            UtmPoint utmP = getUtmPoint(m_segments[i].getPoints()[j].getLatitude(),
-                                        m_segments[i].getPoints()[j].getLongitude(),
+            UtmPoint utmP = getUtmPoint(rPoint.getLatitude(),
+                                        rPoint.getLongitude(),
                                         m_settings);
 
-            utmP.speed = m_segments[i].getPoints()[j].getSpeed();
+            utmP.speed = rPoint.getSpeed();
 
             utmVec.push_back(utmP);
 
             GpsDataIndex tmpIndex;
             tmpIndex.point = counter;
-            tmpIndex.gpsPoint = j;
+            tmpIndex.gpsPoint = j++;
             tmpIndex.gpsSegment = i;
             m_indices.push_back(tmpIndex);
             ++counter;
         }
         m_utmPoints.push_back(utmVec);
+        ++i;
     }
 }
 

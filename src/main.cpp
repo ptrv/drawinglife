@@ -13,7 +13,8 @@
 //========================================================================
 int main(int argc, const char* argv[] ){
 
-    string appStr(string(APP_NAME_STR) + string(", ") + string(APP_AUTHOR_STR) + string(", ") + string(APP_DATE));
+    string appStr(string(APP_NAME_STR) + string(", ") + string(APP_AUTHOR_STR)
+                  + string(", ") + string(APP_DATE));
     std::cout << appStr << std::endl;
     std::cout << "The drawing of my life, plan b\n" << std::endl;
 #ifndef TARGET_OSX
@@ -21,9 +22,15 @@ int main(int argc, const char* argv[] ){
 
         TCLAP::CmdLine cmd(appStr, '=', APP_VERSION_STR);
 
-        TCLAP::ValueArg<int> widthArg("","width","Application window width (default: 1024)",false, 1024, "width");
-        TCLAP::ValueArg<int> heightArg("","height","Application window height (default: 768)",false, 768, "height");
-        TCLAP::ValueArg<std::string> settingsArg("c", "config", "Configuration file name (default: AppSettings.xml)", false, "AppSettings.xml", "file-name");
+        TCLAP::ValueArg<int> widthArg(
+                    "", "width", "Application window width (default: 1024)",
+                    false, 1024, "width");
+        TCLAP::ValueArg<int> heightArg(
+                    "", "height", "Application window height (default: 768)",
+                    false, 768, "height");
+        TCLAP::ValueArg<std::string> settingsArg(
+                    "c", "config", "Configuration file name (default: AppSettings.xml)",
+                    false, "AppSettings.xml", "file-name");
 
         cmd.add( heightArg );
         cmd.add( widthArg );

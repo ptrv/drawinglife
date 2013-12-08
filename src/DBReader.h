@@ -45,7 +45,8 @@ public:
     * \param day
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataDay(GpsData& gpsData, const std::string& userName, int year, int month, int day);
+    bool getGpsDataDay(GpsData& gpsData, const std::string& userName,
+                       int year, int month, int day);
     /**
     * \brief Get Gps data for a day range.
     * \param gpsData Reference to GpsData object.
@@ -56,7 +57,8 @@ public:
     * \param dayEnd
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataDayRange(GpsData& gpsData, const std::string& userName, int year, int month, int dayStart, int dayEnd);
+    bool getGpsDataDayRange(GpsData& gpsData, const std::string& userName,
+                            int year, int month, int dayStart, int dayEnd);
     /**
     * \brief Get Gps data for one month.
     * \param gpsData Reference to GpsData object.
@@ -65,7 +67,8 @@ public:
     * \param month
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataMonth(GpsData& gpsData, const std::string& userName, int year, int month);
+    bool getGpsDataMonth(GpsData& gpsData, const std::string& userName,
+                         int year, int month);
     /**
     * \brief Get Gps data for a month range.
     * \param gpsData Reference to GpsData object.
@@ -75,7 +78,8 @@ public:
     * \param monthEnd
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataMonthRange(GpsData& gpsData, const std::string& userName, int year, int monthStart, int monthEnd);
+    bool getGpsDataMonthRange(GpsData& gpsData, const std::string& userName,
+                              int year, int monthStart, int monthEnd);
     /**
     * \brief Get Gps data for one year.
     * \param gpsData Reference to GpsData object.
@@ -92,7 +96,9 @@ public:
     * \param yearEnd
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataYearRange(GpsData& gpsData, const std::string& userName, int yearStart, int yearEnd);
+    bool getGpsDataYearRange(GpsData& gpsData,
+                             const std::string& userName,
+                             int yearStart, int yearEnd);
     /**
     * \brief Get Gps data for a city.
     * \param gpsData Reference to GpsData object.
@@ -100,7 +106,9 @@ public:
     * \param city name of city.
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataCity(GpsData& gpsData, const std::string& userName, const std::string& city);
+    bool getGpsDataCity(GpsData& gpsData,
+                        const std::string& userName,
+                        const std::string& city);
     /**
     * \brief Get Gps data with query from sql file.
     * \param gpsData Reference to GpsData object.
@@ -108,7 +116,9 @@ public:
     * \param sqlFileSource String with path to sql file.
     * \return true if getting gpsData succeeded.
     */
-	bool getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userName, const std::string& sqlFileSource);
+    bool getGpsDataWithSqlFile(GpsData& gpsData,
+                               const std::string& userName,
+                               const std::string& sqlFileSource);
 
 private:
     /**

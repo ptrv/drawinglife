@@ -234,18 +234,16 @@ void DrawingLifeApp::setup()
             }
         }
 
-        for(unsigned int i = 0; i < m_settings->getLocationImageData().size(); ++i)
+        BOOST_FOREACH(const LocationImageData& locImgData, m_settings->getLocationImageData())
         {
             LocationImage* lImg;
             if(m_multiMode)
             {
-                lImg = new LocationImage(*m_magicBox.get(),
-                                         m_settings->getLocationImageData()[i]);
+                lImg = new LocationImage(*m_magicBox.get(), locImgData);
             }
             else
             {
-                lImg = new LocationImage(m_magicBoxes[0],
-                                         m_settings->getLocationImageData()[i]);
+                lImg = new LocationImage(m_magicBoxes[0], locImgData);
             }
 
             lImg->setViewBounds(m_viewMinDimension[0],
@@ -268,10 +266,10 @@ void DrawingLifeApp::setup()
 
     if(m_settings->isSoundActive())
     {
-    	for (unsigned int i = 0; i < m_settings->getSoundFiles().size(); ++i)
+        BOOST_FOREACH(const std::string& sndFilePath, m_settings->getSoundFiles())
     	{
     	    ofSoundPlayer* sndPlay = new ofSoundPlayer();
-    	    sndPlay->loadSound(m_settings->getSoundFiles()[i]);
+            sndPlay->loadSound(sndFilePath);
     	    sndPlay->setLoop(false);
     	    m_soundPlayer.push_back(sndPlay);
 		}
@@ -995,13 +993,13 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
         m_walks.push_back(new Walk(*m_settings,
                                    m_settings->getNameColors()[personIndex]));
 
-        m_walks[personIndex].setViewBounds(ofGetWidth(),
-                                           ofGetHeight(),
-                                           m_viewXOffset[personIndex],
-                                           m_viewYOffset[personIndex],
-                                           m_viewMinDimension[personIndex],
-                                           m_viewPadding[personIndex]);
-        m_walks[personIndex].reset();
+        m_walks.back().setViewBounds(ofGetWidth(),
+                                     ofGetHeight(),
+                                     m_viewXOffset[personIndex],
+                                     m_viewYOffset[personIndex],
+                                     m_viewMinDimension[personIndex],
+                                     m_viewPadding[personIndex]);
+        m_walks.back().reset();
 
         std::ifstream sqlFile(ofToDataPath(sqlFilePaths[personIndex]).c_str(),
                               std::ifstream::in);
@@ -1016,14 +1014,16 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
         {
             // -----------------------------------------------------------------------------
             // DB query
-            dbOk = dbReader->getGpsDataWithSqlFile(m_gpsDatas[personIndex], names[personIndex], sqlFileSource);
+            dbOk = dbReader->getGpsDataWithSqlFile(m_gpsDatas.back(),
+                                                   names[personIndex],
+                                                   sqlFileSource);
             if(dbOk)
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
                 ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
-                      m_gpsDatas[personIndex].getSegments().size(),
-                      m_gpsDatas[personIndex].getTotalGpsPoints());
-                m_walks[personIndex].setGpsData(&m_gpsDatas[personIndex]);
+                      m_gpsDatas.back().getSegments().size(),
+                      m_gpsDatas.back().getTotalGpsPoints());
+                m_walks.back().setGpsData(&m_gpsDatas.back());
             }
             else
             {
@@ -1035,20 +1035,21 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
         // -----------------------------------------------------------------------------
         // test print
         maxPoints = 0;
-        for (unsigned int i = 0; i < m_gpsDatas[personIndex].getSegments().size(); ++i)
+        BOOST_FOREACH(const GpsSegment& rSeg, m_gpsDatas.back().getSegments())
         {
-            for (unsigned int j = 0; j < m_gpsDatas[personIndex].getSegments()[i].getPoints().size(); ++j)
+            BOOST_FOREACH(const GpsPoint& rPoint, rSeg.getPoints())
             {
                 ++maxPoints;
             }
         }
 
         ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-          m_gpsDatas[personIndex].getMinUtmX(),
-          m_gpsDatas[personIndex].getMaxUtmX(),
-          m_gpsDatas[personIndex].getMinUtmY(),
-          m_gpsDatas[personIndex].getMaxUtmY());
-        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[personIndex].getProjectionCentralMeridian());
+          m_gpsDatas.back().getMinUtmX(),
+          m_gpsDatas.back().getMaxUtmX(),
+          m_gpsDatas.back().getMinUtmY(),
+          m_gpsDatas.back().getMaxUtmY());
+        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf",
+              m_gpsDatas.back().getProjectionCentralMeridian());
     }
 
     processGpsData();

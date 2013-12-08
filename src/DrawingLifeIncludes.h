@@ -27,6 +27,7 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_container.hpp>
+#include <boost/foreach.hpp>
 
 // -----------------------------------------------------------------------------
 // include openFrameworks source tree.

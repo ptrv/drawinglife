@@ -214,7 +214,9 @@ const std::string DBReader::getBasicQueryString()
     return query;
 }
 
-bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int year, int month, int day)
+bool DBReader::getGpsDataDay(GpsData& gpsData,
+                             const std::string& userName,
+                             int year, int month, int day)
 {
 	bool result = false;
 	std::stringstream query;
@@ -233,7 +235,9 @@ bool DBReader::getGpsDataDay(GpsData& gpsData, const std::string& userName, int 
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
-bool DBReader::getGpsDataDayRange(GpsData& gpsData, const std::string& userName, int year, int month, int dayStart, int dayEnd)
+bool DBReader::getGpsDataDayRange(GpsData& gpsData,
+                                  const std::string& userName,
+                                  int year, int month, int dayStart, int dayEnd)
 {
 	bool result = false;
 	std::stringstream query;
@@ -261,7 +265,9 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData, const std::string& userName,
 	return result;
 }
 
-bool DBReader::getGpsDataMonth(GpsData& gpsData, const std::string& userName, int year, int month)
+bool DBReader::getGpsDataMonth(GpsData& gpsData,
+                               const std::string& userName,
+                               int year, int month)
 {
 	bool result = false;
 	std::stringstream query;
@@ -278,7 +284,9 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData, const std::string& userName, in
 	return result;
 }
 
-bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const std::string& userName, int year, int monthStart, int monthEnd)
+bool DBReader::getGpsDataMonthRange(GpsData& gpsData,
+                                    const std::string& userName,
+                                    int year, int monthStart, int monthEnd)
 {
 	bool result = false;
 	std::stringstream query;
@@ -300,7 +308,9 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData, const std::string& userNam
 	return result;
 }
 
-bool DBReader::getGpsDataYear(GpsData& gpsData, const std::string& userName, int year)
+bool DBReader::getGpsDataYear(GpsData& gpsData,
+                              const std::string& userName,
+                              int year)
 {
 	bool result = false;
 	std::stringstream query;
@@ -315,7 +325,9 @@ bool DBReader::getGpsDataYear(GpsData& gpsData, const std::string& userName, int
 	return result;
 }
 
-bool DBReader::getGpsDataYearRange(GpsData& gpsData, const std::string& userName, int yearStart, int yearEnd)
+bool DBReader::getGpsDataYearRange(GpsData& gpsData,
+                                   const std::string& userName,
+                                   int yearStart, int yearEnd)
 {
 	bool result = false;
 	std::stringstream query;
@@ -333,7 +345,9 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData, const std::string& userName
 	return result;
 }
 
-bool DBReader::getGpsDataCity(GpsData& gpsData, const std::string& userName, const std::string& city)
+bool DBReader::getGpsDataCity(GpsData& gpsData,
+                              const std::string& userName,
+                              const std::string& city)
 {
 	bool result = false;
 	std::stringstream query;
@@ -347,7 +361,9 @@ bool DBReader::getGpsDataCity(GpsData& gpsData, const std::string& userName, con
 	return result;
 }
 
-bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData, const std::string& userName, const std::string& sqlFileSource)
+bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
+                                     const std::string& userName,
+                                     const std::string& sqlFileSource)
 {
 	bool result = false;
 	std::stringstream query;
