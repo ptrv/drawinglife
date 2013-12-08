@@ -23,20 +23,26 @@ MagicBox::~MagicBox()
     --m_boxNum;
 }
 
-bool MagicBox::isInBox(const ofxPointd utmPoint)
+bool MagicBox::isInBox(const ofxPoint<double> utmPoint)
 {
-    return utmPoint.x >= m_theBox.x && utmPoint.y >= m_theBox.y && utmPoint.x < m_theBox.x + m_theBox.width && utmPoint.y < m_theBox.y + m_theBox.height;
+    return utmPoint.x >= m_theBox.getX()
+            && utmPoint.y >= m_theBox.getY()
+            && utmPoint.x < m_theBox.getX() + m_theBox.getWidth()
+            && utmPoint.y < m_theBox.getY() + m_theBox.getHeight();
 }
 
-bool MagicBox::isInPaddedBox(const ofxPointd utmPoint)
+bool MagicBox::isInPaddedBox(const ofxPoint<double> utmPoint)
 {
-    return utmPoint.x >= m_paddedBox.x && utmPoint.y >= m_paddedBox.y && utmPoint.x < m_paddedBox.x + m_paddedBox.width && utmPoint.y < m_paddedBox.y + m_paddedBox.height;
+    return utmPoint.x >= m_paddedBox.getX()
+            && utmPoint.y >= m_paddedBox.getY()
+            && utmPoint.x < m_paddedBox.getX() + m_paddedBox.getWidth()
+            && utmPoint.y < m_paddedBox.getY() + m_paddedBox.getHeight();
 }
 
-const ofxPointd MagicBox::getDrawablePoint(const UtmPoint& utmPoint)
+const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint)
 {
-    ofxPointd normalizedPoint((utmPoint.x - m_theBox.x) / m_theBox.width,
-                              (utmPoint.y - m_theBox.y) / m_theBox.height);
+    ofxPoint<double> normalizedPoint((utmPoint.x - m_theBox.getX()) / m_theBox.getWidth(),
+                              (utmPoint.y - m_theBox.getY()) / m_theBox.getHeight());
     return normalizedPoint;
 }
 
@@ -44,7 +50,7 @@ void MagicBox::setCenter(double x, double y)
 {
 //	m_centerUtm.
 }
-void MagicBox::setupBox(ofxPointd currUtm, double lon0)
+void MagicBox::setupBox(ofxPoint<double> currUtm, double lon0)
 {
     m_centerUtm = currUtm;
 //    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
@@ -55,7 +61,7 @@ void MagicBox::setupBox(ofxPointd currUtm, double lon0)
     m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
 }
 
-void MagicBox::setupBoxStatic(ofxPointd currUtm, double lon0, double width, double height)
+void MagicBox::setupBoxStatic(ofxPoint<double> currUtm, double lon0, double width, double height)
 {
     m_centerUtm = currUtm;
     m_currentSize = width;
@@ -63,12 +69,13 @@ void MagicBox::setupBoxStatic(ofxPointd currUtm, double lon0, double width, doub
     ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
 
     m_theBox.setFromCenter(m_centerUtm , width, height);
-    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf", m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
+    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf",
+          m_boxId+1, m_theBox.getX(), m_theBox.getY(), m_theBox.getWidth(), m_theBox.getHeight());
 
     m_paddedBox.setFromCenter(m_centerUtm, width, height);
 }
 
-void MagicBox::updateBoxIfNeeded(const ofxPointd utmPoint)
+void MagicBox::updateBoxIfNeeded(const ofxPoint<double> utmPoint)
 {
 
 //    if(!this->isInBox(utmPoint))
@@ -97,27 +104,46 @@ void MagicBox::updateBoxIfNeeded(const ofxPointd utmPoint)
 
     if(!this->isInPaddedBox(utmPoint))
     {
-        if (utmPoint.x >= m_paddedBox.x + m_paddedBox.width)
+        if (utmPoint.x >= m_paddedBox.getX() + m_paddedBox.getWidth())
         {
-            m_theBox.x += utmPoint.x - (m_paddedBox.x + m_paddedBox.width);
-            m_paddedBox.x += utmPoint.x - (m_paddedBox.x + m_paddedBox.width);
+            double x1 = m_theBox.getX();
+            x1 += utmPoint.x - (m_paddedBox.getX() + m_paddedBox.getWidth());
+            m_theBox.setX(x1);
+            double x2 = m_paddedBox.getX();
+            x2 += utmPoint.x - (m_paddedBox.getX() + m_paddedBox.getWidth());
+            m_paddedBox.setX(x2);
         }
-        else if (utmPoint.x < m_paddedBox.x)
+        else if (utmPoint.x < m_paddedBox.getX())
         {
-            m_theBox.x += utmPoint.x - m_paddedBox.x;
-            m_paddedBox.x += utmPoint.x - m_paddedBox.x;
+            double x1 = m_theBox.getX();
+            x1 += utmPoint.x - m_paddedBox.getX();
+            m_theBox.setX(x1);
+
+            double x2 = m_paddedBox.getX();
+            x2 += utmPoint.x - m_paddedBox.getX();
+            m_paddedBox.setX(x2);
         }
 
 
-        if (utmPoint.y >= m_paddedBox.y + m_paddedBox.height)
+        if (utmPoint.y >= m_paddedBox.getY() + m_paddedBox.getHeight())
         {
-            m_theBox.y += utmPoint.y - (m_paddedBox.y + m_paddedBox.height);
-            m_paddedBox.y += utmPoint.y - (m_paddedBox.y + m_paddedBox.height);
+            double y1 = m_theBox.getY();
+            y1 += utmPoint.y - (m_paddedBox.getY() + m_paddedBox.getHeight());
+            m_theBox.setY(y1);
+
+            double y2 = m_paddedBox.getY();
+            y2 += utmPoint.y - (m_paddedBox.getY() + m_paddedBox.getHeight());
+            m_paddedBox.setY(y2);
         }
-        else if (utmPoint.y < m_paddedBox.y)
+        else if (utmPoint.y < m_paddedBox.getY())
         {
-            m_theBox.y += utmPoint.y - m_paddedBox.y;
-            m_paddedBox.y += utmPoint.y - m_paddedBox.y;
+            double y1 = m_theBox.getY();
+            y1 += utmPoint.y - m_paddedBox.getY();
+            m_theBox.setY(y1);
+
+            double y2 = m_paddedBox.getY();
+            y2 += utmPoint.y - m_paddedBox.getY();
+            m_paddedBox.setY(y2);
         }
         m_centerUtm = m_theBox.getCenter();
     }
@@ -132,9 +158,16 @@ void MagicBox::addToBoxSize(double sizeToAdd)
 
     if(m_currentSize > 0)
     {
-        m_theBox.x -= sizeToAdd/2;
-        m_theBox.y -= sizeToAdd/2;
-        m_theBox.width = m_theBox.height = m_currentSize;
+        double x = m_theBox.getX();
+        x -= sizeToAdd/2;
+        m_theBox.setX(x);
+
+        double y = m_theBox.getY();
+        y -= sizeToAdd/2;
+        m_theBox.setY(y);
+
+        m_theBox.setWidth(m_currentSize);
+        m_theBox.setHeight(m_currentSize);
 
         // calcuzlates new padding with old size/padding ratio.
         m_padding = m_currentSize/(oldSize/oldPadding);
@@ -196,28 +229,16 @@ void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
     }
 }
 
-const ofxRectangled MagicBox::getNormalizedBox()
+const ofxRectangle<double> MagicBox::getNormalizedBox()
 {
-    ofxRectangled tmpRect;
-
-    tmpRect.x = 0;
-    tmpRect.y = 0;
-    tmpRect.width = 1;
-    tmpRect.height = 1;
-
-    return tmpRect;
+    return ofxRectangle<double> (0, 0, 1, 1);
 }
-const ofxRectangled MagicBox::getNormalizedPaddedBox()
+const ofxRectangle<double> MagicBox::getNormalizedPaddedBox()
 {
-    ofxRectangled tmpRect;
-
-    tmpRect.x = 0 + (m_padding/m_theBox.width);
-    tmpRect.y = 0 + (m_padding/m_theBox.height);
-    tmpRect.width = 1 - (m_padding/m_theBox.width);
-    tmpRect.height = 1 - (m_padding/m_theBox.height);
-
-    return tmpRect;
-
+    return ofxRectangle<double> (m_padding / m_theBox.getWidth(),
+                                 m_padding / m_theBox.getHeight(),
+                                 1 - (m_padding / m_theBox.getWidth()),
+                                 1 - (m_padding / m_theBox.getHeight()));
 }
 
 void MagicBox::setBoxes()

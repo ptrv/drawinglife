@@ -457,14 +457,14 @@ void DrawingLifeApp::zoomUpdate()
         if(m_multiMode)
         {
             m_magicBox->setSize((double)m_zoomIntegrator->getValue());
-            m_magicBox->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0);
+            m_magicBox->setupBox(ofxPoint<double>(m_integratorX->getValue(), m_integratorY->getValue()), 0);
         }
         else
         {
             for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
             {
                 m_magicBoxes[bi]->setSize((double)m_zoomIntegrator->getValue());
-                m_magicBoxes[bi]->setupBox(ofxPointd(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
+                m_magicBoxes[bi]->setupBox(ofxPoint<double>(m_integratorX->getValue(), m_integratorY->getValue()), 0 );
             }
         }
     }

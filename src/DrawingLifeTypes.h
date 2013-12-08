@@ -107,29 +107,31 @@ struct GpsRegion
 };
 
 // -----------------------------------------------------------------------------
-// double version of openFramworks datatypes.
+// templated version of openFramworks datatypes.
 // -----------------------------------------------------------------------------
 
 //----------------------------------------------------------
-// ofxPointd
+// ofxPoint
 //----------------------------------------------------------
-class ofxPointd {
+template < class T >
+class ofxPoint {
   public:
-	virtual ~ofxPointd(){}
+    virtual ~ofxPoint(){}
 
-    ofxPointd( double _x=0.0, double _y=0.0, double _z=0.0 ) {
-        x = _x;
-        y = _y;
-        z = _z;
-    }
+    ofxPoint() : x(), y(), z() {}
+    ofxPoint(T _x) : x(_x), y(), z() {}
+    ofxPoint(T _x, T _y) : x(_x), y(_y), z() {}
+    ofxPoint(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
 
-    ofxPointd( const ofxPointd & pnt){
+    ofxPoint( const ofxPoint & pnt)
+    {
         x = pnt.x;
         y = pnt.y;
         z = pnt.z;
     }
 
-    void set(double _x, double _y, double _z = 0){
+    void set(T _x, T _y, T _z = 0)
+    {
         x = _x;
         y = _y;
         z = _z;
@@ -139,29 +141,34 @@ class ofxPointd {
 	//------ Operators:
 
   	//Negative
-    ofxPointd operator-() const {
-        return ofxPointd( -x, -y, -z );
+    ofxPoint operator-() const
+    {
+        return ofxPoint( -x, -y, -z );
     }
 
     //equality
-    bool operator==( const ofxPointd& pnt ) {
+    bool operator==( const ofxPoint& pnt )
+    {
         return (x == pnt.x) && (y == pnt.y) && (z == pnt.z);
     }
 
 	//inequality
-    bool operator!=( const ofxPointd& pnt ) {
+    bool operator!=( const ofxPoint& pnt )
+    {
         return (x != pnt.x) || (y != pnt.y) || (z != pnt.z);
     }
 
 	//Set
-	ofxPointd & operator=( const ofxPointd& pnt ){
+    ofxPoint & operator=( const ofxPoint& pnt )
+    {
 		x = pnt.x;
 		y = pnt.y;
 		z = pnt.z;
 		return *this;
 	}
 
-	ofxPointd & operator=( const double& val ){
+    ofxPoint& operator=( const T& val )
+    {
 		x = val;
 		y = val;
 		z = val;
@@ -169,22 +176,26 @@ class ofxPointd {
 	}
 
 	// Add
-    ofxPointd operator+( const ofxPointd& pnt ) const {
-        return ofxPointd( x+pnt.x, y+pnt.y, z+pnt.z );
+    ofxPoint operator+( const ofxPoint& pnt ) const
+    {
+        return ofxPoint( x+pnt.x, y+pnt.y, z+pnt.z );
     }
 
-    ofxPointd operator+( const double& val ) const {
-        return ofxPointd( x+val, y+val, z+val );
+    ofxPoint operator+( const T& val ) const
+    {
+        return ofxPoint( x+val, y+val, z+val );
     }
 
-	ofxPointd & operator+=( const ofxPointd& pnt ) {
+    ofxPoint & operator+=( const ofxPoint& pnt )
+    {
         x+=pnt.x;
         y+=pnt.y;
         z+=pnt.z;
         return *this;
     }
 
-	ofxPointd & operator+=( const double & val ) {
+    ofxPoint & operator+=( const T& val )
+    {
         x+=val;
         y+=val;
         z+=val;
@@ -192,22 +203,26 @@ class ofxPointd {
     }
 
 	// Subtract
-    ofxPointd operator-(const ofxPointd& pnt) const {
-        return ofxPointd( x-pnt.x, y-pnt.y, z-pnt.z );
+    ofxPoint operator-(const ofxPoint& pnt) const
+    {
+        return ofxPoint( x-pnt.x, y-pnt.y, z-pnt.z );
     }
 
-    ofxPointd operator-(const double& val) const {
-        return ofxPointd( x-val, y-val, z-val);
+    ofxPoint operator-(const T& val) const
+    {
+        return ofxPoint( x-val, y-val, z-val);
     }
 
-    ofxPointd & operator-=( const ofxPointd& pnt ) {
+    ofxPoint & operator-=( const ofxPoint& pnt )
+    {
         x -= pnt.x;
         y -= pnt.y;
         z -= pnt.z;
         return *this;
     }
 
-    ofxPointd & operator-=( const double & val ) {
+    ofxPoint& operator-=( const T& val )
+    {
         x -= val;
         y -= val;
         z -= val;
@@ -215,22 +230,26 @@ class ofxPointd {
     }
 
 	// Multiply
-    ofxPointd operator*( const ofxPointd& pnt ) const {
-        return ofxPointd( x*pnt.x, y*pnt.y, z*pnt.z );
+    ofxPoint operator*( const ofxPoint& pnt ) const
+    {
+        return ofxPoint( x*pnt.x, y*pnt.y, z*pnt.z );
     }
 
-    ofxPointd operator*(const double& val) const {
-        return ofxPointd( x*val, y*val, z*val);
+    ofxPoint operator*(const T& val) const
+    {
+        return ofxPoint( x*val, y*val, z*val);
     }
 
-    ofxPointd & operator*=( const ofxPointd& pnt ) {
+    ofxPoint & operator*=( const ofxPoint& pnt )
+    {
         x*=pnt.x;
         y*=pnt.y;
         z*=pnt.z;
         return *this;
     }
 
-    ofxPointd & operator*=( const double & val ) {
+    ofxPoint & operator*=( const T& val )
+    {
         x*=val;
         y*=val;
         z*=val;
@@ -238,18 +257,24 @@ class ofxPointd {
     }
 
 	// Divide
-    ofxPointd operator/( const ofxPointd& pnt ) const {
-        return ofxPointd( pnt.x!=0 ? x/pnt.x : x , pnt.y!=0 ? y/pnt.y : y, pnt.z!=0 ? z/pnt.z : z );
+    ofxPoint operator/( const ofxPoint& pnt ) const
+    {
+        return ofxPoint(pnt.x!=0 ? x/pnt.x : x,
+                        pnt.y!=0 ? y/pnt.y : y,
+                        pnt.z!=0 ? z/pnt.z : z);
     }
 
-    ofxPointd operator/( const double &val ) const {
-		if( val != 0){
-			return ofxPointd( x/val, y/val, z/val );
+    ofxPoint operator/( const T&val ) const
+    {
+        if( val != 0)
+        {
+            return ofxPoint( x/val, y/val, z/val );
 		}
-        return ofxPointd(x, y, z );
+        return ofxPoint(x, y, z );
     }
 
-    ofxPointd& operator/=( const ofxPointd& pnt ) {
+    ofxPoint& operator/=( const ofxPoint& pnt )
+    {
         pnt.x!=0 ? x/=pnt.x : x;
         pnt.y!=0 ? y/=pnt.y : y;
         pnt.z!=0 ? z/=pnt.z : z;
@@ -257,7 +282,8 @@ class ofxPointd {
         return *this;
     }
 
-    ofxPointd& operator/=( const double &val ) {
+    ofxPoint& operator/=( const T&val )
+    {
 		if( val != 0 ){
 			x /= val;
 			y /= val;
@@ -269,16 +295,19 @@ class ofxPointd {
 
 	// union allows us to access the coordinates through
     // both an array 'v' and 'x', 'y', 'z' member varibles
-    union  {
-        struct {
-            double x;
-            double y;
-            double z;
+    union
+    {
+        struct
+        {
+            T x;
+            T y;
+            T z;
         };
-        double v[3];
+        T v[3];
     };
 
-	double& operator[]( int n ){
+    T& operator[]( int n )
+    {
 		return v[n];
 	}
 };
@@ -287,64 +316,73 @@ class ofxPointd {
 // ofxRectangled
 //----------------------------------------------------------
 
-class ofxRectangled {
+template < class T >
+class ofxRectangle
+{
   public:
-	ofxRectangled(){ x = y = width = height = 0.0; };
-	ofxRectangled(double _x, double _y, double _w, double _h){
-		x = _x;
-		y = _y;
-		width = _w;
-		height = _h;
-	}
-	virtual ~ofxRectangled(){}
+    ofxRectangle() :pos(), width(), height() {}
+    ofxRectangle(T _x, T _y, T _w, T _h) : pos(_x, _y), width(_w), height(_h) {}
+    virtual ~ofxRectangle(){}
 
-	void set(double px, double py, double w, double h){
-		x		= px;
-		y		= py;
+    void set(T px, T py, T w, T h)
+    {
+        pos.set(px, py);
 		width	= w;
 		height	= h;
 	}
 
-	void set(ofxPointd pos, double w, double h){
-		x		= pos.x;
-		y		= pos.y;
+    void set(ofxPoint<T> p, T w, T h)
+    {
+        pos = p;
+        width	= w;
+		height	= h;
+	}
+
+    void setFromCenter(T px, T py, T w, T h)
+    {
+        pos.set(px - (w / 2), py - (h / 2));
 		width	= w;
 		height	= h;
 	}
 
-	void setFromCenter(double px, double py, double w, double h){
-		x		= px - w*0.5;
-		y		= py - h*0.5;
+    void setFromCenter(ofxPoint<T> p, T w, T h)
+    {
+        pos.set(p.x - (w / 2), p.y - (h / 2));
 		width	= w;
 		height	= h;
 	}
 
-	void setFromCenter(ofxPointd pos, double w, double h){
-		x		= pos.x - w*0.5;
-		y		= pos.y - h*0.5;
-		width	= w;
-		height	= h;
+    ofxPoint<T> getCenter()
+    {
+        return ofxPoint<T>(pos.x + width / 2, pos.y + height / 2, 0);
 	}
 
-	ofxPointd getCenter(){
-		return ofxPointd(x + width * 0.5, y + height * 0.5, 0);
-	}
-
-	bool inside (ofxPointd p){
+    bool inside (ofxPoint<T> p){
 		return inside(p.x, p.y);
 	}
 
-	bool inside(double px, double py){
-		if( px > x && py > y && px < x + width && py < y + height ){
+    bool inside(T px, T py){
+        if( px > pos.x && py > pos.y && px < pos.x + width
+                && py < pos.y + height )
+        {
 		    return true;
 		}
 		return false;
 	}
 
-   double x;
-   double y;
-   double width;
-   double height;
+    inline T getX() const { return pos.x; }
+    inline T getY() const { return pos.y; }
+    inline T getWidth() const { return width; }
+    inline T getHeight() const { return height; }
+
+    inline void setX(const T newX) { pos.x = newX; }
+    inline void setY(const T newY) { pos.y = newY; }
+    inline void setWidth(const T newWidth) { width = newWidth; }
+    inline void setHeight(const T newHeight) { height = newHeight; }
+
+private:
+    ofxPoint<T> pos;
+    T width, height;
 
 };
 

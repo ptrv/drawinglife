@@ -453,7 +453,7 @@ UtmPoint GpsData::getUtmPoint(double lat, double lon, AppSettings* settings)
     return utmP;
 }
 
-GpsPoint GpsData::getGpsPoint(const ofxPointd& utmP)
+GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 {
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     Math::real gamma, k;

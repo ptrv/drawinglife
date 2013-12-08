@@ -158,16 +158,21 @@ void Walk::reset()
 
 void Walk::draw()
 {
-	if (m_gpsData->getNormalizedUTMPoints().size() > 0 && m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
+    if (m_gpsData->getNormalizedUTMPoints().size() > 0
+            && m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
 	{
 		// -----------------------------------------------------------------------------
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
-        if(!m_interactiveMode && !m_settings->isMultiMode() && !m_settings->isBoundingBoxFixed())
+        const UtmPoint& currentUtm =
+                m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint];
+
+        if(!m_interactiveMode && !m_settings->isMultiMode()
+                && !m_settings->isBoundingBoxFixed())
         {
-            m_magicBox->updateBoxIfNeeded(ofxPointd(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].x,
-                                                    m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].y));
+            m_magicBox->updateBoxIfNeeded(ofxPoint<double>(currentUtm.x,
+                                                           currentUtm.y));
         }
 
         int startSeg, startPoint;
@@ -176,8 +181,10 @@ void Walk::draw()
             if(m_maxPointsToDraw - m_currentPoint <= 0)
             {
                 int startIndex = m_currentPoint-m_maxPointsToDraw;
-                startSeg = m_gpsData->getIndices()[startIndex].gpsSegment;
-                startPoint = m_gpsData->getIndices()[startIndex].gpsPoint;
+                const GpsDataIndex& gpsDataIndex =
+                        m_gpsData->getIndices()[startIndex];
+                startSeg = gpsDataIndex.gpsSegment;
+                startPoint = gpsDataIndex.gpsPoint;
             }
             else
             {
@@ -217,10 +224,11 @@ void Walk::draw()
 
             for (int j = startPoint; j <= pointEnd; ++j)
             {
+                const UtmPoint& utm = m_gpsData->getUTMPoints()[i][j];
                 bool isInBox = true;
                 if(m_settings->isBoundingBoxAuto() && !m_settings->isMultiMode())
                 {
-                    isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+                    isInBox = m_magicBox->isInBox(ofxPoint<double>(utm.x, utm.y));
                     if(!isInBox)
                     {
                         glEnd();
@@ -231,9 +239,9 @@ void Walk::draw()
 //                    isInBox = true;
                 if(m_settings->useSpeed())
                 {
-                    //DBG_VAL(m_gpsData->getUTMPoints()[i][j].speed);
+                    //DBG_VAL(utm.speed);
                     bool shouldNotBeDrawn = false;
-                    if(m_gpsData->getUTMPoints()[i][j].speed > m_settings->getSpeedThreshold())
+                    if(utm.speed > m_settings->getSpeedThreshold())
                     {
                         ofColor tmpColor = m_settings->getSpeedColorAbove();
                         ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
@@ -263,7 +271,7 @@ void Walk::draw()
                 if(isInBox)
                 {
 //                    ofSetColor(255, 0,0);
-                    ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
+                    ofxPoint<double> tmp = m_magicBox->getDrawablePoint(utm);
                     glVertex2d(getScaledUtmX(tmp.x),
                                getScaledUtmY(tmp.y));
                 }
@@ -275,7 +283,7 @@ void Walk::draw()
         }
 //        ofDisableSmoothing();
 
-		ofxPointd tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint]);
+        ofxPoint<double> tmp = m_magicBox->getDrawablePoint(currentUtm);
 
 		if (m_currentPointIsImage)
 		{
@@ -289,7 +297,7 @@ void Walk::draw()
 			bool shouldBeDrawn = true;
 			if(m_settings->useSpeed())
 			{
-			    if(m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint].speed > m_settings->getSpeedThreshold())
+                if(currentUtm.speed > m_settings->getSpeedThreshold())
 			    {
 			        if(m_settings->getSpeedColorAbove().a == 0.0)
 			        {
@@ -319,20 +327,23 @@ void Walk::draw()
         ofNoFill();
         ofSetColor(255,0,0);
 
-        double x = getScaledUtmX(m_magicBox->getNormalizedBox().x);
-        double y = getScaledUtmY(m_magicBox->getNormalizedBox().y);
-        double w = getScaledUtmX(m_magicBox->getNormalizedBox().width)-x;
-        double h = getScaledUtmY(m_magicBox->getNormalizedBox().height)-y;
+        const ofxRectangle<double>& normalizedBox = m_magicBox->getNormalizedBox();
+        double x = getScaledUtmX(normalizedBox.getX());
+        double y = getScaledUtmY(normalizedBox.getY());
+        double w = getScaledUtmX(normalizedBox.getWidth()) - x;
+        double h = getScaledUtmY(normalizedBox.getHeight()) - y;
 
         ofRect(x, y , w, h);
 
         ofNoFill();
         ofSetColor(0,255,0);
 
-        double xp = getScaledUtmX(m_magicBox->getNormalizedPaddedBox().x);
-        double yp = getScaledUtmY(m_magicBox->getNormalizedPaddedBox().y);
-        double wp = getScaledUtmX(m_magicBox->getNormalizedPaddedBox().width)-xp;
-        double hp = getScaledUtmY(m_magicBox->getNormalizedPaddedBox().height)-yp;
+        const ofxRectangle<double>& normalizedPaddedBox =
+                m_magicBox->getNormalizedPaddedBox();
+        double xp = getScaledUtmX(normalizedPaddedBox.getX());
+        double yp = getScaledUtmY(normalizedPaddedBox.getY());
+        double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
+        double hp = getScaledUtmY(normalizedPaddedBox.getHeight()) - yp;
 
         ofRect(xp, yp , wp, hp);
     }
@@ -351,13 +362,16 @@ void Walk::drawAll()
 
 		for (unsigned int j = 0; j < m_gpsData->getNormalizedUTMPointsGlobal()[i].size(); ++j)
 		{
+            const UtmPoint& utm = m_gpsData->getUTMPoints()[i][j];
             bool isInBox = true;
             if(m_settings->isBoundingBoxAuto() && !m_settings->isMultiMode())
-                isInBox = m_magicBox->isInBox(ofxPointd(m_gpsData->getUTMPoints()[i][j].x, m_gpsData->getUTMPoints()[i][j].y));
+            {
+                isInBox = m_magicBox->isInBox(ofxPoint<double>(utm.x, utm.y));
+            }
 //            if(isInBox)
             if(isInBox)
             {
-                const ofxPointd& tmp = m_magicBox->getDrawablePoint(m_gpsData->getUTMPoints()[i][j]);
+                const ofxPoint<double>& tmp = m_magicBox->getDrawablePoint(utm);
                 glVertex2d(getScaledUtmX(tmp.x),
                            getScaledUtmY(tmp.y));
             }
@@ -521,7 +535,7 @@ void Walk::setMagicBox(MagicBox* magicBox)
     m_magicBox = 0;
     m_magicBox = magicBox;
     reset();
-    ofxPointd tmpCoord;
+    ofxPoint<double> tmpCoord;
     tmpCoord.x = m_gpsData->getUtmX(0,0);
     tmpCoord.y = m_gpsData->getUtmY(0,0);
     m_magicBox->setupBox(tmpCoord, GpsData::getLon0Glogal());
@@ -535,7 +549,7 @@ void Walk::setMagicBoxStatic(MagicBox* magicBox, double lat, double lon)
     m_magicBox = magicBox;
     reset();
 
-    ofxPointd tmpCoord;
+    ofxPoint<double> tmpCoord;
     UtmPoint utmP = GpsData::getUtmPoint(lat, lon, m_settings);
     tmpCoord.x = utmP.x;
     tmpCoord.y = utmP.y;

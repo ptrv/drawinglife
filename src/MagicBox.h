@@ -14,14 +14,14 @@ public:
     MagicBox(AppSettings* settings, double size, double padding);
     ~MagicBox();
 
-    bool isInBox(const ofxPointd utmPoint);
+    bool isInBox(const ofxPoint<double> utmPoint);
 
-    const ofxPointd getDrawablePoint(const UtmPoint& utmPoint);
+    const ofxPoint<double> getDrawablePoint(const UtmPoint& utmPoint);
 
-    void setupBox(ofxPointd currUtm, double lon0);
-    void setupBoxStatic(ofxPointd currUtm, double lon0, double width, double height);
+    void setupBox(ofxPoint<double> currUtm, double lon0);
+    void setupBoxStatic(ofxPoint<double> currUtm, double lon0, double width, double height);
 
-    void updateBoxIfNeeded(const ofxPointd utmPoint);
+    void updateBoxIfNeeded(const ofxPoint<double> utmPoint);
 
     void updateBoxSize(double size);
 
@@ -30,11 +30,11 @@ public:
     void setSize(double newSize);
     void setCenter(double x, double y);
 
-    const ofxRectangled& getTheBox() const { return m_theBox; }
-    const ofxRectangled getNormalizedBox();
-    const ofxRectangled& getPaddedBox() const { return m_theBox; }
-    const ofxRectangled getNormalizedPaddedBox();
-    const ofxPointd& getCenter() const {return m_centerUtm; }
+    const ofxRectangle<double>& getTheBox() const { return m_theBox; }
+    const ofxRectangle<double> getNormalizedBox();
+    const ofxRectangle<double>& getPaddedBox() const { return m_theBox; }
+    const ofxRectangle<double> getNormalizedPaddedBox();
+    const ofxPoint<double>& getCenter() const {return m_centerUtm; }
     const GpsPoint getCenterGps() const;
     const double getSize() const { return m_currentSize; }
 
@@ -47,14 +47,14 @@ public:
 
 private:
 
-    bool isInPaddedBox(const ofxPointd utmPoint);
+    bool isInPaddedBox(const ofxPoint<double> utmPoint);
 
     void setBoxes();
     // ist auch m_lon0
-    ofxPointd m_centerUtm;
+    ofxPoint<double> m_centerUtm;
 
-    ofxRectangled m_theBox;
-    ofxRectangled m_paddedBox;
+    ofxRectangle<double> m_theBox;
+    ofxRectangle<double> m_paddedBox;
 
     AppSettings* m_settings;
     double m_currentSize;
