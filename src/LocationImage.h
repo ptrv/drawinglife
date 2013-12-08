@@ -7,7 +7,7 @@
 class LocationImage
 {
 public:
-    LocationImage(MagicBox* magicBox, LocationImageData lid);
+    LocationImage(const MagicBox& magicBox, LocationImageData lid);
     virtual ~LocationImage();
 
 //    void setup(double minX, double maxX, double minY, double maxY);
@@ -20,7 +20,7 @@ private:
    	double getScaledUtmY(double utmY);
 	double getScaledUtmX(double utmX);
 
-    MagicBox* m_magicBox;
+    const MagicBox& m_magicBox;
     LocationImageData m_lid;
 
     UtmPoint m_utm;

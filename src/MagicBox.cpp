@@ -20,10 +20,11 @@ m_defaultSize(10000.0)
 
 MagicBox::~MagicBox()
 {
+    ofLogVerbose("MagicBox", "destroying");
     --m_boxNum;
 }
 
-bool MagicBox::isInBox(const ofxPoint<double> utmPoint)
+bool MagicBox::isInBox(const ofxPoint<double>& utmPoint) const
 {
     return utmPoint.x >= m_theBox.getX()
             && utmPoint.y >= m_theBox.getY()
@@ -31,7 +32,7 @@ bool MagicBox::isInBox(const ofxPoint<double> utmPoint)
             && utmPoint.y < m_theBox.getY() + m_theBox.getHeight();
 }
 
-bool MagicBox::isInPaddedBox(const ofxPoint<double> utmPoint)
+bool MagicBox::isInPaddedBox(const ofxPoint<double>& utmPoint) const
 {
     return utmPoint.x >= m_paddedBox.getX()
             && utmPoint.y >= m_paddedBox.getY()
@@ -39,18 +40,17 @@ bool MagicBox::isInPaddedBox(const ofxPoint<double> utmPoint)
             && utmPoint.y < m_paddedBox.getY() + m_paddedBox.getHeight();
 }
 
-const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint)
+const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint) const
 {
-    ofxPoint<double> normalizedPoint((utmPoint.x - m_theBox.getX()) / m_theBox.getWidth(),
-                              (utmPoint.y - m_theBox.getY()) / m_theBox.getHeight());
-    return normalizedPoint;
+    return ofxPoint<double> ((utmPoint.x - m_theBox.getX()) / m_theBox.getWidth(),
+                             (utmPoint.y - m_theBox.getY()) / m_theBox.getHeight());
 }
 
 void MagicBox::setCenter(double x, double y)
 {
 //	m_centerUtm.
 }
-void MagicBox::setupBox(ofxPoint<double> currUtm, double lon0)
+void MagicBox::setupBox(const ofxPoint<double>& currUtm, double lon0)
 {
     m_centerUtm = currUtm;
 //    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
@@ -61,7 +61,8 @@ void MagicBox::setupBox(ofxPoint<double> currUtm, double lon0)
     m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
 }
 
-void MagicBox::setupBoxStatic(ofxPoint<double> currUtm, double lon0, double width, double height)
+void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
+                              double width, double height)
 {
     m_centerUtm = currUtm;
     m_currentSize = width;
@@ -75,7 +76,7 @@ void MagicBox::setupBoxStatic(ofxPoint<double> currUtm, double lon0, double widt
     m_paddedBox.setFromCenter(m_centerUtm, width, height);
 }
 
-void MagicBox::updateBoxIfNeeded(const ofxPoint<double> utmPoint)
+void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 {
 
 //    if(!this->isInBox(utmPoint))
@@ -229,11 +230,11 @@ void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
     }
 }
 
-const ofxRectangle<double> MagicBox::getNormalizedBox()
+const ofxRectangle<double> MagicBox::getNormalizedBox() const
 {
     return ofxRectangle<double> (0, 0, 1, 1);
 }
-const ofxRectangle<double> MagicBox::getNormalizedPaddedBox()
+const ofxRectangle<double> MagicBox::getNormalizedPaddedBox() const
 {
     return ofxRectangle<double> (m_padding / m_theBox.getWidth(),
                                  m_padding / m_theBox.getHeight(),

@@ -50,16 +50,19 @@ private:
 	* \param names vector with name strings.
 	* \param city string with city name.
 	*/
-	bool loadGpsDataCity(std::vector<std::string> names, std::string city);
+    bool loadGpsDataCity(const std::vector<std::string>& names,
+                         const std::string& city);
 	/**
 	* \brief
 	* \param names vector with name strings.
 	* \param yearStart start year for query.
 	* \param yearEnd end year for query.
 	*/
-	bool loadGpsDataYearRange(std::vector<std::string> names, int yearStart, int yearEnd);
+    bool loadGpsDataYearRange(const std::vector<std::string>& names,
+                              int yearStart, int yearEnd);
 
-	bool loadGpsDataWithSqlFile(std::vector<std::string> names, std::vector<std::string> m_sqlFilePaths);
+    bool loadGpsDataWithSqlFile(const std::vector<std::string>& names,
+                                const std::vector<std::string>& m_sqlFilePaths);
 	/**
 	* \brief Set square view area and center.
 	*/
@@ -100,12 +103,12 @@ private:
     // Member variables
     //---------------------------------------------------------------------------
     std::string m_settingsFile;
-    AppSettings* m_settings;
-	DBReader* m_dbReader;
 
-	std::vector<GpsData* > m_gpsDatas;
-	std::vector<Walk* > m_walks;
-	std::vector<MagicBox* > m_magicBoxes;
+    boost::scoped_ptr<AppSettings> m_settings;
+
+    GpsDataVector m_gpsDatas;
+    WalkVector m_walks;
+    MagicBoxVector m_magicBoxes;
 
 	std::string m_dbPath;
 	//---------------------------------------------------------------------------
@@ -135,7 +138,7 @@ private:
     std::vector<string> m_names;
 	std::string m_currentCity;
     // -----------------------------------------------------------------------------
-    Timeline* m_timeline;
+    boost::scoped_ptr<Timeline> m_timeline;
 
     DBQueryData m_dbQueryData;
 
@@ -144,7 +147,8 @@ private:
     float fpsToShow;
 
     std::vector<CurrentImageData> m_imageList;
-    std::vector<ofImage > m_images;
+//    std::vector<ofImage > m_images;
+    boost::ptr_vector<ofImage> m_images;
     bool m_imageAsCurrentPoint;
 
     bool m_hideCursor;
@@ -162,18 +166,18 @@ private:
     bool m_multiMode;
     bool m_multiModeInfo;
 
-    std::vector<LocationImage*> m_locationImgs;
+    boost::ptr_vector<LocationImage> m_locationImgs;
 
     bool m_pause;
-    MagicBox* m_magicBox;
+    boost::scoped_ptr<MagicBox> m_magicBox;
 
-    std::vector<ofSoundPlayer*> m_soundPlayer;
+    boost::ptr_vector<ofSoundPlayer> m_soundPlayer;
 
     bool m_isZoomAnimation;
 
-    Integrator* m_zoomIntegrator;
-    Integrator* m_integratorX;
-    Integrator* m_integratorY;
+    Integrator m_zoomIntegrator;
+    Integrator m_integratorX;
+    Integrator m_integratorY;
 
     ofShader shader;
     bool doShader;

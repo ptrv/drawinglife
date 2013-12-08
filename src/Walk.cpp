@@ -67,6 +67,8 @@ Walk::~Walk()
     if(m_magicBox)
         m_magicBox = 0;
 	m_image.clear();
+
+    ofLogVerbose("Walk", "destroying");
 }
 
 // -----------------------------------------------------------------------------
@@ -526,14 +528,14 @@ const std::string& Walk::getCurrentGpsInfo()
 //
 //}
 
-void Walk::setGpsData(GpsData* gpsData)
+void Walk::setGpsData(GpsData* const gpsData)
 {
     m_gpsData = 0;
     m_gpsData = gpsData;
 }
 
 
-void Walk::setMagicBox(MagicBox* magicBox)
+void Walk::setMagicBox(MagicBox* const magicBox)
 {
     m_magicBox = 0;
     m_magicBox = magicBox;
@@ -545,7 +547,7 @@ void Walk::setMagicBox(MagicBox* magicBox)
 
 }
 
-void Walk::setMagicBoxStatic(MagicBox* magicBox, double lat, double lon)
+void Walk::setMagicBoxStatic(MagicBox* const magicBox, double lat, double lon)
 {
 
     m_magicBox = 0;
@@ -560,7 +562,7 @@ void Walk::setMagicBoxStatic(MagicBox* magicBox, double lat, double lon)
 
 }
 
-void Walk::setCurrentPointImage(ofImage img, int alpha)
+void Walk::setCurrentPointImage(const ofImage& img, int alpha)
 {
     m_image = img;
     m_image.setAnchorPercent(0.5f, 0.5f);

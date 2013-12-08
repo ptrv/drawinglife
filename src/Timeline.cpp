@@ -20,27 +20,29 @@ m_currentCountWasUpdated(false)
 
 Timeline::~Timeline()
 {
+    ofLogVerbose("Timeline", "destroying");
 }
 
-void Timeline::sortGpsDataVecs(std::vector<GpsData*>& gpsDatas)
+void Timeline::sortGpsDataVecs(const std::vector<GpsData*>& gpsDatas)
 {
 }
-void Timeline::setTimeline(std::vector<GpsData*>& gpsDatas)
+//void Timeline::setTimeline(const std::vector<GpsData*>& gpsDatas)
+void Timeline::setTimeline(const GpsDataVector& gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
     for(unsigned int i = 0; i < gpsDatas.size(); ++i)
     {
-        for(unsigned int j = 0; j < gpsDatas[i]->getSegments().size(); ++j)
+        for(unsigned int j = 0; j < gpsDatas[i].getSegments().size(); ++j)
         {
-            for(unsigned int k = 0; k < gpsDatas[i]->getSegments()[j].getPoints().size(); ++k)
+            for(unsigned int k = 0; k < gpsDatas[i].getSegments()[j].getPoints().size(); ++k)
             {
-                std::string timeString = gpsDatas[i]->getSegments()[j].getPoints()[k].getTimestamp();
+                std::string timeString = gpsDatas[i].getSegments()[j].getPoints()[k].getTimestamp();
                 TimelineObject tmObj;
                 tmObj.timeString = timeString;
                 tmObj.secs = makeTimeObject(timeString);
                 tmObj.id = i;
-                tmObj.gpsid = gpsDatas[i]->getSegments()[j].getPoints()[k].getGpsPointId();
+                tmObj.gpsid = gpsDatas[i].getSegments()[j].getPoints()[k].getGpsPointId();
                 m_timeline.push_back(tmObj);
 //                ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", tmObj.timeString.c_str(), tmObj.id, tmObj.secs);
             }
@@ -127,7 +129,7 @@ void Timeline::countUp()
     ++m_counter;
     m_counter %= m_timeline.size();
 }
-time_t Timeline::makeTimeObject(std::string timeString)
+time_t Timeline::makeTimeObject(const std::string& timeString)
 {
     struct tm tm;
     time_t t;

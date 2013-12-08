@@ -14,14 +14,15 @@ public:
     MagicBox(const AppSettings& settings, double size, double padding);
     ~MagicBox();
 
-    bool isInBox(const ofxPoint<double> utmPoint);
+    bool isInBox(const ofxPoint<double>& utmPoint) const;
 
-    const ofxPoint<double> getDrawablePoint(const UtmPoint& utmPoint);
+    const ofxPoint<double> getDrawablePoint(const UtmPoint& utmPoint) const;
 
-    void setupBox(ofxPoint<double> currUtm, double lon0);
-    void setupBoxStatic(ofxPoint<double> currUtm, double lon0, double width, double height);
+    void setupBox(const ofxPoint<double>& currUtm, double lon0);
+    void setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
+                        double width, double height);
 
-    void updateBoxIfNeeded(const ofxPoint<double> utmPoint);
+    void updateBoxIfNeeded(const ofxPoint<double>& utmPoint);
 
     void updateBoxSize(double size);
 
@@ -31,9 +32,9 @@ public:
     void setCenter(double x, double y);
 
     const ofxRectangle<double>& getTheBox() const { return m_theBox; }
-    const ofxRectangle<double> getNormalizedBox();
+    const ofxRectangle<double> getNormalizedBox() const;
     const ofxRectangle<double>& getPaddedBox() const { return m_theBox; }
-    const ofxRectangle<double> getNormalizedPaddedBox();
+    const ofxRectangle<double> getNormalizedPaddedBox() const;
     const ofxPoint<double>& getCenter() const {return m_centerUtm; }
     const GpsPoint getCenterGps() const;
     const double getSize() const { return m_currentSize; }
@@ -47,7 +48,7 @@ public:
 
 private:
 
-    bool isInPaddedBox(const ofxPoint<double> utmPoint);
+    bool isInPaddedBox(const ofxPoint<double>& utmPoint) const;
 
     void setBoxes();
     // ist auch m_lon0

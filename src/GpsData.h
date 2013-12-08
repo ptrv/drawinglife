@@ -180,9 +180,9 @@ public:
                                 double maxY,
                                 double lon0);
 
-    const std::vector< std::vector<UtmPoint> >& getUTMPoints() const { return m_utmPoints; }
-    const std::vector< std::vector<UtmPoint> >& getNormalizedUTMPoints() const { return m_normalizedUtmPoints; }
-    const std::vector< std::vector<UtmPoint> >& getNormalizedUTMPointsGlobal() const { return m_normalizedUtmPointsGlobal; }
+    const UtmPointVector& getUTMPoints() const { return m_utmPoints; }
+    const UtmPointVector& getNormalizedUTMPoints() const { return m_normalizedUtmPoints; }
+    const UtmPointVector& getNormalizedUTMPointsGlobal() const { return m_normalizedUtmPointsGlobal; }
 
 
 	// -----------------------------------------------------------------------------
@@ -249,9 +249,9 @@ private:
 	double m_minUtmY;
 	double m_maxUtmY;
 
-	std::vector< std::vector<UtmPoint> > m_utmPoints;
-	std::vector< std::vector<UtmPoint> > m_normalizedUtmPoints;
-	std::vector< std::vector<UtmPoint> > m_normalizedUtmPointsGlobal;
+    UtmPointVector m_utmPoints;
+    UtmPointVector m_normalizedUtmPoints;
+    UtmPointVector m_normalizedUtmPointsGlobal;
     double m_lon0;
 
     std::vector<GpsDataIndex > m_indices;

@@ -386,4 +386,18 @@ private:
 
 };
 
+// typedefs
+
+class DBReader;
+class GpsData;
+class Walk;
+class MagicBox;
+
+typedef boost::scoped_ptr<DBReader> DBReaderPtr;
+typedef std::vector<ZoomAnimFrame> ZoomAnimFrames;
+typedef boost::ptr_vector<GpsData> GpsDataVector;
+typedef boost::ptr_vector<Walk> WalkVector;
+typedef boost::ptr_vector<MagicBox> MagicBoxVector;
+typedef std::vector< std::vector<UtmPoint> > UtmPointVector;
+
 #endif // _DRAWINGLIFETYPES_H_

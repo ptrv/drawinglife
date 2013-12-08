@@ -119,7 +119,7 @@ private:
     */
 	bool getGpsData(GpsData& gpsData, const std::string& query);
 
-	/**
+	/*!
     * \brief Get basic query.
     * \return string query.
     */
@@ -128,8 +128,8 @@ private:
 	// -----------------------------------------------------------------------------
 
 	string m_dbPath;
-	sqlite3x::sqlite3_connection* m_dbconn;
-	sqlite3x::sqlite3_transaction* m_trans;
+    boost::scoped_ptr<sqlite3x::sqlite3_connection> m_dbconn;
+//    boost::scoped_ptr<sqlite3x::sqlite3_transaction> m_trans;
 
 	bool m_useSpeed;
 

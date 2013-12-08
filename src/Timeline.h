@@ -20,12 +20,12 @@ public:
     Timeline();
     ~Timeline();
 
-    static void sortGpsDataVecs(std::vector<GpsData*>& gpsDatas);
+    static void sortGpsDataVecs(const std::vector<GpsData*>& gpsDatas);
     /**
     * \brief Set timeline for gps data.
     * \param gpsDatas vector with gps data.
     */
-    void setTimeline(std::vector<GpsData*>& gpsDatas);
+    void setTimeline(const GpsDataVector& gpsDatas);
 
     /**
     * \brief Get next user id on the timeline.
@@ -81,7 +81,7 @@ private:
     * \param timeString time string.
     * \return time_t value.
     */
-    time_t makeTimeObject(std::string timeString);
+    time_t makeTimeObject(const std::string& timeString);
 
     /**
     * \brief Sort timeline objects.

@@ -35,16 +35,13 @@ ofLog(OF_LOG_ERROR, "Database error: %s, \nwith query: %s", ex.what(), query.c_s
 DBReader::DBReader(const std::string& dbpath, bool useSpeed)
 :
 m_dbPath(dbpath),
-m_dbconn(0),
-m_trans(0),
 m_useSpeed(useSpeed)
 {
 }
 
 DBReader::~DBReader()
 {
-	SAFE_DELETE(m_dbconn);
-	SAFE_DELETE(m_trans);
+    ofLogVerbose("DBReader", "destroying");
 }
 
 bool DBReader::setupDbConnection()
@@ -55,7 +52,7 @@ bool DBReader::setupDbConnection()
 
 	bool result = false;
 	try {
-		m_dbconn = new sqlite3_connection(m_dbPath.c_str());
+        m_dbconn.reset(new sqlite3_connection(m_dbPath.c_str()));
 		result = true;
 	}
 	CATCHDBERRORS
@@ -66,8 +63,7 @@ void DBReader::closeDbConnection()
 {
 	try {
 		m_dbconn->close();
-		SAFE_DELETE(m_dbconn);
-//		m_dbconn = 0;
+        m_dbconn.reset();
 	}
 	CATCHDBERRORS
 }

@@ -131,17 +131,17 @@ public:
 
 //    void setDotColors();
 
-	const GpsData& getGpsData() const { return *m_gpsData; }
+    const GpsData& getGpsData() const { return *m_gpsData; }
 
-    void setCurrentPointImage(ofImage img, int alpha);
+    void setCurrentPointImage(const ofImage& img, int alpha);
 
 	/**
 	 * \brief Sets the GpsData.
 	 * \param gpsData Pointer to GpsData object.
 	**/
-	void setGpsData(GpsData* gpsData);
+    void setGpsData(GpsData* gpsData);
 
-	void setMagicBox(MagicBox* magicBox);
+    void setMagicBox(MagicBox* magicBox);
 
     void setMagicBoxStatic(MagicBox* magicBox, double lat, double lon);
 
@@ -151,7 +151,7 @@ private:
 
     const AppSettings& m_settings;
 
-	GpsData* m_gpsData;
+    GpsData* m_gpsData;
 
 	static double maxDrawX;
     static double minDrawX;

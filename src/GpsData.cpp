@@ -44,6 +44,7 @@ m_lon0(0.0)
 
 GpsData::~GpsData()
 {
+    ofLogVerbose("GpsData", "destroying");
 }
 
 

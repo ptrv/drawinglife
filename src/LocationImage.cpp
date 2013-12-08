@@ -3,7 +3,7 @@
 
 using namespace GeographicLib;
 
-LocationImage::LocationImage(MagicBox* magicBox, LocationImageData lid)
+LocationImage::LocationImage(const MagicBox& magicBox, LocationImageData lid)
 :
 m_magicBox(magicBox),
 m_lid(lid),
@@ -43,7 +43,7 @@ void LocationImage::draw()
 {
 //    ofSetColor(0xffffff);
     ofSetColor(255,255,255,m_lid.alpha);
-    const ofxPoint<double>& tmp = m_magicBox->getDrawablePoint(m_utm);
+    const ofxPoint<double>& tmp = m_magicBox.getDrawablePoint(m_utm);
     m_image.draw(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
 
     if(m_lid.anchorShow)
