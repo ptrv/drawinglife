@@ -694,6 +694,8 @@ void DrawingLifeApp::prepareGpsData()
     m_magicBoxes.clear();
 }
 
+// -----------------------------------------------------------------------------
+
 void DrawingLifeApp::processGpsData()
 {
     ofLog(OF_LOG_VERBOSE, "------------------------\n");
@@ -714,6 +716,7 @@ void DrawingLifeApp::processGpsData()
 
         for(unsigned int i = 0; i < m_walks.size(); ++i)
         {
+            Walk& walk = m_walks[i];
 //            m_walks[i]->setDotColors();
 
             if(!m_settings->isBoundingBoxAuto() && !m_multiMode)
@@ -721,7 +724,7 @@ void DrawingLifeApp::processGpsData()
                 //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
                 double bbLat = m_settings->getBoundingBoxLat();
                 double bbLon = m_settings->getBoundingBoxLon();
-                m_walks[i].setMagicBoxStatic(&m_magicBoxes[i], bbLat, bbLon);
+                walk.setMagicBoxStatic(&m_magicBoxes[i], bbLat, bbLon);
             }
             else
             {
@@ -729,31 +732,25 @@ void DrawingLifeApp::processGpsData()
                 {
                     double bbLat = m_settings->getBoundingBoxLat();
                     double bbLon = m_settings->getBoundingBoxLon();
-                    m_walks[i].setMagicBoxStatic(m_magicBox.get(), bbLat, bbLon);
-//                    m_walks[i]->setMagicBox(m_magicBox);
+                    walk.setMagicBoxStatic(m_magicBox.get(), bbLat, bbLon);
+//                    walk.setMagicBox(m_magicBox);
                 }
                 else
                 {
-                    m_walks[i].setMagicBox(&m_magicBoxes[i]);
+                    walk.setMagicBox(&m_magicBoxes[i]);
                 }
             }
 
             if (m_imageAsCurrentPoint && (unsigned int)m_images.size() >= m_numPerson)
             {
-                m_walks[i].setCurrentPointImage(m_images[i], m_imageList[i].alpha);
+                walk.setCurrentPointImage(m_images[i], m_imageList[i].alpha);
             }
         }
     }
 }
 
-/**
- *
- *
- * @param names
- * @param city
- *
- * @return
- */
+// -----------------------------------------------------------------------------
+
 bool DrawingLifeApp::loadGpsDataCity(const std::vector<std::string>& names,
                                      const std::string& city)
 {
@@ -1058,7 +1055,8 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
 }
 
 // -----------------------------------------------------------------------------
-
+// View
+// -----------------------------------------------------------------------------
 void DrawingLifeApp::setViewAspectRatio()
 {
     double width;
@@ -1118,10 +1116,11 @@ void DrawingLifeApp::fillViewAreaUTM()
     for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
         // Normalized value range from 0 to 1.
-        double x = m_walks[personIndex].getScaledUtmX(0);
-        double y = m_walks[personIndex].getScaledUtmY(0);
-        double w = m_walks[personIndex].getScaledUtmX(1) - x;
-        double h = m_walks[personIndex].getScaledUtmY(1) - y;
+        Walk& walk = m_walks[personIndex];
+        double x = walk.getScaledUtmX(0);
+        double y = walk.getScaledUtmY(0);
+        double w = walk.getScaledUtmX(1) - x;
+        double h = walk.getScaledUtmY(1) - y;
         ofFill();
         ofSetColor(m_settings->getColorViewboxR(),
                    m_settings->getColorViewboxG(),
@@ -1133,6 +1132,8 @@ void DrawingLifeApp::fillViewAreaUTM()
     }
 }
 
+// -----------------------------------------------------------------------------
+// Input
 // TODO Add function for processing keys
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
@@ -1374,6 +1375,10 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------------
 void DrawingLifeApp::windowResized(int w, int h)
 {
     this->setViewAspectRatio();

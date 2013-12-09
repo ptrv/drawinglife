@@ -31,19 +31,19 @@ public:
     * \brief Get next user id on the timeline.
     * \return int value for user id.
     */
-    int getNext();
+    int getNext() const;
 
     /**
     * \brief Return true if count is last in timeline.
     * \return true if count is last.
     */
-    bool isLast();
+    bool isLast() const;
 
     /**
     * \brief Return true if count is last in timeline.
     * \return true if count is last.
     */
-    bool isFirst();
+    bool isFirst() const;
 
     /**
     * \brief Return true if count is last in timeline.

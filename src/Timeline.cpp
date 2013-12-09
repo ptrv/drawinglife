@@ -26,7 +26,7 @@ Timeline::~Timeline()
 void Timeline::sortGpsDataVecs(const std::vector<GpsData*>& gpsDatas)
 {
 }
-//void Timeline::setTimeline(const std::vector<GpsData*>& gpsDatas)
+
 void Timeline::setTimeline(const GpsDataVector& gpsDatas)
 {
     m_counter = 0;
@@ -58,7 +58,7 @@ void Timeline::setTimeline(const GpsDataVector& gpsDatas)
     }
 }
 
-int Timeline::getNext()
+int Timeline::getNext() const
 {
     if (m_timeline.size() > 0)
     {
@@ -74,12 +74,12 @@ int Timeline::getNext()
     }
 }
 
-bool Timeline::isLast()
+bool Timeline::isLast() const
 {
     return m_counter == m_timeline.size()-1;
 }
 
-bool Timeline::isFirst()
+bool Timeline::isFirst() const
 {
     return m_counter == 0;
 }
@@ -156,8 +156,7 @@ time_t Timeline::makeTimeObject(const std::string& timeString)
 
 void Timeline::sortTimeline()
 {
-    TimelineObject compareObj;
-	std::sort(m_timeline.begin(), m_timeline.end(), compareObj);
+    std::sort(m_timeline.begin(), m_timeline.end(), TimelineObject());
 }
 
 std::string Timeline::getCurrentTime()
