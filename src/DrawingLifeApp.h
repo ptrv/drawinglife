@@ -63,6 +63,9 @@ private:
 
     bool loadGpsDataWithSqlFile(const std::vector<std::string>& names,
                                 const std::vector<std::string>& m_sqlFilePaths);
+
+    typedef boost::function<bool(DBReader*,GpsData&)> tFuncLoadGpsData;
+    bool loadGpsData(const std::vector<tFuncLoadGpsData>& funcVec);
 	/**
 	* \brief Set square view area and center.
 	*/

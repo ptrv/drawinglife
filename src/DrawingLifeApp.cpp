@@ -754,217 +754,62 @@ void DrawingLifeApp::processGpsData()
 bool DrawingLifeApp::loadGpsDataCity(const std::vector<std::string>& names,
                                      const std::string& city)
 {
-    prepareGpsData();
-
-    bool dbOk = false;
-
-    // get GpsData from database
-    if(m_multiMode)
+    std::vector<tFuncLoadGpsData> funcVec;
+    for (size_t i = 0; i < m_numPerson; ++i)
     {
-        m_magicBox.reset(new MagicBox(*m_settings,
-                                      m_settings->getBoundingBoxSize(),
-                                      m_settings->getBoundingBoxPadding()));
+        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataCity, _1, _2,
+                                         names[i], city);
+        funcVec.push_back(f);
     }
 
-    for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
-    {
-        m_gpsDatas.push_back(new GpsData(*m_settings));
-
-        if(!m_multiMode)
-        {
-            m_magicBoxes.push_back(new MagicBox(*m_settings,
-                                                m_settings->getBoundingBoxSize(),
-                                                m_settings->getBoundingBoxPadding()));
-        }
-
-        m_walks.push_back(new Walk(*m_settings,
-                                   m_settings->getNameColors()[personIndex]));
-
-        m_walks[personIndex].setViewBounds(ofGetWidth(),
-                                           ofGetHeight(),
-                                           m_viewXOffset[personIndex],
-                                           m_viewYOffset[personIndex],
-                                           m_viewMinDimension[personIndex],
-                                           m_viewPadding[personIndex]);
-        m_walks[personIndex].reset();
-
-        DBReaderPtr dbReader(new DBReader(m_dbPath, m_settings->useSpeed()));
-        if (dbReader->setupDbConnection())
-        {
-            // -----------------------------------------------------------------------------
-            // DB query
-            dbOk = dbReader->getGpsDataCity(m_gpsDatas[personIndex], names[personIndex], city);
-            if(dbOk)
-            {
-                ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
-                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
-                      m_gpsDatas[personIndex].getSegments().size(),
-                      m_gpsDatas[personIndex].getTotalGpsPoints());
-                m_walks[personIndex].setGpsData(&m_gpsDatas[personIndex]);
-            }
-            else
-            {
-                ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
-                break;
-            }
-            dbReader->closeDbConnection();
-        }
-        // -----------------------------------------------------------------------------
-
-        // test print
-        maxPoints = 0;
-        for (unsigned int i = 0; i < m_gpsDatas[personIndex].getSegments().size(); ++i)
-        {
-            for (unsigned int j = 0; j < m_gpsDatas[personIndex].getSegments()[i].getPoints().size(); ++j)
-            {
-                ++maxPoints;
-            }
-        }
-
-        DBG_VAL(city);
-        ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-          m_gpsDatas[personIndex].getMinUtmX(),
-          m_gpsDatas[personIndex].getMaxUtmX(),
-          m_gpsDatas[personIndex].getMinUtmY(),
-          m_gpsDatas[personIndex].getMaxUtmY());
-        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf", m_gpsDatas[personIndex].getProjectionCentralMeridian());
-    }
-
-    processGpsData();
-
-    return dbOk;
+    return loadGpsData(funcVec);
 }
+
+// -----------------------------------------------------------------------------
+
 bool DrawingLifeApp::loadGpsDataYearRange(const std::vector<std::string>& names,
                                           int yearStart, int yearEnd)
 {
-//    m_startScreenMode = false;
-//
+    std::vector<tFuncLoadGpsData> funcVec;
 
-    prepareGpsData();
-
-    bool dbOk = false;
-
-    if(m_multiMode)
+    for (size_t i = 0; i < m_numPerson; ++i)
     {
-        m_magicBox.reset(new MagicBox(*m_settings,
-                                      m_settings->getBoundingBoxSize(),
-                                      m_settings->getBoundingBoxPadding()));
+        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataYearRange, _1, _2,
+                                         names[i], yearStart, yearEnd);
+        funcVec.push_back(f);
     }
-    for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
-    {
-        m_gpsDatas.push_back(new GpsData(*m_settings));
 
-        if(!m_multiMode)
-        {
-            m_magicBoxes.push_back(new MagicBox(*m_settings,
-                                                m_settings->getBoundingBoxSize(),
-                                                m_settings->getBoundingBoxPadding()));
-        }
-
-        m_walks.push_back(new Walk(*m_settings,
-                                   m_settings->getNameColors()[personIndex]));
-
-        m_walks[personIndex].setViewBounds(ofGetWidth(),
-                                           ofGetHeight(),
-                                           m_viewXOffset[personIndex],
-                                           m_viewYOffset[personIndex],
-                                           m_viewMinDimension[personIndex],
-                                           m_viewPadding[personIndex]);
-        m_walks[personIndex].reset();
-
-        DBReaderPtr dbReader(new DBReader(m_dbPath, m_settings->useSpeed()));
-
-        if (dbReader->setupDbConnection())
-        {
-            // -----------------------------------------------------------------------------
-            // DB query
-            dbOk = dbReader->getGpsDataYearRange(m_gpsDatas[personIndex],
-                                                   names[personIndex],
-                                                   yearStart,
-                                                   yearEnd);
-            if(dbOk)
-            {
-                ofLog(OF_LOG_SILENT, "--> GpsData set %d: load ok!", personIndex+1);
-                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
-                      m_gpsDatas[personIndex].getSegments().size(),
-                      m_gpsDatas[personIndex].getTotalGpsPoints());
-                m_walks[personIndex].setGpsData(&m_gpsDatas[personIndex]);
-            }
-            else
-            {
-                ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
-                break;
-            }
-            dbReader->closeDbConnection();
-        }
-        // -----------------------------------------------------------------------------
-        // test print
-        maxPoints = 0;
-        for (unsigned int i = 0; i < m_gpsDatas[personIndex].getSegments().size(); ++i)
-        {
-            for (unsigned int j = 0; j < m_gpsDatas[personIndex].getSegments()[i].getPoints().size(); ++j)
-            {
-                ++maxPoints;
-            }
-        }
-
-        ofLog(OF_LOG_VERBOSE, "Start year: %d, end year: %d", yearStart, yearEnd);
-        ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-          m_gpsDatas[personIndex].getMinUtmX(),
-          m_gpsDatas[personIndex].getMaxUtmX(),
-          m_gpsDatas[personIndex].getMinUtmY(),
-          m_gpsDatas[personIndex].getMaxUtmY());
-        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf\n", m_gpsDatas[personIndex].getProjectionCentralMeridian());
-    }
-//    ofLog(OF_LOG_VERBOSE, "------------------------\n");
-//    if (m_gpsDatas.size() > 0 && dbOk)
-//    {
-//        m_timeline->setTimeline(m_gpsDatas);
-//
-////        ofstream myfile;
-////        myfile.open ("timeline_output.txt");
-////        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
-////        {
-//////            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
-//////                                                    m_timeline->getTimeline()[i].id,
-//////                                                    (long)(m_timeline->getTimeline()[i].secs));
-////            myfile << m_timeline->getTimeline()[i].timeString.c_str()
-////            << " : " << m_timeline->getTimeline()[i].id
-////            << " : " << (long)(m_timeline->getTimeline()[i].secs) << "\n";
-////
-////        }
-////        myfile.close();
-//
-//        this->calculateGlobalMinMaxValues();
-//
-//        Walk::setTrackAlpha(m_settings->getAlphaDot());
-//
-//        Walk::setDotSize(m_settings->getDotSize());
-//
-//        for(unsigned int i = 0; i < m_walks.size(); ++i)
-//        {
-//            m_walks[i]->setDotColors();
-//
-//            if(!m_settings->isBoundingBoxEnabled())
-//                m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
-//            else
-//                m_walks[i]->setMagicBox(m_magicBoxes[i]);
-//
-//            if (m_imageAsCurrentPoint && (unsigned int)m_images.size() >= m_numPerson)
-//            {
-//                m_walks[i]->setCurrentPointImage(m_images[i]);
-//            }
-//        }
-//    }
-
-    processGpsData();
-
-    return dbOk;
+    return loadGpsData(funcVec);
 }
+
+// -----------------------------------------------------------------------------
 
 bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& names,
                                             const std::vector<std::string>& sqlFilePaths)
 {
+    std::vector<tFuncLoadGpsData> funcVec;
+    for (size_t i = 0; i < m_numPerson; ++i)
+    {
+        std::ifstream sqlFile(ofToDataPath(sqlFilePaths[i]).c_str(),
+                              std::ifstream::in);
+        std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile),
+                                                std::istreambuf_iterator<char>());
+
+        DBG_VAL(sqlFilePaths[i]);
+        DBG_VAL(sqlFileSource);
+
+        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2,
+                                         names[i], sqlFileSource);
+        funcVec.push_back(f);
+    }
+
+    return loadGpsData(funcVec);
+}
+
+// -----------------------------------------------------------------------------
+
+bool DrawingLifeApp::loadGpsData(const std::vector<tFuncLoadGpsData>& funcVec)
+{
     prepareGpsData();
 
     bool dbOk = false;
@@ -976,9 +821,10 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
                                       m_settings->getBoundingBoxPadding()));
     }
     // get GpsData from database
-    for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
+    for(size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
     {
-        m_gpsDatas.push_back(new GpsData(*m_settings));
+        GpsData* gpsData = new GpsData(*m_settings);
+        m_gpsDatas.push_back(gpsData);
 
         if(!m_multiMode)
         {
@@ -987,40 +833,34 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
                                                 m_settings->getBoundingBoxPadding()));
         }
 
-        m_walks.push_back(new Walk(*m_settings,
-                                   m_settings->getNameColors()[personIndex]));
+        Walk* walk = new Walk(*m_settings,
+                              m_settings->getNameColors()[personIndex]);
+        m_walks.push_back(walk);
 
-        m_walks.back().setViewBounds(ofGetWidth(),
-                                     ofGetHeight(),
-                                     m_viewXOffset[personIndex],
-                                     m_viewYOffset[personIndex],
-                                     m_viewMinDimension[personIndex],
-                                     m_viewPadding[personIndex]);
-        m_walks.back().reset();
-
-        std::ifstream sqlFile(ofToDataPath(sqlFilePaths[personIndex]).c_str(),
-                              std::ifstream::in);
-        std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile),
-                                                std::istreambuf_iterator<char>());
-
-        DBG_VAL(sqlFilePaths[personIndex]);
-        DBG_VAL(sqlFileSource);
+        walk->setViewBounds(ofGetWidth(),
+                            ofGetHeight(),
+                            m_viewXOffset[personIndex],
+                            m_viewYOffset[personIndex],
+                            m_viewMinDimension[personIndex],
+                            m_viewPadding[personIndex]);
+        walk->reset();
 
         DBReaderPtr dbReader(new DBReader(m_dbPath, m_settings->useSpeed()));
         if (dbReader->setupDbConnection())
         {
             // -----------------------------------------------------------------------------
             // DB query
-            dbOk = dbReader->getGpsDataWithSqlFile(m_gpsDatas.back(),
-                                                   names[personIndex],
-                                                   sqlFileSource);
+            tFuncLoadGpsData getGpsDataFunc = funcVec.at(personIndex);
+            dbOk = getGpsDataFunc(dbReader.get(), *gpsData);
+
             if(dbOk)
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
                 ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
-                      m_gpsDatas.back().getSegments().size(),
-                      m_gpsDatas.back().getTotalGpsPoints());
-                m_walks.back().setGpsData(&m_gpsDatas.back());
+                      gpsData->getSegments().size(),
+                      gpsData->getTotalGpsPoints());
+
+                walk->setGpsData(gpsData);
             }
             else
             {
@@ -1030,28 +870,20 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
             dbReader->closeDbConnection();
         }
         // -----------------------------------------------------------------------------
-        // test print
-        maxPoints = 0;
-        BOOST_FOREACH(const GpsSegment& rSeg, m_gpsDatas.back().getSegments())
-        {
-            BOOST_FOREACH(const GpsPoint& rPoint, rSeg.getPoints())
-            {
-                ++maxPoints;
-            }
-        }
 
         ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-          m_gpsDatas.back().getMinUtmX(),
-          m_gpsDatas.back().getMaxUtmX(),
-          m_gpsDatas.back().getMinUtmY(),
-          m_gpsDatas.back().getMaxUtmY());
+          gpsData->getMinUtmX(),
+          gpsData->getMaxUtmX(),
+          gpsData->getMinUtmY(),
+          gpsData->getMaxUtmY());
         ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf",
-              m_gpsDatas.back().getProjectionCentralMeridian());
+              gpsData->getProjectionCentralMeridian());
     }
 
     processGpsData();
 
     return dbOk;
+
 }
 
 // -----------------------------------------------------------------------------
