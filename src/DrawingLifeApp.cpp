@@ -222,7 +222,7 @@ void DrawingLifeApp::setup()
                                                     m_dbQueryData.yearEnd);
             break;
             case DBReader::DB_QUERY_SQLFILE:
-            gpsDataAreLoaded = loadGpsDataWithSqlFile(m_names, m_sqlFilePaths);
+            gpsDataAreLoaded = loadGpsDataWithSqlFile(m_sqlFilePaths);
 			break;
         }
         if(gpsDataAreLoaded)
@@ -339,7 +339,7 @@ bool DrawingLifeApp::zoomHasChanged()
 
 bool DrawingLifeApp::zoomHasChangedId()
 {
-	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    if(zoomFrameCount + 1 >= static_cast<int>(m_settings->getZoomAnimFrames().size()))
     {
 		return false;
     }
@@ -777,8 +777,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(const std::vector<std::string>& names,
 
 // -----------------------------------------------------------------------------
 
-bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& names,
-                                            const std::vector<std::string>& sqlFilePaths)
+bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& sqlFilePaths)
 {
     std::vector<tFuncLoadGpsData> funcVec;
     for (size_t i = 0; i < m_numPerson; ++i)
@@ -792,7 +791,7 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
 //        DBG_VAL(sqlFileSource);
 
         tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2,
-                                         names[i], sqlFileSource);
+                                         sqlFileSource);
         funcVec.push_back(f);
     }
 

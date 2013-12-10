@@ -61,8 +61,7 @@ private:
     bool loadGpsDataYearRange(const std::vector<std::string>& names,
                               int yearStart, int yearEnd);
 
-    bool loadGpsDataWithSqlFile(const std::vector<std::string>& names,
-                                const std::vector<std::string>& m_sqlFilePaths);
+    bool loadGpsDataWithSqlFile(const std::vector<std::string>& m_sqlFilePaths);
 
     typedef boost::function<bool(DBReader*,GpsData&)> tFuncLoadGpsData;
     bool loadGpsData(const std::vector<tFuncLoadGpsData>& funcVec);

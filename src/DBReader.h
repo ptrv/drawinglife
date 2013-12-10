@@ -117,7 +117,6 @@ public:
     * \return true if getting gpsData succeeded.
     */
     bool getGpsDataWithSqlFile(GpsData& gpsData,
-                               const std::string& userName,
                                const std::string& sqlFileSource);
 
 private:

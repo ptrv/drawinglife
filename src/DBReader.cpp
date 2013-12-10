@@ -362,7 +362,6 @@ bool DBReader::getGpsDataCity(GpsData& gpsData,
 }
 
 bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
-                                     const std::string& userName,
                                      const std::string& sqlFileSource)
 {
 	bool result = false;
@@ -370,7 +369,7 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
     query << getBasicQueryString();
     query << sqlFileSource;
 //    query << ";";
-    DBG_VAL(query.str());
+//    DBG_VAL(query.str());
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
