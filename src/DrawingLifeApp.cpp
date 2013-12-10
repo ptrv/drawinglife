@@ -179,10 +179,11 @@ void DrawingLifeApp::setup()
     double attrCenter = m_settings->getZoomAnimationAttractionCenter();
 
     DBG_VAL((ofToString(damp) + " " + ofToString(attr)));
-    m_zoomIntegrator = Integrator(0.0f, damp, attr);
+    m_zoomIntegrator.reset(new Integrator<double>(0.0f, damp, attr));
     m_isZoomAnimation = m_settings->isZoomAnimation();
-    m_integratorX = Integrator(0.0f, dampCenter, attrCenter);
-    m_integratorY = Integrator(0.0f, dampCenter, attrCenter);
+    m_theIntegrator.reset(new Integrator<ofxPoint<double> >(0.0f,
+                                                            dampCenter,
+                                                            attrCenter));
 
     if( ! m_isZoomAnimation)
     {
@@ -412,42 +413,35 @@ void DrawingLifeApp::zoomUpdate()
             float zoomLevel = zoomAnimFrame.frameZoom;
             double centerX = zoomAnimFrame.frameCenterX;
             double centerY = zoomAnimFrame.frameCenterY;
-            UtmPoint utmP = GpsData::getUtmPoint(centerY, centerX, *m_settings);
+            UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
+                                                           *m_settings);
 
 			if(m_timeline->isFirst())
 			{
-                m_zoomIntegrator.set(zoomLevel);
-                m_integratorX.set(utmP.x);
-                m_integratorY.set(utmP.y);
+                m_zoomIntegrator->set(zoomLevel);
+                m_theIntegrator->set(utmP);
 			}
-            m_zoomIntegrator.setTarget(zoomLevel);
-            m_integratorX.setTarget(utmP.x);
-            m_integratorY.setTarget(utmP.y);
+            m_zoomIntegrator->setTarget(zoomLevel);
+            m_theIntegrator->setTarget(utmP);
 
 		}
 	}
-    m_zoomIntegrator.update();
-    m_integratorX.update();
-    m_integratorY.update();
+    m_zoomIntegrator->update();
+    m_theIntegrator->update();
 
-    if(m_zoomIntegrator.isTargeting() ||
-       m_integratorX.isTargeting() ||
-       m_integratorY.isTargeting())
+    if(m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
     {
         if(m_multiMode)
         {
-            m_magicBox->setSize((double)m_zoomIntegrator.getValue());
-            m_magicBox->setupBox(ofxPoint<double>(m_integratorX.getValue(),
-                                                  m_integratorY.getValue()), 0);
+            m_magicBox->setSize(m_zoomIntegrator->getValue());
+            m_magicBox->setupBox(m_theIntegrator->getValue(), 0);
         }
         else
         {
-            for(unsigned int bi = 0; bi < m_magicBoxes.size(); ++bi)
+            BOOST_FOREACH(MagicBox& box, m_magicBoxes)
             {
-                m_magicBoxes[bi].setSize((double)m_zoomIntegrator.getValue());
-                m_magicBoxes[bi].setupBox(
-                            ofxPoint<double>(m_integratorX.getValue(),
-                                             m_integratorY.getValue()), 0);
+                box.setSize(m_zoomIntegrator->getValue());
+                box.setupBox(m_theIntegrator->getValue(), 0);
             }
         }
     }

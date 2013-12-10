@@ -178,9 +178,8 @@ private:
 
     bool m_isZoomAnimation;
 
-    Integrator m_zoomIntegrator;
-    Integrator m_integratorX;
-    Integrator m_integratorY;
+    boost::scoped_ptr<Integrator<double> > m_zoomIntegrator;
+    boost::scoped_ptr<Integrator<ofxPoint<double> > > m_theIntegrator;
 
     ofShader shader;
     bool doShader;
