@@ -45,6 +45,9 @@ public:
 	 * \return scaled UTM X value.
 	 */
 	double getScaledUtmX(double utmX);
+
+    UtmPoint getScaledUtm(const UtmPoint& normalizedUtmPoint);
+
     /**
 	 * \brief Draw function for GpsData.
 	 */

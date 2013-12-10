@@ -96,7 +96,7 @@ void GpsData::clear()
 // -----------------------------------------------------------------------------
 // Get Gps point.
 // -----------------------------------------------------------------------------
-double GpsData::getLongitude(int segmentIndex, int pointIndex)
+double GpsData::getLongitude(int segmentIndex, int pointIndex) const
 {
 	double longitude = -1000.0;
 	if (segmentIndex < (int)m_segments.size())
@@ -109,7 +109,7 @@ double GpsData::getLongitude(int segmentIndex, int pointIndex)
 	return longitude;
 }
 
-double GpsData::getLatitude(int segmentIndex, int pointIndex)
+double GpsData::getLatitude(int segmentIndex, int pointIndex) const
 {
 	double latitude = -1000.0;
 	if (segmentIndex < (int)m_segments.size())
@@ -122,7 +122,7 @@ double GpsData::getLatitude(int segmentIndex, int pointIndex)
 	return latitude;
 }
 
-double GpsData::getElevation(int segmentIndex, int pointIndex)
+double GpsData::getElevation(int segmentIndex, int pointIndex) const
 {
 	double elevation = -1000.0;
 	if (segmentIndex < (int)m_segments.size())
@@ -136,7 +136,7 @@ double GpsData::getElevation(int segmentIndex, int pointIndex)
 }
 // -----------------------------------------------------------------------------
 
-double GpsData::getUtmX(int segmentIndex, int pointIndex)
+double GpsData::getUtmX(int segmentIndex, int pointIndex) const
 {
 	double utmX = 0.0;
 	if (segmentIndex < (int)m_utmPoints.size())
@@ -149,7 +149,7 @@ double GpsData::getUtmX(int segmentIndex, int pointIndex)
 	return utmX;
 }
 
-double GpsData::getUtmY(int segmentIndex, int pointIndex)
+double GpsData::getUtmY(int segmentIndex, int pointIndex) const
 {
 	double utmY = 0.0;
 	if (segmentIndex < (int)m_utmPoints.size())
@@ -162,7 +162,21 @@ double GpsData::getUtmY(int segmentIndex, int pointIndex)
 	return utmY;
 }
 
-double GpsData::getNormalizedUtmX(int segmentIndex, int pointIndex)
+UtmPoint GpsData::getUtm(int segmentIndex, int pointIndex) const
+{
+    if (segmentIndex < (int)m_utmPoints.size())
+    {
+        if (pointIndex < (int)m_utmPoints[segmentIndex].size())
+        {
+            return m_utmPoints[segmentIndex][pointIndex];
+        }
+    }
+    return UtmPoint();
+}
+
+//------------------------------------------------------------------------------
+
+double GpsData::getNormalizedUtmX(int segmentIndex, int pointIndex) const
 {
 	double utmX = 0.0;
 	if (segmentIndex < (int)m_normalizedUtmPoints.size())
@@ -175,7 +189,7 @@ double GpsData::getNormalizedUtmX(int segmentIndex, int pointIndex)
 	return utmX;
 }
 
-double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
+double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex) const
 {
 	double utmY = 0.0;
 	if (segmentIndex < (int)m_normalizedUtmPoints.size())
@@ -188,8 +202,20 @@ double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex)
 	return utmY;
 }
 
+UtmPoint GpsData::getNormalizedUtm(int segmentIndex, int pointIndex) const
+{
+    if (segmentIndex < (int)m_normalizedUtmPoints.size())
+    {
+        if (pointIndex < (int)m_normalizedUtmPoints[segmentIndex].size())
+        {
+            return m_normalizedUtmPoints[segmentIndex][pointIndex];
+        }
+    }
+    return UtmPoint();
+}
+
 //---------------------------------------------------------------------------
-const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex)
+const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex) const
 {
 	std::string loc = "";
 	if (segmentIndex < (int)m_segments.size())
@@ -403,7 +429,8 @@ void GpsData::calculateUtmPoints()
     }
 }
 
-UtmPoint GpsData::getUtmPoint(double lat, double lon, const AppSettings& settings)
+UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
+                                        const AppSettings& settings)
 {
     const GpsRegion* regions = settings.getRegions();
     UtmPoint utmP;
@@ -492,9 +519,9 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
         utmVec.reserve( rSegment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
-            UtmPoint utmP = getUtmPoint(rPoint.getLatitude(),
-                                        rPoint.getLongitude(),
-                                        m_settings);
+            UtmPoint utmP = getUtmPointWithRegion(rPoint.getLatitude(),
+                                                  rPoint.getLongitude(),
+                                                  m_settings);
 
             utmP.speed = rPoint.getSpeed();
 

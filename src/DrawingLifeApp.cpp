@@ -216,7 +216,9 @@ void DrawingLifeApp::setup()
             gpsDataAreLoaded = loadGpsDataCity(m_names, m_dbQueryData.city);
             break;
             case DBReader::DB_QUERY_YEAR:
-            gpsDataAreLoaded = loadGpsDataYearRange(m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
+            gpsDataAreLoaded = loadGpsDataYearRange(m_names,
+                                                    m_dbQueryData.yearStart,
+                                                    m_dbQueryData.yearEnd);
             break;
             case DBReader::DB_QUERY_SQLFILE:
             gpsDataAreLoaded = loadGpsDataWithSqlFile(m_names, m_sqlFilePaths);
@@ -225,7 +227,7 @@ void DrawingLifeApp::setup()
         if(gpsDataAreLoaded)
         {
 			// GpsData are loaded now. Drawing routine can start.
-			for(unsigned int personIndex = 0; personIndex < m_numPerson; ++personIndex)
+            for(size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
                 if(m_walks[personIndex].getGpsData().getTotalGpsPoints() == 0)
                 {
@@ -795,8 +797,8 @@ bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& name
         std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile),
                                                 std::istreambuf_iterator<char>());
 
-        DBG_VAL(sqlFilePaths[i]);
-        DBG_VAL(sqlFileSource);
+//        DBG_VAL(sqlFilePaths[i]);
+//        DBG_VAL(sqlFileSource);
 
         tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2,
                                          names[i], sqlFileSource);

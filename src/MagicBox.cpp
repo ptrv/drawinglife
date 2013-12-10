@@ -53,12 +53,16 @@ void MagicBox::setCenter(double x, double y)
 void MagicBox::setupBox(const ofxPoint<double>& currUtm, double lon0)
 {
     m_centerUtm = currUtm;
-//    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
+//    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf",
+//          m_boxId+1, m_centerUtm.x, m_centerUtm.y);
 
     m_theBox.setFromCenter(m_centerUtm , m_currentSize, m_currentSize);
-//    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf", m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
+//    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf",
+//          m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
 
-    m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
+    m_paddedBox.setFromCenter(m_centerUtm,
+                              m_currentSize-(2*m_padding),
+                              m_currentSize-(2*m_padding));
 }
 
 void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
@@ -67,11 +71,13 @@ void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
     m_centerUtm = currUtm;
     m_currentSize = width;
     m_padding = 0;
-    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf", m_boxId+1, m_centerUtm.x, m_centerUtm.y);
+    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf",
+          m_boxId+1, m_centerUtm.x, m_centerUtm.y);
 
     m_theBox.setFromCenter(m_centerUtm , width, height);
     ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf",
-          m_boxId+1, m_theBox.getX(), m_theBox.getY(), m_theBox.getWidth(), m_theBox.getHeight());
+          m_boxId+1, m_theBox.getX(), m_theBox.getY(),
+          m_theBox.getWidth(), m_theBox.getHeight());
 
     m_paddedBox.setFromCenter(m_centerUtm, width, height);
 }
@@ -160,20 +166,22 @@ void MagicBox::addToBoxSize(double sizeToAdd)
     if(m_currentSize > 0)
     {
         double x = m_theBox.getX();
-        x -= sizeToAdd/2;
+        x -= sizeToAdd / 2;
         m_theBox.setX(x);
 
         double y = m_theBox.getY();
-        y -= sizeToAdd/2;
+        y -= sizeToAdd / 2;
         m_theBox.setY(y);
 
         m_theBox.setWidth(m_currentSize);
         m_theBox.setHeight(m_currentSize);
 
         // calcuzlates new padding with old size/padding ratio.
-        m_padding = m_currentSize/(oldSize/oldPadding);
+        m_padding = m_currentSize / (oldSize / oldPadding);
 
-        m_paddedBox.setFromCenter(m_theBox.getCenter(), m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
+        m_paddedBox.setFromCenter(m_theBox.getCenter(),
+                                  m_currentSize - (2 * m_padding),
+                                  m_currentSize - (2 * m_padding));
     }
     else
     {
@@ -191,7 +199,9 @@ void MagicBox::setSize(double newSize)
     m_currentSize = newSize;
 
     m_padding = m_currentSize/(oldSize/oldPadding);
-    m_paddedBox.setFromCenter(m_centerUtm, newSize-(2*m_padding),newSize-(2*m_padding));
+    m_paddedBox.setFromCenter(m_centerUtm,
+                              newSize - (2 * m_padding),
+                              newSize - (2 * m_padding));
 }
 
 void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
@@ -203,27 +213,27 @@ void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
     {
         case 1:
             if(m_currentSize != m_zoomLevels[0])
-                this->setSize(m_zoomLevels[0]);
+                setSize(m_zoomLevels[0]);
             else
-                this->setSize(m_defaultSize);
+                setSize(m_defaultSize);
         break;
         case 2:
             if(m_currentSize != m_zoomLevels[1])
-                this->setSize(m_zoomLevels[1]);
+                setSize(m_zoomLevels[1]);
             else
-                this->setSize(m_defaultSize);
+                setSize(m_defaultSize);
         break;
         case 3:
             if(m_currentSize != m_zoomLevels[2])
-                this->setSize(m_zoomLevels[2]);
+                setSize(m_zoomLevels[2]);
             else
-                this->setSize(m_defaultSize);
+                setSize(m_defaultSize);
         break;
         case 4:
             if(m_currentSize != m_zoomLevels[3])
-                this->setSize(m_zoomLevels[3]);
+                setSize(m_zoomLevels[3]);
             else
-                this->setSize(m_defaultSize);
+                setSize(m_defaultSize);
         break;
         default:
         break;
@@ -246,9 +256,15 @@ void MagicBox::setBoxes()
 {
     m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
     if(m_settings.isInteractiveMode())
+    {
         m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+    }
     else
-        m_paddedBox.setFromCenter(m_centerUtm, m_currentSize-(2*m_padding), m_currentSize-(2*m_padding));
+    {
+        m_paddedBox.setFromCenter(m_centerUtm,
+                                  m_currentSize - (2 * m_padding),
+                                  m_currentSize - (2 * m_padding));
+    }
 }
 void MagicBox::goUp(double val)
 {

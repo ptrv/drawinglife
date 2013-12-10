@@ -58,17 +58,6 @@ struct GpsCoord
     double lat;
     double lon;
 };
-/**
- * \brief Represents x and y value of an UTM coordinate.
- *
- */
-struct UtmPoint
-{
-    double x;
-    double y;
-    double speed;
-    double lon0;
-};
 
 struct LocationImageData
 {
@@ -386,18 +375,41 @@ private:
 
 };
 
+//---------------------------------------------------------------------------
+
+/**
+ * \brief Represents x and y value of an UTM coordinate.
+ *
+ */
+struct UtmPoint : public ofxPoint<double>
+{
+    UtmPoint() : ofxPoint<double>(){}
+    UtmPoint(double utmX, double utmY) : ofxPoint<double>(utmX, utmY) {}
+    double speed;
+    double lon0;
+};
+
+//---------------------------------------------------------------------------
 // typedefs
+//---------------------------------------------------------------------------
 
 class DBReader;
 class GpsData;
 class Walk;
 class MagicBox;
+class GpsSegment;
+class GpsPoint;
 
 typedef boost::scoped_ptr<DBReader> DBReaderPtr;
 typedef std::vector<ZoomAnimFrame> ZoomAnimFrames;
 typedef boost::ptr_vector<GpsData> GpsDataVector;
 typedef boost::ptr_vector<Walk> WalkVector;
 typedef boost::ptr_vector<MagicBox> MagicBoxVector;
-typedef std::vector< std::vector<UtmPoint> > UtmPointVector;
+typedef std::vector<UtmPoint> UtmSegment;
+typedef std::vector< std::vector<UtmPoint> > UtmDataVec;
+typedef std::vector<GpsSegment> GpsSegmentVec;
+typedef std::vector<GpsPoint> GpsPointVec;
+
+//---------------------------------------------------------------------------
 
 #endif // _DRAWINGLIFETYPES_H_
