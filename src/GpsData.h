@@ -217,6 +217,9 @@ private:
     * \brief Normalize all UtmPoints to a value between 0 and 1.
     */
 	void normalizeUtmPoints();
+
+    void normalizeUtmPoints(UtmDataVec& utmDataVec);
+
     /**
     * \brief Set range of min/max values to be the same (square).
     */

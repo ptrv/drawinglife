@@ -345,34 +345,31 @@ void GpsData::calculateUtmPoints(double lon0)
 void GpsData::normalizeUtmPoints()
 {
 	setMinMaxRatioUTM();
-	m_normalizedUtmPoints = m_utmPoints;
-	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
-		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
-		{
-			double x = m_utmPoints[i][j].x;
-			double y = m_utmPoints[i][j].y;
-			x = (x - m_minUtmX) / (m_maxUtmX - m_minUtmX);
-			y = (y - m_minUtmY) / (m_maxUtmY - m_minUtmY);
-			m_normalizedUtmPoints[i][j].x = x;
-			m_normalizedUtmPoints[i][j].y = y;
-		}
-	}
+    normalizeUtmPoints(m_normalizedUtmPoints);
 }
 void GpsData::normalizeUtmPointsGlobal()
 {
 	setGlobalMinMaxRatioUTM();
-	m_normalizedUtmPointsGlobal = m_utmPoints;
-	for (unsigned int i = 0; i < m_utmPoints.size(); ++i) {
-		for (unsigned int j = 0; j < m_utmPoints[i].size(); ++j)
-		{
-			double x = m_utmPoints[i][j].x;
-			double y = m_utmPoints[i][j].y;
-			x = (x - minDrawX) / (maxDrawX - minDrawX);
-			y = (y - minDrawY) / (maxDrawY- minDrawY);
-			m_normalizedUtmPointsGlobal[i][j].x = x;
-			m_normalizedUtmPointsGlobal[i][j].y = y;
-		}
-	}
+    normalizeUtmPoints(m_normalizedUtmPointsGlobal);
+}
+
+void GpsData::normalizeUtmPoints(UtmDataVec& utmDataVec)
+{
+    utmDataVec.clear();
+    BOOST_FOREACH(const UtmSegment& utmSegment, m_utmPoints)
+    {
+        UtmSegment normalizedSegments;
+        BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
+        {
+            double x = utmPoint.x;
+            double y = utmPoint.y;
+            x = (x - m_minUtmX) / (m_maxUtmX - m_minUtmX);
+            y = (y - m_minUtmY) / (m_maxUtmY - m_minUtmY);
+
+            normalizedSegments.push_back(UtmPoint(x, y));
+        }
+        utmDataVec.push_back(normalizedSegments);
+    }
 }
 
 void GpsData::setMinMaxValuesUTM()
@@ -384,7 +381,7 @@ void GpsData::setMinMaxValuesUTM()
 	double maxX = -numeric_limits<double>::max();
 	double maxY = -numeric_limits<double>::max();
 
-    BOOST_FOREACH(const std::vector<UtmPoint> segments, m_utmPoints)
+    BOOST_FOREACH(const UtmSegment& segments, m_utmPoints)
     {
         BOOST_FOREACH(const UtmPoint& utmPoint, segments)
         {
