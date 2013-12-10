@@ -451,60 +451,57 @@ bool firstSleep = true;
 
 void DrawingLifeApp::update()
 {
-    if (m_isAnimation && !m_pause)
+    if (m_isAnimation
+            && !m_pause
+            && !m_interactiveMode
+            && m_timeline->getTimeline().size() > 0)
     {
-        if(!m_interactiveMode)
+        if(m_loopMode)
         {
-            if(m_timeline->getTimeline().size() > 0)
+            for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
             {
-                if(m_loopMode)
+                int id = m_timeline->getNext();
+                if (id < (int)m_numPerson)
                 {
-                    for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
-                    {
-                        int id = m_timeline->getNext();
-                        if (id < (int)m_numPerson)
-                        {
-                            m_walks[id].update();
-                        }
+                    m_walks[id].update();
+                }
 
-                        zoomUpdate();
-                        soundUpdate();
+                zoomUpdate();
+                soundUpdate();
 
-                        m_timeline->countUp();
-                        if(m_timeline->isFirst())
-                        {
+                m_timeline->countUp();
+                if(m_timeline->isFirst())
+                {
 //                            std::cout << "First timeline object!" << std::endl;
-                            for(unsigned int i = 0; i < m_walks.size(); ++i)
-                            {
-                                m_walks[i].reset();
-                            }
-                            zoomFrameCount = 0;
-#if defined (TARGET_WIN32)
-                            Sleep(m_settings->getSleepTime()*1000);
-#else
-                            sleep(m_settings->getSleepTime());
-#endif
-                        }
+                    for(unsigned int i = 0; i < m_walks.size(); ++i)
+                    {
+                        m_walks[i].reset();
                     }
+                    zoomFrameCount = 0;
+#if defined (TARGET_WIN32)
+                    Sleep(m_settings->getSleepTime()*1000);
+#else
+                    sleep(m_settings->getSleepTime());
+#endif
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
+            {
+                if(!m_timeline->isLast())
+                {
+                    int id = m_timeline->getNext();
+                    m_walks[id].update();
+                    m_timeline->countUp();
                 }
                 else
                 {
-                    for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
-                    {
-                        if(!m_timeline->isLast())
-                        {
-                            int id = m_timeline->getNext();
-                            m_walks[id].update();
-                            m_timeline->countUp();
-                        }
-                        else
-                        {
-                            OF_EXIT_APP(0);
-                        }
-                    }
-
+                    OF_EXIT_APP(0);
                 }
             }
+
         }
     }
 }
@@ -1239,16 +1236,16 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
     double maxLon = -numeric_limits<double>::max();
     double minLat = numeric_limits<double>::max();
     double maxLat = -numeric_limits<double>::max();
-    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    BOOST_FOREACH(const GpsData& gpsData, m_gpsDatas)
     {
-        if (m_gpsDatas[i].getMinUtmX() < minX) minX = m_gpsDatas[i].getMinUtmX();
-        if (m_gpsDatas[i].getMaxUtmX() > maxX) maxX = m_gpsDatas[i].getMaxUtmX();
-        if (m_gpsDatas[i].getMinUtmY() < minY) minY = m_gpsDatas[i].getMinUtmY();
-        if (m_gpsDatas[i].getMaxUtmY() > maxY) maxY = m_gpsDatas[i].getMaxUtmY();
-        if (m_gpsDatas[i].getMinLon() < minLon) minLon = m_gpsDatas[i].getMinLon();
-        if (m_gpsDatas[i].getMaxLon() > maxLon) maxLon = m_gpsDatas[i].getMaxLon();
-        if (m_gpsDatas[i].getMinLat() < minLat) minLat = m_gpsDatas[i].getMinLon();
-        if (m_gpsDatas[i].getMaxLat() > maxLat) maxLat = m_gpsDatas[i].getMaxLon();
+        if (gpsData.getMinUtmX() < minX) minX = gpsData.getMinUtmX();
+        if (gpsData.getMaxUtmX() > maxX) maxX = gpsData.getMaxUtmX();
+        if (gpsData.getMinUtmY() < minY) minY = gpsData.getMinUtmY();
+        if (gpsData.getMaxUtmY() > maxY) maxY = gpsData.getMaxUtmY();
+        if (gpsData.getMinLon() < minLon) minLon = gpsData.getMinLon();
+        if (gpsData.getMaxLon() > maxLon) maxLon = gpsData.getMaxLon();
+        if (gpsData.getMinLat() < minLat) minLat = gpsData.getMinLon();
+        if (gpsData.getMaxLat() > maxLat) maxLat = gpsData.getMaxLon();
     }
 
     bool isRegionOn = m_settings->isRegionsOn();
@@ -1268,12 +1265,11 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
         }
     }
 
-    for(unsigned int i = 0; i < m_gpsDatas.size(); ++i)
+    BOOST_FOREACH(GpsData& gpsData, m_gpsDatas)
     {
-        m_gpsDatas[i].calculateUtmPointsGlobalLon(isRegionOn);
-        m_gpsDatas[i].normalizeUtmPointsGlobal();
+        gpsData.calculateUtmPointsGlobalLon(isRegionOn);
+        gpsData.normalizeUtmPointsGlobal();
     }
-
 }
 
 void DrawingLifeApp::fpsDisplay()

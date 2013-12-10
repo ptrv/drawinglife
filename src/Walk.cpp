@@ -111,41 +111,37 @@ void Walk::update()
 
 void Walk::updateToNextSegment()
 {
-    if (m_gpsData->getTotalGpsPoints() > 0)
+    if (m_gpsData->getTotalGpsPoints() > 0
+            && m_gpsData->getNormalizedUTMPoints().size() > 0)
     {
-        if (m_gpsData->getNormalizedUTMPoints().size() > 0)
+        if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size()-1)
         {
-            if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size()-1)
-            {
-                ++m_currentGpsSegment;
-                m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
-            }
-            else
-            {
-                m_currentGpsPoint = 0;
-                m_currentGpsSegment = 0;
-                m_currentPoint = -1;
-            }
+            ++m_currentGpsSegment;
+            m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
+        }
+        else
+        {
+            m_currentGpsPoint = 0;
+            m_currentGpsSegment = 0;
+            m_currentPoint = -1;
         }
     }
 }
 void Walk::updateToPreviousSegment()
 {
-    if (m_gpsData->getTotalGpsPoints() > 0)
+    if (m_gpsData->getTotalGpsPoints() > 0
+            && m_gpsData->getNormalizedUTMPoints().size() > 0)
     {
-        if (m_gpsData->getNormalizedUTMPoints().size() > 0)
+        if ((unsigned int)m_currentGpsSegment > 0)
         {
-            if ((unsigned int)m_currentGpsSegment > 0)
-            {
-                --m_currentGpsSegment;
-                m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
-            }
-            else
-            {
-                m_currentGpsPoint = 0;
-                m_currentGpsSegment = 0;
-                m_currentPoint = -1;
-            }
+            --m_currentGpsSegment;
+            m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
+        }
+        else
+        {
+            m_currentGpsPoint = 0;
+            m_currentGpsSegment = 0;
+            m_currentPoint = -1;
         }
     }
 }
@@ -241,14 +237,13 @@ void Walk::draw()
                 if(m_settings.useSpeed())
                 {
                     //DBG_VAL(utm.speed);
-                    bool shouldNotBeDrawn = false;
                     if(utm.speed > m_settings.getSpeedThreshold())
                     {
                         ofColor tmpColor = m_settings.getSpeedColorAbove();
                         ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
                         if(tmpColor.a == 0.0)
                         {
-                            shouldNotBeDrawn = true;
+                            isInBox = false;
                             glEnd();
                             glBegin(GL_LINE_STRIP);
                         }
@@ -259,14 +254,10 @@ void Walk::draw()
                         ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
                         if(tmpColor.a == 0.0)
                         {
-                            shouldNotBeDrawn = true;
+                            isInBox = false;
                             glEnd();
                             glBegin(GL_LINE_STRIP);
                         }
-                    }
-                    if(shouldNotBeDrawn)
-                    {
-                        isInBox = false;
                     }
                 }
                 if(isInBox)
@@ -297,25 +288,19 @@ void Walk::draw()
 		else if(!m_interactiveMode)
 		{
 			ofFill();
-			bool shouldBeDrawn = true;
+            bool skipDrawing = false;
             if(m_settings.useSpeed())
 			{
                 if(currentUtm.speed > m_settings.getSpeedThreshold())
 			    {
-                    if(m_settings.getSpeedColorAbove().a == 0.0)
-			        {
-			            shouldBeDrawn = false;
-                    }
+                    skipDrawing = m_settings.getSpeedColorAbove().a == 0.0;
                 }
                 else
                 {
-                    if(m_settings.getSpeedColorUnder().a == 0.0)
-                    {
-                        shouldBeDrawn = false;
-                    }
+                    skipDrawing = m_settings.getSpeedColorUnder().a == 0.0;
                 }
 			}
-			if(shouldBeDrawn)
+            if(skipDrawing)
 			{
 			    ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
                 ofCircle(getScaledUtmX(currentDrawablePoint.x),
