@@ -126,6 +126,8 @@ public:
     const std::string& getFragmentShaderSource() const { return m_fragmentShaderSource; }
     bool useShader() const { return m_useShader; }
 
+    bool getIsGrabScreen() const { return m_grabScreen; }
+
 private:
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
@@ -248,6 +250,8 @@ private:
     std::string m_vertexShaderSource;
     std::string m_fragmentShaderSource;
     bool m_useShader;
+
+    bool m_grabScreen;
 };
 
 #endif // _APPSETTINGS_H_

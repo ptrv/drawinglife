@@ -50,7 +50,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_multiMode(false),
     m_multiModeInfo(false),
     m_pause(false),
-    m_magicBox(0)
+    m_magicBox(0),
+    m_currentFrame(0)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -60,6 +61,11 @@ DrawingLifeApp::~DrawingLifeApp()
     m_magicBoxes.clear();
 
     m_images.clear();
+
+    if (m_imgSaver.isThreadRunning())
+    {
+        m_imgSaver.stopThread();
+    }
 }
 
 void DrawingLifeApp::setup()
@@ -599,7 +605,6 @@ void DrawingLifeApp::draw()
                 {
                     shaderEnd();
                 }
-
             }
         }
 		// -----------------------------------------------------------------------------
@@ -631,6 +636,16 @@ void DrawingLifeApp::draw()
         {
 
         }
+    }
+
+    if(m_settings->getIsGrabScreen())
+    {
+        static char fileNameStr[255];
+        sprintf(fileNameStr, "output/output_%0.4i.png", m_currentFrame);
+        m_imgSaver.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+        //printf("Saving file: %s\n", fileNameStr);
+        m_imgSaver.saveThreaded(fileNameStr);
+        ++m_currentFrame;
     }
 }
 // -----------------------------------------------------------------------------

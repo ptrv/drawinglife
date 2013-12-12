@@ -60,6 +60,7 @@
             <!-- value in degrees -->
             <lon0>0.0</lon0>
         </meridian>
+        <grabscreen>0</grabscreen>
     </settings>
     <ui>
         <fonts>

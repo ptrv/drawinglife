@@ -61,7 +61,8 @@ m_multiMode(false),
 m_multiModeInfo(false),
 m_sleepTime(0),
 m_useSpeed(false),
-m_speedThreshold(0.0)
+m_speedThreshold(0.0),
+  m_grabScreen(false)
 {
     ofxXmlSettings m_xml;
 
@@ -294,6 +295,8 @@ m_speedThreshold(0.0)
     m_useShader = m_xml.getValue("shader:enabled", 0) == 1 ? true : false;
 
     m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
+
+    m_grabScreen = m_xml.getValue("settings:grabscreen", 0) == 1 ? true : false;
 
 	if(m_printSettings)
 	{
