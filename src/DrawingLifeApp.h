@@ -184,7 +184,7 @@ private:
     ofShader shader;
     bool doShader;
 
-    ThreadedImageSaver m_imgScreen;
+    ThreadedImageSaver m_imgSaver;
     int m_currentFrame;
 };
 
