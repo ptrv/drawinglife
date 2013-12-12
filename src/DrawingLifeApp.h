@@ -12,7 +12,6 @@
 #include "LocationImage.h"
 #include "Integrator.h"
 #include "ofSoundPlayer.h"
-#include "ThreadedImageSaver.h"
 
 /**
  *  \brief Main application class.
@@ -184,8 +183,6 @@ private:
     ofShader shader;
     bool doShader;
 
-    ThreadedImageSaver m_imgSaver;
-    int m_currentFrame;
 };
 
 #endif // _DRAWINGLIFEAPP_H_
