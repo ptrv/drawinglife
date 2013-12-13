@@ -300,7 +300,7 @@ void Walk::draw()
                     skipDrawing = m_settings.getSpeedColorUnder().a == 0.0;
                 }
 			}
-            if(skipDrawing)
+            if (!skipDrawing)
 			{
 			    ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
                 ofCircle(getScaledUtmX(currentDrawablePoint.x),
