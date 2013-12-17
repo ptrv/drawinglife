@@ -223,7 +223,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData,
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;
-	query << "' AND strftime('%Y-%m-%d', time) = '";
+	query << "' AND strftime('%Y-%m-%d', a.utctimestamp) = '";
 	query << year;
 	query << "-";
 	query << (month < 10 ? "0" : "");
@@ -244,7 +244,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData,
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;
-	query << "' AND strftime('%Y-%m-%d', time) >= '";
+	query << "' AND strftime('%Y-%m-%d', a.utctimestamp) >= '";
 	query << year;
 	query << "-";
 	query << (month < 10 ? "0" : "");
@@ -274,7 +274,7 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData,
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;
-	query << "' AND strftime('%Y-%m', time) = '";
+	query << "' AND strftime('%Y-%m', a.utctimestamp) = '";
 	query << year;
 	query << "-";
 	query << (month < 10 ? "0" : "");
@@ -293,12 +293,12 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData,
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;
-	query << "' AND strftime('%Y-%m', time) >= '";
+	query << "' AND strftime('%Y-%m', a.utctimestamp) >= '";
 	query << year;
 	query << "-";
 	query << (monthStart < 10 ? "0" : "");
 	query << monthStart;
-	query << "' AND strftime('%Y-%m', time) <= '";
+	query << "' AND strftime('%Y-%m', a.utctimestamp) <= '";
 	query << year;
 	query << "-";
 	query << (monthEnd < 10 ? "0" : "");
@@ -317,7 +317,7 @@ bool DBReader::getGpsDataYear(GpsData& gpsData,
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;
-	query << "' AND strftime('%Y', time) = '";
+	query << "' AND strftime('%Y', a.utctimestamp) = '";
 	query << (year < 10 ? "0" : "");
 	query << year;
 	query << "' ORDER BY datetime(a.utctimestamp);";
@@ -334,10 +334,10 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData,
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;
-	query << "' AND strftime('%Y', time) >= '";
+	query << "' AND strftime('%Y', a.utctimestamp) >= '";
 	query << (yearStart < 10 ? "0" : "");
 	query << yearStart;
-	query << "' AND strftime('%Y', time) <= '";
+	query << "' AND strftime('%Y', a.utctimestamp) <= '";
 	query << (yearEnd < 10 ? "0" : "");
 	query << yearEnd;
 	query << "' ORDER BY datetime(a.utctimestamp);";
