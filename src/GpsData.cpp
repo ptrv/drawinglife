@@ -503,7 +503,7 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
 {
     m_indices.clear();
     int counter = 0;
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    //const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 

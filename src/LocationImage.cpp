@@ -27,7 +27,7 @@ m_viewYOffset(0.0)
     m_utm.y = 0.0;
 
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
-    Math::real minGamma, minK, maxGamma, maxK;
+    Math::real minGamma, minK;//, maxGamma, maxK;
 
     TMS.Forward(Math::real(12.0), lid.gps.lat, lid.gps.lon, m_utm.x, m_utm.y, minGamma, minK);
 
