@@ -1,10 +1,13 @@
 #include "AppSettings.h"
 #include "ofxXmlSettings.h"
+#include "ofxJSONElement.h"
+#include <jsoncpp/json/json.h>
 
 //static const char* settingsPath = "AppSettings.xml";
 
-AppSettings::AppSettings(std::string path)
+AppSettings::AppSettings(const std::string& path)
 :
+m_initialized(false),
 m_settingsFilePath(path),
 m_fontTitleName(""),
 m_fontTitleSize(0),
@@ -62,18 +65,43 @@ m_multiModeInfo(false),
 m_sleepTime(0),
 m_useSpeed(false),
 m_speedThreshold(0.0),
-  m_grabScreen(false)
+m_grabScreen(false)
+{
+    ofFile settingsFile = ofFile(ofToDataPath(m_settingsFilePath));
+
+    if (settingsFile.getExtension().compare("xml") == 0)
+    {
+        m_initialized = loadXML();
+    }
+    else if (settingsFile.getExtension().compare("json") == 0)
+    {
+        m_initialized = loadJSON();
+    }
+
+    if(m_initialized && m_printSettings)
+    {
+        print();
+    }
+
+
+}
+
+AppSettings::~AppSettings()
+{
+}
+
+bool AppSettings::loadXML()
 {
     ofxXmlSettings m_xml;
 
-    if(m_xml.loadFile(path))
+    if(m_xml.loadFile(m_settingsFilePath))
     {
-        ofLog(OF_LOG_SILENT, "Settings file: "+path+" loaded!\n");
+        ofLog(OF_LOG_SILENT, "Settings file: "+m_settingsFilePath+" loaded!\n");
     }
     else
     {
-        ofLog(OF_LOG_SILENT, "Loading "+path+" failed!\n");
-		OF_EXIT_APP(1);
+        ofLog(OF_LOG_SILENT, "Loading "+m_settingsFilePath+" failed!\n");
+        return false;
     }
 
     m_xml.pushTag("drawinglife");
@@ -298,16 +326,296 @@ m_speedThreshold(0.0),
 
     m_grabScreen = m_xml.getValue("settings:grabscreen", 0) == 1 ? true : false;
 
-	if(m_printSettings)
-	{
-		this->print();
-	}
-
     m_xml.popTag();
+
+    return true;
 }
 
-AppSettings::~AppSettings()
+bool AppSettings::loadJSON()
 {
+    ofxJSONElement jsonRoot;
+
+    bool parsingSuccessful = jsonRoot.open(ofToDataPath("AppSettings.json"));
+
+    if (parsingSuccessful)
+    {
+        //----------------------------------------------------------------------
+        // ui
+        Json::Value& json = jsonRoot["ui"]["fonts"];
+
+//        std::vector<DrawingLifeFont> defaultFonts;
+
+//        defaultFonts.push_back(DrawingLifeFont("title", "mono.ttf", 50));
+//        defaultFonts.push_back(DrawingLifeFont("author", "mono.ttf", 24));
+//        defaultFonts.push_back(DrawingLifeFont("text", "mono.ttf", 16));
+//        defaultFonts.push_back(DrawingLifeFont("info", "consola.ttf", 50));
+
+//        for (size_t i = 0; i < json.size(); ++i)
+//        {
+//            std::string defaultId = boost::get<0>(defaultFonts[i]);
+//            std::string defaultName = boost::get<1>(defaultFonts[i]);
+//            int defaultSize = boost::get<2>(defaultFonts[i]);
+
+//            std::string id = json[i].get("id", defaultId).asString();
+//            std::string name = json[i].get("name", defaultName).asString();
+//            int fontSize = json[i].get("size", defaultSize).asInt();
+
+//            m_fonts.push_back(DrawingLifeFont(id, name, fontSize));
+//        }
+
+        if (json.size() == 4)
+        {
+            Json::UInt idx = 0;
+            m_fontTitleName = json[idx].get("name", "mono.ttf").asString();
+            m_fontTitleSize = json[idx].get("size", 50).asInt();
+            ++idx;
+            m_fontAuthorName = json[idx].get("name", "mono.ttf").asString();
+            m_fontAuthorSize = json[idx].get("size", 24).asInt();
+            ++idx;
+            m_fontTextName = json[idx].get("name", "mono.ttf").asString();
+            m_fontTextSize = json[idx].get("size", 16).asInt();
+            ++idx;
+            m_fontInfoName = json[idx].get("name", "consola.ttf").asString();
+            m_fontInfoSize = json[idx].get("size", 11).asInt();
+        }
+
+        json = jsonRoot["ui"]["colors"];
+        m_colorForegroundR = json["foreground"].get("r", 255).asInt();
+        m_colorForegroundG = json["foreground"].get("g", 255).asInt();
+        m_colorForegroundB = json["foreground"].get("b", 255).asInt();
+
+        m_colorBackgroundR = json["background"].get("r", 0).asInt();
+        m_colorBackgroundG = json["background"].get("g", 0).asInt();
+        m_colorBackgroundB = json["background"].get("b", 0).asInt();
+
+        m_colorViewboxR = json["viewbox"].get("r", 0).asInt();
+        m_colorViewboxG = json["viewbox"].get("g", 0).asInt();
+        m_colorViewboxB = json["viewbox"].get("b", 0).asInt();
+
+        json = jsonRoot["ui"]["alpha"];
+        m_alphaTracks = json.get("path", 64).asInt();
+        m_alphaDots = json.get("dots", 127).asInt();
+        m_alphaLegend = json.get("legend", 255).asInt();
+
+        json = jsonRoot["ui"];
+        m_dotSize = json.get("dotsize", 5).asInt();
+
+        //----------------------------------------------------------------------
+        // settings
+        json = jsonRoot["settings"];
+        m_logLevel = json.get("level_level", 0).asInt();
+        m_debugMode = json.get("debugmode", false).asBool();
+        m_loadOnStart = json.get("load_data_on_start", true).asBool();
+        m_fullscreen = json.get("fullscreen", false).asBool();
+        m_hideCursor = json.get("hide_cursor", false).asBool();
+        m_showInfo = json.get("showinfo", true).asBool();
+        m_loop = json.get("loop", true).asBool();
+        m_sleepTime = json.get("sleep_time", 0).asInt();
+        m_printSettings = json.get("print_values", false).asBool();
+        m_grabScreen = json.get("grab_screen", false).asBool();
+
+        //----------------------------------------------------------------------
+        // animation
+        json = jsonRoot["animation"];
+        m_walkLength = json.get("walklength", 10000).asInt();
+        m_drawSpeed = json.get("speed", 1.0f).asDouble();
+        m_frameRate = json.get("framerate", 30).asInt();
+
+        //----------------------------------------------------------------------
+        // bounding box
+        json = jsonRoot["bounding_box"];
+        m_boundingBoxAuto = json.get("auto", true).asBool();
+        m_boundingBoxSize = json.get("size", 3000.0).asDouble();
+        m_boundingBoxPadding = json.get("padding", 500.0).asDouble();
+        m_boundingBoxFixed = json.get("static", false).asBool();
+        m_boundingBoxLat = json["position"].get("latitude", 52.542).asDouble();
+        m_boundingBoxLon = json["position"].get("longitude", 13.413).asDouble();
+
+        //----------------------------------------------------------------------
+        // database
+        json = jsonRoot["database"];
+        std::string dbPath = json.get("path", "test.sqlite").asString();
+        m_databasePath = ofToDataPath(dbPath, true);
+
+        //----------------------------------------------------------------------
+        // db query
+        json = jsonRoot["dbquery"];
+        m_queryType = json.get("type", 4).asInt();
+        m_queryYearStart = json["time_range"].get("year_start", 2009).asInt();
+        m_queryYearEnd = json["time_range"].get("year_end", 2010).asInt();
+        m_queryCity = json.get("city", "Berlin").asString();
+
+        //----------------------------------------------------------------------
+        // regions
+        json = jsonRoot["regions"];
+        m_regionsOn = json.get("enabled", true).asBool();
+
+        json = jsonRoot["regions"]["meridian"];
+        m_meridianAuto = json.get("auto", true).asBool();
+        m_meridianVal = json.get("lon0", 0.0).asDouble();
+
+        json = jsonRoot["regions"]["coordinates"];
+        double regions[5][3] = {{-119.0, -180.0, -100.0},
+                                {-74.0, -100.0, -35.0},
+                                {12.0, -35.0, 65.0},
+                                {116.0, 65.0, 130.0},
+                                {146.0, 130.0, 180.0}};
+
+        for (size_t i = 0; i < MAX(5, json.size()); ++i)
+        {
+            Json::Value region = json[i];
+            m_regions[i].lon0 = region.get("lon0", regions[i][0]).asDouble();
+            m_regions[i].minLon = region.get("minlon", regions[i][1]).asDouble();
+            m_regions[i].maxLon = region.get("maxlon", regions[i][2]).asDouble();
+        }
+
+        //----------------------------------------------------------------------
+        // users
+        json = jsonRoot["users"];
+        m_numPerson = json.size();
+        for(size_t i = 0; i < m_numPerson; ++i)
+        {
+            Json::Value person = json[i];
+            m_names.push_back(person.get("name", "").asString());
+            ofColor tmpColor;
+            Json::Value personColor = person["color"];
+            tmpColor.r = personColor.get("r", ofRandom(0, 255)).asDouble();
+            tmpColor.g = personColor.get("g", ofRandom(0, 255)).asDouble();
+            tmpColor.b = personColor.get("b", ofRandom(0, 255)).asDouble();
+            tmpColor.a = personColor.get("a", ofRandom(0, 255)).asDouble();
+            m_nameColors.push_back(tmpColor);
+
+            std::string sqlFilePath = person.get("sql", "").asString();
+            m_sqlFilePaths.push_back(sqlFilePath);
+        }
+
+        //----------------------------------------------------------------------
+        // current point images
+
+        json = jsonRoot["current_point_images"];
+
+        m_imageAsCurrentPoint = json.get("enabled", false).asBool();
+
+        if(m_imageAsCurrentPoint)
+        {
+            json = jsonRoot["current_point_images"]["images"];
+            for(size_t i = 0; i < json.size(); ++i)
+            {
+                Json::Value img = json[i];
+                CurrentImageData cid;
+                cid.path = img.get("path", "").asString();
+                cid.width = img.get("width", 0.0).asDouble();
+                cid.height = img.get("height", 0.0).asDouble();
+                cid.alpha = img.get("alpha", 255).asInt();
+                m_currImageData.push_back(cid);
+            }
+        }
+
+        //----------------------------------------------------------------------
+        // modes
+        json = jsonRoot["modes"]["interactive_mode"];
+        m_interactiveMode = json.get("enabled", false).asBool();
+        m_interactiveTraced = json.get("traced", true).asBool();
+
+        json = jsonRoot["modes"]["interactive_mode"]["current_segment"]["color"];
+        m_colorInteractiveSegR = json.get("r", 255).asInt();
+        m_colorInteractiveSegG = json.get("g", 255).asInt();
+        m_colorInteractiveSegB = json.get("b", 0).asInt();
+        m_colorInteractiveSegA = json.get("a", 255).asInt();
+
+        json = jsonRoot["modes"]["multi_mode"];
+        m_multiMode = json.get("enabled", false).asBool();
+        m_multiModeInfo = json.get("show_info", false).asBool();
+
+        json = jsonRoot["modes"]["speed_mode"];
+        m_useSpeed = json.get("enabled", false).asBool();
+        m_speedThreshold = json.get("threshold", 0.0).asDouble();
+
+        json = jsonRoot["modes"]["speed_mode"]["colors"]["below_threshold"];
+        m_speedColorUnder.r = json.get("r", 255).asInt();
+        m_speedColorUnder.g = json.get("g", 255).asInt();
+        m_speedColorUnder.b = json.get("b", 255).asInt();
+        m_speedColorUnder.a = json.get("a", 255).asInt();
+
+        json = jsonRoot["modes"]["speed_mode"]["colors"]["above_threshold"];
+        m_speedColorAbove.r = json.get("r", 255).asInt();
+        m_speedColorAbove.g = json.get("g", 255).asInt();
+        m_speedColorAbove.b = json.get("b", 255).asInt();
+        m_speedColorAbove.a = json.get("a", 255).asInt();
+
+        json = jsonRoot["location_images"]["images"];
+        m_locationImgData.clear();
+        for(size_t i = 0; i < json.size(); ++i)
+        {
+            Json::Value img = json[i];
+            LocationImageData lid;
+            lid.path = img.get("path", "").asString();
+            lid.name = img.get("name", "").asString();
+            lid.gps.lat = img.get("lat", 0.0).asDouble();
+            lid.gps.lon = img.get("lon", 0.0).asDouble();
+            lid.width = img.get("width", 0.0).asDouble();
+            lid.height = img.get("height", 0.0).asDouble();
+            lid.alpha = img.get("alpha", 255).asInt();
+            Json::Value anchor = img["anchor"];
+            lid.anchorType = anchor.get("type", 1).asInt();
+            lid.anchorX = anchor.get("posx", 0.5).asDouble();
+            lid.anchorY = anchor.get("posy", 0.5).asDouble();
+            lid.anchorShow = anchor.get("show", false).asBool();
+
+            m_locationImgData.push_back(lid);
+        }
+
+        json = jsonRoot["zoom_animation"];
+        m_isZoomAnimation = json.get("enabled", false).asBool();
+        m_zoomAnimationAttractionCriteria = json.get("type", 1).asInt();
+        m_zoomanimationUseOnlyZ = json.get("onlyz", false).asBool();
+
+        json = jsonRoot["zoom_animation"]["z"];
+        m_zoomAnimationDamp = json.get("damp", 0.2).asDouble();
+        m_zoomAnimationAttraction = json.get("attraction", 0.2).asDouble();
+        json = jsonRoot["zoom_animation"]["xy"];
+        m_zoomAnimationDampCenter = json.get("damp", 0.2).asDouble();
+        m_zoomAnimationAttractionCenter = json.get("attraction", 0.2).asDouble();
+
+        json = jsonRoot["zoom_animation"]["frames"];
+        for(size_t i = 0; i < json.size(); ++i)
+        {
+            Json::Value frame = json[i];
+            ZoomAnimFrame zaf;
+            zaf.frameTime = frame.get("time", 0.0).asDouble();
+            zaf.frameZoom = frame.get("zoom", 0).asInt();
+            zaf.frameCenterX = frame.get("lon", 0.0).asDouble();
+            zaf.frameCenterY = frame.get("lat", 0.0).asDouble();
+            zaf.gpsId = frame.get("gpsid", -1).asInt();
+            zaf.timestamp = frame.get("timestamp", "").asString();
+            m_zoomAnimationFrames.push_back(zaf);
+        }
+
+        //----------------------------------------------------------------------
+        // sound
+        json = jsonRoot["sound"];
+        m_isSoundActive = json.get("enabled", false).asBool();
+
+        json = jsonRoot["sound"]["soundfiles"];
+        for (size_t i = 0; i < json.size(); ++i)
+        {
+            m_soundFiles.push_back(json[i].asString());
+        }
+
+        //----------------------------------------------------------------------
+        // shader
+        json = jsonRoot["shader"];
+        m_useShader = json.get("enabled", false).asBool();
+        m_vertexShaderSource = json.get("vertex", "").asString();
+        m_fragmentShaderSource = json.get("fragment", "").asString();
+
+        return true;
+    }
+    else
+    {
+        cout  << "Failed to parse JSON" << endl;
+        return false;
+    }
 }
 
 void AppSettings::print()
@@ -315,16 +623,24 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "------------------------------");
     ofLog(OF_LOG_SILENT, "All loaded app setting values:");
     ofLog(OF_LOG_SILENT, "------------------------------");
-    ofLog(OF_LOG_SILENT, "Font: title | name = %s, size = %d", m_fontTitleName.c_str(), m_fontTitleSize);
-    ofLog(OF_LOG_SILENT, "Font: author | name = %s, size = %d", m_fontAuthorName.c_str(), m_fontAuthorSize);
-    ofLog(OF_LOG_SILENT, "Font: text | name = %s, size = %d", m_fontTextName.c_str(), m_fontTextSize);
-    ofLog(OF_LOG_SILENT, "Font: info | name = %s, size = %d", m_fontInfoName.c_str(), m_fontInfoSize);
+    ofLog(OF_LOG_SILENT, "Font: title | name = %s, size = %d",
+          m_fontTitleName.c_str(), m_fontTitleSize);
+    ofLog(OF_LOG_SILENT, "Font: author | name = %s, size = %d",
+          m_fontAuthorName.c_str(), m_fontAuthorSize);
+    ofLog(OF_LOG_SILENT, "Font: text | name = %s, size = %d",
+          m_fontTextName.c_str(), m_fontTextSize);
+    ofLog(OF_LOG_SILENT, "Font: info | name = %s, size = %d",
+          m_fontInfoName.c_str(), m_fontInfoSize);
 
-    ofLog(OF_LOG_SILENT, "Foreground color: r = %d, g = %d, b = %d", m_colorForegroundR, m_colorForegroundG, m_colorForegroundB);
-    ofLog(OF_LOG_SILENT, "Background color: r = %d, g = %d, b = %d", m_colorBackgroundR, m_colorBackgroundG, m_colorBackgroundB);
-    ofLog(OF_LOG_SILENT, "Viewbox color: r = %d, g = %d, b = %d", m_colorViewboxR, m_colorViewboxG, m_colorViewboxB);
+    ofLog(OF_LOG_SILENT, "Foreground color: r = %d, g = %d, b = %d",
+          m_colorForegroundR, m_colorForegroundG, m_colorForegroundB);
+    ofLog(OF_LOG_SILENT, "Background color: r = %d, g = %d, b = %d",
+          m_colorBackgroundR, m_colorBackgroundG, m_colorBackgroundB);
+    ofLog(OF_LOG_SILENT, "Viewbox color: r = %d, g = %d, b = %d",
+          m_colorViewboxR, m_colorViewboxG, m_colorViewboxB);
 
-    ofLog(OF_LOG_SILENT, "Alphas: tracks = %d, dots = %d, legend = %d", m_alphaTracks, m_alphaDots, m_alphaLegend);
+    ofLog(OF_LOG_SILENT, "Alphas: tracks = %d, dots = %d, legend = %d",
+          m_alphaTracks, m_alphaDots, m_alphaLegend);
 
     ofLog(OF_LOG_SILENT, "Debug mode: %d", m_debugMode);
     ofLog(OF_LOG_SILENT, "Interactive mode: %d, show only one segment: %d, seg color: r=%d, g=%d, b=%d, a=%d",
@@ -337,7 +653,8 @@ void AppSettings::print()
 
     ofLog(OF_LOG_SILENT, "Start fullscreen: %d", m_fullscreen);
     ofLog(OF_LOG_SILENT, "Load Gps on start: %d", m_loadOnStart);
-    ofLog(OF_LOG_SILENT, "Show image as current point: %d", m_imageAsCurrentPoint);
+    ofLog(OF_LOG_SILENT, "Show image as current point: %d",
+          m_imageAsCurrentPoint);
     ofLog(OF_LOG_SILENT, "Hide cursor: %d", m_hideCursor);
     ofLog(OF_LOG_SILENT, "Show info: %d", m_showInfo);
     ofLog(OF_LOG_SILENT, "Log level: %d", m_logLevel);
@@ -345,23 +662,31 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "Draw speed: %d", m_drawSpeed);
     ofLog(OF_LOG_SILENT, "Frame rate: %d", m_frameRate);
 
-    ofLog(OF_LOG_SILENT, "Bounding box: size = %lf, padding = %lf", m_boundingBoxSize, m_boundingBoxPadding);
+    ofLog(OF_LOG_SILENT, "Bounding box: size = %lf, padding = %lf",
+          m_boundingBoxSize, m_boundingBoxPadding);
 
-    ofLog(OF_LOG_SILENT, "Meridian value: %lf, auto = %d", m_meridianVal, m_meridianAuto);
+    ofLog(OF_LOG_SILENT, "Meridian value: %lf, auto = %d",
+          m_meridianVal, m_meridianAuto);
 
     ofLog(OF_LOG_SILENT, "Database path: %s", m_databasePath.c_str());
 
     ofLog(OF_LOG_SILENT, "Number of person: %d", m_numPerson);
 
-    ofLog(OF_LOG_SILENT, "Query: type = %d, start year = %d, end year = %d, city = %s", m_queryType, m_queryYearStart, m_queryYearEnd, m_queryCity.c_str());
+    ofLog(OF_LOG_SILENT,
+          "Query: type = %d, start year = %d, end year = %d, city = %s",
+          m_queryType, m_queryYearStart, m_queryYearEnd, m_queryCity.c_str());
     for (unsigned int i=0; i < m_names.size();++i)
     {
     	ofLog(OF_LOG_SILENT, "Name %d: %s", i, m_names[i].c_str());
-    	ofLog(OF_LOG_SILENT, "Name color %d: r=%d, g=%d, b=%d", i, (int)m_nameColors[i].r, (int)m_nameColors[i].g, (int)m_nameColors[i].b);
+        ofLog(OF_LOG_SILENT, "Name color %d: r=%d, g=%d, b=%d", i,
+              (int)m_nameColors[i].r,
+              (int)m_nameColors[i].g,
+              (int)m_nameColors[i].b);
     }
     for (unsigned int i=0; i < m_currImageData.size();++i)
     {
-    	ofLog(OF_LOG_SILENT, "Current point image %d: %s", i, m_currImageData[i].path.c_str());
+        ofLog(OF_LOG_SILENT, "Current point image %d: %s", i,
+              m_currImageData[i].path.c_str());
     }
     ofLog(OF_LOG_SILENT, "------------------------------\n");
 

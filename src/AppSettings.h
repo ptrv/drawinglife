@@ -9,9 +9,10 @@
 class AppSettings
 {
 public:
-    AppSettings(std::string path);
+    AppSettings(const std::string& path);
     ~AppSettings();
 
+    bool initialized() const { return m_initialized; }
 
     void print();
 
@@ -25,6 +26,8 @@ public:
     int getFontTextSize() const { return m_fontTextSize; }
     const std::string& getFontInfoName() const { return m_fontInfoName; }
     int getFontInfoSize() const { return m_fontInfoSize; }
+
+    const std::vector<DrawingLifeFont>& getFonts() const { return m_fonts; }
 
     int getColorForegroundR () const {return m_colorForegroundR; }
     int getColorForegroundG () const {return m_colorForegroundG; }
@@ -129,6 +132,12 @@ public:
     bool getIsGrabScreen() const { return m_grabScreen; }
 
 private:
+
+    bool loadXML();
+    bool loadJSON();
+
+    bool m_initialized;
+
     std::string m_settingsFilePath;
     // -----------------------------------------------------------------------------
     // Fonts
@@ -141,6 +150,8 @@ private:
     int m_fontTextSize;
     std::string m_fontInfoName;
     int m_fontInfoSize;
+
+    std::vector<DrawingLifeFont> m_fonts;
 
     // -----------------------------------------------------------------------------
     // Colors

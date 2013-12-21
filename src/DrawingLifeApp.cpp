@@ -71,6 +71,12 @@ void DrawingLifeApp::setup()
 
     m_settings.reset(new AppSettings(m_settingsFile));
 
+    if (!m_settings->initialized())
+    {
+        ofLog() << "Could not load settings" << endl;
+        OF_EXIT_APP(1);
+    }
+
     switch(m_settings->getLogLevel())
     {
         case 0:

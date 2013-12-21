@@ -25,6 +25,7 @@
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/tuple/tuple.hpp>
 
 // -----------------------------------------------------------------------------
 // include openFrameworks source tree.

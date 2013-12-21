@@ -66,6 +66,8 @@ PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/attic%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/docs%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/scripts%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/tclap-1.2.0%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/ofxJSON/example%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/ofxJSON/lib%
 
 ################################################################################
 # PROJECT LINKER FLAGS
@@ -81,7 +83,7 @@ PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/tclap-1.2.0%
 # incorporated directly into the final executable application binary.
 ################################################################################
 # PROJECT_LDFLAGS=-Wl,-rpath=./libs
-PROJECT_LDFLAGS=-lsqlite3 -lGeographic -lspatialite
+PROJECT_LDFLAGS=-lsqlite3 -lGeographic -lspatialite -ljsoncpp
 
 ################################################################################
 # PROJECT DEFINES
@@ -109,7 +111,8 @@ PROJECT_LDFLAGS=-lsqlite3 -lGeographic -lspatialite
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -I /usr/include -I libs/sqlite3x -Ilibs/tclap-1.2.0/include -Ilibs/ofxTimer/src
+PROJECT_CFLAGS = -I /usr/include -I libs/sqlite3x -Ilibs/tclap-1.2.0/include \
+    -Ilibs/ofxTimer/src -Ilibs/ofxJSON/src -I/usr/include/jsoncpp
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
