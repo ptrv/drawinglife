@@ -3,6 +3,95 @@
 #include "ofxJSONElement.h"
 #include <jsoncpp/json/json.h>
 
+namespace JsonHelper
+{
+// -----------------------------------------------------------------------------
+#define CATCH_JSON_PARSE_ERROR                                                  \
+catch (std::exception& ex)                                                      \
+{                                                                               \
+    ofLogError() << "Json parse error with key: <" << key << ">"                \
+                 << ", msg: " << ex.what();                                     \
+    return defaultValue;                                                        \
+}                                                                               \
+// -----------------------------------------------------------------------------
+
+std::string getString(const Json::Value& value, const std::string& key,
+                      const std::string& defaultValue)
+{
+    if (!value.isObject())
+    {
+        return defaultValue;
+    }
+    try
+    {
+        return value.get(key, defaultValue).asString();
+    }
+    CATCH_JSON_PARSE_ERROR
+}
+
+std::string getString(const Json::Value& value, const std::string& defaultValue)
+{
+    if (!value.isString())
+    {
+        return defaultValue;
+    }
+    try
+    {
+        return value.asString();
+    }
+    catch (const std::exception& ex)
+    {
+        ofLogError() << "Json parse error: " << ex.what();
+        return defaultValue;
+    }
+}
+
+bool getBool(const Json::Value& value, const std::string& key,
+             const bool defaultValue)
+{
+    if (!value.isObject())
+    {
+        return defaultValue;
+    }
+    try
+    {
+        return value.get(key, defaultValue).asBool();
+    }
+    CATCH_JSON_PARSE_ERROR
+}
+
+int getInt(const Json::Value& value, const std::string& key,
+           const int defaultValue)
+{
+    if (!value.isObject())
+    {
+        return defaultValue;
+    }
+    try
+    {
+        return value.get(key, defaultValue).asInt();
+    }
+    CATCH_JSON_PARSE_ERROR
+}
+
+double getDouble(const Json::Value& value, const std::string& key,
+                 const double defaultValue)
+{
+    if (!value.isObject())
+    {
+        return defaultValue;
+    }
+    try
+    {
+        return value.get(key, defaultValue).asDouble();
+    }
+    CATCH_JSON_PARSE_ERROR
+}
+
+}
+// -----------------------------------------------------------------------------
+
+
 //static const char* settingsPath = "AppSettings.xml";
 
 AppSettings::AppSettings(const std::string& path)
@@ -366,93 +455,98 @@ bool AppSettings::loadJSON()
         if (json.size() == 4)
         {
             Json::UInt idx = 0;
-            m_fontTitleName = json[idx].get("name", "mono.ttf").asString();
-            m_fontTitleSize = json[idx].get("size", 50).asInt();
+            m_fontTitleName = JsonHelper::getString(json[idx], "name", "mono.ttf");
+            m_fontTitleSize = JsonHelper::getInt(json[idx], "size", 50);
             ++idx;
-            m_fontAuthorName = json[idx].get("name", "mono.ttf").asString();
-            m_fontAuthorSize = json[idx].get("size", 24).asInt();
+            m_fontAuthorName = JsonHelper::getString(json[idx], "name", "mono.ttf");
+            m_fontAuthorSize = JsonHelper::getInt(json[idx], "size", 24);
             ++idx;
-            m_fontTextName = json[idx].get("name", "mono.ttf").asString();
-            m_fontTextSize = json[idx].get("size", 16).asInt();
+            m_fontTextName = JsonHelper::getString(json[idx], "name", "mono.ttf");
+            m_fontTextSize = JsonHelper::getInt(json[idx], "size", 16);
             ++idx;
-            m_fontInfoName = json[idx].get("name", "consola.ttf").asString();
-            m_fontInfoSize = json[idx].get("size", 11).asInt();
+            m_fontInfoName = JsonHelper::getString(json[idx], "name", "consola.ttf");
+            m_fontInfoSize = JsonHelper::getInt(json[idx], "size", 11);
         }
 
-        json = jsonRoot["ui"]["colors"];
-        m_colorForegroundR = json["foreground"].get("r", 255).asInt();
-        m_colorForegroundG = json["foreground"].get("g", 255).asInt();
-        m_colorForegroundB = json["foreground"].get("b", 255).asInt();
+        json = jsonRoot["ui"]["colors"]["foreground"];
+        m_colorForegroundR = JsonHelper::getInt(json, "r", 255);
+        m_colorForegroundG = JsonHelper::getInt(json, "g", 255);
+        m_colorForegroundB = JsonHelper::getInt(json, "b", 255);
 
-        m_colorBackgroundR = json["background"].get("r", 0).asInt();
-        m_colorBackgroundG = json["background"].get("g", 0).asInt();
-        m_colorBackgroundB = json["background"].get("b", 0).asInt();
+        json = jsonRoot["ui"]["colors"]["background"];
+        m_colorBackgroundR = JsonHelper::getInt(json, "r", 0);
+        m_colorBackgroundG = JsonHelper::getInt(json, "g", 0);
+        m_colorBackgroundB = JsonHelper::getInt(json, "b", 0);
 
-        m_colorViewboxR = json["viewbox"].get("r", 0).asInt();
-        m_colorViewboxG = json["viewbox"].get("g", 0).asInt();
-        m_colorViewboxB = json["viewbox"].get("b", 0).asInt();
+        json = jsonRoot["ui"]["colors"]["viewbox"];
+        m_colorViewboxR = JsonHelper::getInt(json, "r", 0);
+        m_colorViewboxG = JsonHelper::getInt(json, "g", 0);
+        m_colorViewboxB = JsonHelper::getInt(json, "b", 0);
 
         json = jsonRoot["ui"]["alpha"];
-        m_alphaTracks = json.get("path", 64).asInt();
-        m_alphaDots = json.get("dots", 127).asInt();
-        m_alphaLegend = json.get("legend", 255).asInt();
+        m_alphaTracks = JsonHelper::getInt(json, "path", 64);
+        m_alphaDots = JsonHelper::getInt(json, "dots", 127);
+        m_alphaLegend = JsonHelper::getInt(json, "legend", 255);
 
         json = jsonRoot["ui"];
-        m_dotSize = json.get("dotsize", 5).asInt();
+        m_dotSize = JsonHelper::getInt(json, "dotsize", 5);
 
         //----------------------------------------------------------------------
         // settings
         json = jsonRoot["settings"];
-        m_logLevel = json.get("level_level", 0).asInt();
-        m_debugMode = json.get("debugmode", false).asBool();
-        m_loadOnStart = json.get("load_data_on_start", true).asBool();
-        m_fullscreen = json.get("fullscreen", false).asBool();
-        m_hideCursor = json.get("hide_cursor", false).asBool();
-        m_showInfo = json.get("showinfo", true).asBool();
-        m_loop = json.get("loop", true).asBool();
-        m_sleepTime = json.get("sleep_time", 0).asInt();
-        m_printSettings = json.get("print_values", false).asBool();
-        m_grabScreen = json.get("grab_screen", false).asBool();
+        m_logLevel = JsonHelper::getInt(json, "level_level", 0);
+        m_debugMode = JsonHelper::getBool(json, "debugmode", false);
+        m_loadOnStart = JsonHelper::getBool(json, "load_data_on_start", true);
+        m_fullscreen = JsonHelper::getBool(json, "fullscreen", false);
+        m_hideCursor = JsonHelper::getBool(json, "hide_cursor", false);
+        m_showInfo = JsonHelper::getBool(json, "showinfo", true);
+        m_loop = JsonHelper::getBool(json, "loop", true);
+        m_sleepTime = JsonHelper::getInt(json, "sleep_time", 0);
+        m_printSettings = JsonHelper::getBool(json, "print_values", false);
+        m_grabScreen = JsonHelper::getBool(json, "grab_screen", false);
 
         //----------------------------------------------------------------------
         // animation
         json = jsonRoot["animation"];
-        m_walkLength = json.get("walklength", 10000).asInt();
-        m_drawSpeed = json.get("speed", 1.0f).asDouble();
-        m_frameRate = json.get("framerate", 30).asInt();
+        m_walkLength = JsonHelper::getInt(json, "walklength", 10000);
+        m_drawSpeed = JsonHelper::getDouble(json, "speed", 1.0);
+        m_frameRate = JsonHelper::getInt(json, "framerate", 30);
 
         //----------------------------------------------------------------------
         // bounding box
         json = jsonRoot["bounding_box"];
-        m_boundingBoxAuto = json.get("auto", true).asBool();
-        m_boundingBoxSize = json.get("size", 3000.0).asDouble();
-        m_boundingBoxPadding = json.get("padding", 500.0).asDouble();
-        m_boundingBoxFixed = json.get("static", false).asBool();
-        m_boundingBoxLat = json["position"].get("latitude", 52.542).asDouble();
-        m_boundingBoxLon = json["position"].get("longitude", 13.413).asDouble();
+        m_boundingBoxAuto = JsonHelper::getBool(json, "auto", true);
+        m_boundingBoxSize = JsonHelper::getDouble(json, "size", 3000.0);
+        m_boundingBoxPadding = JsonHelper::getDouble(json, "padding", 500.0);
+        m_boundingBoxFixed = JsonHelper::getBool(json, "static", false);
+        json = jsonRoot["bounding_box"]["position"];
+        m_boundingBoxLat = JsonHelper::getDouble(json, "latitude", 52.542);
+        m_boundingBoxLon = JsonHelper::getDouble(json, "longitude", 13.413);
 
         //----------------------------------------------------------------------
         // database
         json = jsonRoot["database"];
-        std::string dbPath = json.get("path", "test.sqlite").asString();
+        std::string dbPath = JsonHelper::getString(json, "path", "test.sqlite");
         m_databasePath = ofToDataPath(dbPath, true);
 
         //----------------------------------------------------------------------
         // db query
         json = jsonRoot["dbquery"];
-        m_queryType = json.get("type", 4).asInt();
-        m_queryYearStart = json["time_range"].get("year_start", 2009).asInt();
-        m_queryYearEnd = json["time_range"].get("year_end", 2010).asInt();
-        m_queryCity = json.get("city", "Berlin").asString();
+        m_queryType = JsonHelper::getInt(json, "type", 4);
+        json = jsonRoot["dbquery"]["time_range"];
+        m_queryYearStart = JsonHelper::getInt(json, "year_start", 2009);
+        m_queryYearEnd = JsonHelper::getInt(json, "year_end", 2010);
+
+        m_queryCity = JsonHelper::getString(json, "city", "Berlin");
 
         //----------------------------------------------------------------------
         // regions
         json = jsonRoot["regions"];
-        m_regionsOn = json.get("enabled", true).asBool();
+        m_regionsOn = JsonHelper::getBool(json, "enabled", true);
 
         json = jsonRoot["regions"]["meridian"];
-        m_meridianAuto = json.get("auto", true).asBool();
-        m_meridianVal = json.get("lon0", 0.0).asDouble();
+        m_meridianAuto = JsonHelper::getBool(json, "auto", true);
+        m_meridianVal = JsonHelper::getDouble(json, "lon0", 0.0);
 
         json = jsonRoot["regions"]["coordinates"];
         double regions[5][3] = {{-119.0, -180.0, -100.0},
@@ -464,9 +558,9 @@ bool AppSettings::loadJSON()
         for (size_t i = 0; i < MAX(5, json.size()); ++i)
         {
             Json::Value region = json[i];
-            m_regions[i].lon0 = region.get("lon0", regions[i][0]).asDouble();
-            m_regions[i].minLon = region.get("minlon", regions[i][1]).asDouble();
-            m_regions[i].maxLon = region.get("maxlon", regions[i][2]).asDouble();
+            m_regions[i].lon0 = JsonHelper::getDouble(region, "lon0", regions[i][0]);
+            m_regions[i].minLon = JsonHelper::getDouble(region, "minlon", regions[i][1]);
+            m_regions[i].maxLon = JsonHelper::getDouble(region, "maxlon", regions[i][2]);
         }
 
         //----------------------------------------------------------------------
@@ -476,16 +570,16 @@ bool AppSettings::loadJSON()
         for(size_t i = 0; i < m_numPerson; ++i)
         {
             Json::Value person = json[i];
-            m_names.push_back(person.get("name", "").asString());
+            m_names.push_back(JsonHelper::getString(person, "name", ""));
             ofColor tmpColor;
             Json::Value personColor = person["color"];
-            tmpColor.r = personColor.get("r", ofRandom(0, 255)).asDouble();
-            tmpColor.g = personColor.get("g", ofRandom(0, 255)).asDouble();
-            tmpColor.b = personColor.get("b", ofRandom(0, 255)).asDouble();
-            tmpColor.a = personColor.get("a", ofRandom(0, 255)).asDouble();
+            tmpColor.r = JsonHelper::getDouble(personColor, "r", ofRandom(0, 255));
+            tmpColor.g = JsonHelper::getDouble(personColor, "g", ofRandom(0, 255));
+            tmpColor.b = JsonHelper::getDouble(personColor, "b", ofRandom(0, 255));
+            tmpColor.a = JsonHelper::getDouble(personColor, "a", ofRandom(0, 255));
             m_nameColors.push_back(tmpColor);
 
-            std::string sqlFilePath = person.get("sql", "").asString();
+            std::string sqlFilePath = JsonHelper::getString(person, "sql", "");
             m_sqlFilePaths.push_back(sqlFilePath);
         }
 
@@ -494,7 +588,7 @@ bool AppSettings::loadJSON()
 
         json = jsonRoot["current_point_images"];
 
-        m_imageAsCurrentPoint = json.get("enabled", false).asBool();
+        m_imageAsCurrentPoint = JsonHelper::getBool(json, "enabled", false);
 
         if(m_imageAsCurrentPoint)
         {
@@ -503,10 +597,10 @@ bool AppSettings::loadJSON()
             {
                 Json::Value img = json[i];
                 CurrentImageData cid;
-                cid.path = img.get("path", "").asString();
-                cid.width = img.get("width", 0.0).asDouble();
-                cid.height = img.get("height", 0.0).asDouble();
-                cid.alpha = img.get("alpha", 255).asInt();
+                cid.path = JsonHelper::getString(img, "path", "");
+                cid.width = JsonHelper::getDouble(img, "width", 0.0);
+                cid.height = JsonHelper::getDouble(img, "height", 0.0);
+                cid.alpha = JsonHelper::getInt(img, "alpha", 255);
                 m_currImageData.push_back(cid);
             }
         }
@@ -514,34 +608,34 @@ bool AppSettings::loadJSON()
         //----------------------------------------------------------------------
         // modes
         json = jsonRoot["modes"]["interactive_mode"];
-        m_interactiveMode = json.get("enabled", false).asBool();
-        m_interactiveTraced = json.get("traced", true).asBool();
+        m_interactiveMode = JsonHelper::getBool(json, "enabled", false);
+        m_interactiveTraced = JsonHelper::getBool(json, "traced", true);
 
         json = jsonRoot["modes"]["interactive_mode"]["current_segment"]["color"];
-        m_colorInteractiveSegR = json.get("r", 255).asInt();
-        m_colorInteractiveSegG = json.get("g", 255).asInt();
-        m_colorInteractiveSegB = json.get("b", 0).asInt();
-        m_colorInteractiveSegA = json.get("a", 255).asInt();
+        m_colorInteractiveSegR = JsonHelper::getInt(json, "r", 255);
+        m_colorInteractiveSegG = JsonHelper::getInt(json, "g", 255);
+        m_colorInteractiveSegB = JsonHelper::getInt(json, "b", 0);
+        m_colorInteractiveSegA = JsonHelper::getInt(json, "a", 255);
 
         json = jsonRoot["modes"]["multi_mode"];
-        m_multiMode = json.get("enabled", false).asBool();
-        m_multiModeInfo = json.get("show_info", false).asBool();
+        m_multiMode = JsonHelper::getBool(json, "enabled", false);
+        m_multiModeInfo = JsonHelper::getBool(json, "show_info", false);
 
         json = jsonRoot["modes"]["speed_mode"];
-        m_useSpeed = json.get("enabled", false).asBool();
-        m_speedThreshold = json.get("threshold", 0.0).asDouble();
+        m_useSpeed = JsonHelper::getBool(json, "enabled", false);
+        m_speedThreshold = JsonHelper::getDouble(json, "threshold", 0.0);
 
         json = jsonRoot["modes"]["speed_mode"]["colors"]["below_threshold"];
-        m_speedColorUnder.r = json.get("r", 255).asInt();
-        m_speedColorUnder.g = json.get("g", 255).asInt();
-        m_speedColorUnder.b = json.get("b", 255).asInt();
-        m_speedColorUnder.a = json.get("a", 255).asInt();
+        m_speedColorUnder.r = JsonHelper::getInt(json, "r", 255);
+        m_speedColorUnder.g = JsonHelper::getInt(json, "g", 255);
+        m_speedColorUnder.b = JsonHelper::getInt(json, "b", 255);
+        m_speedColorUnder.a = JsonHelper::getInt(json, "a", 255);
 
         json = jsonRoot["modes"]["speed_mode"]["colors"]["above_threshold"];
-        m_speedColorAbove.r = json.get("r", 255).asInt();
-        m_speedColorAbove.g = json.get("g", 255).asInt();
-        m_speedColorAbove.b = json.get("b", 255).asInt();
-        m_speedColorAbove.a = json.get("a", 255).asInt();
+        m_speedColorAbove.r = JsonHelper::getInt(json, "r", 255);
+        m_speedColorAbove.g = JsonHelper::getInt(json, "g", 255);
+        m_speedColorAbove.b = JsonHelper::getInt(json, "b", 255);
+        m_speedColorAbove.a = JsonHelper::getInt(json, "a", 255);
 
         json = jsonRoot["location_images"]["images"];
         m_locationImgData.clear();
@@ -549,65 +643,69 @@ bool AppSettings::loadJSON()
         {
             Json::Value img = json[i];
             LocationImageData lid;
-            lid.path = img.get("path", "").asString();
-            lid.name = img.get("name", "").asString();
-            lid.gps.lat = img.get("lat", 0.0).asDouble();
-            lid.gps.lon = img.get("lon", 0.0).asDouble();
-            lid.width = img.get("width", 0.0).asDouble();
-            lid.height = img.get("height", 0.0).asDouble();
-            lid.alpha = img.get("alpha", 255).asInt();
+            lid.path = JsonHelper::getString(img, "path", "");
+            lid.name = JsonHelper::getString(img, "name", "");
+            lid.gps.lat = JsonHelper::getDouble(img, "lat", 0.0);
+            lid.gps.lon = JsonHelper::getDouble(img, "lon", 0.0);
+            lid.width = JsonHelper::getDouble(img, "width", 0.0);
+            lid.height = JsonHelper::getDouble(img, "height", 0.0);
+            lid.alpha = JsonHelper::getInt(img, "alpha", 255);
             Json::Value anchor = img["anchor"];
-            lid.anchorType = anchor.get("type", 1).asInt();
-            lid.anchorX = anchor.get("posx", 0.5).asDouble();
-            lid.anchorY = anchor.get("posy", 0.5).asDouble();
-            lid.anchorShow = anchor.get("show", false).asBool();
+            lid.anchorType = JsonHelper::getInt(anchor, "type", 1);
+            lid.anchorX = JsonHelper::getDouble(anchor, "posx", 0.5);
+            lid.anchorY = JsonHelper::getDouble(anchor, "posy", 0.5);
+            lid.anchorShow = JsonHelper::getBool(anchor, "show", false);
 
             m_locationImgData.push_back(lid);
         }
 
         json = jsonRoot["zoom_animation"];
-        m_isZoomAnimation = json.get("enabled", false).asBool();
-        m_zoomAnimationAttractionCriteria = json.get("type", 1).asInt();
-        m_zoomanimationUseOnlyZ = json.get("onlyz", false).asBool();
+        m_isZoomAnimation = JsonHelper::getBool(json, "enabled", false);
+        m_zoomAnimationAttractionCriteria = JsonHelper::getInt(json, "type", 1);
+        m_zoomanimationUseOnlyZ = JsonHelper::getBool(json, "onlyz", false);
 
         json = jsonRoot["zoom_animation"]["z"];
-        m_zoomAnimationDamp = json.get("damp", 0.2).asDouble();
-        m_zoomAnimationAttraction = json.get("attraction", 0.2).asDouble();
+        m_zoomAnimationDamp = JsonHelper::getDouble(json, "damp", 0.2);
+        m_zoomAnimationAttraction = JsonHelper::getDouble(json, "attraction", 0.2);
         json = jsonRoot["zoom_animation"]["xy"];
-        m_zoomAnimationDampCenter = json.get("damp", 0.2).asDouble();
-        m_zoomAnimationAttractionCenter = json.get("attraction", 0.2).asDouble();
+        m_zoomAnimationDampCenter = JsonHelper::getDouble(json, "damp", 0.2);
+        m_zoomAnimationAttractionCenter = JsonHelper::getDouble(json, "attraction", 0.2);
 
         json = jsonRoot["zoom_animation"]["frames"];
         for(size_t i = 0; i < json.size(); ++i)
         {
             Json::Value frame = json[i];
             ZoomAnimFrame zaf;
-            zaf.frameTime = frame.get("time", 0.0).asDouble();
-            zaf.frameZoom = frame.get("zoom", 0).asInt();
-            zaf.frameCenterX = frame.get("lon", 0.0).asDouble();
-            zaf.frameCenterY = frame.get("lat", 0.0).asDouble();
-            zaf.gpsId = frame.get("gpsid", -1).asInt();
-            zaf.timestamp = frame.get("timestamp", "").asString();
+            zaf.frameTime = JsonHelper::getDouble(frame, "time", 0.0);
+            zaf.frameZoom = JsonHelper::getInt(frame, "zoom", 0);
+            zaf.frameCenterX = JsonHelper::getDouble(frame, "lon", 0.0);
+            zaf.frameCenterY = JsonHelper::getDouble(frame, "lat", 0.0);
+            zaf.gpsId = JsonHelper::getInt(frame, "gpsid", -1);
+            zaf.timestamp = JsonHelper::getString(frame, "timestamp", "");
             m_zoomAnimationFrames.push_back(zaf);
         }
 
         //----------------------------------------------------------------------
         // sound
         json = jsonRoot["sound"];
-        m_isSoundActive = json.get("enabled", false).asBool();
+        m_isSoundActive = JsonHelper::getBool(json, "enabled", false);
 
         json = jsonRoot["sound"]["soundfiles"];
         for (size_t i = 0; i < json.size(); ++i)
         {
-            m_soundFiles.push_back(json[i].asString());
+            Json::Value soundFile = json[i];
+            if (soundFile.isString())
+            {
+                m_soundFiles.push_back(soundFile.asString());
+            }
         }
 
         //----------------------------------------------------------------------
         // shader
         json = jsonRoot["shader"];
-        m_useShader = json.get("enabled", false).asBool();
-        m_vertexShaderSource = json.get("vertex", "").asString();
-        m_fragmentShaderSource = json.get("fragment", "").asString();
+        m_useShader = JsonHelper::getBool(json, "enabled", false);
+        m_vertexShaderSource = JsonHelper::getString(json, "vertex", "");
+        m_fragmentShaderSource = JsonHelper::getString(json, "fragment", "");
 
         return true;
     }
@@ -691,3 +789,5 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "------------------------------\n");
 
 }
+
+//------------------------------------------------------------------------------
