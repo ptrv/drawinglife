@@ -390,17 +390,15 @@ const std::string Walk::getGpsLocationCurrent()
 
 int Walk::getCurrentSegmentNum()
 {
-    int segmentNum = 0;
-    const GpsSegmentVec& segments = m_gpsData->getSegments();
-    if(m_currentGpsSegment < static_cast<int>(segments.size()))
+    try
     {
-        const GpsPointVec& points = segments.at(m_currentGpsSegment).getPoints();
-        if(m_currentGpsPoint < static_cast<int>(points.size()))
-        {
-            segmentNum = segments.at(m_currentGpsSegment).getSegmentNum();
-        }
+        const GpsSegmentVec& segments = m_gpsData->getSegments();
+        return segments.at(m_currentGpsSegment).getSegmentNum();
     }
-    return segmentNum;
+    catch (const std::out_of_range&)
+    {
+        return 0;
+    }
 }
 
 int Walk::getCurrentPointNum()
@@ -410,18 +408,16 @@ int Walk::getCurrentPointNum()
 
 std::string Walk::getCurrentTimestamp()
 {
-    std::string timestamp = "";
-	if (m_currentGpsSegment < (int)m_gpsData->getSegments().size())
-	{
-        const std::vector<GpsPoint>& points =
-                m_gpsData->getSegments()[m_currentGpsSegment].getPoints();
-        if (m_currentGpsPoint < static_cast<int>(points.size()))
-		{
-            timestamp = points.at(m_currentGpsPoint).getTimestamp();
-		}
-	}
-	return timestamp;
-
+    try
+    {
+        const GpsSegmentVec& segments = m_gpsData->getSegments();
+        const GpsPointVec& points = segments.at(m_currentGpsSegment).getPoints();
+        return points.at(m_currentGpsPoint).getTimestamp();
+    }
+    catch (const std::out_of_range&)
+    {
+        return std::string();
+    }
 }
 double Walk::getCurrentLongitude()
 {

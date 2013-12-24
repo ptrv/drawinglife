@@ -96,136 +96,148 @@ void GpsData::clear()
 // -----------------------------------------------------------------------------
 // Get Gps point.
 // -----------------------------------------------------------------------------
-double GpsData::getLongitude(int segmentIndex, int pointIndex) const
+double GpsData::getLongitude(const size_t segmentIndex,
+                             const size_t pointIndex) const
 {
-	double longitude = -1000.0;
-	if (segmentIndex < (int)m_segments.size())
-	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
-		{
-			longitude = m_segments[segmentIndex].getPoints()[pointIndex].getLongitude();
-		}
-	}
-	return longitude;
+    try
+    {
+        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        return points.at(pointIndex).getLongitude();
+    }
+    catch (const std::out_of_range&)
+    {
+        return -1000.0;
+    }
 }
 
-double GpsData::getLatitude(int segmentIndex, int pointIndex) const
+double GpsData::getLatitude(const size_t segmentIndex,
+                            const size_t pointIndex) const
 {
-	double latitude = -1000.0;
-	if (segmentIndex < (int)m_segments.size())
-	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
-		{
-			latitude = m_segments[segmentIndex].getPoints()[pointIndex].getLatitude();
-		}
-	}
-	return latitude;
+    try
+    {
+        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        return points.at(pointIndex).getLatitude();
+    }
+    catch (const std::out_of_range&)
+    {
+        return -1000.0;
+    }
 }
 
-double GpsData::getElevation(int segmentIndex, int pointIndex) const
+double GpsData::getElevation(const size_t segmentIndex,
+                             const size_t pointIndex) const
 {
-	double elevation = -1000.0;
-	if (segmentIndex < (int)m_segments.size())
-	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
-		{
-			elevation = m_segments[segmentIndex].getPoints()[pointIndex].getElevation();
-		}
-	}
-	return elevation;
+    try
+    {
+        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        return points.at(pointIndex).getElevation();
+    }
+    catch (const std::out_of_range&)
+    {
+        return -1000.0;
+    }
 }
 // -----------------------------------------------------------------------------
 
-double GpsData::getUtmX(int segmentIndex, int pointIndex) const
+double GpsData::getUtmX(const size_t segmentIndex,
+                        const size_t pointIndex) const
 {
-	double utmX = 0.0;
-	if (segmentIndex < (int)m_utmPoints.size())
-	{
-		if (pointIndex < (int)m_utmPoints[segmentIndex].size())
-		{
-			utmX = m_utmPoints[segmentIndex][pointIndex].x;
-		}
-	}
-	return utmX;
-}
-
-double GpsData::getUtmY(int segmentIndex, int pointIndex) const
-{
-	double utmY = 0.0;
-	if (segmentIndex < (int)m_utmPoints.size())
-	{
-		if (pointIndex < (int)m_utmPoints[segmentIndex].size())
-		{
-			utmY = m_utmPoints[segmentIndex][pointIndex].y;
-		}
-	}
-	return utmY;
-}
-
-UtmPoint GpsData::getUtm(int segmentIndex, int pointIndex) const
-{
-    if (segmentIndex < (int)m_utmPoints.size())
+    try
     {
-        if (pointIndex < (int)m_utmPoints[segmentIndex].size())
-        {
-            return m_utmPoints[segmentIndex][pointIndex];
-        }
+        const UtmSegment& utmSegment = m_utmPoints.at(segmentIndex);
+        return utmSegment.at(pointIndex).x;
     }
-    return UtmPoint();
+    catch (const std::out_of_range&)
+    {
+        return 0.0;
+    }
+}
+
+double GpsData::getUtmY(const size_t segmentIndex,
+                        const size_t pointIndex) const
+{
+    try
+    {
+        const UtmSegment& utmSegment = m_utmPoints.at(segmentIndex);
+        return utmSegment.at(pointIndex).y;
+    }
+    catch (const std::out_of_range&)
+    {
+        return 0.0;
+    }
+}
+
+UtmPoint GpsData::getUtm(const size_t segmentIndex,
+                         const size_t pointIndex) const
+{
+    try
+    {
+        const UtmSegment& utmSegment = m_utmPoints.at(segmentIndex);
+        return utmSegment.at(pointIndex);
+    }
+    catch (const std::out_of_range&)
+    {
+        return UtmPoint();
+    }
 }
 
 //------------------------------------------------------------------------------
 
-double GpsData::getNormalizedUtmX(int segmentIndex, int pointIndex) const
+double GpsData::getNormalizedUtmX(const size_t segmentIndex,
+                                  const size_t pointIndex) const
 {
-	double utmX = 0.0;
-	if (segmentIndex < (int)m_normalizedUtmPoints.size())
-	{
-		if (pointIndex < (int)m_normalizedUtmPoints[segmentIndex].size())
-		{
-			utmX = m_normalizedUtmPoints[segmentIndex][pointIndex].x;
-		}
-	}
-	return utmX;
-}
-
-double GpsData::getNormalizedUtmY(int segmentIndex, int pointIndex) const
-{
-	double utmY = 0.0;
-	if (segmentIndex < (int)m_normalizedUtmPoints.size())
-	{
-		if (pointIndex < (int)m_normalizedUtmPoints[segmentIndex].size())
-		{
-			utmY = m_normalizedUtmPoints[segmentIndex][pointIndex].y;
-		}
-	}
-	return utmY;
-}
-
-UtmPoint GpsData::getNormalizedUtm(int segmentIndex, int pointIndex) const
-{
-    if (segmentIndex < (int)m_normalizedUtmPoints.size())
+    try
     {
-        if (pointIndex < (int)m_normalizedUtmPoints[segmentIndex].size())
-        {
-            return m_normalizedUtmPoints[segmentIndex][pointIndex];
-        }
+        const UtmSegment& normUtmSeg = m_normalizedUtmPoints.at(segmentIndex);
+        return normUtmSeg.at(pointIndex).x;
     }
-    return UtmPoint();
+    catch (const std::out_of_range&)
+    {
+        return 0.0;
+    }
+}
+
+double GpsData::getNormalizedUtmY(const size_t segmentIndex,
+                                  const size_t pointIndex) const
+{
+    try
+    {
+        const UtmSegment& normUtmSeg = m_normalizedUtmPoints.at(segmentIndex);
+        return normUtmSeg.at(pointIndex).y;
+    }
+    catch (const std::out_of_range&)
+    {
+        return 0.0;
+    }
+}
+
+UtmPoint GpsData::getNormalizedUtm(const size_t segmentIndex,
+                                   const size_t pointIndex) const
+{
+    try
+    {
+        const UtmSegment& normUtmSeg = m_normalizedUtmPoints.at(segmentIndex);
+        return normUtmSeg.at(pointIndex);
+    }
+    catch (const std::out_of_range&)
+    {
+        return UtmPoint();
+    }
 }
 
 //---------------------------------------------------------------------------
-const std::string GpsData::getGpsLocation(int segmentIndex, int pointIndex) const
+const std::string GpsData::getGpsLocation(const size_t segmentIndex,
+                                          const size_t pointIndex) const
 {
-	std::string loc = "";
-	if (segmentIndex < (int)m_segments.size())
-	{
-		if (pointIndex < (int)m_segments[segmentIndex].getPoints().size())
-		{
-			loc = m_segments[segmentIndex].getPoints()[pointIndex].getLocation();
-		}
-	}
-	return loc;
+    try
+    {
+        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        return points.at(pointIndex).getLocation();
+    }
+    catch (const std::out_of_range&)
+    {
+        return std::string();
+    }
 }
 // -----------------------------------------------------------------------------
 int GpsData::getTotalGpsPoints() const

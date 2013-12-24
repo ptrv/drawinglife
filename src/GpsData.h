@@ -104,21 +104,21 @@ public:
 	* \param pointIndex index of a GpsPoint.
 	* \return longitude for given GpsSegment and GpsPoint.
 	*/
-    double getLongitude(int segmentIndex, int pointIndex) const;
+    double getLongitude(size_t segmentIndex, size_t pointIndex) const;
 	/**
 	* \brief Get latitude for given GpsSegment and GpsPoint.
 	* \param segmentIndex index of a GpsSegment.
 	* \param pointIndex index of a GpsPoint.
 	* \return latitude for given GpsSegment and GpsPoint.
 	*/
-    double getLatitude(int segmentIndex, int pointIndex) const;
+    double getLatitude(size_t segmentIndex, size_t pointIndex) const;
 	/**
 	* \brief Get elevation for given GpsSegment and GpsPoint.
 	* \param segmentIndex index of a GpsSegment.
 	* \param pointIndex index of a GpsPoint.
 	* \return elevation for given GpsSegment and GpsPoint.
 	*/
-    double getElevation(int segmentIndex, int pointIndex) const;
+    double getElevation(size_t segmentIndex, size_t pointIndex) const;
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get UTM X for given GpsSegment and GpsPoint.
@@ -126,16 +126,16 @@ public:
 	* \param pointIndex index of a GpsPoint.
 	* \return UTM X for given GpsSegment and GpsPoint.
 	*/
-    double getUtmX(int segmentIndex, int pointIndex) const;
+    double getUtmX(size_t segmentIndex, size_t pointIndex) const;
 	/**
 	* \brief Get UTM Y for given GpsSegment and GpsPoint.
 	* \param segmentIndex index of a GpsSegment.
 	* \param pointIndex index of a GpsPoint.
 	* \return UTM Y for given GpsSegment and GpsPoint.
 	*/
-    double getUtmY(int segmentIndex, int pointIndex) const;
+    double getUtmY(size_t segmentIndex, size_t pointIndex) const;
 
-    UtmPoint getUtm(int segmentIndex, int pointIndex) const;
+    UtmPoint getUtm(size_t segmentIndex, size_t pointIndex) const;
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get normalized UTM X for given GpsSegment and GpsPoint.
@@ -143,16 +143,16 @@ public:
 	* \param pointIndex index of a GpsPoint.
 	* \return normalized UTM X for given GpsSegment and GpsPoint.
 	*/
-    double getNormalizedUtmX(int segmentIndex, int pointIndex) const;
+    double getNormalizedUtmX(size_t segmentIndex, size_t pointIndex) const;
 	/**
 	* \brief Get normalized UTM Y for given GpsSegment and GpsPoint.
 	* \param segmentIndex index of a GpsSegment.
 	* \param pointIndex index of a GpsPoint.
 	* \return normalized UTM Y for given GpsSegment and GpsPoint.
 	*/
-    double getNormalizedUtmY(int segmentIndex, int pointIndex) const;
+    double getNormalizedUtmY(size_t segmentIndex, size_t pointIndex) const;
 
-    UtmPoint getNormalizedUtm(int segmentIndex, int pointIndex) const;
+    UtmPoint getNormalizedUtm(size_t segmentIndex, size_t pointIndex) const;
 	// -----------------------------------------------------------------------------
 	/**
 	* \brief Get total number of GpsPoints.
@@ -197,7 +197,7 @@ public:
 	* \param pointIndex index of a GpsPoint.
 	* \return location for given GpsSegment and GpsPoint.
 	*/
-    const std::string getGpsLocation(int segmentIndex, int pointIndex) const;
+    const std::string getGpsLocation(size_t segmentIndex, size_t pointIndex) const;
 
 	double getLon0() const { return m_lon0; }
 
