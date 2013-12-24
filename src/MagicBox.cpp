@@ -7,7 +7,9 @@
 double MagicBox::m_zoomLevels[] = {20000.0, 30000.0, 40000.0, 50000.0};
 int MagicBox::m_boxNum = 0;
 
-MagicBox::MagicBox(const AppSettings& settings, double size, double padding)
+MagicBox::MagicBox(const AppSettings& settings,
+                   const double size,
+                   const double padding)
 :
 m_settings(settings),
 m_currentSize(size),
@@ -46,11 +48,12 @@ const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint) cons
                              (utmPoint.y - m_theBox.getY()) / m_theBox.getHeight());
 }
 
-void MagicBox::setCenter(double x, double y)
+void MagicBox::setCenter(const double x, const double y)
 {
 //	m_centerUtm.
 }
-void MagicBox::setupBox(const ofxPoint<double>& currUtm, double lon0)
+
+void MagicBox::setupBox(const ofxPoint<double>& currUtm, const double lon0)
 {
     m_centerUtm = currUtm;
 //    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf",
@@ -65,8 +68,10 @@ void MagicBox::setupBox(const ofxPoint<double>& currUtm, double lon0)
                               m_currentSize-(2*m_padding));
 }
 
-void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
-                              double width, double height)
+void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
+                              const double lon0,
+                              const double width,
+                              const double height)
 {
     m_centerUtm = currUtm;
     m_currentSize = width;
@@ -156,7 +161,7 @@ void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
     }
 }
 
-void MagicBox::addToBoxSize(double sizeToAdd)
+void MagicBox::addToBoxSize(const double sizeToAdd)
 {
     double oldSize = m_currentSize;
     double oldPadding = m_padding;
@@ -189,7 +194,7 @@ void MagicBox::addToBoxSize(double sizeToAdd)
     }
 }
 
-void MagicBox::setSize(double newSize)
+void MagicBox::setSize(const double newSize)
 {
     double oldSize = m_currentSize;
     double oldPadding = m_padding;
@@ -266,22 +271,22 @@ void MagicBox::setBoxes()
                                   m_currentSize - (2 * m_padding));
     }
 }
-void MagicBox::goUp(double val)
+void MagicBox::goUp(const double val)
 {
     m_centerUtm.y += val;
     setBoxes();
 }
-void MagicBox::goDown(double val)
+void MagicBox::goDown(const double val)
 {
     m_centerUtm.y -= val;
     setBoxes();
 }
-void MagicBox::goLeft(double val)
+void MagicBox::goLeft(const double val)
 {
     m_centerUtm.x -= val;
     setBoxes();
 }
-void MagicBox::goRight(double val)
+void MagicBox::goRight(const double val)
 {
     m_centerUtm.x += val;
     setBoxes();

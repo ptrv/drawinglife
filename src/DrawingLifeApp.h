@@ -50,18 +50,17 @@ private:
 	* \param names vector with name strings.
 	* \param city string with city name.
 	*/
-    bool loadGpsDataCity(const std::vector<std::string>& names,
-                         const std::string& city);
+    bool loadGpsDataCity(const StringVec& names, const std::string& city);
 	/**
 	* \brief
 	* \param names vector with name strings.
 	* \param yearStart start year for query.
 	* \param yearEnd end year for query.
 	*/
-    bool loadGpsDataYearRange(const std::vector<std::string>& names,
+    bool loadGpsDataYearRange(const StringVec& names,
                               int yearStart, int yearEnd);
 
-    bool loadGpsDataWithSqlFile(const std::vector<std::string>& m_sqlFilePaths);
+    bool loadGpsDataWithSqlFile(const StringVec& sqlFilePaths);
 
     typedef boost::function<bool(DBReader*,GpsData&)> tFuncLoadGpsData;
     bool loadGpsData(const std::vector<tFuncLoadGpsData>& funcVec);
@@ -137,7 +136,7 @@ private:
 	ofTrueTypeFont m_fontInfo;
     // -----------------------------------------------------------------------------
     unsigned int m_numPerson;
-    std::vector<string> m_names;
+    StringVec m_names;
 	std::string m_currentCity;
     // -----------------------------------------------------------------------------
     boost::scoped_ptr<Timeline> m_timeline;
@@ -157,7 +156,7 @@ private:
 
     bool m_interactiveMode;
 
-    std::vector<std::string> m_sqlFilePaths;
+    StringVec m_sqlFilePaths;
 
     bool m_showKeyCommands;
 

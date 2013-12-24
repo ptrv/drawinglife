@@ -760,7 +760,7 @@ void DrawingLifeApp::processGpsData()
 
 // -----------------------------------------------------------------------------
 
-bool DrawingLifeApp::loadGpsDataCity(const std::vector<std::string>& names,
+bool DrawingLifeApp::loadGpsDataCity(const StringVec& names,
                                      const std::string& city)
 {
     std::vector<tFuncLoadGpsData> funcVec;
@@ -776,7 +776,7 @@ bool DrawingLifeApp::loadGpsDataCity(const std::vector<std::string>& names,
 
 // -----------------------------------------------------------------------------
 
-bool DrawingLifeApp::loadGpsDataYearRange(const std::vector<std::string>& names,
+bool DrawingLifeApp::loadGpsDataYearRange(const StringVec& names,
                                           int yearStart, int yearEnd)
 {
     std::vector<tFuncLoadGpsData> funcVec;
@@ -793,7 +793,7 @@ bool DrawingLifeApp::loadGpsDataYearRange(const std::vector<std::string>& names,
 
 // -----------------------------------------------------------------------------
 
-bool DrawingLifeApp::loadGpsDataWithSqlFile(const std::vector<std::string>& sqlFilePaths)
+bool DrawingLifeApp::loadGpsDataWithSqlFile(const StringVec& sqlFilePaths)
 {
     std::vector<tFuncLoadGpsData> funcVec;
     for (size_t i = 0; i < m_numPerson; ++i)
@@ -1223,18 +1223,18 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 // -----------------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------------
-void DrawingLifeApp::windowResized(int w, int h)
+void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 {
     this->setViewAspectRatio();
     for(size_t i = 0; i < m_numPerson; ++i)
     {
 //        if(m_walks[personIndex])
         m_walks[i].setViewBounds(ofGetWidth(),
-                                           ofGetHeight(),
-                                           m_viewXOffset[i],
-                                           m_viewYOffset[i],
-                                           m_viewMinDimension[i],
-                                           m_viewPadding[i]);
+                                 ofGetHeight(),
+                                 m_viewXOffset[i],
+                                 m_viewYOffset[i],
+                                 m_viewMinDimension[i],
+                                 m_viewPadding[i]);
     }
     for(size_t i = 0; i < m_locationImgs.size(); ++i)
     {
@@ -1275,7 +1275,8 @@ void DrawingLifeApp::calculateGlobalMinMaxValues()
     else
     {
         if(m_settings->isMeridianAuto())
-            GpsData::setGlobalValues(minX, maxX, minY, maxY, (minLon + (maxLon - minLon)/2));
+            GpsData::setGlobalValues(minX, maxX, minY, maxY,
+                                     (minLon + (maxLon - minLon)/2));
         else
         {
             double lon0 = 0.0;

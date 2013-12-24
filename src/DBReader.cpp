@@ -20,13 +20,13 @@ using namespace sqlite3x;
 
 // --------------------------------------------------------------------------------------
 #define CATCHDBERRORS																	\
-catch(exception &ex)																	\
+catch(const std::exception& ex)																	\
 {																						\
 ofLog(OF_LOG_ERROR, "Database error: %s", ex.what());									\
 }																						\
 // --------------------------------------------------------------------------------------
 #define CATCHDBERRORSQ(query)															\
-catch(exception &ex)																	\
+catch(const std::exception& ex)																	\
 {																						\
 ofLog(OF_LOG_ERROR, "Database error: %s, \nwith query: %s", ex.what(), query.c_str());	\
 }																						\
@@ -82,8 +82,8 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		int lastSegment = -1;
 		std::string user = "";
 		GpsSegment gpsSeg;
-		std::vector<GpsPoint> gpsPointVec;
-		std::vector<GpsSegment> gpsSegmentVec;
+        GpsPointVec gpsPointVec;
+        GpsSegmentVec gpsSegmentVec;
 
 
 		// -----------------------------------------------------------------------------

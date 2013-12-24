@@ -38,7 +38,6 @@ m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_magicBox(0),
 m_currentPointIsImage(false),
-m_magicBoxEnabled(true),
 m_interactiveMode(false),
 m_drawTraced(true),
 m_imageAlpha(255)
@@ -368,12 +367,12 @@ void Walk::drawAll()
 // -----------------------------------------------------------------------------
 // Set view bounds.
 // -----------------------------------------------------------------------------
-void Walk::setViewBounds(int screenWidth,
-                            int screenHeight,
-                            double viewXOffset,
-                            double viewYOffset,
-                            double viewMinDimension,
-                            double viewPadding)
+void Walk::setViewBounds(const int screenWidth,
+                         const int screenHeight,
+                         const double viewXOffset,
+                         const double viewYOffset,
+                         const double viewMinDimension,
+                         const double viewPadding)
 {
     m_screenWidth = screenWidth;
     m_screenHeight = screenHeight;
@@ -443,12 +442,12 @@ double Walk::getCurrentUtmY()
 // -----------------------------------------------------------------------------
 // Scale to screen
 // -----------------------------------------------------------------------------
-double Walk::getScaledUtmX(double normalizedUtmX)
+double Walk::getScaledUtmX(const double normalizedUtmX)
 {
     return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
 }
 
-double Walk::getScaledUtmY(double normalizedUtmY)
+double Walk::getScaledUtmY(const double normalizedUtmY)
 {
     // Flip y coordinates ??
     return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
@@ -527,7 +526,9 @@ void Walk::setMagicBox(MagicBox* const magicBox)
     m_magicBox->setupBox(m_gpsData->getUtm(0, 0), GpsData::getLon0Glogal());
 }
 
-void Walk::setMagicBoxStatic(MagicBox* const magicBox, double lat, double lon)
+void Walk::setMagicBoxStatic(MagicBox* const magicBox,
+                             const double lat,
+                             const double lon)
 {
 
     m_magicBox = 0;
@@ -538,7 +539,7 @@ void Walk::setMagicBoxStatic(MagicBox* const magicBox, double lat, double lon)
 
 }
 
-void Walk::setCurrentPointImage(const ofImage& img, int alpha)
+void Walk::setCurrentPointImage(const ofImage& img, const int alpha)
 {
     m_image = img;
     m_image.setAnchorPercent(0.5f, 0.5f);

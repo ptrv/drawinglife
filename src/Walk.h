@@ -189,8 +189,6 @@ private:
 
     bool m_currentPointIsImage;
 
-	bool m_magicBoxEnabled;
-
 	bool m_interactiveMode;
 	bool m_drawTraced;
 

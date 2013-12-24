@@ -67,12 +67,14 @@ void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
 	m_maxLat = maxLat;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     Math::real minGamma, minK, maxGamma, maxK;
-    // -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Calculating central meridian for projection.
     m_lon0 = m_minLon + (m_maxLon-m_minLon)/2;
-    // -----------------------------------------------------------------------------
-    TMS.Forward(Math::real(m_lon0), m_minLat, m_minLon, m_minUtmX, m_minUtmY, minGamma, minK);
-    TMS.Forward(Math::real(m_lon0), m_maxLat, m_maxLon, m_maxUtmX, m_maxUtmY, maxGamma, maxK);
+    // -------------------------------------------------------------------------
+    TMS.Forward(Math::real(m_lon0), m_minLat, m_minLon, m_minUtmX, m_minUtmY,
+                minGamma, minK);
+    TMS.Forward(Math::real(m_lon0), m_maxLat, m_maxLon, m_maxUtmX, m_maxUtmY,
+                maxGamma, maxK);
 	m_user = user;
 	calculateUtmPoints();
     normalizeUtmPoints();

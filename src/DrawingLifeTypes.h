@@ -128,6 +128,7 @@ class MagicBox;
 class GpsSegment;
 class GpsPoint;
 
+typedef std::vector<std::string> StringVec;
 typedef boost::scoped_ptr<DBReader> DBReaderPtr;
 typedef std::vector<ZoomAnimFrame> ZoomAnimFrames;
 typedef boost::ptr_vector<GpsData> GpsDataVector;

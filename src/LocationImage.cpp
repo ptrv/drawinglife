@@ -54,18 +54,19 @@ void LocationImage::draw()
 
 }
 
-double LocationImage::getScaledUtmX(double normalizedUtmX)
+double LocationImage::getScaledUtmX(const double normalizedUtmX)
 {
     return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
 }
 
-double LocationImage::getScaledUtmY(double normalizedUtmY)
+double LocationImage::getScaledUtmY(const double normalizedUtmY)
 {
     // Flip y coordinates ??
     return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
 
-void LocationImage::setViewBounds(double minDim, double padding, double offsetX, double offsetY)
+void LocationImage::setViewBounds(const double minDim, const double padding,
+                                  const double offsetX, double offsetY)
 {
     m_viewMinDimension = minDim;
     m_viewPadding = padding;
