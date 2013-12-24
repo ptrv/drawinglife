@@ -231,14 +231,14 @@ bool AppSettings::loadXML()
     m_dotSize = m_xml.getValue("ui:dotsize", 5);
 
     m_logLevel = m_xml.getAttribute("settings:log", "level", 0);
-    m_debugMode = m_xml.getValue("settings:debugmode", 0) == 1 ? true : false;
+    m_debugMode = m_xml.getValue("settings:debugmode", 0) == 1;
 
     m_walkLength = m_xml.getValue("settings:walklength", 10000);
 
-    m_boundingBoxAuto = m_xml.getValue("settings:boundingbox:auto", 1) == 1 ? true : false;
+    m_boundingBoxAuto = m_xml.getValue("settings:boundingbox:auto", 1) == 1;
     m_boundingBoxSize = m_xml.getValue("settings:boundingbox:size", 3000.0);
     m_boundingBoxPadding = m_xml.getValue("settings:boundingbox:padding", 500.0);
-    m_boundingBoxFixed = m_xml.getValue("settings:boundingbox:static", 0) == 1 ? true : false;
+    m_boundingBoxFixed = m_xml.getValue("settings:boundingbox:static", 0) == 1;
     m_boundingBoxLat = m_xml.getAttribute("settings:boundingbox:position", "lat", 52.542);
     m_boundingBoxLon = m_xml.getAttribute("settings:boundingbox:position", "lon", 13.413);
     
@@ -249,7 +249,7 @@ bool AppSettings::loadXML()
     m_queryYearEnd = m_xml.getValue("dbquery:time:yearend", 2010);
     m_queryCity = m_xml.getValue("dbquery:city", "Berlin");
 
-    m_meridianAuto = m_xml.getValue("settings:meridian:auto", 1) == 1 ? true : false;
+    m_meridianAuto = m_xml.getValue("settings:meridian:auto", 1) == 1;
     m_meridianVal = m_xml.getValue("settings:meridian:lon0", 0.0);
 
     m_xml.pushTag("data");
@@ -275,9 +275,9 @@ bool AppSettings::loadXML()
     m_drawSpeed = m_xml.getValue("settings:drawspeed", 1.0f);
     m_loadOnStart = m_xml.getValue("settings:loadgpsonstart",1);
     m_frameRate = m_xml.getValue("settings:framerate", 30);
-    m_fullscreen = m_xml.getValue("settings:fullscreen", 0) == 1 ? true : false;
-    m_imageAsCurrentPoint = m_xml.getValue("ui:imageascurrent", 0) == 1 ? true : false;
-    m_hideCursor = m_xml.getValue("settings:hidecursor", 0) == 1 ? true : false;
+    m_fullscreen = m_xml.getValue("settings:fullscreen", 0) == 1;
+    m_imageAsCurrentPoint = m_xml.getValue("ui:imageascurrent", 0) == 1;
+    m_hideCursor = m_xml.getValue("settings:hidecursor", 0) == 1;
 
     if(m_imageAsCurrentPoint)
     {
@@ -301,12 +301,12 @@ bool AppSettings::loadXML()
         m_xml.popTag();
     }
 
-    m_interactiveMode = m_xml.getValue("settings:interactivemode:enabled", 0) == 1 ? true : false;
-    m_interactiveTraced = m_xml.getValue("settings:interactivemode:traced", 1) == 1 ? true : false;
+    m_interactiveMode = m_xml.getValue("settings:interactivemode:enabled", 0) == 1;
+    m_interactiveTraced = m_xml.getValue("settings:interactivemode:traced", 1) == 1;
 
-    m_showInfo = m_xml.getValue("settings:showinfo", 1) == 1? true : false;
+    m_showInfo = m_xml.getValue("settings:showinfo", 1) == 1;
 
-    m_regionsOn = m_xml.getValue("settings:meridian:regions", 1) == 1 ? true : false;
+    m_regionsOn = m_xml.getValue("settings:meridian:regions", 1) == 1;
 
     m_regions[0].lon0 = m_xml.getAttribute("settings:meridian:region1", "lon0", -119.0);
     m_regions[0].minLon = m_xml.getAttribute("settings:meridian:region1", "minlon", -180.0);
@@ -324,14 +324,14 @@ bool AppSettings::loadXML()
     m_regions[4].minLon = m_xml.getAttribute("settings:meridian:region5", "minlon", 130.0);
     m_regions[4].maxLon = m_xml.getAttribute("settings:meridian:region5", "maxlon", 180.0);
 
-    m_loop = m_xml.getValue("settings:loop", 1) == 1 ? true : false;
+    m_loop = m_xml.getValue("settings:loop", 1) == 1;
 
-    m_multiMode = m_xml.getValue("settings:multimode", 0) == 1 ? true : false;
-    m_multiModeInfo = m_xml.getValue("settings:multimodeinfo", 0) == 1 ? true : false;
+    m_multiMode = m_xml.getValue("settings:multimode", 0) == 1;
+    m_multiModeInfo = m_xml.getValue("settings:multimodeinfo", 0) == 1;
 
     m_sleepTime = m_xml.getValue("settings:sleeptime", 0);
 
-    m_useSpeed = m_xml.getValue("settings:usespeed", 0) == 1 ? true : false;
+    m_useSpeed = m_xml.getValue("settings:usespeed", 0) == 1;
     m_speedThreshold = m_xml.getAttribute("settings:usespeed", "threshold", 0.0);
 
     m_speedColorUnder.r = m_xml.getAttribute("ui:speedcolors:underthreshold", "r", 255);
@@ -362,7 +362,7 @@ bool AppSettings::loadXML()
         lid.anchorType = m_xml.getValue("anchor:type", 1);
         lid.anchorX = m_xml.getValue("anchor:posx", 0.5);
         lid.anchorY = m_xml.getValue("anchor:posy", 0.5);
-        lid.anchorShow = m_xml.getValue("anchor:show", 0) == 1 ? true : false;
+        lid.anchorShow = m_xml.getValue("anchor:show", 0) == 1;
 
         m_locationImgData.push_back(lid);
         m_xml.popTag();
@@ -372,13 +372,13 @@ bool AppSettings::loadXML()
     m_xml.popTag();
 
     m_xml.pushTag("zoomanimation");
-    m_isZoomAnimation = m_xml.getValue("active", 0) == 1 ? true : false;
+    m_isZoomAnimation = m_xml.getValue("active", 0) == 1;
     m_zoomAnimationDamp = m_xml.getValue("dampzoom", 0.2);
     m_zoomAnimationAttraction = m_xml.getValue("attractionzoom", 0.2);
     m_zoomAnimationDampCenter = m_xml.getValue("dampcenter", 0.2);
     m_zoomAnimationAttractionCenter = m_xml.getValue("attractioncenter", 0.2);
     m_zoomAnimationAttractionCriteria = m_xml.getValue("type", 1);
-    m_zoomanimationUseOnlyZ = m_xml.getValue("onlyz", 0) == 1 ? true : false;
+    m_zoomanimationUseOnlyZ = m_xml.getValue("onlyz", 0) == 1;
     m_xml.pushTag("frames");
     int numZoomFrames = m_xml.getNumTags("frame");
     for(int i = 0; i < numZoomFrames; ++i)
@@ -397,7 +397,7 @@ bool AppSettings::loadXML()
     m_xml.popTag();
 
     m_xml.pushTag("sound");
-    m_isSoundActive = m_xml.getValue("active", 0) == 1 ? true : false;
+    m_isSoundActive = m_xml.getValue("active", 0) == 1;
 
     m_xml.pushTag("soundfiles");
     int numSoundFiles = m_xml.getNumTags("soundfile");
@@ -409,11 +409,11 @@ bool AppSettings::loadXML()
 
     m_vertexShaderSource = m_xml.getValue("shader:vertex", "");
     m_fragmentShaderSource = m_xml.getValue("shader:fragment", "");
-    m_useShader = m_xml.getValue("shader:enabled", 0) == 1 ? true : false;
+    m_useShader = m_xml.getValue("shader:enabled", 0) == 1;
 
-    m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1 ? true : false;
+    m_printSettings = m_xml.getValue("settings:printvalues", 0) == 1;
 
-    m_grabScreen = m_xml.getValue("settings:grabscreen", 0) == 1 ? true : false;
+    m_grabScreen = m_xml.getValue("settings:grabscreen", 0) == 1;
 
     m_xml.popTag();
 
