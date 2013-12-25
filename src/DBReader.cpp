@@ -252,7 +252,7 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData,
 	query << "-";
 	query << (dayStart < 10 ? "0" : "");
 	query << dayStart;
-	query << "' AND strftime('%Y-%m-%d', time) <= '";
+    query << "' AND strftime('%Y-%m-%d', a.utctimestamp) <= '";
 	query << year;
 	query << "-";
 	query << (month < 10 ? "0" : "");
