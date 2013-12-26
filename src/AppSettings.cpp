@@ -91,6 +91,12 @@ double getDouble(const Json::Value& value, const std::string& key,
 }
 // -----------------------------------------------------------------------------
 
+static const int NUM_FONTS = 4;
+static const std::string defaultFontIds[NUM_FONTS] = {"title", "author", "text",
+                                                      "info"};
+static const std::string defaultFontNames[NUM_FONTS] = {"mono.ttf", "mono.ttf",
+                                                        "mono.ttf", "consola.ttf"};
+static const int defaultFontSizes[NUM_FONTS] = {50, 24, 16, 50};
 
 //static const char* settingsPath = "AppSettings.xml";
 
@@ -98,14 +104,6 @@ AppSettings::AppSettings(const std::string& path)
 :
 m_initialized(false),
 m_settingsFilePath(path),
-m_fontTitleName(""),
-m_fontTitleSize(0),
-m_fontAuthorName(""),
-m_fontAuthorSize(0),
-m_fontTextName(""),
-m_fontTextSize(0),
-m_fontInfoName(""),
-m_fontInfoSize(0),
 m_colorForegroundR(255),
 m_colorForegroundG(255),
 m_colorForegroundB(255),
@@ -196,14 +194,16 @@ bool AppSettings::loadXML()
     m_xml.pushTag("drawinglife");
     m_xml.pushTag("ui");
     m_xml.pushTag("fonts");
-    m_fontTitleName = m_xml.getAttribute("font", "name","mono.ttf", 0);
-    m_fontTitleSize = m_xml.getAttribute("font", "size", 50, 0);
-    m_fontAuthorName = m_xml.getAttribute("font", "name", "mono.ttf", 1);
-    m_fontAuthorSize = m_xml.getAttribute("font", "size", 24, 1);
-    m_fontTextName = m_xml.getAttribute("font", "name", "mono.ttf", 2);
-    m_fontTextSize = m_xml.getAttribute("font", "size", 16, 2);
-    m_fontInfoName = m_xml.getAttribute("font", "name", "consola.ttf", 3);
-    m_fontInfoSize = m_xml.getAttribute("font", "size", 11, 3);
+    for (size_t i = 0; i < NUM_FONTS; ++i)
+    {
+        std::string id = defaultFontIds[i];
+        std::string fontName = m_xml.getAttribute("font", "name",
+                                                  defaultFontNames[i], i);
+        int fontSize = m_xml.getAttribute("font", "size",
+                                          defaultFontSizes[i], i);
+
+        m_fonts[id] = std::make_pair(fontName, fontSize);
+    }
     m_xml.popTag();
     m_xml.popTag();
 
@@ -432,40 +432,16 @@ bool AppSettings::loadJSON()
         // ui
         Json::Value& json = jsonRoot["ui"]["fonts"];
 
-//        std::vector<DrawingLifeFont> defaultFonts;
-
-//        defaultFonts.push_back(DrawingLifeFont("title", "mono.ttf", 50));
-//        defaultFonts.push_back(DrawingLifeFont("author", "mono.ttf", 24));
-//        defaultFonts.push_back(DrawingLifeFont("text", "mono.ttf", 16));
-//        defaultFonts.push_back(DrawingLifeFont("info", "consola.ttf", 50));
-
-//        for (size_t i = 0; i < json.size(); ++i)
-//        {
-//            std::string defaultId = boost::get<0>(defaultFonts[i]);
-//            std::string defaultName = boost::get<1>(defaultFonts[i]);
-//            int defaultSize = boost::get<2>(defaultFonts[i]);
-
-//            std::string id = json[i].get("id", defaultId).asString();
-//            std::string name = json[i].get("name", defaultName).asString();
-//            int fontSize = json[i].get("size", defaultSize).asInt();
-
-//            m_fonts.push_back(DrawingLifeFont(id, name, fontSize));
-//        }
-
-        if (json.size() == 4)
+        for (size_t i = 0; i < NUM_FONTS; ++i)
         {
-            Json::UInt idx = 0;
-            m_fontTitleName = JsonHelper::getString(json[idx], "name", "mono.ttf");
-            m_fontTitleSize = JsonHelper::getInt(json[idx], "size", 50);
-            ++idx;
-            m_fontAuthorName = JsonHelper::getString(json[idx], "name", "mono.ttf");
-            m_fontAuthorSize = JsonHelper::getInt(json[idx], "size", 24);
-            ++idx;
-            m_fontTextName = JsonHelper::getString(json[idx], "name", "mono.ttf");
-            m_fontTextSize = JsonHelper::getInt(json[idx], "size", 16);
-            ++idx;
-            m_fontInfoName = JsonHelper::getString(json[idx], "name", "consola.ttf");
-            m_fontInfoSize = JsonHelper::getInt(json[idx], "size", 11);
+            std::string id = JsonHelper::getString(json[i], "id",
+                                                   defaultFontIds[i]);
+            std::string name = JsonHelper::getString(json[i], "name",
+                                                     defaultFontNames[i]);
+            int fontSize = JsonHelper::getInt(json[i], "size",
+                                              defaultFontSizes[i]);
+
+            m_fonts[id] = std::make_pair(name, fontSize);
         }
 
         json = jsonRoot["ui"]["colors"]["foreground"];
@@ -722,13 +698,13 @@ void AppSettings::print()
     ofLog(OF_LOG_SILENT, "All loaded app setting values:");
     ofLog(OF_LOG_SILENT, "------------------------------");
     ofLog(OF_LOG_SILENT, "Font: title | name = %s, size = %d",
-          m_fontTitleName.c_str(), m_fontTitleSize);
+          m_fonts["title"].first.c_str(), m_fonts["title"].second);
     ofLog(OF_LOG_SILENT, "Font: author | name = %s, size = %d",
-          m_fontAuthorName.c_str(), m_fontAuthorSize);
+          m_fonts["author"].first.c_str(), m_fonts["author"].second);
     ofLog(OF_LOG_SILENT, "Font: text | name = %s, size = %d",
-          m_fontTextName.c_str(), m_fontTextSize);
+          m_fonts["text"].first.c_str(), m_fonts["text"].second);
     ofLog(OF_LOG_SILENT, "Font: info | name = %s, size = %d",
-          m_fontInfoName.c_str(), m_fontInfoSize);
+          m_fonts["info"].first.c_str(), m_fonts["info"].second);
 
     ofLog(OF_LOG_SILENT, "Foreground color: r = %d, g = %d, b = %d",
           m_colorForegroundR, m_colorForegroundG, m_colorForegroundB);
@@ -788,6 +764,18 @@ void AppSettings::print()
     }
     ofLog(OF_LOG_SILENT, "------------------------------\n");
 
+}
+
+//------------------------------------------------------------------------------
+
+const std::string& AppSettings::getFontName(const string& id)
+{
+    return m_fonts[id].first;
+}
+
+int AppSettings::getFontSize(const string &id)
+{
+    return m_fonts[id].second;
 }
 
 //------------------------------------------------------------------------------

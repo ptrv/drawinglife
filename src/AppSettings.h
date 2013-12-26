@@ -18,16 +18,8 @@ public:
 
     //bool shouldPrintSettings() const { return m_printSettings; }
 
-    const std::string& getFontTitleName() const { return m_fontTitleName; }
-    int getFontTitleSize() const { return m_fontTitleSize; }
-    const std::string& getFontAuthorName() const { return m_fontAuthorName; }
-    int getFontAuthorSize() const { return m_fontAuthorSize; }
-    const std::string& getFontTextName() const { return m_fontTextName; }
-    int getFontTextSize() const { return m_fontTextSize; }
-    const std::string& getFontInfoName() const { return m_fontInfoName; }
-    int getFontInfoSize() const { return m_fontInfoSize; }
-
-    const std::vector<DrawingLifeFont>& getFonts() const { return m_fonts; }
+    const std::string& getFontName(const std::string& id);
+    int getFontSize(const std::string& id);
 
     int getColorForegroundR () const {return m_colorForegroundR; }
     int getColorForegroundG () const {return m_colorForegroundG; }
@@ -107,7 +99,7 @@ public:
 
     const std::vector<LocationImageData>& getLocationImageData() const { return m_locationImgData; }
     
-    bool isBoundingBoxFixed() const { return m_boundingBoxFixed; };
+    bool isBoundingBoxFixed() const { return m_boundingBoxFixed; }
     double getBoundingBoxLat() const { return m_boundingBoxLat; } 
     double getBoundingBoxLon() const { return m_boundingBoxLon; }
     
@@ -142,16 +134,8 @@ private:
     // -----------------------------------------------------------------------------
     // Fonts
     // -----------------------------------------------------------------------------
-    std::string m_fontTitleName;
-    int m_fontTitleSize;
-    std::string m_fontAuthorName;
-    int m_fontAuthorSize;
-    std::string m_fontTextName;
-    int m_fontTextSize;
-    std::string m_fontInfoName;
-    int m_fontInfoSize;
 
-    std::vector<DrawingLifeFont> m_fonts;
+    std::map<std::string, std::pair<std::string, int> > m_fonts;
 
     // -----------------------------------------------------------------------------
     // Colors

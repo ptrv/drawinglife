@@ -105,17 +105,17 @@ void DrawingLifeApp::setup()
 	// -----------------------------------------------------------------------------
 	// Fonts.
 	// -----------------------------------------------------------------------------
-	m_fontTitle.loadFont(m_settings->getFontTitleName(),
-						 m_settings->getFontTitleSize());
+    m_fontTitle.loadFont(m_settings->getFontName("title"),
+                         m_settings->getFontSize("title"));
 
-    m_fontAuthor.loadFont(m_settings->getFontAuthorName(),
-                          m_settings->getFontAuthorSize());
+    m_fontAuthor.loadFont(m_settings->getFontName("author"),
+                          m_settings->getFontSize("author"));
 
-    m_fontText.loadFont(m_settings->getFontTextName(),
-                        m_settings->getFontTextSize());
+    m_fontText.loadFont(m_settings->getFontName("text"),
+                        m_settings->getFontSize("text"));
 
-    m_fontInfo.loadFont(m_settings->getFontInfoName(),
-                        m_settings->getFontInfoSize());
+    m_fontInfo.loadFont(m_settings->getFontName("info"),
+                        m_settings->getFontSize("info"));
 
     // -----------------------------------------------------------------------------
 	// Settings.

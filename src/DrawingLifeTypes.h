@@ -139,9 +139,6 @@ typedef std::vector< std::vector<UtmPoint> > UtmDataVec;
 typedef std::vector<GpsSegment> GpsSegmentVec;
 typedef std::vector<GpsPoint> GpsPointVec;
 
-typedef boost::tuple<std::string,std::string,int> DrawingLifeFont;
-typedef std::vector<DrawingLifeFont> DrawingLifeFontVec;
-
 //---------------------------------------------------------------------------
 
 #endif // _DRAWINGLIFETYPES_H_
