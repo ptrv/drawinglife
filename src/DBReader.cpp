@@ -62,7 +62,7 @@ bool DBReader::setupDbConnection()
 void DBReader::closeDbConnection()
 {
 	try {
-		m_dbconn->close();
+        m_dbconn->close();
         m_dbconn.reset();
 	}
 	CATCHDBERRORS
@@ -72,7 +72,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 {
 	bool result = false;
 	bool queryFirstOk = false;
-	std::stringstream queryMinMax;
+    stringstream queryMinMax;
 	try {
 		sqlite3_command cmd(*m_dbconn, query.c_str());
 		sqlite3_reader reader=cmd.executereader();
@@ -80,50 +80,29 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		//DBG_VAL(query);
 
 		int lastSegment = -1;
-		std::string user = "";
-		GpsSegment gpsSeg;
+        string user = "";
+        GpsSegment gpsSeg;
         GpsPointVec gpsPointVec;
         GpsSegmentVec gpsSegmentVec;
 
 
-		// -----------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 		// Get all data from query.
-		// -----------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 		while(reader.read())
 		{
 			GpsPoint gpsPoint;
-			if(m_useSpeed)
-            {
-                gpsPoint.setGpsPoint(reader.getint(0),
-                                     reader.getdouble(1),
-                                     reader.getdouble(2),
-                                     reader.getdouble(4),
-                                     reader.getstring(3),
-                                     reader.getstring(7),
-                                     reader.getdouble(8));
-            }
-            else
-            {
-                gpsPoint.setGpsPoint(reader.getint(0),
-                                     reader.getdouble(1),
-                                     reader.getdouble(2),
-                                     reader.getdouble(4),
-                                     reader.getstring(3),
-                                     reader.getstring(7),
-                                     0.0);
-            }
+            int id = reader.getint(0);
+            double lat = reader.getdouble(1);
+            double lon = reader.getdouble(2);
+            double ele = reader.getdouble(4);
+            string timeStamp = reader.getstring(3);
+            string location = reader.getstring(7);
+            double speed = m_useSpeed ? reader.getdouble(8) : 0.0;
 			int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
 
-			// for logging
-//			ofLog(OF_LOG_NOTICE, "userid: %d, lat: %lf, lon: %lf, ele: %lf, time: %s, segment: %d, user: %d",
-//				  reader.getint(0),
-//				  reader.getdouble(1),
-//				  reader.getdouble(2),
-//				  reader.getdouble(3),
-//				  reader.getstring(4).c_str(),
-//				  currentSegment,
-//				  user);
+            gpsPoint.setData(id, lat, lon, ele, timeStamp, location, speed);
 
 			if (currentSegment != lastSegment)
 			{
@@ -131,7 +110,6 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 				if (lastSegment == -1)
 				{
 					lastSegment = currentSegment;
-					gpsPointVec.push_back(gpsPoint);
 				}
 				else
 				{
@@ -139,13 +117,9 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 					gpsSegmentVec.push_back(gpsSeg);
 					lastSegment = currentSegment;
 					gpsPointVec.clear();
-					gpsPointVec.push_back(gpsPoint);
 				}
 			}
-			else
-			{
-				gpsPointVec.push_back(gpsPoint);
-			}
+            gpsPointVec.push_back(gpsPoint);
 		}
 		queryFirstOk = true;
 		// -----------------------------------------------------------------------------
@@ -160,7 +134,8 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		size_t posE = query.find(" ORDER");
 
 //        queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
-        queryMinMax << "SELECT min(x(a.geom)), max(x(a.geom)), min(y(a.geom)), max(y(a.geom)) ";
+        queryMinMax << "SELECT min(x(a.geom)), max(x(a.geom)), "
+                    << "min(y(a.geom)), max(y(a.geom)) ";
 		// Retrieve select conditions from original database query.
 		queryMinMax << query.substr(posS, (posE - posS));
 
@@ -188,30 +163,18 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 const std::string DBReader::getBasicQueryString()
 {
     // This is the part of the query string that all queries have common.
-    std::string query;
+    stringstream query;
 
-    if(m_useSpeed)
-    {
-        query =	"SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
-                "a.utctimestamp AS time, a.ele AS elevation,"\
-                "a.trkseg_id AS segment, b.username AS name, "\
-                "c.city AS city "\
-                "a.speed AS speed "\
-                "FROM trackpoints AS a "\
-                "JOIN users AS b ON (a.user_uid = b.user_uid) "\
-                "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
-    }
-    else
-    {
-        query =	"SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"\
-                "a.utctimestamp AS time, a.ele AS elevation,"\
-                "a.trkseg_id AS segment, b.username AS name, "\
-                "c.city AS city "\
-                "FROM trackpoints AS a "\
-                "JOIN users AS b ON (a.user_uid = b.user_uid) "\
-                "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
-    }
-    return query;
+    query << "SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"
+          << "a.utctimestamp AS time, a.ele AS elevation,"
+          << "a.trkseg_id AS segment, b.username AS name, "
+          << "c.city AS city "
+          << (m_useSpeed ? "a.speed AS speed " : "")
+          << "FROM trackpoints AS a "
+          << "JOIN users AS b ON (a.user_uid = b.user_uid) "
+          << "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
+
+    return query.str();
 }
 
 bool DBReader::getGpsDataDay(GpsData& gpsData,
@@ -219,7 +182,7 @@ bool DBReader::getGpsDataDay(GpsData& gpsData,
                              int year, int month, int day)
 {
 	bool result = false;
-	std::stringstream query;
+    std::stringstream query;
 	query << getBasicQueryString();
 	query << "WHERE b.username = '";
 	query << userName;

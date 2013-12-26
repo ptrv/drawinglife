@@ -29,9 +29,9 @@ public:
 	m_speed(0.0),
 	m_timestamp(""),
 	m_location("")
-	{};
+    {}
 
-	~GpsPoint(){};
+    ~GpsPoint(){}
 
     /**
     * \brief Set values for a GpsPoint.
@@ -41,14 +41,10 @@ public:
     * \param timestamp
     * \param location
     */
-	void setGpsPoint(int id,
-                     double latitude,
-					 double longitude,
-					 double elevation,
-					 const std::string& timestamp,
-					 const std::string& location,
-					 double speed)
-	{
+    void setData(int id, double latitude, double longitude, double elevation,
+                 const std::string& timestamp, const std::string& location,
+                 double speed)
+    {
 		m_gpsPointId = id;
 		m_latitude = latitude;
 		m_longitude = longitude;
