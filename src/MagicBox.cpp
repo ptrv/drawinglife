@@ -271,24 +271,43 @@ void MagicBox::setBoxes()
                                   m_currentSize - (2 * m_padding));
     }
 }
-void MagicBox::goUp(const double val)
+
+static const double SIZE_ZOOM_FACTOR = 4.0;
+
+void MagicBox::zoom(Zoom z)
 {
-    m_centerUtm.y += val;
-    setBoxes();
+    double val = getSize() / SIZE_ZOOM_FACTOR;
+    if (z == ZOOM_IN)
+    {
+        val *= -1;
+    }
+    addToBoxSize(val);
 }
-void MagicBox::goDown(const double val)
+
+void MagicBox::move(Direction d)
 {
-    m_centerUtm.y -= val;
-    setBoxes();
+    double val = getSize() / SIZE_ZOOM_FACTOR;
+    move(d, val);
 }
-void MagicBox::goLeft(const double val)
+
+void MagicBox::move(Direction d, const double val)
 {
-    m_centerUtm.x -= val;
-    setBoxes();
-}
-void MagicBox::goRight(const double val)
-{
-    m_centerUtm.x += val;
+    switch (d) {
+    case UP:
+        m_centerUtm.y += val;
+        break;
+    case DOWN:
+        m_centerUtm.y -= val;
+        break;
+    case RIGHT:
+        m_centerUtm.x += val;
+        break;
+    case LEFT:
+        m_centerUtm.x -= val;
+        break;
+    default:
+        break;
+    }
     setBoxes();
 }
 

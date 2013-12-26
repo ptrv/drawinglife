@@ -1101,58 +1101,57 @@ void DrawingLifeApp::keyPressed  (int key)
     case '+':
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].addToBoxSize(-500.0);
-
+            m_magicBoxes[i].zoom(MagicBox::ZOOM_IN);
         }
         if(m_multiMode)
-            m_magicBox->addToBoxSize(-500.0);
+            m_magicBox->zoom(MagicBox::ZOOM_IN);
         break;
     case '-':
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].addToBoxSize(500.0);
+            m_magicBoxes[i].zoom(MagicBox::ZOOM_OUT);
         }
         if(m_multiMode)
-            m_magicBox->addToBoxSize(500.0);
+            m_magicBox->zoom(MagicBox::ZOOM_OUT);
         break;
     case OF_KEY_UP:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].goUp(500.0);
+            m_magicBoxes[i].move(MagicBox::UP);
         }
         if(m_multiMode)
-            m_magicBox->goUp(500.0);
+            m_magicBox->move(MagicBox::UP);
         break;
     case OF_KEY_DOWN:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].goDown(500.0);
+            m_magicBoxes[i].move(MagicBox::DOWN);
         }
         if(m_multiMode)
-            m_magicBox->goDown(500.0);
+            m_magicBox->move(MagicBox::DOWN);
         break;
        break;
     case OF_KEY_RIGHT:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].goRight(500.0);
+            m_magicBoxes[i].move(MagicBox::RIGHT);
         }
         if(m_multiMode)
-            m_magicBox->goRight(500.0);
+            m_magicBox->move(MagicBox::RIGHT);
         break;
     case OF_KEY_LEFT:
         for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].goLeft(500.0);
+            m_magicBoxes[i].move(MagicBox::LEFT);
         }
         if(m_multiMode)
-            m_magicBox->goLeft(500.0);
+            m_magicBox->move(MagicBox::LEFT);
 
         break;
-    case 32:
+    case ' ':
         if(m_interactiveMode)
         {
-            for (unsigned int i=0; i < m_walks.size();++i)
+            for (unsigned int i=0; i < m_walks.size(); ++i)
             {
                 m_walks[i].updateToNextSegment();
             }
@@ -1162,7 +1161,7 @@ void DrawingLifeApp::keyPressed  (int key)
             m_pause = !m_pause;
         }
         break;
-    case 8:
+    case OF_KEY_BACKSPACE:
         if(m_interactiveMode)
         {
             for (unsigned int i=0; i < m_walks.size();++i)

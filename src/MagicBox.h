@@ -11,6 +11,16 @@ class MagicBox
 {
 public:
 
+    enum Direction
+    {
+        UP, DOWN, RIGHT, LEFT
+    };
+
+    enum Zoom
+    {
+        ZOOM_IN, ZOOM_OUT
+    };
+
     MagicBox(const AppSettings& settings, double size, double padding);
     ~MagicBox();
 
@@ -41,10 +51,9 @@ public:
 
     void toggleZoomLevel(unsigned int zoomLevel);
 
-    void goUp(double val);
-    void goDown(double val);
-    void goLeft(double val);
-    void goRight(double val);
+    void zoom(Zoom z);
+    void move(Direction d);
+    void move(Direction d, double val);
 
 private:
 
