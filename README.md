@@ -8,4 +8,4 @@ GPS data.
 Some of the project's outcome can be viewed
 [here](http://vimeo.com/36858805) and [here](http://vimeo.com/21772894)
 
-We are starting to gather documentation on the wiki [here](wiki/)
+We are starting to gather documentation on the wiki [here](drawinglife/wiki/)
