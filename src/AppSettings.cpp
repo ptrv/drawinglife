@@ -508,7 +508,7 @@ bool AppSettings::loadJSON()
         //----------------------------------------------------------------------
         // animation
         json = jsonRoot["animation"];
-        m_walkLength = JsonHelper::getInt(json, "walklength", 10000);
+        m_walkLength = JsonHelper::getInt(json, "path_length", 10000);
         m_drawSpeed = JsonHelper::getDouble(json, "speed", 1.0);
         m_frameRate = JsonHelper::getInt(json, "framerate", 30);
 
