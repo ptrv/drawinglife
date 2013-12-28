@@ -130,10 +130,8 @@ private:
 	double m_zoomZ;
 	//---------------------------------------------------------------------------
 	bool m_startScreenMode;
-	ofTrueTypeFont m_fontTitle;
-	ofTrueTypeFont m_fontAuthor;
-	ofTrueTypeFont m_fontText;
-	ofTrueTypeFont m_fontInfo;
+
+    std::map<std::string, ofTrueTypeFont> m_fonts;
     // -----------------------------------------------------------------------------
     unsigned int m_numPerson;
     StringVec m_names;

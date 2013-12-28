@@ -139,6 +139,8 @@ typedef std::vector< std::vector<UtmPoint> > UtmDataVec;
 typedef std::vector<GpsSegment> GpsSegmentVec;
 typedef std::vector<GpsPoint> GpsPointVec;
 
+typedef std::map<std::string, std::pair<std::string, int> > DrawingLifeFontMap;
+
 //---------------------------------------------------------------------------
 
 #endif // _DRAWINGLIFETYPES_H_

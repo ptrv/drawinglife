@@ -102,20 +102,22 @@ void DrawingLifeApp::setup()
             break;
     }
 
-	// -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 	// Fonts.
-	// -----------------------------------------------------------------------------
-    m_fontTitle.loadFont(m_settings->getFontName("title"),
-                         m_settings->getFontSize("title"));
+    // -------------------------------------------------------------------------
 
-    m_fontAuthor.loadFont(m_settings->getFontName("author"),
-                          m_settings->getFontSize("author"));
-
-    m_fontText.loadFont(m_settings->getFontName("text"),
-                        m_settings->getFontSize("text"));
-
-    m_fontInfo.loadFont(m_settings->getFontName("info"),
-                        m_settings->getFontSize("info"));
+    DrawingLifeFontMap::const_iterator it = m_settings->getFonts().begin();
+    DrawingLifeFontMap::const_iterator itEnd = m_settings->getFonts().end();
+    for (; it != itEnd; ++it)
+    {
+        string fontId = it->first;
+        const pair<string, int>& f = it->second;
+        string fontName = f.first;
+        int fontSize = f.second;
+        ofTrueTypeFont font;
+        font.loadFont(fontName, fontSize);
+        m_fonts[fontId] = font;
+    }
 
     // -----------------------------------------------------------------------------
 	// Settings.
@@ -561,9 +563,9 @@ void DrawingLifeApp::draw()
                 std::string infoText = m_timeline->getCurrentTime();
 //                if(m_pause)
 //                    infoText.append(" (stopped)");
-                m_fontInfo.drawString(infoText,
-                                      m_viewPadding[0],
-                                      m_viewYOffset[0] + 10);
+                m_fonts["info"].drawString(infoText,
+                                           m_viewPadding[0],
+                                           m_viewYOffset[0] + 10);
 
             }
 
@@ -588,7 +590,7 @@ void DrawingLifeApp::draw()
 //                        infoText.append(" (stopped)");
                     int infoX = m_viewPadding[i] + (ofGetWidth() / m_numPerson) * i;
                     int infoY = m_viewYOffset[i] + 10;
-                    m_fontInfo.drawString(infoText, infoX, infoY);
+                    m_fonts["info"].drawString(infoText, infoX, infoY);
                 }
 
                 // -----------------------------------------------------------------------------
@@ -659,10 +661,10 @@ void DrawingLifeApp::drawStartScreen()
     std::string title = APP_NAME_STR;
     title += " ";
     title += APP_VERSION_STR;
-    m_fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
+    m_fonts["title"].drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
 
-    m_fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
-    m_fontAuthor.drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
+    m_fonts["author"].drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
+    m_fonts["author"].drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
 
 //    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
 }
