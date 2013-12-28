@@ -458,7 +458,7 @@ void DrawingLifeApp::update()
                 if(m_timeline->isFirst())
                 {
 //                            std::cout << "First timeline object!" << std::endl;
-                    for(unsigned int i = 0; i < m_walks.size(); ++i)
+                    for(size_t i = 0; i < m_walks.size(); ++i)
                     {
                         m_walks[i].reset();
                     }
@@ -1078,7 +1078,7 @@ void DrawingLifeApp::keyPressed  (int key)
 //        loadGpsDataCity(m_names, "Banff");
 //        break;
     case '+':
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i].zoom(MagicBox::ZOOM_IN);
         }
@@ -1086,7 +1086,7 @@ void DrawingLifeApp::keyPressed  (int key)
             m_magicBox->zoom(MagicBox::ZOOM_IN);
         break;
     case '-':
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i].zoom(MagicBox::ZOOM_OUT);
         }
@@ -1094,7 +1094,7 @@ void DrawingLifeApp::keyPressed  (int key)
             m_magicBox->zoom(MagicBox::ZOOM_OUT);
         break;
     case OF_KEY_UP:
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i].move(MagicBox::UP);
         }
@@ -1102,7 +1102,7 @@ void DrawingLifeApp::keyPressed  (int key)
             m_magicBox->move(MagicBox::UP);
         break;
     case OF_KEY_DOWN:
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i].move(MagicBox::DOWN);
         }
@@ -1111,7 +1111,7 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
        break;
     case OF_KEY_RIGHT:
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i].move(MagicBox::RIGHT);
         }
@@ -1119,7 +1119,7 @@ void DrawingLifeApp::keyPressed  (int key)
             m_magicBox->move(MagicBox::RIGHT);
         break;
     case OF_KEY_LEFT:
-        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i].move(MagicBox::LEFT);
         }
@@ -1130,7 +1130,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case ' ':
         if(m_interactiveMode)
         {
-            for (unsigned int i=0; i < m_walks.size(); ++i)
+            for (size_t i = 0; i < m_walks.size(); ++i)
             {
                 m_walks[i].updateToNextSegment();
             }
@@ -1143,7 +1143,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_BACKSPACE:
         if(m_interactiveMode)
         {
-            for (unsigned int i=0; i < m_walks.size();++i)
+            for (size_t i = 0; i < m_walks.size(); ++i)
             {
                 m_walks[i].updateToPreviousSegment();
             }
@@ -1152,7 +1152,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case 't':
         if(m_interactiveMode)
         {
-            for (unsigned int i=0; i < m_walks.size();++i)
+            for (size_t i = 0; i < m_walks.size(); ++i)
             {
                 m_walks[i].toggleTraced();
             }
