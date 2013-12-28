@@ -38,15 +38,15 @@ public:
 	 * \param utmY UTM Y value to scale.
 	 * \return scaled UTM Y value.
 	 */
-   	double getScaledUtmY(double utmY);
+    double getScaledUtmY(double utmY) const;
     /**
 	 * \brief Scale UTM X to application window size.
 	 * \param utmX UTM X value to scale.
 	 * \return scaled UTM X value.
 	 */
-	double getScaledUtmX(double utmX);
+    double getScaledUtmX(double utmX) const;
 
-    UtmPoint getScaledUtm(const UtmPoint& normalizedUtmPoint);
+    UtmPoint getScaledUtm(const UtmPoint& normalizedUtmPoint) const;
 
     /**
 	 * \brief Draw function for GpsData.

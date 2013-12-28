@@ -434,18 +434,18 @@ double Walk::getCurrentUtmY()
 // -----------------------------------------------------------------------------
 // Scale to screen
 // -----------------------------------------------------------------------------
-double Walk::getScaledUtmX(const double normalizedUtmX)
+double Walk::getScaledUtmX(const double normalizedUtmX) const
 {
     return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
 }
 
-double Walk::getScaledUtmY(const double normalizedUtmY)
+double Walk::getScaledUtmY(const double normalizedUtmY) const
 {
     // Flip y coordinates ??
     return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
 }
 
-UtmPoint Walk::getScaledUtm(const UtmPoint& normalizedUtmPoint)
+UtmPoint Walk::getScaledUtm(const UtmPoint& normalizedUtmPoint) const
 {
     return UtmPoint(getScaledUtmX(normalizedUtmPoint.x),
                     getScaledUtmY(normalizedUtmPoint.y));

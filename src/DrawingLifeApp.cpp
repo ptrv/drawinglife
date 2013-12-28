@@ -8,6 +8,9 @@
 #include <limits>
 #include <fstream>
 
+#include "DataLoader.h"
+#include "ViewHelper.h"
+
 #if defined (WIN32)
 #undef max
 #endif
@@ -21,9 +24,6 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_isDebugMode(false),
     m_isAnimation(true),
     m_showFps(false),
-    m_zoomX(0.0),
-    m_zoomY(0.0),
-    m_zoomZ(0.0),
     m_startScreenMode(false),
     m_numPerson(0),
     m_timeline(0),
@@ -36,10 +36,6 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
 //	m_frameRate(60),
 //	m_magicBoxSize(3000.0),
 //	m_magicBoxPadding(500.0),
-	timeNow(0.0f),
-	timeThen(0.0f),
-	timeSum(0.0),
-	fpsToShow(0.0),
 //	m_maxPointsToDraw(10000),
 	m_imageAsCurrentPoint(false),
 	m_hideCursor(false),
@@ -132,10 +128,10 @@ void DrawingLifeApp::setup()
 
     for(size_t i = 0; i < m_numPerson; ++i)
     {
-        m_viewXOffset.push_back(0);
-        m_viewYOffset.push_back(0);
-        m_viewMinDimension.push_back(0);
-        m_viewPadding.push_back(15);
+        m_viewAspectRatioData.offsetX.push_back(0);
+        m_viewAspectRatioData.offsetY.push_back(0);
+        m_viewAspectRatioData.minDimension.push_back(0);
+        m_viewAspectRatioData.padding.push_back(15);
     }
 
     m_dbPath = m_settings->getDatabasePath();
@@ -179,9 +175,9 @@ void DrawingLifeApp::setup()
     DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
 
-    this->setViewAspectRatio();
+    ViewHelper::setViewAspectRatio(*this);
     // -----------------------------------------------------------------------------
-    loadCurrentPointImages();
+    m_imageAsCurrentPoint = DataLoader::loadCurrentPointImages(*this);
 
     m_timeline.reset(new Timeline());
 
@@ -199,15 +195,17 @@ void DrawingLifeApp::setup()
 			// TODO 101028_1701_TP: Not implemented yet.
 			break;
             case DBReader::DB_QUERY_CITY:
-            gpsDataAreLoaded = loadGpsDataCity(m_names, m_dbQueryData.city);
+            gpsDataAreLoaded = DataLoader::loadGpsDataCity(*this, m_names,
+                                                           m_dbQueryData.city);
             break;
             case DBReader::DB_QUERY_YEAR:
-            gpsDataAreLoaded = loadGpsDataYearRange(m_names,
-                                                    m_dbQueryData.yearStart,
-                                                    m_dbQueryData.yearEnd);
+            gpsDataAreLoaded = DataLoader::loadGpsDataYearRange(*this, m_names,
+                                                                m_dbQueryData.yearStart,
+                                                                m_dbQueryData.yearEnd);
             break;
             case DBReader::DB_QUERY_SQLFILE:
-            gpsDataAreLoaded = loadGpsDataWithSqlFile(m_sqlFilePaths);
+            gpsDataAreLoaded = DataLoader::loadGpsDataWithSqlFile(*this,
+                                                                  m_sqlFilePaths);
 			break;
         }
         if(gpsDataAreLoaded)
@@ -236,10 +234,10 @@ void DrawingLifeApp::setup()
                     lImg = new LocationImage(m_magicBoxes[0], locImgData);
                 }
 
-                lImg->setViewBounds(m_viewMinDimension[0],
-                                    m_viewPadding[0],
-                                    m_viewXOffset[0],
-                                    m_viewYOffset[0]);
+                lImg->setViewBounds(m_viewAspectRatioData.minDimension[0],
+                                    m_viewAspectRatioData.padding[0],
+                                    m_viewAspectRatioData.offsetX[0],
+                                    m_viewAspectRatioData.offsetY[0]);
 
                 m_locationImgs.push_back(lImg);
             }
@@ -514,16 +512,15 @@ void DrawingLifeApp::shaderEnd()
 }
 
 //--------------------------------------------------------------
-unsigned currentFrame = 0;
 void DrawingLifeApp::draw()
 {
     if (m_startScreenMode)
     {
-        drawStartScreen();
+        ViewHelper::drawStartScreen(m_fonts["title"], m_fonts["author"]);
     }
     else
     {
-        fillViewAreaUTM();
+        ViewHelper::fillViewAreaUTM(*this);
 		// -----------------------------------------------------------------------------
 		// Draw Gps data as an animation.
 		// -----------------------------------------------------------------------------
@@ -546,8 +543,8 @@ void DrawingLifeApp::draw()
 //                if(m_pause)
 //                    infoText.append(" (stopped)");
                 m_fonts["info"].drawString(infoText,
-                                           m_viewPadding[0],
-                                           m_viewYOffset[0] + 10);
+                                           m_viewAspectRatioData.padding[0],
+                                           m_viewAspectRatioData.offsetY[0] + 10);
 
             }
 
@@ -570,8 +567,9 @@ void DrawingLifeApp::draw()
                     std::string infoText = walk.getCurrentGpsInfo();
 //                    if(m_pause)
 //                        infoText.append(" (stopped)");
-                    int infoX = m_viewPadding[i] + (ofGetWidth() / m_numPerson) * i;
-                    int infoY = m_viewYOffset[i] + 10;
+                    int infoX = m_viewAspectRatioData.padding[i]
+                            + (ofGetWidth() / m_numPerson) * i;
+                    int infoY = m_viewAspectRatioData.offsetY[i] + 10;
                     m_fonts["info"].drawString(infoText, infoX, infoY);
                 }
 
@@ -614,11 +612,17 @@ void DrawingLifeApp::draw()
             }
         }
 
-        if(m_showFps)
-            fpsDisplay();
+        if (m_showFps)
+        {
+            ViewHelper::drawFPS();
+        }
 
         if(m_showKeyCommands)
-            showKeyCommands();
+        {
+            ofColor c(255, 255, 255, m_settings->getAlphaLegend());
+            ViewHelper::drawKeyCommands(c);
+        }
+
         if(m_timeline->isLast())
         {
 
@@ -627,337 +631,18 @@ void DrawingLifeApp::draw()
 
     if(m_settings->getIsGrabScreen())
     {
-        static char fileNameStr[255];
-        sprintf(fileNameStr, "output/output_%.4u.png", currentFrame);
-        ofSaveScreen(fileNameStr);
-        ++currentFrame;
+        Utils::grabScreen();
     }
 }
+
 // -----------------------------------------------------------------------------
-// Start screen
-// -----------------------------------------------------------------------------
-void DrawingLifeApp::drawStartScreen()
-{
-    ofSetColor(255,255,255);
-
-    std::string title = APP_NAME_STR;
-    title += " ";
-    title += APP_VERSION_STR;
-    m_fonts["title"].drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
-
-    m_fonts["author"].drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
-    m_fonts["author"].drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
-
-//    m_fontText.drawString("Press key 0 - 9 to choose a life map.", ofGetWidth()/2 - 300, ofGetHeight()/2 + 250);
-}
-
-void DrawingLifeApp::showKeyCommands()
-{
-    ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
-    std::stringstream stream;
-
-    stream << "a           : draw all gps points\n";
-    stream << "d           : debug mode\n";
-    stream << "f           : toggle fullscreen\n";
-    stream << "p           : show fps\n";
-    stream << "k           : show key commands\n";
-    stream << "+           : zoom in\n";
-    stream << "-           : zoom out\n";
-    stream << "left arrow  : move view left\n";
-    stream << "right arrow : move view right\n";
-    stream << "up arrow    : move view up\n";
-    stream << "down arrow  : move view down\n";
-    stream << "1 - 4       : set zoom level 1 - 4\n";
-    stream << "0 - 9       : load gps data with a city (when querying city)\n";
-    stream << "t           : toggle traced drawing (interactive mode)\n";
-    stream << "space       : go to next segment (interactive mode)\n";
-    stream << "backspace   : go to previous segment (interactive mode)\n";
-
-   ofDrawBitmapString(stream.str(), 30, ofGetHeight() - 320);
-}
-// -----------------------------------------------------------------------------
-// Retrieving new GpsData
-// -----------------------------------------------------------------------------
-void DrawingLifeApp::prepareGpsData()
+void DrawingLifeApp::resetData()
 {
     m_startScreenMode = false;
 
     m_gpsDatas.clear();
     m_walks.clear();
     m_magicBoxes.clear();
-}
-
-// -----------------------------------------------------------------------------
-
-void DrawingLifeApp::processGpsData()
-{
-    ofLog(OF_LOG_VERBOSE, "------------------------\n");
-    if (m_gpsDatas.size() > 0)
-    {
-        m_timeline->setTimeline(m_gpsDatas);
-//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
-//        {
-//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
-//                                                    m_timeline->getTimeline()[i].id,
-//                                                    (long)(m_timeline->getTimeline()[i].secs));
-//        }
-        this->calculateGlobalMinMaxValues();
-
-        Walk::setTrackAlpha(m_settings->getAlphaDot());
-
-        Walk::setDotSize(m_settings->getDotSize());
-
-        for(size_t i = 0; i < m_walks.size(); ++i)
-        {
-            Walk& walk = m_walks[i];
-//            m_walks[i]->setDotColors();
-
-            if(!m_settings->isBoundingBoxAuto() && !m_multiMode)
-            {
-                //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
-                double bbLat = m_settings->getBoundingBoxLat();
-                double bbLon = m_settings->getBoundingBoxLon();
-                walk.setMagicBoxStatic(&m_magicBoxes[i], bbLat, bbLon);
-            }
-            else
-            {
-                if(m_multiMode)
-                {
-                    double bbLat = m_settings->getBoundingBoxLat();
-                    double bbLon = m_settings->getBoundingBoxLon();
-                    walk.setMagicBoxStatic(m_magicBox.get(), bbLat, bbLon);
-//                    walk.setMagicBox(m_magicBox);
-                }
-                else
-                {
-                    walk.setMagicBox(&m_magicBoxes[i]);
-                }
-            }
-
-            if (m_imageAsCurrentPoint && m_images.size() >= m_numPerson)
-            {
-                walk.setCurrentPointImage(m_images[i], m_imageList[i].alpha);
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-bool DrawingLifeApp::loadGpsDataCity(const StringVec& names,
-                                     const std::string& city)
-{
-    std::vector<tFuncLoadGpsData> funcVec;
-    for (size_t i = 0; i < m_numPerson; ++i)
-    {
-        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataCity, _1, _2,
-                                         names[i], city);
-        funcVec.push_back(f);
-    }
-
-    return loadGpsData(funcVec);
-}
-
-// -----------------------------------------------------------------------------
-
-bool DrawingLifeApp::loadGpsDataYearRange(const StringVec& names,
-                                          int yearStart, int yearEnd)
-{
-    std::vector<tFuncLoadGpsData> funcVec;
-
-    for (size_t i = 0; i < m_numPerson; ++i)
-    {
-        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataYearRange, _1, _2,
-                                         names[i], yearStart, yearEnd);
-        funcVec.push_back(f);
-    }
-
-    return loadGpsData(funcVec);
-}
-
-// -----------------------------------------------------------------------------
-
-bool DrawingLifeApp::loadGpsDataWithSqlFile(const StringVec& sqlFilePaths)
-{
-    std::vector<tFuncLoadGpsData> funcVec;
-    for (size_t i = 0; i < m_numPerson; ++i)
-    {
-        std::ifstream sqlFile(ofToDataPath(sqlFilePaths[i]).c_str(),
-                              std::ifstream::in);
-        std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile),
-                                                std::istreambuf_iterator<char>());
-
-//        DBG_VAL(sqlFilePaths[i]);
-//        DBG_VAL(sqlFileSource);
-
-        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2,
-                                         sqlFileSource);
-        funcVec.push_back(f);
-    }
-
-    return loadGpsData(funcVec);
-}
-
-// -----------------------------------------------------------------------------
-
-bool DrawingLifeApp::loadGpsData(const std::vector<tFuncLoadGpsData>& funcVec)
-{
-    prepareGpsData();
-
-    bool dbOk = false;
-
-    if(m_multiMode)
-    {
-        m_magicBox.reset(new MagicBox(*m_settings,
-                                      m_settings->getBoundingBoxSize(),
-                                      m_settings->getBoundingBoxPadding()));
-    }
-    // get GpsData from database
-    for(size_t i = 0; i < m_numPerson; ++i)
-    {
-        GpsData* gpsData = new GpsData(*m_settings);
-        m_gpsDatas.push_back(gpsData);
-
-        if(!m_multiMode)
-        {
-            m_magicBoxes.push_back(new MagicBox(*m_settings,
-                                                m_settings->getBoundingBoxSize(),
-                                                m_settings->getBoundingBoxPadding()));
-        }
-
-        Walk* walk = new Walk(*m_settings,
-                              m_settings->getNameColors()[i]);
-        m_walks.push_back(walk);
-
-        walk->setViewBounds(ofGetWidth(),
-                            ofGetHeight(),
-                            m_viewXOffset[i],
-                            m_viewYOffset[i],
-                            m_viewMinDimension[i],
-                            m_viewPadding[i]);
-        walk->reset();
-
-        DBReaderPtr dbReader(new DBReader(m_dbPath, m_settings->useSpeed()));
-        if (dbReader->setupDbConnection())
-        {
-            // -----------------------------------------------------------------------------
-            // DB query
-            tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
-            dbOk = getGpsDataFunc(dbReader.get(), *gpsData);
-
-            if(dbOk)
-            {
-                ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
-                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
-                      gpsData->getSegments().size(),
-                      gpsData->getTotalGpsPoints());
-
-                walk->setGpsData(gpsData);
-            }
-            else
-            {
-                ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
-                break;
-            }
-            dbReader->closeDbConnection();
-        }
-        // -----------------------------------------------------------------------------
-
-        ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-          gpsData->getMinUtmX(),
-          gpsData->getMaxUtmX(),
-          gpsData->getMinUtmY(),
-          gpsData->getMaxUtmY());
-        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf",
-              gpsData->getProjectionCentralMeridian());
-    }
-
-    processGpsData();
-
-    return dbOk;
-
-}
-
-// -----------------------------------------------------------------------------
-// View
-// -----------------------------------------------------------------------------
-void DrawingLifeApp::setViewAspectRatio()
-{
-    double width;
-    double height;
-    if(m_multiMode)
-    {
-        width = ofGetWidth();
-    }
-    else
-    {
-        width = ofGetWidth() / (int)m_numPerson;
-    }
-
-    height = ofGetHeight();
-
-    for(size_t i = 0; i < m_numPerson; ++i)
-    {
-        // Reset for view padding.
-        m_viewXOffset[i] = 0;
-        m_viewYOffset[i] = 0;
-
-//        if(false)
-//        {
-//            m_viewMinDimension[personIndex] = height;
-//
-//            m_viewXOffset[personIndex] += m_viewPadding[personIndex];
-//            m_viewYOffset[personIndex] += m_viewPadding[personIndex];
-//        }
-//        else
-//        {
-        // Set square view area and center.
-        if (height < width)
-        {
-            m_viewMinDimension[i] = height;
-            m_viewXOffset[i] = (width - height) / 2.0;
-        }
-        else if (width < height)
-        {
-            m_viewMinDimension[i] = width;
-            m_viewYOffset[i] = (height - width) / 2.0;
-        }
-        else
-        {
-            m_viewMinDimension[i] = width;
-        }
-
-        // Left and top indentation.
-        m_viewXOffset[i] += m_viewPadding[i];
-        m_viewYOffset[i] += m_viewPadding[i];
-
-        if(!m_multiMode)
-        {
-            m_viewXOffset[i] += width * i;
-        }
-
-//        m_viewYOffset += m_viewPadding;
-    }
-}
-void DrawingLifeApp::fillViewAreaUTM()
-{
-    for(size_t i = 0; i < m_numPerson; ++i)
-    {
-        // Normalized value range from 0 to 1.
-        Walk& walk = m_walks[i];
-        double x = walk.getScaledUtmX(0);
-        double y = walk.getScaledUtmY(0);
-        double w = walk.getScaledUtmX(1) - x;
-        double h = walk.getScaledUtmY(1) - y;
-        ofFill();
-        ofSetColor(m_settings->getColorViewboxR(),
-                   m_settings->getColorViewboxG(),
-                   m_settings->getColorViewboxB());
-        ofRect(x, y, w, h);
-        if(m_multiMode)
-            break;
-
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1208,109 +893,22 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 // -----------------------------------------------------------------------------
 void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 {
-    this->setViewAspectRatio();
+    ViewHelper::setViewAspectRatio(*this);
     for(size_t i = 0; i < m_numPerson; ++i)
     {
 //        if(m_walks[personIndex])
         m_walks[i].setViewBounds(ofGetWidth(),
                                  ofGetHeight(),
-                                 m_viewXOffset[i],
-                                 m_viewYOffset[i],
-                                 m_viewMinDimension[i],
-                                 m_viewPadding[i]);
+                                 m_viewAspectRatioData.offsetX[i],
+                                 m_viewAspectRatioData.offsetY[i],
+                                 m_viewAspectRatioData.minDimension[i],
+                                 m_viewAspectRatioData.padding[i]);
     }
     for(size_t i = 0; i < m_locationImgs.size(); ++i)
     {
-        m_locationImgs[i].setViewBounds(m_viewMinDimension[0],
-                                        m_viewPadding[0],
-                                        m_viewXOffset[0],
-                                        m_viewYOffset[0]);
-    }
-}
-
-void DrawingLifeApp::calculateGlobalMinMaxValues()
-{
-    double minX = numeric_limits<double>::max();
-    double maxX = -numeric_limits<double>::max();
-    double minY = numeric_limits<double>::max();
-    double maxY = -numeric_limits<double>::max();
-    double minLon = numeric_limits<double>::max();
-    double maxLon = -numeric_limits<double>::max();
-    double minLat = numeric_limits<double>::max();
-    double maxLat = -numeric_limits<double>::max();
-    BOOST_FOREACH(const GpsData& gpsData, m_gpsDatas)
-    {
-        if (gpsData.getMinUtmX() < minX) minX = gpsData.getMinUtmX();
-        if (gpsData.getMaxUtmX() > maxX) maxX = gpsData.getMaxUtmX();
-        if (gpsData.getMinUtmY() < minY) minY = gpsData.getMinUtmY();
-        if (gpsData.getMaxUtmY() > maxY) maxY = gpsData.getMaxUtmY();
-        if (gpsData.getMinLon() < minLon) minLon = gpsData.getMinLon();
-        if (gpsData.getMaxLon() > maxLon) maxLon = gpsData.getMaxLon();
-        if (gpsData.getMinLat() < minLat) minLat = gpsData.getMinLon();
-        if (gpsData.getMaxLat() > maxLat) maxLat = gpsData.getMaxLon();
-    }
-
-    bool isRegionOn = m_settings->isRegionsOn();
-    if(isRegionOn)
-    {
-        GpsData::setGlobalValues(minX, maxX, minY, maxY, 0.0);
-    }
-    else
-    {
-        if(m_settings->isMeridianAuto())
-            GpsData::setGlobalValues(minX, maxX, minY, maxY,
-                                     (minLon + (maxLon - minLon)/2));
-        else
-        {
-            double lon0 = 0.0;
-            lon0 = m_settings->getMeridian();
-            GpsData::setGlobalValues(minX, maxX, minY, maxY, lon0);
-        }
-    }
-
-    BOOST_FOREACH(GpsData& gpsData, m_gpsDatas)
-    {
-        gpsData.calculateUtmPointsGlobalLon(isRegionOn);
-        gpsData.normalizeUtmPointsGlobal();
-    }
-}
-
-void DrawingLifeApp::fpsDisplay()
-{
-    timeNow = ofGetElapsedTimef();
-    double diff = timeNow-timeThen;
-    timeThen		= timeNow;
-
-    timeSum += diff;
-    if (timeSum > 0.5)
-    {
-        fpsToShow = 1.0/diff;
-        timeSum = 0.0;
-    }
-
-    ofSetHexColor(0xffffff);
-    std::string str = "FPS: "+ofToString((double)fpsToShow, 1);
-    ofDrawBitmapString(str, 30.0, ofGetHeight()-30 );
-}
-
-void DrawingLifeApp::loadCurrentPointImages()
-{
-    for(size_t i = 0; i < m_imageList.size(); ++i)
-    {
-        ofImage* tmpImg = new ofImage();
-        std::string str = m_imageList[i].path;
-        float width = m_imageList[i].width;
-        float height= m_imageList[i].height;
-
-        if(tmpImg->loadImage(str))
-        {
-            tmpImg->resize(width, height);
-            m_images.push_back(tmpImg);
-        }
-        else
-        {
-            m_imageAsCurrentPoint = false;
-            break;
-        }
+        m_locationImgs[i].setViewBounds(m_viewAspectRatioData.minDimension[0],
+                                        m_viewAspectRatioData.padding[0],
+                                        m_viewAspectRatioData.offsetX[0],
+                                        m_viewAspectRatioData.offsetY[0]);
     }
 }

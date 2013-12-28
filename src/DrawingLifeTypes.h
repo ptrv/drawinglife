@@ -95,6 +95,13 @@ struct GpsRegion
     double maxLon;
 };
 
+struct ViewAspectRatioData
+{
+    std::vector<double> offsetX;
+    std::vector<double> offsetY;
+    std::vector<double> minDimension;
+    std::vector<double> padding;
+};
 
 // -----------------------------------------------------------------------------
 // templated version of openFramworks datatypes.

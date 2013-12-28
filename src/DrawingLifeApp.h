@@ -34,59 +34,36 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
 
-//	static const char* settingsPath;
+    Timeline& getTimeline() const { return *m_timeline.get(); }
+    const AppSettings& getAppSettings() const { return *m_settings.get(); }
+    GpsDataVector& getGpsDataVector() { return m_gpsDatas; }
+    WalkVector& getWalkVector() { return m_walks; }
+    MagicBoxVector& getMagicBoxVector() { return m_magicBoxes; }
+    MagicBox& getMagicBox() { return *m_magicBox.get(); }
+    void setMagicBox(MagicBox* const magicBox) { m_magicBox.reset(magicBox); }
+
+    const std::vector<CurrentImageData>& getCurrentPointImageList() const
+    { return m_imageList; }
+    const boost::ptr_vector<ofImage>& getCurrentPointImages() const
+    { return m_images; }
+
+    bool getIsImageAsCurrentPoint() const { return m_imageAsCurrentPoint; }
+    void setImageAsCurrentPoint(bool isImageAsCurrentPoint)
+    { m_imageAsCurrentPoint = isImageAsCurrentPoint; }
+    void addCurrentPointImage(ofImage* img) { m_images.push_back(img); }
+    void clearCurrentPointImages() { m_images.clear(); }
+
+    void resetData();
+
+    ViewAspectRatioData& getViewAspectRatioData()
+    { return m_viewAspectRatioData; }
+//    void setViewAspectRatioData(const ViewAspectRatioData& v)
+//    { m_viewAspectRatioData = v; }
 
 private:
     //---------------------------------------------------------------------------
     // Functions
     //---------------------------------------------------------------------------
-	void fillViewArea();
-	/**
-	* \brief Draw a square to draw onto.
-	*/
-	void fillViewAreaUTM();
-	/**
-	* \brief
-	* \param names vector with name strings.
-	* \param city string with city name.
-	*/
-    bool loadGpsDataCity(const StringVec& names, const std::string& city);
-	/**
-	* \brief
-	* \param names vector with name strings.
-	* \param yearStart start year for query.
-	* \param yearEnd end year for query.
-	*/
-    bool loadGpsDataYearRange(const StringVec& names,
-                              int yearStart, int yearEnd);
-
-    bool loadGpsDataWithSqlFile(const StringVec& sqlFilePaths);
-
-    typedef boost::function<bool(DBReader*,GpsData&)> tFuncLoadGpsData;
-    bool loadGpsData(const std::vector<tFuncLoadGpsData>& funcVec);
-	/**
-	* \brief Set square view area and center.
-	*/
-	void setViewAspectRatio();
-
-    /**
-    * \brief Draw start screen with app info.
-    */
-	void drawStartScreen();
-
-	void showKeyCommands();
-
-	void calculateGlobalMinMaxValues();
-
-	void loadXmlSettings();
-
-	void fpsDisplay();
-
-	void loadCurrentPointImages();
-
-	void prepareGpsData();
-
-	void processGpsData();
 
 	bool zoomHasChanged();
 	bool zoomHasChangedTime();
@@ -113,21 +90,12 @@ private:
 
 	std::string m_dbPath;
 	//---------------------------------------------------------------------------
-	int maxPoints;
-	//---------------------------------------------------------------------------
-	std::vector<double> m_viewXOffset;
-	std::vector<double> m_viewYOffset;
-	std::vector<double> m_viewMinDimension;
-	std::vector<double> m_viewPadding;
+    ViewAspectRatioData m_viewAspectRatioData;
     //---------------------------------------------------------------------------
 	bool m_isFullscreen;
 	bool m_isDebugMode;
 	bool m_isAnimation;
 	bool m_showFps;
-	//---------------------------------------------------------------------------
-	double m_zoomX;
-	double m_zoomY;
-	double m_zoomZ;
 	//---------------------------------------------------------------------------
 	bool m_startScreenMode;
 
@@ -141,12 +109,7 @@ private:
 
     DBQueryData m_dbQueryData;
 
-    float timeNow, timeThen;
-    double timeSum;
-    float fpsToShow;
-
     std::vector<CurrentImageData> m_imageList;
-//    std::vector<ofImage > m_images;
     boost::ptr_vector<ofImage> m_images;
     bool m_imageAsCurrentPoint;
 
