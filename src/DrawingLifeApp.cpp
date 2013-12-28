@@ -249,11 +249,13 @@ void DrawingLifeApp::setup()
     {
         m_startScreenMode = true;
     }
+
     ofSetFullscreen(m_isFullscreen);
 
-    if(m_hideCursor)
+    if (m_hideCursor)
+    {
         ofHideCursor();
-
+    }
 
     if(m_settings->isSoundActive())
     {
@@ -995,7 +997,7 @@ void DrawingLifeApp::keyPressed  (int key)
 //        {
 //            m_walks[i]->setDotColors();
 //        }
-        break;
+//        break;
 //    case 49:
 //    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //    {
