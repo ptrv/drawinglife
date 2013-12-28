@@ -142,9 +142,9 @@ typedef boost::ptr_vector<GpsData> GpsDataVector;
 typedef boost::ptr_vector<Walk> WalkVector;
 typedef boost::ptr_vector<MagicBox> MagicBoxVector;
 typedef std::vector<UtmPoint> UtmSegment;
-typedef std::vector< std::vector<UtmPoint> > UtmDataVec;
-typedef std::vector<GpsSegment> GpsSegmentVec;
-typedef std::vector<GpsPoint> GpsPointVec;
+typedef std::vector<std::vector<UtmPoint> > UtmDataVector;
+typedef std::vector<GpsSegment> GpsSegmentVector;
+typedef std::vector<GpsPoint> GpsPointVector;
 
 typedef std::map<std::string, std::pair<std::string, int> > DrawingLifeFontMap;
 

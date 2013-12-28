@@ -185,9 +185,11 @@ public:
                                 double maxY,
                                 double lon0);
 
-    const UtmDataVec& getUTMPoints() const { return m_utmPoints; }
-    const UtmDataVec& getNormalizedUTMPoints() const { return m_normalizedUtmPoints; }
-    const UtmDataVec& getNormalizedUTMPointsGlobal() const { return m_normalizedUtmPointsGlobal; }
+    const UtmDataVector& getUTMPoints() const { return m_utmPoints; }
+    const UtmDataVector& getNormalizedUTMPoints() const
+    { return m_normalizedUtmPoints; }
+    const UtmDataVector& getNormalizedUTMPointsGlobal() const
+    { return m_normalizedUtmPointsGlobal; }
 
 
 	// -----------------------------------------------------------------------------
@@ -210,7 +212,7 @@ public:
     */
     void calculateUtmPoints(double lon0);
 
-    const std::vector<GpsDataIndex >& getIndices() const { return m_indices; }
+    const std::vector<GpsDataIndex>& getIndices() const { return m_indices; }
 
 private:
     /**
@@ -218,7 +220,7 @@ private:
     */
 	void normalizeUtmPoints();
 
-    void normalizeUtmPoints(UtmDataVec& utmDataVec);
+    void normalizeUtmPoints(UtmDataVector& utmDataVec);
 
     /**
     * \brief Set range of min/max values to be the same (square).
@@ -257,9 +259,9 @@ private:
 	double m_minUtmY;
 	double m_maxUtmY;
 
-    UtmDataVec m_utmPoints;
-    UtmDataVec m_normalizedUtmPoints;
-    UtmDataVec m_normalizedUtmPointsGlobal;
+    UtmDataVector m_utmPoints;
+    UtmDataVector m_normalizedUtmPoints;
+    UtmDataVector m_normalizedUtmPointsGlobal;
     double m_lon0;
 
     std::vector<GpsDataIndex > m_indices;

@@ -230,8 +230,8 @@ void Walk::draw()
                     //DBG_VAL(utm.speed);
                     if(utm.speed > m_settings.getSpeedThreshold())
                     {
-                        ofColor tmpColor = m_settings.getSpeedColorAbove();
-                        ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
+                        const ofColor tmpColor = m_settings.getSpeedColorAbove();
+                        ofSetColor(tmpColor);
                         if(tmpColor.a == 0.0)
                         {
                             isInBox = false;
@@ -241,8 +241,8 @@ void Walk::draw()
                     }
                     else
                     {
-                        ofColor tmpColor = m_settings.getSpeedColorUnder();
-                        ofSetColor(tmpColor.r, tmpColor.g, tmpColor.b, tmpColor.a);
+                        const ofColor tmpColor = m_settings.getSpeedColorUnder();
+                        ofSetColor(tmpColor);
                         if(tmpColor.a == 0.0)
                         {
                             isInBox = false;
@@ -293,7 +293,7 @@ void Walk::draw()
 			}
             if (!skipDrawing)
 			{
-			    ofSetColor(m_dotColor.r, m_dotColor.g, m_dotColor.b, m_dotColor.a);
+                ofSetColor(m_dotColor);
                 ofCircle(getScaledUtmX(currentDrawablePoint.x),
                          getScaledUtmY(currentDrawablePoint.y),
                          m_dotSize);
@@ -307,7 +307,8 @@ void Walk::draw()
         ofNoFill();
         ofSetColor(255,0,0);
 
-        const ofxRectangle<double>& normalizedBox = m_magicBox->getNormalizedBox();
+        const ofxRectangle<double>& normalizedBox =
+                m_magicBox->getNormalizedBox();
         double x = getScaledUtmX(normalizedBox.getX());
         double y = getScaledUtmY(normalizedBox.getY());
         double w = getScaledUtmX(normalizedBox.getWidth()) - x;
@@ -348,7 +349,8 @@ void Walk::drawAll()
             }
             if (isInBox)
             {
-                const ofxPoint<double>& tmp = m_magicBox->getDrawablePoint(utmPoint);
+                const ofxPoint<double>& tmp =
+                        m_magicBox->getDrawablePoint(utmPoint);
                 glVertex2d(getScaledUtmX(tmp.x),
                            getScaledUtmY(tmp.y));
             }
@@ -383,7 +385,7 @@ int Walk::getCurrentSegmentNum()
 {
     try
     {
-        const GpsSegmentVec& segments = m_gpsData->getSegments();
+        const GpsSegmentVector& segments = m_gpsData->getSegments();
         return segments.at(m_currentGpsSegment).getSegmentNum();
     }
     catch (const std::out_of_range&)
@@ -401,8 +403,9 @@ std::string Walk::getCurrentTimestamp()
 {
     try
     {
-        const GpsSegmentVec& segments = m_gpsData->getSegments();
-        const GpsPointVec& points = segments.at(m_currentGpsSegment).getPoints();
+        const GpsSegmentVector& segments = m_gpsData->getSegments();
+        const GpsPointVector& points =
+                segments.at(m_currentGpsSegment).getPoints();
         return points.at(m_currentGpsPoint).getTimestamp();
     }
     catch (const std::out_of_range&)

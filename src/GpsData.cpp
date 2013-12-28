@@ -103,7 +103,7 @@ double GpsData::getLongitude(const size_t segmentIndex,
 {
     try
     {
-        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        const GpsPointVector& points = m_segments.at(segmentIndex).getPoints();
         return points.at(pointIndex).getLongitude();
     }
     catch (const std::out_of_range&)
@@ -117,7 +117,7 @@ double GpsData::getLatitude(const size_t segmentIndex,
 {
     try
     {
-        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        const GpsPointVector& points = m_segments.at(segmentIndex).getPoints();
         return points.at(pointIndex).getLatitude();
     }
     catch (const std::out_of_range&)
@@ -131,7 +131,7 @@ double GpsData::getElevation(const size_t segmentIndex,
 {
     try
     {
-        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        const GpsPointVector& points = m_segments.at(segmentIndex).getPoints();
         return points.at(pointIndex).getElevation();
     }
     catch (const std::out_of_range&)
@@ -233,7 +233,7 @@ const std::string GpsData::getGpsLocation(const size_t segmentIndex,
 {
     try
     {
-        const GpsPointVec& points = m_segments.at(segmentIndex).getPoints();
+        const GpsPointVector& points = m_segments.at(segmentIndex).getPoints();
         return points.at(pointIndex).getLocation();
     }
     catch (const std::out_of_range&)
@@ -367,7 +367,7 @@ void GpsData::normalizeUtmPointsGlobal()
     normalizeUtmPoints(m_normalizedUtmPointsGlobal);
 }
 
-void GpsData::normalizeUtmPoints(UtmDataVec& utmDataVec)
+void GpsData::normalizeUtmPoints(UtmDataVector& utmDataVec)
 {
     utmDataVec.clear();
     BOOST_FOREACH(const UtmSegment& utmSegment, m_utmPoints)
