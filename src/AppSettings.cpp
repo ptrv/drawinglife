@@ -467,7 +467,7 @@ bool AppSettings::loadJSON()
         json = jsonRoot["ui"]["alpha"];
         m_alphaTracks = JsonHelper::getInt(json, "path", 64);
         m_alphaDots = JsonHelper::getInt(json, "dots", 127);
-        m_alphaLegend = JsonHelper::getInt(json, "legend", 255);
+        m_alphaLegend = JsonHelper::getInt(json, "text", 255);
 
         json = jsonRoot["ui"];
         m_dotSize = JsonHelper::getInt(json, "dotsize", 5);
