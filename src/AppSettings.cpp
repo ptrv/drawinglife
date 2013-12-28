@@ -231,6 +231,11 @@ bool AppSettings::loadXML()
     m_dotSize = m_xml.getValue("ui:dotsize", 5);
 
     m_logLevel = m_xml.getAttribute("settings:log", "level", 0);
+    if (m_logLevel < 0 || m_logLevel > 5)
+    {
+        m_logLevel = 0;
+    }
+
     m_debugMode = m_xml.getValue("settings:debugmode", 0) == 1;
 
     m_walkLength = m_xml.getValue("settings:walklength", 10000);

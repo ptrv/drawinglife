@@ -77,30 +77,7 @@ void DrawingLifeApp::setup()
         OF_EXIT_APP(1);
     }
 
-    switch(m_settings->getLogLevel())
-    {
-        case 0:
-            ofSetLogLevel(OF_LOG_VERBOSE);
-            break;
-        case 1:
-            ofSetLogLevel(OF_LOG_NOTICE);
-            break;
-        case 2:
-            ofSetLogLevel(OF_LOG_WARNING);
-            break;
-        case 3:
-            ofSetLogLevel(OF_LOG_ERROR);
-            break;
-        case 4:
-            ofSetLogLevel(OF_LOG_FATAL_ERROR);
-            break;
-        case 5:
-            ofSetLogLevel(OF_LOG_SILENT);
-            break;
-        default:
-            ofSetLogLevel(OF_LOG_NOTICE);
-            break;
-    }
+    ofSetLogLevel(ofLogLevel(m_settings->getLogLevel()));
 
     // -------------------------------------------------------------------------
 	// Fonts.
