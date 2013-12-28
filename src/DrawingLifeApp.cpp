@@ -221,26 +221,28 @@ void DrawingLifeApp::setup()
                     m_startScreenMode = true;
                 }
             }
-        }
 
-        BOOST_FOREACH(const LocationImageData& locImgData, m_settings->getLocationImageData())
-        {
-            LocationImage* lImg;
-            if(m_multiMode)
+            const vector<LocationImageData>& locImgVec =
+                    m_settings->getLocationImageData();
+            BOOST_FOREACH(const LocationImageData& locImgData, locImgVec)
             {
-                lImg = new LocationImage(*m_magicBox.get(), locImgData);
-            }
-            else
-            {
-                lImg = new LocationImage(m_magicBoxes[0], locImgData);
-            }
+                LocationImage* lImg;
+                if(m_multiMode)
+                {
+                    lImg = new LocationImage(*m_magicBox.get(), locImgData);
+                }
+                else
+                {
+                    lImg = new LocationImage(m_magicBoxes[0], locImgData);
+                }
 
-            lImg->setViewBounds(m_viewMinDimension[0],
-                                m_viewPadding[0],
-                                m_viewXOffset[0],
-                                m_viewYOffset[0]);
+                lImg->setViewBounds(m_viewMinDimension[0],
+                                    m_viewPadding[0],
+                                    m_viewXOffset[0],
+                                    m_viewYOffset[0]);
 
-            m_locationImgs.push_back(lImg);
+                m_locationImgs.push_back(lImg);
+            }
         }
     }
     else
