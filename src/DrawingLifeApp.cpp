@@ -215,7 +215,8 @@ void DrawingLifeApp::setup()
 			// GpsData are loaded now. Drawing routine can start.
             for(size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
-                if(m_walks[personIndex].getGpsData().getTotalGpsPoints() == 0)
+                const Walk& walk = m_walks[personIndex];
+                if(walk.getGpsData().getTotalGpsPoints() == 0)
                 {
                     m_startScreenMode = true;
                 }
@@ -729,7 +730,7 @@ void DrawingLifeApp::processGpsData()
                 }
             }
 
-            if (m_imageAsCurrentPoint && (unsigned int)m_images.size() >= m_numPerson)
+            if (m_imageAsCurrentPoint && m_images.size() >= m_numPerson)
             {
                 walk.setCurrentPointImage(m_images[i], m_imageList[i].alpha);
             }

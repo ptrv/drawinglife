@@ -172,21 +172,13 @@ void Walk::draw()
         }
 
         int startSeg, startPoint;
-        if(m_maxPointsToDraw > 0)
+        if(m_maxPointsToDraw > 0 && m_maxPointsToDraw - m_currentPoint <= 0)
         {
-            if(m_maxPointsToDraw - m_currentPoint <= 0)
-            {
-                int startIndex = m_currentPoint-m_maxPointsToDraw;
-                const GpsDataIndex& gpsDataIndex =
-                        m_gpsData->getIndices()[startIndex];
-                startSeg = gpsDataIndex.gpsSegment;
-                startPoint = gpsDataIndex.gpsPoint;
-            }
-            else
-            {
-                startSeg = 0;
-                startPoint = 0;
-            }
+            int startIndex = m_currentPoint-m_maxPointsToDraw;
+            const GpsDataIndex& gpsDataIndex =
+                    m_gpsData->getIndices()[startIndex];
+            startSeg = gpsDataIndex.gpsSegment;
+            startPoint = gpsDataIndex.gpsPoint;
         }
         else
         {
