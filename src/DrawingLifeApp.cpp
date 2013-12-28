@@ -187,7 +187,7 @@ void DrawingLifeApp::setup()
 
     m_sqlFilePaths = m_settings->getSqlFilePaths();
 
-    if (m_settings->loadGpsOnStart() == 1)
+    if (m_settings->loadGpsOnStart())
     {
 		bool gpsDataAreLoaded = false;
         switch(m_dbQueryData.type)
