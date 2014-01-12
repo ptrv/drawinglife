@@ -101,32 +101,32 @@ public:
 	 * \brief Get timestamp for current GpsPoint.
 	 * \return timestamp string of current GpsPoint.
 	 */
-	std::string getCurrentTimestamp();
+    std::string getCurrentTimestamp() const;
     /**
 	 * \brief Get current logitude for GpsPoint.
 	 * \return longitude of current GpsPoint.
 	 */
-	double getCurrentLongitude();
+    double getCurrentLongitude() const;
     /**
 	 * \brief Get current latitude for GpsPoint.
 	 * \return latitude of current GpsPoint.
 	 */
-	double getCurrentLatitude();
+    double getCurrentLatitude() const;
     /**
 	 * \brief Get current elevation for GpsPoint.
 	 * \return elevation of current GpsPoint.
 	 */
-	double getCurrentElevation();
+    double getCurrentElevation() const;
     /**
 	 * \brief Get current UTM X for GpsPoint.
 	 * \return UTM X of current GpsPoint.
 	 */
-	double getCurrentUtmX();
+    double getCurrentUtmX() const;
     /**
 	 * \brief Get current UTM Y for GpsPoint.
 	 * \return UTM Y of current GpsPoint.
 	 */
-	double getCurrentUtmY();
+    double getCurrentUtmY() const;
 
     static void setDotSize(float dotSize) { m_dotSize = dotSize; }
 
@@ -134,27 +134,29 @@ public:
 
 //    void setDotColors();
 
-    const GpsData& getGpsData() const { return *m_gpsData; }
-
     void setCurrentPointImage(const ofImage& img, int alpha);
 
 	/**
 	 * \brief Sets the GpsData.
 	 * \param gpsData Pointer to GpsData object.
 	**/
-    void setGpsData(GpsData* gpsData);
+    void setGpsData(const GpsDataWeak gpsData);
 
-    void setMagicBox(MagicBox* magicBox);
+    void setMagicBox(MagicBoxWeak magicBox);
 
-    void setMagicBoxStatic(MagicBox* magicBox, double lat, double lon);
+    void setMagicBoxStatic(MagicBoxWeak magicBox, double lat, double lon);
 
 	void toggleTraced();
 
 private:
 
+    typedef boost::function<double(const GpsDataPtr, int, int)> tFuncGetCurrentDouble;
+    double getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const;
+    void updateToSegment(bool prev);
+
     const AppSettings& m_settings;
 
-    GpsData* m_gpsData;
+    GpsDataWeak m_gpsData;
 
 	static double maxDrawX;
     static double minDrawX;
@@ -179,7 +181,7 @@ private:
 	std::string m_currentGpsPointInfoDebug;
     std::string m_currentGpsPointInfo;
 
-    MagicBox* m_magicBox;
+    MagicBoxWeak m_magicBox;
 
     ofColor m_dotColor;
 

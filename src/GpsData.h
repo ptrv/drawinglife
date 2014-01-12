@@ -15,7 +15,7 @@
  * \brief Holds a vector with segments, user and min/max values for longitude/latitude.
  *
  */
-class GpsData
+class GpsData : public boost::enable_shared_from_this<GpsData>
 {
 
 public:

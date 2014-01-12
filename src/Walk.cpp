@@ -23,7 +23,6 @@ int Walk::m_dotAlpha = 127;
 Walk::Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled)
 :
 m_settings(settings),
-m_gpsData(0),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
 m_currentPoint(-1),
@@ -36,7 +35,6 @@ m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
-m_magicBox(0),
 m_currentPointIsImage(false),
 m_interactiveMode(false),
 m_drawTraced(true),
@@ -61,10 +59,6 @@ m_imageAlpha(255)
 
 Walk::~Walk()
 {
-    if(m_gpsData)
-        m_gpsData = 0;
-    if(m_magicBox)
-        m_magicBox = 0;
 	m_image.clear();
 
     ofLogVerbose("Walk", "destroying");
@@ -75,66 +69,84 @@ Walk::~Walk()
 // -----------------------------------------------------------------------------
 void Walk::update()
 {
-        if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size())
+    GpsDataPtr gpsData = m_gpsData.lock();
+    if (!gpsData)
+    {
+        return;
+    }
+    const UtmDataVector& utmData= gpsData->getNormalizedUTMPoints();
+    const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
+
+    if (m_currentGpsSegment < static_cast<int>(utmData.size()))
+    {
+        if (m_currentGpsPoint < static_cast<int>(utmSegment.size()) - 1)
         {
-            if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1)
+            if (!m_firstPoint)
             {
-                if (!m_firstPoint)
-                    ++m_currentGpsPoint;
-                else
-                    m_firstPoint = false;
+                ++m_currentGpsPoint;
             }
             else
             {
-                ++m_currentGpsSegment;
-                m_currentGpsPoint = 0;
+                m_firstPoint = false;
             }
         }
         else
         {
-            if ((unsigned int)m_currentGpsPoint < m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1)
-            {
-                ++m_currentGpsPoint;
-            }
-            else//	void setMinMaxRatio();
-
-            {
-                std::cout << "I'm the last gps point" << std::endl;
-                m_currentGpsPoint = 0;
-                m_currentGpsSegment = 0;
-                m_currentPoint = -1;
-            }
+            ++m_currentGpsSegment;
+            m_currentGpsPoint = 0;
         }
-        ++m_currentPoint;
+    }
+    else
+    {
+        if (m_currentGpsPoint < static_cast<int>(utmSegment.size()) - 1)
+        {
+            ++m_currentGpsPoint;
+        }
+        else//	void setMinMaxRatio();
+        {
+            std::cout << "I'm the last gps point" << std::endl;
+            m_currentGpsPoint = 0;
+            m_currentGpsSegment = 0;
+            m_currentPoint = -1;
+        }
+    }
+    ++m_currentPoint;
 }
 
 void Walk::updateToNextSegment()
 {
-    if (m_gpsData->getTotalGpsPoints() > 0
-            && m_gpsData->getNormalizedUTMPoints().size() > 0)
-    {
-        if ((unsigned int)m_currentGpsSegment < m_gpsData->getNormalizedUTMPoints().size()-1)
-        {
-            ++m_currentGpsSegment;
-            m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
-        }
-        else
-        {
-            m_currentGpsPoint = 0;
-            m_currentGpsSegment = 0;
-            m_currentPoint = -1;
-        }
-    }
+    updateToSegment(false);
 }
 void Walk::updateToPreviousSegment()
 {
-    if (m_gpsData->getTotalGpsPoints() > 0
-            && m_gpsData->getNormalizedUTMPoints().size() > 0)
+    updateToSegment(true);
+}
+
+void Walk::updateToSegment(bool prev)
+{
+    GpsDataPtr gpsData = m_gpsData.lock();
+    if (!gpsData)
     {
-        if ((unsigned int)m_currentGpsSegment > 0)
+        return;
+    }
+
+    const UtmDataVector& utmData = gpsData->getNormalizedUTMPoints();
+
+    if (gpsData->getTotalGpsPoints() > 0
+            && static_cast<int>(utmData.size()) > 0)
+    {
+        if (!prev && m_currentGpsSegment < static_cast<int>(utmData.size()) - 1)
+        {
+            ++m_currentGpsSegment;
+            const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
+            m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
+
+        }
+        else if (prev && m_currentGpsSegment > 0)
         {
             --m_currentGpsSegment;
-            m_currentGpsPoint = m_gpsData->getNormalizedUTMPoints()[m_currentGpsSegment].size()-1;
+            const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
+            m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
         }
         else
         {
@@ -143,7 +155,9 @@ void Walk::updateToPreviousSegment()
             m_currentPoint = -1;
         }
     }
+
 }
+
 void Walk::reset()
 {
     m_currentGpsPoint = 0;
@@ -155,20 +169,27 @@ void Walk::reset()
 
 void Walk::draw()
 {
-    if (m_gpsData->getNormalizedUTMPoints().size() > 0
-            && m_gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
+    GpsDataPtr gpsData = m_gpsData.lock();
+    MagicBoxPtr magicBox = m_magicBox.lock();
+    if (!gpsData || !magicBox)
+    {
+        return;
+    }
+
+    if (gpsData->getNormalizedUTMPoints().size() > 0
+            && gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
 	{
 		// -----------------------------------------------------------------------------
 		// Draw Gps data
 		// -----------------------------------------------------------------------------
 
         const UtmPoint& currentUtm =
-                m_gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint];
+                gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint];
 
         if(!m_interactiveMode && !m_settings.isMultiMode()
                 && !m_settings.isBoundingBoxFixed())
         {
-            m_magicBox->updateBoxIfNeeded(currentUtm);
+            magicBox->updateBoxIfNeeded(currentUtm);
         }
 
         int startSeg, startPoint;
@@ -176,7 +197,7 @@ void Walk::draw()
         {
             int startIndex = m_currentPoint-m_maxPointsToDraw;
             const GpsDataIndex& gpsDataIndex =
-                    m_gpsData->getIndices()[startIndex];
+                    gpsData->getIndices()[startIndex];
             startSeg = gpsDataIndex.gpsSegment;
             startPoint = gpsDataIndex.gpsPoint;
         }
@@ -207,16 +228,16 @@ void Walk::draw()
             }
             else
             {
-                pointEnd = (int)m_gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
+                pointEnd = (int)gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
             }
 
             for (int j = startPoint; j <= pointEnd; ++j)
             {
-                const UtmPoint& utm = m_gpsData->getUTMPoints()[i][j];
+                const UtmPoint& utm = gpsData->getUTMPoints()[i][j];
                 bool isInBox = true;
                 if(m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
                 {
-                    isInBox = m_magicBox->isInBox(utm);
+                    isInBox = magicBox->isInBox(utm);
                     if(!isInBox)
                     {
                         glEnd();
@@ -254,7 +275,7 @@ void Walk::draw()
                 if(isInBox)
                 {
 //                    ofSetColor(255, 0,0);
-                    ofxPoint<double> tmp = m_magicBox->getDrawablePoint(utm);
+                    ofxPoint<double> tmp = magicBox->getDrawablePoint(utm);
                     glVertex2d(getScaledUtmX(tmp.x),
                                getScaledUtmY(tmp.y));
                 }
@@ -267,7 +288,7 @@ void Walk::draw()
 //        ofDisableSmoothing();
 
         ofxPoint<double> currentDrawablePoint =
-                m_magicBox->getDrawablePoint(currentUtm);
+                magicBox->getDrawablePoint(currentUtm);
 
 		if (m_currentPointIsImage)
 		{
@@ -308,7 +329,7 @@ void Walk::draw()
         ofSetColor(255,0,0);
 
         const ofxRectangle<double>& normalizedBox =
-                m_magicBox->getNormalizedBox();
+                magicBox->getNormalizedBox();
         double x = getScaledUtmX(normalizedBox.getX());
         double y = getScaledUtmY(normalizedBox.getY());
         double w = getScaledUtmX(normalizedBox.getWidth()) - x;
@@ -320,7 +341,7 @@ void Walk::draw()
         ofSetColor(0,255,0);
 
         const ofxRectangle<double>& normalizedPaddedBox =
-                m_magicBox->getNormalizedPaddedBox();
+                magicBox->getNormalizedPaddedBox();
         double xp = getScaledUtmX(normalizedPaddedBox.getX());
         double yp = getScaledUtmY(normalizedPaddedBox.getY());
         double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
@@ -336,8 +357,15 @@ void Walk::draw()
 // -----------------------------------------------------------------------------
 void Walk::drawAll()
 {
+    GpsDataPtr gpsData = m_gpsData.lock();
+    MagicBoxPtr magicBox = m_magicBox.lock();
+    if (!gpsData || !magicBox)
+    {
+        return;
+    }
+
 	ofNoFill();
-    BOOST_FOREACH(const UtmSegment& utmSegment, m_gpsData->getUTMPoints())
+    BOOST_FOREACH(const UtmSegment& utmSegment, gpsData->getUTMPoints())
     {
         glBegin(GL_LINE_STRIP);
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
@@ -345,12 +373,12 @@ void Walk::drawAll()
             bool isInBox = true;
             if(m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
             {
-                isInBox = m_magicBox->isInBox(utmPoint);
+                isInBox = magicBox->isInBox(utmPoint);
             }
             if (isInBox)
             {
                 const ofxPoint<double>& tmp =
-                        m_magicBox->getDrawablePoint(utmPoint);
+                        magicBox->getDrawablePoint(utmPoint);
                 glVertex2d(getScaledUtmX(tmp.x),
                            getScaledUtmY(tmp.y));
             }
@@ -378,14 +406,26 @@ void Walk::setViewBounds(const int screenWidth,
 // -----------------------------------------------------------------------------
 const std::string Walk::getGpsLocationCurrent()
 {
-    return m_gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
+    GpsDataPtr gpsData = m_gpsData.lock();
+    if (!gpsData)
+    {
+        return std::string();
+    }
+
+    return gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
 
 int Walk::getCurrentSegmentNum()
 {
+    GpsDataPtr gpsData = m_gpsData.lock();
+    if (!gpsData)
+    {
+        return 0;
+    }
+
     try
     {
-        const GpsSegmentVector& segments = m_gpsData->getSegments();
+        const GpsSegmentVector& segments = gpsData->getSegments();
         return segments.at(m_currentGpsSegment).getSegmentNum();
     }
     catch (const std::out_of_range&)
@@ -399,11 +439,17 @@ int Walk::getCurrentPointNum()
     return m_currentPoint;
 }
 
-std::string Walk::getCurrentTimestamp()
+std::string Walk::getCurrentTimestamp() const
 {
+    GpsDataPtr gpsData = m_gpsData.lock();
+    if (!gpsData)
+    {
+        return std::string();
+    }
+
     try
     {
-        const GpsSegmentVector& segments = m_gpsData->getSegments();
+        const GpsSegmentVector& segments = gpsData->getSegments();
         const GpsPointVector& points =
                 segments.at(m_currentGpsSegment).getPoints();
         return points.at(m_currentGpsPoint).getTimestamp();
@@ -413,25 +459,38 @@ std::string Walk::getCurrentTimestamp()
         return std::string();
     }
 }
-double Walk::getCurrentLongitude()
+
+double Walk::getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const
 {
-    return m_gpsData->getLongitude(m_currentGpsSegment, m_currentGpsPoint);
+    if (GpsDataPtr gpsData = m_gpsData.lock())
+    {
+        return fnGetCurrentDouble(gpsData, m_currentGpsSegment, m_currentGpsPoint);
+    }
+    else
+    {
+        return 0.0;
+    }
 }
-double Walk::getCurrentLatitude()
+
+double Walk::getCurrentLongitude() const
 {
-    return m_gpsData->getLatitude(m_currentGpsSegment, m_currentGpsPoint);
+    return getCurrentThing(boost::bind(&GpsData::getLongitude, _1, _2, _3));
 }
-double Walk::getCurrentElevation()
+double Walk::getCurrentLatitude() const
 {
-    return m_gpsData->getElevation(m_currentGpsSegment, m_currentGpsPoint);
+    return getCurrentThing(boost::bind(&GpsData::getLatitude, _1, _2, _3));
 }
-double Walk::getCurrentUtmX()
+double Walk::getCurrentElevation() const
 {
-    return m_gpsData->getUtmX(m_currentGpsSegment, m_currentGpsPoint);
+    return getCurrentThing(boost::bind(&GpsData::getElevation, _1, _2, _3));
 }
-double Walk::getCurrentUtmY()
+double Walk::getCurrentUtmX() const
 {
-    return m_gpsData->getUtmY(m_currentGpsSegment, m_currentGpsPoint);
+    return getCurrentThing(boost::bind(&GpsData::getUtmX, _1, _2, _3));
+}
+double Walk::getCurrentUtmY() const
+{
+    return getCurrentThing(boost::bind(&GpsData::getUtmY, _1, _2, _3));
 }
 
 // -----------------------------------------------------------------------------
@@ -456,42 +515,60 @@ UtmPoint Walk::getScaledUtm(const UtmPoint& normalizedUtmPoint) const
 
 const std::string& Walk::getCurrentGpsInfoDebug()
 {
-    GpsPoint boxCenter = m_magicBox->getCenterGps();
-    m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
-	"Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
-	"Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
-	"UTM X             : " + ofToString(getCurrentUtmX(), 7) + "\n" +
-	"UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
-	"Time              : " + getCurrentTimestamp() + "\n" +
-	"Location          : " + getGpsLocationCurrent() + "\n" +
-	"Central meridian  : " + ofToString(m_gpsData->getLon0(), 7) + "\n" +
-	"Meridian global   : " + ofToString(GpsData::getLon0Glogal(), 7) + "\n" +
-	"Min/Max latitude  : " + ofToString(m_gpsData->getMinLat(), 7) + " / " + ofToString(m_gpsData->getMaxLat(), 7) + "\n" +
-	"Min/Max longitude : " + ofToString(m_gpsData->getMinLon(), 7) + " / " + ofToString(m_gpsData->getMaxLon(), 7) + "\n" +
-	"Min/Max UTM X     : " + ofToString(m_gpsData->getMinUtmX(), 7) + " / " + ofToString(m_gpsData->getMaxUtmX(), 7) + "\n" +
-	"Min/Max UTM Y     : " + ofToString(m_gpsData->getMinUtmY(), 7) + " / " + ofToString(m_gpsData->getMaxUtmY(), 7) + "\n" +
-	"Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
-	"Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
-	"Total pts.        : " + ofToString(m_gpsData->getTotalGpsPoints()) + "\n" +
-//	"Viewbox center    : " + ofToString(m_magicBox->getCenter().x,7) + " / " + ofToString(m_magicBox->getCenter().y, 7) + "\n" +
-	"Viewbox center    : " + ofToString(boxCenter.getLatitude(),7) + " / " + ofToString(boxCenter.getLongitude(), 7) + "\n" +
-    "Viewbox size      : " + ofToString(m_magicBox->getSize(),7) + "\n" +
-	"Person            : " + m_gpsData->getUser();
+    GpsDataPtr gpsData = m_gpsData.lock();
+    MagicBoxPtr magicBox = m_magicBox.lock();
+    if (gpsData && magicBox)
+    {
+        GpsPoint boxCenter = magicBox->getCenterGps();
+        m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
+        "Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
+        "Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
+        "UTM X             : " + ofToString(getCurrentUtmX(), 7) + "\n" +
+        "UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
+        "Time              : " + getCurrentTimestamp() + "\n" +
+        "Location          : " + getGpsLocationCurrent() + "\n" +
+        "Central meridian  : " + ofToString(gpsData->getLon0(), 7) + "\n" +
+        "Meridian global   : " + ofToString(GpsData::getLon0Glogal(), 7) + "\n" +
+        "Min/Max latitude  : " + ofToString(gpsData->getMinLat(), 7) + " / " + ofToString(gpsData->getMaxLat(), 7) + "\n" +
+        "Min/Max longitude : " + ofToString(gpsData->getMinLon(), 7) + " / " + ofToString(gpsData->getMaxLon(), 7) + "\n" +
+        "Min/Max UTM X     : " + ofToString(gpsData->getMinUtmX(), 7) + " / " + ofToString(gpsData->getMaxUtmX(), 7) + "\n" +
+        "Min/Max UTM Y     : " + ofToString(gpsData->getMinUtmY(), 7) + " / " + ofToString(gpsData->getMaxUtmY(), 7) + "\n" +
+        "Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
+        "Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
+        "Total pts.        : " + ofToString(gpsData->getTotalGpsPoints()) + "\n" +
+    //	"Viewbox center    : " + ofToString(m_magicBox->getCenter().x,7) + " / " + ofToString(m_magicBox->getCenter().y, 7) + "\n" +
+        "Viewbox center    : " + ofToString(boxCenter.getLatitude(),7) + " / " + ofToString(boxCenter.getLongitude(), 7) + "\n" +
+        "Viewbox size      : " + ofToString(magicBox->getSize(),7) + "\n" +
+        "Person            : " + gpsData->getUser();
+    }
+    else
+    {
+        m_currentGpsPointInfoDebug = std::string();
+    }
+
 
     return m_currentGpsPointInfoDebug;
 }
 
 const std::string& Walk::getCurrentGpsInfo()
 {
-	if(m_gpsData->getTotalGpsPoints() != 0)
+    GpsDataPtr gpsData = m_gpsData.lock();
+    if(gpsData && gpsData->getTotalGpsPoints() != 0)
 	{
 		std::string timeString = getCurrentTimestamp();
 		int year, month, day, hour, min, sec;
-//		sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
-        sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
+//        sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ",
+//               &year, &month, &day, &hour, &min, &sec);
+        sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d",
+               &year, &month, &day, &hour, &min, &sec);
 		char buf[25];
-		sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d", day, month, year, hour, min, sec);
+        sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d",
+                day, month, year, hour, min, sec);
 		m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
+    }
+    else
+    {
+        m_currentGpsPointInfo = std::string();
     }
 	return m_currentGpsPointInfo;
 
@@ -506,31 +583,35 @@ const std::string& Walk::getCurrentGpsInfo()
 //
 //}
 
-void Walk::setGpsData(GpsData* const gpsData)
+void Walk::setGpsData(const GpsDataWeak gpsDataWeak)
 {
-    m_gpsData = 0;
-    m_gpsData = gpsData;
+    m_gpsData = gpsDataWeak;
 }
 
 
-void Walk::setMagicBox(MagicBox* const magicBox)
+void Walk::setMagicBox(MagicBoxWeak magicBoxWeak)
 {
-    m_magicBox = 0;
-    m_magicBox = magicBox;
+    m_magicBox = magicBoxWeak;
     reset();
-    m_magicBox->setupBox(m_gpsData->getUtm(0, 0), GpsData::getLon0Glogal());
+    GpsDataPtr gpsData = m_gpsData.lock();
+    MagicBoxPtr magicBox = m_magicBox.lock();
+    if (gpsData && magicBox)
+    {
+        magicBox->setupBox(gpsData->getUtm(0, 0), GpsData::getLon0Glogal());
+    }
 }
 
-void Walk::setMagicBoxStatic(MagicBox* const magicBox,
+void Walk::setMagicBoxStatic(MagicBoxWeak magicBoxWeak,
                              const double lat,
                              const double lon)
 {
-
-    m_magicBox = 0;
-    m_magicBox = magicBox;
+    m_magicBox = magicBoxWeak;
     reset();
     UtmPoint utmP = GpsData::getUtmPointWithRegion(lat, lon, m_settings);
-    m_magicBox->setupBox(utmP, GpsData::getLon0Glogal());
+    if (MagicBoxPtr magicBox = m_magicBox.lock())
+    {
+        magicBox->setupBox(utmP, GpsData::getLon0Glogal());
+    }
 
 }
 

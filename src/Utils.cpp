@@ -22,16 +22,16 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
     GpsDataVector& gpsDatas = app.getGpsDataVector();
     const AppSettings& settings = app.getAppSettings();
 
-    BOOST_FOREACH(const GpsData& gpsData, gpsDatas)
+    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
     {
-        if (gpsData.getMinUtmX() < minX) minX = gpsData.getMinUtmX();
-        if (gpsData.getMaxUtmX() > maxX) maxX = gpsData.getMaxUtmX();
-        if (gpsData.getMinUtmY() < minY) minY = gpsData.getMinUtmY();
-        if (gpsData.getMaxUtmY() > maxY) maxY = gpsData.getMaxUtmY();
-        if (gpsData.getMinLon() < minLon) minLon = gpsData.getMinLon();
-        if (gpsData.getMaxLon() > maxLon) maxLon = gpsData.getMaxLon();
-        if (gpsData.getMinLat() < minLat) minLat = gpsData.getMinLon();
-        if (gpsData.getMaxLat() > maxLat) maxLat = gpsData.getMaxLon();
+        if (gpsData->getMinUtmX() < minX) minX = gpsData->getMinUtmX();
+        if (gpsData->getMaxUtmX() > maxX) maxX = gpsData->getMaxUtmX();
+        if (gpsData->getMinUtmY() < minY) minY = gpsData->getMinUtmY();
+        if (gpsData->getMaxUtmY() > maxY) maxY = gpsData->getMaxUtmY();
+        if (gpsData->getMinLon() < minLon) minLon = gpsData->getMinLon();
+        if (gpsData->getMaxLon() > maxLon) maxLon = gpsData->getMaxLon();
+        if (gpsData->getMinLat() < minLat) minLat = gpsData->getMinLon();
+        if (gpsData->getMaxLat() > maxLat) maxLat = gpsData->getMaxLon();
     }
 
     bool isRegionOn = settings.isRegionsOn();
@@ -52,10 +52,10 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
         }
     }
 
-    BOOST_FOREACH(GpsData& gpsData, gpsDatas)
+    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
     {
-        gpsData.calculateUtmPointsGlobalLon(isRegionOn);
-        gpsData.normalizeUtmPointsGlobal();
+        gpsData->calculateUtmPointsGlobalLon(isRegionOn);
+        gpsData->normalizeUtmPointsGlobal();
     }
 }
 

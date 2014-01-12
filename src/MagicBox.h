@@ -7,7 +7,7 @@
 
 #include "GpsData.h"
 
-class MagicBox
+class MagicBox : public boost::enable_shared_from_this<MagicBox>
 {
 public:
 

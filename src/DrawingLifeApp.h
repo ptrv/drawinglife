@@ -131,7 +131,7 @@ private:
     boost::ptr_vector<LocationImage> m_locationImgs;
 
     bool m_pause;
-    boost::scoped_ptr<MagicBox> m_magicBox;
+    MagicBoxPtr m_magicBox;
 
     boost::ptr_vector<ofSoundPlayer> m_soundPlayer;
 

@@ -32,18 +32,18 @@ void Timeline::setTimeline(const GpsDataVector& gpsDatas)
     m_counter = 0;
     m_timeline.clear();
     int i = 0;
-    BOOST_FOREACH(const GpsData& rGpsData, gpsDatas)
+    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
     {
-        BOOST_FOREACH(const GpsSegment& rGpsSegment, rGpsData.getSegments())
+        BOOST_FOREACH(const GpsSegment& gpsSegment, gpsData->getSegments())
         {
-            BOOST_FOREACH(const GpsPoint& rGpsPoint, rGpsSegment.getPoints())
+            BOOST_FOREACH(const GpsPoint& gpsPoint, gpsSegment.getPoints())
             {
-                std::string timeString = rGpsPoint.getTimestamp();
+                std::string timeString = gpsPoint.getTimestamp();
                 TimelineObject tmObj;
                 tmObj.timeString = timeString;
                 tmObj.secs = makeTimeObject(timeString);
                 tmObj.id = i;
-                tmObj.gpsid = rGpsPoint.getGpsPointId();
+                tmObj.gpsid = gpsPoint.getGpsPointId();
                 m_timeline.push_back(tmObj);
 //                ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", tmObj.timeString.c_str(), tmObj.id, tmObj.secs);
             }

@@ -45,8 +45,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_loopMode(true),
     m_multiMode(false),
     m_multiModeInfo(false),
-    m_pause(false),
-    m_magicBox(0)
+    m_pause(false)
+//    m_magicBox(0)
 {
 }
 DrawingLifeApp::~DrawingLifeApp()
@@ -213,10 +213,11 @@ void DrawingLifeApp::setup()
 			// GpsData are loaded now. Drawing routine can start.
             for(size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
-                const Walk& walk = m_walks[personIndex];
-                if(walk.getGpsData().getTotalGpsPoints() == 0)
+                const GpsDataPtr gpsData = m_gpsDatas[personIndex];
+                if(gpsData->getTotalGpsPoints() == 0)
                 {
                     m_startScreenMode = true;
+                    break;
                 }
             }
 
@@ -231,7 +232,7 @@ void DrawingLifeApp::setup()
                 }
                 else
                 {
-                    lImg = new LocationImage(m_magicBoxes[0], locImgData);
+                    lImg = new LocationImage(*m_magicBoxes[0].get(), locImgData);
                 }
 
                 lImg->setViewBounds(m_viewAspectRatioData.minDimension[0],
@@ -426,10 +427,10 @@ void DrawingLifeApp::zoomUpdate()
         }
         else
         {
-            BOOST_FOREACH(MagicBox& box, m_magicBoxes)
+            BOOST_FOREACH(MagicBoxPtr box, m_magicBoxes)
             {
-                box.setSize(m_zoomIntegrator->getValue());
-                box.setupBox(m_theIntegrator->getValue(), 0);
+                box->setSize(m_zoomIntegrator->getValue());
+                box->setupBox(m_theIntegrator->getValue(), 0);
             }
         }
     }
@@ -770,7 +771,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case '+':
         for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].zoom(MagicBox::ZOOM_IN);
+            m_magicBoxes[i]->zoom(MagicBox::ZOOM_IN);
         }
         if(m_multiMode)
             m_magicBox->zoom(MagicBox::ZOOM_IN);
@@ -778,7 +779,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case '-':
         for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].zoom(MagicBox::ZOOM_OUT);
+            m_magicBoxes[i]->zoom(MagicBox::ZOOM_OUT);
         }
         if(m_multiMode)
             m_magicBox->zoom(MagicBox::ZOOM_OUT);
@@ -786,7 +787,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_UP:
         for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].move(MagicBox::UP);
+            m_magicBoxes[i]->move(MagicBox::UP);
         }
         if(m_multiMode)
             m_magicBox->move(MagicBox::UP);
@@ -794,7 +795,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_DOWN:
         for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].move(MagicBox::DOWN);
+            m_magicBoxes[i]->move(MagicBox::DOWN);
         }
         if(m_multiMode)
             m_magicBox->move(MagicBox::DOWN);
@@ -803,7 +804,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_RIGHT:
         for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].move(MagicBox::RIGHT);
+            m_magicBoxes[i]->move(MagicBox::RIGHT);
         }
         if(m_multiMode)
             m_magicBox->move(MagicBox::RIGHT);
@@ -811,7 +812,7 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_LEFT:
         for(size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
-            m_magicBoxes[i].move(MagicBox::LEFT);
+            m_magicBoxes[i]->move(MagicBox::LEFT);
         }
         if(m_multiMode)
             m_magicBox->move(MagicBox::LEFT);

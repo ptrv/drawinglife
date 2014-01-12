@@ -138,9 +138,17 @@ class GpsPoint;
 typedef std::vector<std::string> StringVec;
 typedef boost::scoped_ptr<DBReader> DBReaderPtr;
 typedef std::vector<ZoomAnimFrame> ZoomAnimFrames;
-typedef boost::ptr_vector<GpsData> GpsDataVector;
+
+typedef boost::shared_ptr<GpsData> GpsDataPtr;
+typedef boost::weak_ptr<GpsData> GpsDataWeak;
+typedef std::vector<GpsDataPtr> GpsDataVector;
+
 typedef boost::ptr_vector<Walk> WalkVector;
-typedef boost::ptr_vector<MagicBox> MagicBoxVector;
+
+typedef boost::shared_ptr<MagicBox> MagicBoxPtr;
+typedef boost::weak_ptr<MagicBox> MagicBoxWeak;
+typedef std::vector<MagicBoxPtr> MagicBoxVector;
+
 typedef std::vector<UtmPoint> UtmSegment;
 typedef std::vector<std::vector<UtmPoint> > UtmDataVector;
 typedef std::vector<GpsSegment> GpsSegmentVector;

@@ -21,38 +21,41 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
     GpsDataVector& gpsDatas = app.getGpsDataVector();
     WalkVector& walks = app.getWalkVector();
     MagicBoxVector& magicBoxes = app.getMagicBoxVector();
+    MagicBox& magicBox = app.getMagicBox();
 
     const std::vector<CurrentImageData>& imageList =
             app.getCurrentPointImageList();
     const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
 
     ofLog(OF_LOG_VERBOSE, "------------------------\n");
-    if (gpsDatas.size() > 0)
+
+    const size_t numPersons = settings.getNumPerson();
+
+    if (numPersons > 0
+            && gpsDatas.size() == numPersons
+            && walks.size() == numPersons
+            && ((magicBoxes.size() == numPersons && !settings.isMultiMode())
+                || settings.isMultiMode()))
     {
         timeline.setTimeline(gpsDatas);
-//        for(unsigned int i = 0; i < m_timeline->getTimeline().size(); ++i)
-//        {
-//            ofLog(OF_LOG_VERBOSE, "%s : %d : %li", m_timeline->getTimeline()[i].timeString.c_str(),
-//                                                    m_timeline->getTimeline()[i].id,
-//                                                    (long)(m_timeline->getTimeline()[i].secs));
-//        }
+
         Utils::calculateGlobalMinMaxValues(app);
 
         Walk::setTrackAlpha(settings.getAlphaDot());
 
         Walk::setDotSize(settings.getDotSize());
 
-        for(size_t i = 0; i < walks.size(); ++i)
+        for(size_t i = 0; i < numPersons; ++i)
         {
             Walk& walk = walks[i];
-//            m_walks[i]->setDotColors();
 
             if(!settings.isBoundingBoxAuto() && !settings.isMultiMode())
             {
                 //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
                 double bbLat = settings.getBoundingBoxLat();
                 double bbLon = settings.getBoundingBoxLon();
-                walk.setMagicBoxStatic(&magicBoxes[i], bbLat, bbLon);
+                walk.setMagicBoxStatic(magicBoxes[i]->shared_from_this(),
+                                       bbLat, bbLon);
             }
             else
             {
@@ -60,12 +63,13 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
                 {
                     double bbLat = settings.getBoundingBoxLat();
                     double bbLon = settings.getBoundingBoxLon();
-                    walk.setMagicBoxStatic(&app.getMagicBox(), bbLat, bbLon);
+                    walk.setMagicBoxStatic(magicBox.shared_from_this(),
+                                           bbLat, bbLon);
 //                    walk.setMagicBox(m_magicBox);
                 }
                 else
                 {
-                    walk.setMagicBox(&magicBoxes[i]);
+                    walk.setMagicBox(magicBoxes[i]->shared_from_this());
                 }
             }
 
@@ -163,14 +167,15 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
     size_t numPerson = settings.getNumPerson();
     for(size_t i = 0; i < numPerson; ++i)
     {
-        GpsData* gpsData = new GpsData(settings);
+        GpsDataPtr gpsData = boost::make_shared<GpsData>(settings);
         gpsDatas.push_back(gpsData);
 
         if(!settings.isMultiMode())
         {
-            magicBoxes.push_back(new MagicBox(settings,
-                                              settings.getBoundingBoxSize(),
-                                              settings.getBoundingBoxPadding()));
+            magicBoxes.push_back(boost::make_shared<MagicBox>(
+                                     settings,
+                                     settings.getBoundingBoxSize(),
+                                     settings.getBoundingBoxPadding()));
         }
 
         Walk* walk = new Walk(settings,
@@ -192,7 +197,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             // -----------------------------------------------------------------------------
             // DB query
             tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
-            dbOk = getGpsDataFunc(dbReader.get(), *gpsData);
+            dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
 
             if(dbOk)
             {
@@ -201,7 +206,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                       gpsData->getSegments().size(),
                       gpsData->getTotalGpsPoints());
 
-                walk->setGpsData(gpsData);
+                walk->setGpsData(gpsData->shared_from_this());
             }
             else
             {
