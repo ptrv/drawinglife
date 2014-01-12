@@ -35,10 +35,8 @@ public:
 	* \param user string with user name.
 	*/
 	void setGpsData(const std::vector<GpsSegment>& segments,
-					double minLon,
-					double maxLon,
-					double minLat,
-					double maxLat,
+                    const ofxPoint<double>& minLonLat,
+                    const ofxPoint<double>& maxLonLat,
 					const std::string& user);
 	// -----------------------------------------------------------------------------
 	// Get members.
@@ -52,43 +50,43 @@ public:
 	* \brief Get minimum longitude value.
 	* \return minimum longitude value.
 	*/
-	double getMinLon() const { return m_minLon; }
+    double getMinLon() const { return m_minLonLat.x; }
 	/**
 	* \brief Get maximum longitude value.
 	* \return maximum longitude value.
 	*/
-	double getMaxLon() const { return m_maxLon; }
+    double getMaxLon() const { return m_maxLonLat.x; }
 	/**
 	* \brief Get minimum latitude value.
 	* \return minimum latitude value.
 	*/
-	double getMinLat() const { return m_minLat; }
+    double getMinLat() const { return m_minLonLat.y; }
 	/**
 	* \brief Get maximum latitude value.
 	* \return maximum latitude value.
 	*/
-	double getMaxLat() const { return m_maxLat; }
+    double getMaxLat() const { return m_maxLonLat.y; }
 	// get UTM convertd min/max values
 	/**
 	* \brief Get minimum UTM X value.
 	* \return minimum UTM X value.
 	*/
-	double getMinUtmX() const { return m_minUtmX; }
+    double getMinUtmX() const { return m_minUtm.x; }
 	/**
 	* \brief Get maximum UTM X value.
 	* \return maximum UTM X value.
 	*/
-	double getMaxUtmX() const { return m_maxUtmX; }
+    double getMaxUtmX() const { return m_maxUtm.x; }
 	/**
 	* \brief Get minimum UTM Y value.
 	* \return minimum UTM Y value.
 	*/
-	double getMinUtmY() const { return m_minUtmY; }
+    double getMinUtmY() const { return m_minUtm.y; }
 	/**
 	* \brief Get maximum UTM Y value.
 	* \return maximum UTM Y value.
 	*/
-	double getMaxUtmY() const { return m_maxUtmY; }
+    double getMaxUtmY() const { return m_maxUtm.y; }
 
 	// -----------------------------------------------------------------------------
 	/**
@@ -179,10 +177,8 @@ public:
 
     static GpsPoint getGpsPoint(const ofxPoint<double>& utmP);
 
-	static void setGlobalValues(double minX,
-                                double maxX,
-                                double minY,
-                                double maxY,
+    static void setGlobalValues(const ofxPoint<double>& minXY,
+                                const ofxPoint<double>& maxXY,
                                 double lon0);
 
     const UtmDataVector& getUTMPoints() const { return m_utmPoints; }
@@ -248,14 +244,11 @@ private:
     int m_gpsDataId;
 	std::vector<GpsSegment> m_segments;
 	std::string m_user;
-	double m_minLon;
-	double m_maxLon;
-	double m_minLat;
-	double m_maxLat;
-	double m_minUtmX;
-	double m_maxUtmX;
-	double m_minUtmY;
-	double m_maxUtmY;
+
+    ofxPoint<double> m_minLonLat;
+    ofxPoint<double> m_maxLonLat;
+    ofxPoint<double> m_minUtm;
+    ofxPoint<double> m_maxUtm;
 
     UtmDataVector m_utmPoints;
     UtmDataVector m_normalizedUtmPoints;

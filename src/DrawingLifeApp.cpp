@@ -5,7 +5,6 @@
 #include "DrawingLifeApp.h"
 #include "GpsData.h"
 #include <vector>
-#include <limits>
 #include <fstream>
 
 #include "DataLoader.h"

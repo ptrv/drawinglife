@@ -14,6 +14,9 @@ public:
 
     static void grabScreen();
 
+    static ofxPoint<double> getPointDoubleMin();
+    static ofxPoint<double> getPointDoubleMax();
+
 private:
     Utils();
 };

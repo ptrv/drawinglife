@@ -5,13 +5,6 @@
 #include "DrawingLifeIncludes.h"
 #include "Walk.h"
 
-#if defined (WIN32)
-#undef max
-#undef min
-#endif
-#include <limits>
-
-
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 

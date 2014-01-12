@@ -151,7 +151,10 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		}
 		// -----------------------------------------------------------------------------
 		gpsData.clear();
-		gpsData.setGpsData(gpsSegmentVec, minLon, maxLon, minLat, maxLat, user);
+        gpsData.setGpsData(gpsSegmentVec,
+                           ofxPoint<double>(minLon, minLat),
+                           ofxPoint<double>(maxLon, maxLat),
+                           user);
 		result = true;
 	}
 	CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))

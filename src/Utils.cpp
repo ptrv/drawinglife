@@ -4,51 +4,53 @@
 #include "DrawingLifeApp.h"
 #include "GpsData.h"
 
+#if defined (WIN32)
+#undef max
+#undef min
+#endif
+#include <limits>
+
 Utils::Utils()
 {
 }
 
 void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
 {
-    double minX = numeric_limits<double>::max();
-    double maxX = -numeric_limits<double>::max();
-    double minY = numeric_limits<double>::max();
-    double maxY = -numeric_limits<double>::max();
-    double minLon = numeric_limits<double>::max();
-    double maxLon = -numeric_limits<double>::max();
-    double minLat = numeric_limits<double>::max();
-    double maxLat = -numeric_limits<double>::max();
+    ofxPoint<double> minXY = getPointDoubleMax();
+    ofxPoint<double> maxXY = getPointDoubleMin();
+    ofxPoint<double> minLonLat = getPointDoubleMax();
+    ofxPoint<double> maxLonLat = getPointDoubleMin();
 
     GpsDataVector& gpsDatas = app.getGpsDataVector();
     const AppSettings& settings = app.getAppSettings();
 
     BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
     {
-        if (gpsData->getMinUtmX() < minX) minX = gpsData->getMinUtmX();
-        if (gpsData->getMaxUtmX() > maxX) maxX = gpsData->getMaxUtmX();
-        if (gpsData->getMinUtmY() < minY) minY = gpsData->getMinUtmY();
-        if (gpsData->getMaxUtmY() > maxY) maxY = gpsData->getMaxUtmY();
-        if (gpsData->getMinLon() < minLon) minLon = gpsData->getMinLon();
-        if (gpsData->getMaxLon() > maxLon) maxLon = gpsData->getMaxLon();
-        if (gpsData->getMinLat() < minLat) minLat = gpsData->getMinLon();
-        if (gpsData->getMaxLat() > maxLat) maxLat = gpsData->getMaxLon();
+        if (gpsData->getMinUtmX() < minXY.x) minXY.x = gpsData->getMinUtmX();
+        if (gpsData->getMaxUtmX() > maxXY.x) maxXY.x = gpsData->getMaxUtmX();
+        if (gpsData->getMinUtmY() < minXY.y) minXY.y = gpsData->getMinUtmY();
+        if (gpsData->getMaxUtmY() > maxXY.y) maxXY.y = gpsData->getMaxUtmY();
+        if (gpsData->getMinLon() < minLonLat.x) minLonLat.x = gpsData->getMinLon();
+        if (gpsData->getMaxLon() > maxLonLat.x) maxLonLat.x = gpsData->getMaxLon();
+        if (gpsData->getMinLat() < minLonLat.y) minLonLat.y = gpsData->getMinLon();
+        if (gpsData->getMaxLat() > maxLonLat.y) maxLonLat.y = gpsData->getMaxLon();
     }
 
     bool isRegionOn = settings.isRegionsOn();
     if (isRegionOn)
     {
-        GpsData::setGlobalValues(minX, maxX, minY, maxY, 0.0);
+        GpsData::setGlobalValues(minXY, maxXY, 0.0);
     }
     else
     {
         if (settings.isMeridianAuto())
-            GpsData::setGlobalValues(minX, maxX, minY, maxY,
-                                     (minLon + (maxLon - minLon)/2));
+            GpsData::setGlobalValues(minXY, maxXY,
+                                     minLonLat.x + (maxLonLat.x - minLonLat.x) / 2);
         else
         {
             double lon0 = 0.0;
             lon0 = settings.getMeridian();
-            GpsData::setGlobalValues(minX, maxX, minY, maxY, lon0);
+            GpsData::setGlobalValues(minXY, maxXY, lon0);
         }
     }
 
@@ -84,4 +86,16 @@ void Utils::grabScreen()
     sprintf(fileNameStr, "output/output_%.4u.png", currentFrame);
     ofSaveScreen(fileNameStr);
     ++currentFrame;
+}
+
+ofxPoint<double> Utils::getPointDoubleMin()
+{
+    return ofxPoint<double>(-std::numeric_limits<double>::max(),
+                            -std::numeric_limits<double>::max());
+}
+
+ofxPoint<double> Utils::getPointDoubleMax()
+{
+    return ofxPoint<double>(std::numeric_limits<double>::max(),
+                            std::numeric_limits<double>::max());
 }
