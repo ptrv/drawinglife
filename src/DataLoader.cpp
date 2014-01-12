@@ -89,7 +89,7 @@ bool DataLoader::loadGpsDataCity(DrawingLifeApp& app,
                                  const std::string& city)
 {
     std::vector<tFuncLoadGpsData> funcVec;
-    size_t numPersons = app.getAppSettings().getNumPersons();
+    const size_t numPersons = app.getAppSettings().getNumPersons();
     for (size_t i = 0; i < numPersons; ++i)
     {
         tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataCity, _1, _2,
@@ -108,7 +108,7 @@ bool DataLoader::loadGpsDataYearRange(DrawingLifeApp& app,
 {
     std::vector<tFuncLoadGpsData> funcVec;
 
-    size_t numPersons = app.getAppSettings().getNumPersons();
+    const size_t numPersons = app.getAppSettings().getNumPersons();
     for (size_t i = 0; i < numPersons; ++i)
     {
         tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataYearRange, _1, _2,
@@ -126,7 +126,7 @@ bool DataLoader::loadGpsDataWithSqlFile(DrawingLifeApp& app,
 {
     std::vector<tFuncLoadGpsData> funcVec;
 
-    size_t numPersons = app.getAppSettings().getNumPersons();
+    const size_t numPersons = app.getAppSettings().getNumPersons();
     for (size_t i = 0; i < numPersons; ++i)
     {
         std::ifstream sqlFile(ofToDataPath(sqlFilePaths[i]).c_str(),
@@ -164,7 +164,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                                      settings.getBoundingBoxPadding()));
     }
     // get GpsData from database
-    size_t numPersons = settings.getNumPersons();
+    const size_t numPersons = settings.getNumPersons();
     for (size_t i = 0; i < numPersons; ++i)
     {
         GpsDataPtr gpsData = boost::make_shared<GpsData>(settings);

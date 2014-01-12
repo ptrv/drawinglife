@@ -543,7 +543,7 @@ void Walk::setMagicBox(MagicBoxWeak magicBoxWeak)
 {
     m_magicBox = magicBoxWeak;
     reset();
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     MagicBoxPtr magicBox = m_magicBox.lock();
     if (gpsData && magicBox)
     {
