@@ -118,7 +118,7 @@ void DrawingLifeApp::setup()
 	// -----------------------------------------------------------------------------
     m_imageAsCurrentPoint = m_settings->isCurrentPointImage();
 
-    if(m_imageAsCurrentPoint)
+    if (m_imageAsCurrentPoint)
     {
         m_imageList = m_settings->getCurrentImageData();
     }
@@ -126,7 +126,7 @@ void DrawingLifeApp::setup()
     m_numPerson = m_settings->getNumPerson();
     m_names = m_settings->getNames();
 
-    for(size_t i = 0; i < m_numPerson; ++i)
+    for (size_t i = 0; i < m_numPerson; ++i)
     {
         m_viewAspectRatioData.offset.push_back(ofxPoint<double>(0, 0));
         m_viewAspectRatioData.minDimension.push_back(0);
@@ -165,7 +165,7 @@ void DrawingLifeApp::setup()
                                                             dampCenter,
                                                             attrCenter));
 
-    if( ! m_isZoomAnimation)
+    if ( ! m_isZoomAnimation)
     {
 
     	//    	m_zoomIntegrator->setTarget();
@@ -207,13 +207,13 @@ void DrawingLifeApp::setup()
                                                                   m_sqlFilePaths);
 			break;
         }
-        if(gpsDataAreLoaded)
+        if (gpsDataAreLoaded)
         {
 			// GpsData are loaded now. Drawing routine can start.
-            for(size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
+            for (size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
 	        {
                 const GpsDataPtr gpsData = m_gpsDatas[personIndex];
-                if(gpsData->getTotalGpsPoints() == 0)
+                if (gpsData->getTotalGpsPoints() == 0)
                 {
                     m_startScreenMode = true;
                     break;
@@ -225,7 +225,7 @@ void DrawingLifeApp::setup()
             BOOST_FOREACH(const LocationImageData& locImgData, locImgVec)
             {
                 LocationImage* lImg;
-                if(m_multiMode)
+                if (m_multiMode)
                 {
                     lImg = new LocationImage(*m_magicBox.get(), locImgData);
                 }
@@ -254,7 +254,7 @@ void DrawingLifeApp::setup()
         ofHideCursor();
     }
 
-    if(m_settings->isSoundActive())
+    if (m_settings->isSoundActive())
     {
         BOOST_FOREACH(const std::string& sndFilePath, m_settings->getSoundFiles())
     	{
@@ -269,27 +269,27 @@ void DrawingLifeApp::setup()
 int currentSoundFile = 0;
 void DrawingLifeApp::soundUpdate()
 {
-	if(m_settings->isSoundActive() && m_soundPlayer.size() > 0)
+    if (m_settings->isSoundActive() && m_soundPlayer.size() > 0)
 	{
-		if(m_timeline->isFirst())
+        if (m_timeline->isFirst())
 		{
 			currentSoundFile = 0;
             for (size_t i = 0; i < m_soundPlayer.size(); ++i)
 			{
                 m_soundPlayer[i].stop();
 			}
-			if(m_soundPlayer.size() > 0)
+            if (m_soundPlayer.size() > 0)
 			{
                 m_soundPlayer[currentSoundFile].play();
 			}
 		}
 		else
 		{
-            if( ! m_soundPlayer[currentSoundFile].getIsPlaying())
+            if ( ! m_soundPlayer[currentSoundFile].getIsPlaying())
 			{
                 m_soundPlayer[currentSoundFile].stop();
                 m_soundPlayer[currentSoundFile].setPosition(0.0);
-				if(currentSoundFile < static_cast<int>(m_soundPlayer.size()-1))
+                if (currentSoundFile < static_cast<int>(m_soundPlayer.size()) - 1)
 				{
 					++currentSoundFile;
 				}
@@ -306,7 +306,7 @@ void DrawingLifeApp::soundUpdate()
 int zoomFrameCount = 0;
 bool DrawingLifeApp::zoomHasChanged()
 {
-	if(m_timeline->isFirst())
+    if (m_timeline->isFirst())
 	{
 		zoomFrameCount = 0;
 		return true;
@@ -326,7 +326,7 @@ bool DrawingLifeApp::zoomHasChanged()
 
 bool DrawingLifeApp::zoomHasChangedId()
 {
-    if(zoomFrameCount + 1 >= static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    if (zoomFrameCount + 1 >= static_cast<int>(m_settings->getZoomAnimFrames().size()))
     {
 		return false;
     }
@@ -345,14 +345,19 @@ bool DrawingLifeApp::zoomHasChangedId()
 
 bool DrawingLifeApp::zoomHasChangedTimestamp()
 {
-	if(zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    if (zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    {
 		return false;
+    }
 	string currentTimestamp = m_timeline->getCurrentTimelineObj().timeString;
 	string zoomChangeTimestamp = m_settings->getZoomAnimFrames()[zoomFrameCount+1].timestamp;
-	if (zoomChangeTimestamp.compare(currentTimestamp) == 0) {
+    if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
+    {
 		++zoomFrameCount;
 		return true;
-	} else {
+    }
+    else
+    {
 		return false;
 	}
 }
@@ -365,7 +370,7 @@ bool DrawingLifeApp::zoomHasChangedTime()
 	int currIndex = 0;
     for (size_t i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
 	{
-		if((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
+        if ((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
 		{
 			currIndex = i;
 		}
@@ -374,10 +379,10 @@ bool DrawingLifeApp::zoomHasChangedTime()
 			break;
 		}
 	}
-	if(zoomFrameCount != currIndex)
+    if (zoomFrameCount != currIndex)
 	{
 		++zoomFrameCount;
-		if(zoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+        if (zoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
         {
 			--zoomFrameCount;
         }
@@ -391,9 +396,9 @@ bool DrawingLifeApp::zoomHasChangedTime()
 
 void DrawingLifeApp::zoomUpdate()
 {
-	if(m_isZoomAnimation)
+    if (m_isZoomAnimation)
 	{
-		if(zoomHasChanged())
+        if (zoomHasChanged())
 		{
             const ZoomAnimFrame& zoomAnimFrame =
                     m_settings->getZoomAnimFrames()[zoomFrameCount];
@@ -403,7 +408,7 @@ void DrawingLifeApp::zoomUpdate()
             UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
                                                            *m_settings);
 
-			if(m_timeline->isFirst())
+            if (m_timeline->isFirst())
 			{
                 m_zoomIntegrator->set(zoomLevel);
                 m_theIntegrator->set(utmP);
@@ -416,9 +421,9 @@ void DrawingLifeApp::zoomUpdate()
     m_zoomIntegrator->update();
     m_theIntegrator->update();
 
-    if(m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
+    if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
     {
-        if(m_multiMode)
+        if (m_multiMode)
         {
             m_magicBox->setSize(m_zoomIntegrator->getValue());
             m_magicBox->setupBox(m_theIntegrator->getValue(), 0);
@@ -443,9 +448,9 @@ void DrawingLifeApp::update()
             && !m_interactiveMode
             && m_timeline->getTimeline().size() > 0)
     {
-        if(m_loopMode)
+        if (m_loopMode)
         {
-            for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
+            for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
             {
                 int id = m_timeline->getNext();
                 if (id < (int)m_numPerson)
@@ -457,10 +462,10 @@ void DrawingLifeApp::update()
                 soundUpdate();
 
                 m_timeline->countUp();
-                if(m_timeline->isFirst())
+                if (m_timeline->isFirst())
                 {
 //                            std::cout << "First timeline object!" << std::endl;
-                    for(size_t i = 0; i < m_walks.size(); ++i)
+                    for (size_t i = 0; i < m_walks.size(); ++i)
                     {
                         m_walks[i].reset();
                     }
@@ -475,9 +480,9 @@ void DrawingLifeApp::update()
         }
         else
         {
-            for(int i = 0; i < m_settings->getDrawSpeed(); ++i)
+            for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
             {
-                if(!m_timeline->isLast())
+                if (!m_timeline->isLast())
                 {
                     int id = m_timeline->getNext();
                     m_walks[id].update();
@@ -530,16 +535,16 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
 //            fillViewAreaUTM();
             //---------------------------------------------------------------------------
-            for(size_t i = 0; i < m_locationImgs.size(); ++i)
+            for (size_t i = 0; i < m_locationImgs.size(); ++i)
             {
                 m_locationImgs[i].draw();
             }
-            if(m_multiMode && m_multiModeInfo)
+            if (m_multiMode && m_multiModeInfo)
             {
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                 ofSetHexColor(0xffffff);
                 std::string infoText = m_timeline->getCurrentTime();
-//                if(m_pause)
+//                if (m_pause)
 //                    infoText.append(" (stopped)");
                 m_fonts["info"].drawString(infoText,
                                            m_viewAspectRatioData.padding[0],
@@ -547,7 +552,7 @@ void DrawingLifeApp::draw()
 
             }
 
-            for(size_t i = 0; i < m_numPerson; ++i)
+            for (size_t i = 0; i < m_numPerson; ++i)
             {
                 Walk& walk = m_walks[i];
                 if (m_isDebugMode)
@@ -559,12 +564,12 @@ void DrawingLifeApp::draw()
                     ofDrawBitmapString(walk.getCurrentGpsInfoDebug(),
                                        debugTextX, debugTextY);
                 }
-                else if(m_showInfo)
+                else if (m_showInfo)
                 {
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                     ofSetHexColor(0xffffff);
                     std::string infoText = walk.getCurrentGpsInfo();
-//                    if(m_pause)
+//                    if (m_pause)
 //                        infoText.append(" (stopped)");
                     int infoX = m_viewAspectRatioData.padding[i]
                             + (ofGetWidth() / m_numPerson) * i;
@@ -575,7 +580,7 @@ void DrawingLifeApp::draw()
                 // -----------------------------------------------------------------------------
                 // Draw Gps data
                 // -----------------------------------------------------------------------------
-                if(doShader)
+                if (doShader)
                 {
                     shaderBegin();
                 }
@@ -585,7 +590,7 @@ void DrawingLifeApp::draw()
                            m_settings->getAlphaTrack());
                 ofNoFill();
                 walk.draw();
-                if(doShader)
+                if (doShader)
                 {
                     shaderEnd();
                 }
@@ -605,7 +610,7 @@ void DrawingLifeApp::draw()
                        m_settings->getColorForegroundB(),
                        m_settings->getAlphaTrack());
             ofNoFill();
-            for(size_t i = 0; i < m_numPerson; ++i)
+            for (size_t i = 0; i < m_numPerson; ++i)
             {
                 m_walks[i].drawAll();
             }
@@ -616,19 +621,19 @@ void DrawingLifeApp::draw()
             ViewHelper::drawFPS();
         }
 
-        if(m_showKeyCommands)
+        if (m_showKeyCommands)
         {
             ofColor c(255, 255, 255, m_settings->getAlphaLegend());
             ViewHelper::drawKeyCommands(c);
         }
 
-        if(m_timeline->isLast())
+        if (m_timeline->isLast())
         {
 
         }
     }
 
-    if(m_settings->getIsGrabScreen())
+    if (m_settings->getIsGrabScreen())
     {
         Utils::grabScreen();
     }
@@ -662,9 +667,9 @@ void DrawingLifeApp::keyPressed  (int key)
         break;
     case 'd':
         m_isDebugMode = !m_isDebugMode;
-        if(m_hideCursor)
+        if (m_hideCursor)
         {
-            if(!m_isDebugMode)
+            if (!m_isDebugMode)
                 ofHideCursor();
             else
                 ofShowCursor();
@@ -677,147 +682,147 @@ void DrawingLifeApp::keyPressed  (int key)
         m_showKeyCommands = !m_showKeyCommands;
         break;
 //    case 'c':
-//        for(unsigned int i = 0; i < m_walks.size(); ++i)
+//        for (unsigned int i = 0; i < m_walks.size(); ++i)
 //        {
 //            m_walks[i]->setDotColors();
 //        }
 //        break;
 //    case 49:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //    {
 //        loadGpsDataCity(m_names, "Berlin");
 //    }
-//    else if(m_dbQueryData.type != DBReader::DB_QUERY_CITY)
+//    else if (m_dbQueryData.type != DBReader::DB_QUERY_CITY)
 //    {
-//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        for (unsigned int i = 0; i < m_magicBoxes.size(); ++i)
 //        {
 //            m_magicBoxes[i]->toggleZoomLevel(1);
 //        }
-//        if(m_multiMode)
+//        if (m_multiMode)
 //            m_magicBox->toggleZoomLevel(1);
 //    }
 //    break;
 //    case 50:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //    {
 //        loadGpsDataCity(m_names, "London");
 //    }
 //    else
 //    {
-//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        for (unsigned int i = 0; i < m_magicBoxes.size(); ++i)
 //        {
 //            m_magicBoxes[i]->toggleZoomLevel(2);
 //        }
-//        if(m_multiMode)
+//        if (m_multiMode)
 //            m_magicBox->toggleZoomLevel(2);
 //    }
 //    break;
 //    case 51:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //    {
 //        loadGpsDataCity(m_names, "Barcelona");
 //    }
 //    else
 //    {
-//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        for (unsigned int i = 0; i < m_magicBoxes.size(); ++i)
 //        {
 //            m_magicBoxes[i]->toggleZoomLevel(3);
 //        }
-//        if(m_multiMode)
+//        if (m_multiMode)
 //            m_magicBox->toggleZoomLevel(3);
 //    }
 //    break;
 //    case 52:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //    {
 //        loadGpsDataCity(m_names, "Hamburg");
 //    }
 //    else
 //    {
-//        for(unsigned int i = 0; i < m_magicBoxes.size(); ++i)
+//        for (unsigned int i = 0; i < m_magicBoxes.size(); ++i)
 //        {
 //            m_magicBoxes[i]->toggleZoomLevel(4);
 //        }
-//        if(m_multiMode)
+//        if (m_multiMode)
 //            m_magicBox->toggleZoomLevel(4);
 //    }
 //    break;
 //    case 53:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //        loadGpsDataCity(m_names, "Vienna");
 //        break;
 //    case 54:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //        loadGpsDataCity(m_names,"New York");
 //        break;
 //    case 55:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //        loadGpsDataCity(m_names, "Tokyo");
 //        break;
 //    case 56:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //        loadGpsDataCity(m_names, "San Francisco");
 //        break;
 //    case 57:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //        loadGpsDataCity(m_names, "Bristol");
 //        break;
 //    case 48:
-//    if(m_dbQueryData.type == DBReader::DB_QUERY_CITY)
+//    if (m_dbQueryData.type == DBReader::DB_QUERY_CITY)
 //        loadGpsDataCity(m_names, "Banff");
 //        break;
     case '+':
-        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
+        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->zoom(MagicBox::ZOOM_IN);
         }
-        if(m_multiMode)
+        if (m_multiMode)
             m_magicBox->zoom(MagicBox::ZOOM_IN);
         break;
     case '-':
-        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
+        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->zoom(MagicBox::ZOOM_OUT);
         }
-        if(m_multiMode)
+        if (m_multiMode)
             m_magicBox->zoom(MagicBox::ZOOM_OUT);
         break;
     case OF_KEY_UP:
-        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
+        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->move(MagicBox::UP);
         }
-        if(m_multiMode)
+        if (m_multiMode)
             m_magicBox->move(MagicBox::UP);
         break;
     case OF_KEY_DOWN:
-        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
+        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->move(MagicBox::DOWN);
         }
-        if(m_multiMode)
+        if (m_multiMode)
             m_magicBox->move(MagicBox::DOWN);
         break;
        break;
     case OF_KEY_RIGHT:
-        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
+        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->move(MagicBox::RIGHT);
         }
-        if(m_multiMode)
+        if (m_multiMode)
             m_magicBox->move(MagicBox::RIGHT);
         break;
     case OF_KEY_LEFT:
-        for(size_t i = 0; i < m_magicBoxes.size(); ++i)
+        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
         {
             m_magicBoxes[i]->move(MagicBox::LEFT);
         }
-        if(m_multiMode)
+        if (m_multiMode)
             m_magicBox->move(MagicBox::LEFT);
 
         break;
     case ' ':
-        if(m_interactiveMode)
+        if (m_interactiveMode)
         {
             for (size_t i = 0; i < m_walks.size(); ++i)
             {
@@ -830,7 +835,7 @@ void DrawingLifeApp::keyPressed  (int key)
         }
         break;
     case OF_KEY_BACKSPACE:
-        if(m_interactiveMode)
+        if (m_interactiveMode)
         {
             for (size_t i = 0; i < m_walks.size(); ++i)
             {
@@ -839,7 +844,7 @@ void DrawingLifeApp::keyPressed  (int key)
         }
         break;
     case 't':
-        if(m_interactiveMode)
+        if (m_interactiveMode)
         {
             for (size_t i = 0; i < m_walks.size(); ++i)
             {
@@ -893,16 +898,16 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 {
     ViewHelper::setViewAspectRatio(*this);
-    for(size_t i = 0; i < m_numPerson; ++i)
+    for (size_t i = 0; i < m_numPerson; ++i)
     {
-//        if(m_walks[personIndex])
+//        if (m_walks[personIndex])
         m_walks[i].setViewBounds(ofGetWidth(),
                                  ofGetHeight(),
                                  m_viewAspectRatioData.offset[i],
                                  m_viewAspectRatioData.minDimension[i],
                                  m_viewAspectRatioData.padding[i]);
     }
-    for(size_t i = 0; i < m_locationImgs.size(); ++i)
+    for (size_t i = 0; i < m_locationImgs.size(); ++i)
     {
         m_locationImgs[i].setViewBounds(m_viewAspectRatioData.minDimension[0],
                                         m_viewAspectRatioData.padding[0],

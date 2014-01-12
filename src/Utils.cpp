@@ -35,13 +35,13 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
     }
 
     bool isRegionOn = settings.isRegionsOn();
-    if(isRegionOn)
+    if (isRegionOn)
     {
         GpsData::setGlobalValues(minX, maxX, minY, maxY, 0.0);
     }
     else
     {
-        if(settings.isMeridianAuto())
+        if (settings.isMeridianAuto())
             GpsData::setGlobalValues(minX, maxX, minY, maxY,
                                      (minLon + (maxLon - minLon)/2));
         else

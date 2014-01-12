@@ -165,7 +165,7 @@ m_grabScreen(false)
         m_initialized = loadJSON();
     }
 
-    if(m_initialized && m_printSettings)
+    if (m_initialized && m_printSettings)
     {
         print();
     }
@@ -181,7 +181,7 @@ bool AppSettings::loadXML()
 {
     ofxXmlSettings m_xml;
 
-    if(m_xml.loadFile(m_settingsFilePath))
+    if (m_xml.loadFile(m_settingsFilePath))
     {
         ofLog(OF_LOG_SILENT, "Settings file: "+m_settingsFilePath+" loaded!\n");
     }
@@ -261,7 +261,7 @@ bool AppSettings::loadXML()
     m_xml.pushTag("person");
 
     m_numPerson = m_xml.getNumTags("name");
-    for(unsigned int i = 0; i < m_numPerson; ++i)
+    for (unsigned int i = 0; i < m_numPerson; ++i)
     {
         m_names.push_back(m_xml.getValue("name", "", i));
         ofColor tmpColor;
@@ -284,13 +284,13 @@ bool AppSettings::loadXML()
     m_imageAsCurrentPoint = m_xml.getValue("ui:imageascurrent", 0) == 1;
     m_hideCursor = m_xml.getValue("settings:hidecursor", 0) == 1;
 
-    if(m_imageAsCurrentPoint)
+    if (m_imageAsCurrentPoint)
     {
         m_xml.pushTag("ui");
         m_xml.pushTag("currentpointimages");
 
         int numImgTags = m_xml.getNumTags("image");
-        for(int i = 0; i < numImgTags; ++i)
+        for (int i = 0; i < numImgTags; ++i)
         {
             m_xml.pushTag("image", i);
             CurrentImageData cid;
@@ -353,7 +353,7 @@ bool AppSettings::loadXML()
     m_xml.pushTag("locationimages");
     int numlocImgTags = m_xml.getNumTags("image");
     m_locationImgData.clear();
-    for(int i = 0; i < numlocImgTags; ++i)
+    for (int i = 0; i < numlocImgTags; ++i)
     {
         m_xml.pushTag("image",i);
         LocationImageData lid;
@@ -386,7 +386,7 @@ bool AppSettings::loadXML()
     m_zoomanimationUseOnlyZ = m_xml.getValue("onlyz", 0) == 1;
     m_xml.pushTag("frames");
     int numZoomFrames = m_xml.getNumTags("frame");
-    for(int i = 0; i < numZoomFrames; ++i)
+    for (int i = 0; i < numZoomFrames; ++i)
     {
     	ZoomAnimFrame zaf;
     	zaf.frameTime = m_xml.getAttribute("frame", "time", 0.0, i);
@@ -548,7 +548,7 @@ bool AppSettings::loadJSON()
         // users
         json = jsonRoot["users"];
         m_numPerson = json.size();
-        for(size_t i = 0; i < m_numPerson; ++i)
+        for (size_t i = 0; i < m_numPerson; ++i)
         {
             Json::Value person = json[i];
             m_names.push_back(JsonHelper::getString(person, "name", ""));
@@ -571,10 +571,10 @@ bool AppSettings::loadJSON()
 
         m_imageAsCurrentPoint = JsonHelper::getBool(json, "enabled", false);
 
-        if(m_imageAsCurrentPoint)
+        if (m_imageAsCurrentPoint)
         {
             json = jsonRoot["current_point_images"]["images"];
-            for(size_t i = 0; i < json.size(); ++i)
+            for (size_t i = 0; i < json.size(); ++i)
             {
                 Json::Value img = json[i];
                 CurrentImageData cid;
@@ -620,7 +620,7 @@ bool AppSettings::loadJSON()
 
         json = jsonRoot["location_images"]["images"];
         m_locationImgData.clear();
-        for(size_t i = 0; i < json.size(); ++i)
+        for (size_t i = 0; i < json.size(); ++i)
         {
             Json::Value img = json[i];
             LocationImageData lid;
@@ -653,7 +653,7 @@ bool AppSettings::loadJSON()
         m_zoomAnimationAttractionCenter = JsonHelper::getDouble(json, "attraction", 0.2);
 
         json = jsonRoot["zoom_animation"]["frames"];
-        for(size_t i = 0; i < json.size(); ++i)
+        for (size_t i = 0; i < json.size(); ++i)
         {
             Json::Value frame = json[i];
             ZoomAnimFrame zaf;

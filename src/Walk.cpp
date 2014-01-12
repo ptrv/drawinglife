@@ -180,14 +180,14 @@ void Walk::draw()
         const UtmPoint& currentUtm =
                 gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint];
 
-        if(!m_interactiveMode && !m_settings.isMultiMode()
+        if (!m_interactiveMode && !m_settings.isMultiMode()
                 && !m_settings.isBoundingBoxFixed())
         {
             magicBox->updateBoxIfNeeded(currentUtm);
         }
 
         int startSeg, startPoint;
-        if(m_maxPointsToDraw > 0 && m_maxPointsToDraw - m_currentPoint <= 0)
+        if (m_maxPointsToDraw > 0 && m_maxPointsToDraw - m_currentPoint <= 0)
         {
             int startIndex = m_currentPoint-m_maxPointsToDraw;
             const GpsDataIndex& gpsDataIndex =
@@ -200,7 +200,7 @@ void Walk::draw()
             startSeg = 0;
             startPoint = 0;
         }
-        if(m_interactiveMode && !m_drawTraced)
+        if (m_interactiveMode && !m_drawTraced)
         {
             startSeg = m_currentGpsSegment;
         }
@@ -214,7 +214,7 @@ void Walk::draw()
             if (i == m_currentGpsSegment)
             {
                 pointEnd = m_currentGpsPoint;
-                if(m_interactiveMode && m_drawTraced)
+                if (m_interactiveMode && m_drawTraced)
                     ofSetColor(m_currentSegColor.r,
                                m_currentSegColor.g,
                                m_currentSegColor.b,
@@ -229,10 +229,10 @@ void Walk::draw()
             {
                 const UtmPoint& utm = gpsData->getUTMPoints()[i][j];
                 bool isInBox = true;
-                if(m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+                if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
                 {
                     isInBox = magicBox->isInBox(utm);
-                    if(!isInBox)
+                    if (!isInBox)
                     {
                         glEnd();
                         glBegin(GL_LINE_STRIP);
@@ -240,14 +240,14 @@ void Walk::draw()
                 }
 //                else
 //                    isInBox = true;
-                if(m_settings.useSpeed())
+                if (m_settings.useSpeed())
                 {
                     //DBG_VAL(utm.speed);
-                    if(utm.speed > m_settings.getSpeedThreshold())
+                    if (utm.speed > m_settings.getSpeedThreshold())
                     {
                         const ofColor tmpColor = m_settings.getSpeedColorAbove();
                         ofSetColor(tmpColor);
-                        if(tmpColor.a == 0.0)
+                        if (tmpColor.a == 0.0)
                         {
                             isInBox = false;
                             glEnd();
@@ -258,7 +258,7 @@ void Walk::draw()
                     {
                         const ofColor tmpColor = m_settings.getSpeedColorUnder();
                         ofSetColor(tmpColor);
-                        if(tmpColor.a == 0.0)
+                        if (tmpColor.a == 0.0)
                         {
                             isInBox = false;
                             glEnd();
@@ -266,7 +266,7 @@ void Walk::draw()
                         }
                     }
                 }
-                if(isInBox)
+                if (isInBox)
                 {
 //                    ofSetColor(255, 0,0);
                     ofxPoint<double> tmp = magicBox->getDrawablePoint(utm);
@@ -291,13 +291,13 @@ void Walk::draw()
                          getScaledUtmY(currentDrawablePoint.y));
 
 		}
-		else if(!m_interactiveMode)
+        else if (!m_interactiveMode)
 		{
 			ofFill();
             bool skipDrawing = false;
-            if(m_settings.useSpeed())
+            if (m_settings.useSpeed())
 			{
-                if(currentUtm.speed > m_settings.getSpeedThreshold())
+                if (currentUtm.speed > m_settings.getSpeedThreshold())
 			    {
                     skipDrawing = m_settings.getSpeedColorAbove().a == 0.0;
                 }
@@ -317,7 +317,7 @@ void Walk::draw()
 	}
 
     // draw borders of bounding boxes.
-    if(EXTRA_DEBUG_MODE)
+    if (EXTRA_DEBUG_MODE)
     {
         ofNoFill();
         ofSetColor(255,0,0);
@@ -365,7 +365,7 @@ void Walk::drawAll()
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
         {
             bool isInBox = true;
-            if(m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+            if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
             {
                 isInBox = magicBox->isInBox(utmPoint);
             }
@@ -545,7 +545,7 @@ const std::string& Walk::getCurrentGpsInfoDebug()
 const std::string& Walk::getCurrentGpsInfo()
 {
     GpsDataPtr gpsData = m_gpsData.lock();
-    if(gpsData && gpsData->getTotalGpsPoints() != 0)
+    if (gpsData && gpsData->getTotalGpsPoints() != 0)
 	{
 		std::string timeString = getCurrentTimestamp();
 		int year, month, day, hour, min, sec;

@@ -45,11 +45,11 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
         Walk::setDotSize(settings.getDotSize());
 
-        for(size_t i = 0; i < numPersons; ++i)
+        for (size_t i = 0; i < numPersons; ++i)
         {
             Walk& walk = walks[i];
 
-            if(!settings.isBoundingBoxAuto() && !settings.isMultiMode())
+            if (!settings.isBoundingBoxAuto() && !settings.isMultiMode())
             {
                 //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
                 double bbLat = settings.getBoundingBoxLat();
@@ -59,7 +59,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
             }
             else
             {
-                if(settings.isMultiMode())
+                if (settings.isMultiMode())
                 {
                     double bbLat = settings.getBoundingBoxLat();
                     double bbLon = settings.getBoundingBoxLon();
@@ -165,12 +165,12 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
     }
     // get GpsData from database
     size_t numPerson = settings.getNumPerson();
-    for(size_t i = 0; i < numPerson; ++i)
+    for (size_t i = 0; i < numPerson; ++i)
     {
         GpsDataPtr gpsData = boost::make_shared<GpsData>(settings);
         gpsDatas.push_back(gpsData);
 
-        if(!settings.isMultiMode())
+        if (!settings.isMultiMode())
         {
             magicBoxes.push_back(boost::make_shared<MagicBox>(
                                      settings,
@@ -198,7 +198,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
             dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
 
-            if(dbOk)
+            if (dbOk)
             {
                 ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
                 ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
@@ -238,14 +238,14 @@ bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
 
     app.clearCurrentPointImages();
 
-    for(size_t i = 0; i < imageList.size(); ++i)
+    for (size_t i = 0; i < imageList.size(); ++i)
     {
         ofImage* tmpImg = new ofImage();
         std::string str = imageList[i].path;
         float width = imageList[i].width;
         float height= imageList[i].height;
 
-        if(tmpImg->loadImage(str))
+        if (tmpImg->loadImage(str))
         {
             tmpImg->resize(width, height);
             app.addCurrentPointImage(tmpImg);

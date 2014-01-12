@@ -89,7 +89,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
         // ---------------------------------------------------------------------
 		// Get all data from query.
         // ---------------------------------------------------------------------
-		while(reader.read())
+        while (reader.read())
 		{
 			GpsPoint gpsPoint;
             int id = reader.getint(0);
@@ -144,7 +144,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
 		sqlite3_reader readerMinMax = cmd2.executereader();
 		double minLon, maxLon, minLat, maxLat;
-		while(readerMinMax.read())
+        while (readerMinMax.read())
 		{
 			minLon = readerMinMax.getdouble(0);
 			maxLon = readerMinMax.getdouble(1);

@@ -90,7 +90,7 @@ void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
 void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 {
 
-//    if(!this->isInBox(utmPoint))
+//    if (!this->isInBox(utmPoint))
 //    {
 //        if (utmPoint.x >= m_theBox.x + m_theBox.width)
 //        {
@@ -114,7 +114,7 @@ void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 
     // -----------------------------------------------------------------------------
 
-    if(!this->isInPaddedBox(utmPoint))
+    if (!this->isInPaddedBox(utmPoint))
     {
         if (utmPoint.x >= m_paddedBox.getX() + m_paddedBox.getWidth())
         {
@@ -168,7 +168,7 @@ void MagicBox::addToBoxSize(const double sizeToAdd)
 
     m_currentSize += sizeToAdd;
 
-    if(m_currentSize > 0)
+    if (m_currentSize > 0)
     {
         double x = m_theBox.getX();
         x -= sizeToAdd / 2;
@@ -211,31 +211,31 @@ void MagicBox::setSize(const double newSize)
 
 void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
 {
-    if(zoomLevel > 4)
+    if (zoomLevel > 4)
         zoomLevel = 4;
 
     switch(zoomLevel)
     {
         case 1:
-            if(m_currentSize != m_zoomLevels[0])
+            if (m_currentSize != m_zoomLevels[0])
                 setSize(m_zoomLevels[0]);
             else
                 setSize(m_defaultSize);
         break;
         case 2:
-            if(m_currentSize != m_zoomLevels[1])
+            if (m_currentSize != m_zoomLevels[1])
                 setSize(m_zoomLevels[1]);
             else
                 setSize(m_defaultSize);
         break;
         case 3:
-            if(m_currentSize != m_zoomLevels[2])
+            if (m_currentSize != m_zoomLevels[2])
                 setSize(m_zoomLevels[2]);
             else
                 setSize(m_defaultSize);
         break;
         case 4:
-            if(m_currentSize != m_zoomLevels[3])
+            if (m_currentSize != m_zoomLevels[3])
                 setSize(m_zoomLevels[3]);
             else
                 setSize(m_defaultSize);
@@ -260,7 +260,7 @@ const ofxRectangle<double> MagicBox::getNormalizedPaddedBox() const
 void MagicBox::setBoxes()
 {
     m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
-    if(m_settings.isInteractiveMode())
+    if (m_settings.isInteractiveMode())
     {
         m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
     }

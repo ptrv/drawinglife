@@ -52,7 +52,7 @@ void Timeline::setTimeline(const GpsDataVector& gpsDatas)
     }
 
     sortTimeline();
-    if(m_timeline.size() > 0)
+    if (m_timeline.size() > 0)
     {
         m_current = &m_timeline[0];
     }
@@ -95,7 +95,7 @@ bool Timeline::isNextReady()
     m_current = &m_timeline[m_counter];
 
     bool ready = false;
-    if(m_last != 0)
+    if (m_last != 0)
     {
         time_t current = m_current->secs;
         time_t last = m_last->secs;
@@ -125,7 +125,7 @@ bool Timeline::isNextReady()
 
 void Timeline::countUp()
 {
-    if(m_currentCountWasUpdated)
+    if (m_currentCountWasUpdated)
     {
         m_lastUpdatedTimelineId = m_counter;
     }

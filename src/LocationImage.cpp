@@ -13,11 +13,11 @@ m_viewOffset(0.0, 0.0)
 {
     m_image.loadImage(lid.path);
     m_image.resize(lid.width, lid.height);
-    if(lid.anchorType == 1)
+    if (lid.anchorType == 1)
     {
         m_image.setAnchorPercent(lid.anchorX, lid.anchorY);
     }
-    else if(lid.anchorType == 2)
+    else if (lid.anchorType == 2)
     {
         m_image.setAnchorPoint(lid.anchorX, lid.anchorY);
     }
@@ -45,7 +45,7 @@ void LocationImage::draw()
     const ofxPoint<double>& tmp = m_magicBox.getDrawablePoint(m_utm);
     m_image.draw(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
 
-    if(m_lid.anchorShow)
+    if (m_lid.anchorShow)
     {
         ofSetHexColor(0xff0000);
         ofCircle(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y), 5);

@@ -449,26 +449,26 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
     Math::real gamma, k;
     const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
 
-    if(settings.isRegionsOn())
+    if (settings.isRegionsOn())
     {
         double lon0 = 0.0;
-        if(lon >= regions[0].minLon && lon < regions[0].maxLon)
+        if (lon >= regions[0].minLon && lon < regions[0].maxLon)
         {
             lon0 = regions[0].lon0;
         }
-        else if(lon >= regions[1].minLon && lon < regions[1].maxLon)
+        else if (lon >= regions[1].minLon && lon < regions[1].maxLon)
         {
             lon0 = regions[1].lon0;
         }
-        else if(lon >= regions[2].minLon && lon < regions[2].maxLon)
+        else if (lon >= regions[2].minLon && lon < regions[2].maxLon)
         {
             lon0 = regions[2].lon0;
         }
-        else if(lon >= regions[3].minLon && lon < regions[3].maxLon)
+        else if (lon >= regions[3].minLon && lon < regions[3].maxLon)
         {
             lon0 = regions[3].lon0;
         }
-        else if(lon >= regions[4].minLon && lon <= regions[4].maxLon)
+        else if (lon >= regions[4].minLon && lon <= regions[4].maxLon)
         {
             lon0 = regions[4].lon0;
         }

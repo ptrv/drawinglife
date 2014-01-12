@@ -65,7 +65,7 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
     double width;
     double height;
 
-    if(isMultiMode)
+    if (isMultiMode)
     {
         width = ofGetWidth();
     }
@@ -76,13 +76,13 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
 
     height = ofGetHeight();
 
-    for(size_t i = 0; i < numPerson; ++i)
+    for (size_t i = 0; i < numPerson; ++i)
     {
         // Reset for view padding.
         viewAspectRatioData.offset[i].x = 0;
         viewAspectRatioData.offset[i].y = 0;
 
-//        if(false)
+//        if (false)
 //        {
 //            m_viewMinDimension[personIndex] = height;
 //
@@ -111,7 +111,7 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
         viewAspectRatioData.offset[i].x += viewAspectRatioData.padding[i];
         viewAspectRatioData.offset[i].y += viewAspectRatioData.padding[i];
 
-        if(!isMultiMode)
+        if (!isMultiMode)
         {
             viewAspectRatioData.offset[i].x += width * i;
         }
@@ -131,7 +131,7 @@ void ViewHelper::fillViewAreaUTM(DrawingLifeApp& app)
 
     const WalkVector& walks = app.getWalkVector();
 
-    for(size_t i = 0; i < numPerson; ++i)
+    for (size_t i = 0; i < numPerson; ++i)
     {
         // Normalized value range from 0 to 1.
         const Walk& walk = walks[i];
@@ -142,7 +142,7 @@ void ViewHelper::fillViewAreaUTM(DrawingLifeApp& app)
         ofFill();
         ofSetColor(foregroundColor);
         ofRect(x, y, w, h);
-        if(isMultiMode)
+        if (isMultiMode)
         {
             break;
         }
