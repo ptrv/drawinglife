@@ -43,16 +43,6 @@ public:
 	 * \brief Reset counter.
 	 */
     void reset();
-	/**
-	 * \brief Get current GpsPoint information.
-	 * \return formatted string with info.
-	 */
-    const std::string& getCurrentGpsInfoDebug();
-    /**
-	 * \brief Get current GpsPoint information.
-	 * \return formatted string with info.
-	 */
-    const std::string& getCurrentGpsInfo();
     /**
 	 * \brief Get current Gps location.
 	 * \return location string for current GpsPoint.
@@ -136,9 +126,6 @@ private:
 	int m_currentGpsSegment;
 	int m_currentPoint;
 	bool m_firstPoint;
-
-	std::string m_currentGpsPointInfoDebug;
-    std::string m_currentGpsPointInfo;
 
     MagicBoxWeak m_magicBox;
 

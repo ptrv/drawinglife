@@ -17,8 +17,6 @@ m_currentGpsPoint(0),
 m_currentGpsSegment(0),
 m_currentPoint(-1),
 m_firstPoint(true),
-m_currentGpsPointInfoDebug(""),
-m_currentGpsPointInfo(""),
 m_currentPointIsImage(false),
 m_interactiveMode(false),
 m_drawTraced(true),
@@ -463,67 +461,6 @@ double Walk::getCurrentUtmY() const
 
 // -----------------------------------------------------------------------------
 
-const std::string& Walk::getCurrentGpsInfoDebug()
-{
-    const GpsDataPtr gpsData = m_gpsData.lock();
-    const MagicBoxPtr magicBox = m_magicBox.lock();
-    if (gpsData && magicBox)
-    {
-        GpsPoint boxCenter = magicBox->getCenterGps();
-        m_currentGpsPointInfoDebug  =	"Longitude         : " + ofToString(getCurrentLongitude(), 7) + "\n" +
-        "Latitude          : " + ofToString(getCurrentLatitude(), 7) + "\n" +
-        "Elevation         : " + ofToString(getCurrentElevation(), 7) + "\n" +
-        "UTM X             : " + ofToString(getCurrentUtmX(), 7) + "\n" +
-        "UTM Y             : " + ofToString(getCurrentUtmY(), 7) + "\n" +
-        "Time              : " + getCurrentTimestamp() + "\n" +
-        "Location          : " + getGpsLocationCurrent() + "\n" +
-        "Central meridian  : " + ofToString(gpsData->getLon0(), 7) + "\n" +
-        "Meridian global   : " + ofToString(GpsData::getLon0Glogal(), 7) + "\n" +
-        "Min/Max latitude  : " + ofToString(gpsData->getMinLat(), 7) + " / " + ofToString(gpsData->getMaxLat(), 7) + "\n" +
-        "Min/Max longitude : " + ofToString(gpsData->getMinLon(), 7) + " / " + ofToString(gpsData->getMaxLon(), 7) + "\n" +
-        "Min/Max UTM X     : " + ofToString(gpsData->getMinUtmX(), 7) + " / " + ofToString(gpsData->getMaxUtmX(), 7) + "\n" +
-        "Min/Max UTM Y     : " + ofToString(gpsData->getMinUtmY(), 7) + " / " + ofToString(gpsData->getMaxUtmY(), 7) + "\n" +
-        "Currrent pt.      : " + ofToString(getCurrentPointNum()) + "\n" +
-        "Segment nr.       : " + ofToString(getCurrentSegmentNum()) + "\n" +
-        "Total pts.        : " + ofToString(gpsData->getTotalGpsPoints()) + "\n" +
-    //	"Viewbox center    : " + ofToString(m_magicBox->getCenter().x,7) + " / " + ofToString(m_magicBox->getCenter().y, 7) + "\n" +
-        "Viewbox center    : " + ofToString(boxCenter.getLatitude(),7) + " / " + ofToString(boxCenter.getLongitude(), 7) + "\n" +
-        "Viewbox size      : " + ofToString(magicBox->getSize(),7) + "\n" +
-        "Person            : " + gpsData->getUser();
-    }
-    else
-    {
-        m_currentGpsPointInfoDebug = std::string();
-    }
-
-
-    return m_currentGpsPointInfoDebug;
-}
-
-const std::string& Walk::getCurrentGpsInfo()
-{
-    const GpsDataPtr gpsData = m_gpsData.lock();
-    if (gpsData && gpsData->getTotalGpsPoints() != 0)
-	{
-		std::string timeString = getCurrentTimestamp();
-		int year, month, day, hour, min, sec;
-//        sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ",
-//               &year, &month, &day, &hour, &min, &sec);
-        sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d",
-               &year, &month, &day, &hour, &min, &sec);
-		char buf[25];
-        sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d",
-                day, month, year, hour, min, sec);
-		m_currentGpsPointInfo = getGpsLocationCurrent() + " " + string(buf);
-    }
-    else
-    {
-        m_currentGpsPointInfo = std::string();
-    }
-	return m_currentGpsPointInfo;
-
-
-}
 //void Walk::setDotColors()
 //{
 ////   	m_dotColor.a = m_dotAlpha;

@@ -552,21 +552,26 @@ void DrawingLifeApp::draw()
 
             for (size_t i = 0; i < m_numPersons; ++i)
             {
+                const GpsDataPtr& gpsData = m_gpsDatas[i];
                 Walk& walk = m_walks[i];
                 if (m_isDebugMode)
                 {
+                    const MagicBoxPtr& box = m_settings->isMultiMode()
+                            ? m_magicBox : m_magicBoxes[i];
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
 
                     int debugTextX = 30 + (ofGetWidth() / m_numPersons) * i;
                     int debugTextY = 30;
-                    ofDrawBitmapString(walk.getCurrentGpsInfoDebug(),
+                    ofDrawBitmapString(Utils::getCurrentGpsInfoDebug(
+                                           gpsData.get(), &walk, box.get()),
                                        debugTextX, debugTextY);
                 }
                 else if (m_showInfo)
                 {
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                     ofSetHexColor(0xffffff);
-                    std::string infoText = walk.getCurrentGpsInfo();
+                    std::string infoText = Utils::getCurrentGpsInfo(
+                                gpsData.get(), &walk);
 //                    if (m_pause)
 //                        infoText.append(" (stopped)");
                     int infoX = m_viewAspectRatioData.padding[i]
