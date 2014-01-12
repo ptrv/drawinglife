@@ -230,9 +230,11 @@ void DrawingLifeApp::setup()
                     lImg = new LocationImage(*m_magicBoxes[0].get(), locImgData);
                 }
 
-                lImg->setViewBounds(m_viewAspectRatioData.minDimension[0],
-                                    m_viewAspectRatioData.padding[0],
-                                    m_viewAspectRatioData.offset[0]);
+                lImg->setViewBounds(ofGetWidth(),
+                                    ofGetHeight(),
+                                    m_viewAspectRatioData.offset[0],
+                                    m_viewAspectRatioData.minDimension[0],
+                                    m_viewAspectRatioData.padding[0]);
 
                 m_locationImgs.push_back(lImg);
             }
@@ -904,8 +906,10 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
     }
     for (size_t i = 0; i < m_locationImgs.size(); ++i)
     {
-        m_locationImgs[i].setViewBounds(m_viewAspectRatioData.minDimension[0],
-                                        m_viewAspectRatioData.padding[0],
-                                        m_viewAspectRatioData.offset[0]);
+        m_locationImgs[i].setViewBounds(ofGetWidth(),
+                                        ofGetHeight(),
+                                        m_viewAspectRatioData.offset[0],
+                                        m_viewAspectRatioData.minDimension[0],
+                                        m_viewAspectRatioData.padding[0]);
     }
 }

@@ -8,44 +8,16 @@
 #include <string>
 #include "GpsData.h"
 #include "MagicBox.h"
+#include "DrawingLifeDrawable.h"
 
-class Walk
+
+class Walk : public DrawingLifeDrawable
 {
 public:
     Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled=true);
 	~Walk();
 
 	//------------------------------------------------------------------------------
-
-	/**
-	 * \brief
-	 * \param screenWidth
-	 * \param screenHeight
-	 * \param viewXOffset
-	 * \param viewYOffset
-	 * \param viewMinDimension
-	 * \param viewPadding
-	 */
-	void setViewBounds(int screenWidth,
-					   int screenHeight,
-                       const ofxPoint<double>& viewOffset,
-					   double viewMinDimension,
-					   double viewPadding);
-
-    /**
-	 * \brief Scale UTM Y to application window size.
-	 * \param utmY UTM Y value to scale.
-	 * \return scaled UTM Y value.
-	 */
-    double getScaledUtmY(double utmY) const;
-    /**
-	 * \brief Scale UTM X to application window size.
-	 * \param utmX UTM X value to scale.
-	 * \return scaled UTM X value.
-	 */
-    double getScaledUtmX(double utmX) const;
-
-    UtmPoint getScaledUtm(const UtmPoint& normalizedUtmPoint) const;
 
     /**
 	 * \brief Draw function for GpsData.
@@ -164,12 +136,6 @@ private:
 	int m_currentGpsSegment;
 	int m_currentPoint;
 	bool m_firstPoint;
-
-	int m_screenWidth;
-	int m_screenHeight;
-    ofxPoint<double> m_viewOffset;
-	double m_viewMinDimension;
-	double m_viewPadding;
 
 	std::string m_currentGpsPointInfoDebug;
     std::string m_currentGpsPointInfo;

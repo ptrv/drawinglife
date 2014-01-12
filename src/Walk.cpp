@@ -3,6 +3,7 @@
 =======================================================*/
 
 #include "DrawingLifeIncludes.h"
+
 #include "Walk.h"
 
 float Walk::m_dotSize = 2.0;
@@ -10,16 +11,12 @@ int Walk::m_dotAlpha = 127;
 
 Walk::Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled)
 :
+DrawingLifeDrawable(),
 m_settings(settings),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
 m_currentPoint(-1),
 m_firstPoint(true),
-m_screenWidth(0),
-m_screenHeight(0),
-m_viewOffset(0.0, 0.0),
-m_viewMinDimension(0.0),
-m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
 m_currentGpsPointInfo(""),
 m_currentPointIsImage(false),
@@ -372,22 +369,9 @@ void Walk::drawAll()
         glEnd();
     }
 }
+
 // -----------------------------------------------------------------------------
-// Set view bounds.
-// -----------------------------------------------------------------------------
-void Walk::setViewBounds(const int screenWidth,
-                         const int screenHeight,
-                         const ofxPoint<double>& viewOffset,
-                         const double viewMinDimension,
-                         const double viewPadding)
-{
-    m_screenWidth = screenWidth;
-    m_screenHeight = screenHeight;
-    m_viewOffset = viewOffset;
-    m_viewMinDimension = viewMinDimension;
-    m_viewPadding = viewPadding;
-}
-// -----------------------------------------------------------------------------
+
 const std::string Walk::getGpsLocationCurrent() const
 {
     const GpsDataPtr gpsData = m_gpsData.lock();
@@ -478,24 +462,6 @@ double Walk::getCurrentUtmY() const
 }
 
 // -----------------------------------------------------------------------------
-// Scale to screen
-// -----------------------------------------------------------------------------
-double Walk::getScaledUtmX(const double normalizedUtmX) const
-{
-    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewOffset.x);
-}
-
-double Walk::getScaledUtmY(const double normalizedUtmY) const
-{
-    // Flip y coordinates ??
-    return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewOffset.y);
-}
-
-UtmPoint Walk::getScaledUtm(const UtmPoint& normalizedUtmPoint) const
-{
-    return UtmPoint(getScaledUtmX(normalizedUtmPoint.x),
-                    getScaledUtmY(normalizedUtmPoint.y));
-}
 
 const std::string& Walk::getCurrentGpsInfoDebug()
 {
