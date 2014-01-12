@@ -23,10 +23,6 @@ Timeline::~Timeline()
     ofLogVerbose("Timeline", "destroying");
 }
 
-void Timeline::sortGpsDataVecs(const std::vector<GpsData*>& gpsDatas)
-{
-}
-
 void Timeline::setTimeline(const GpsDataVector& gpsDatas)
 {
     m_counter = 0;

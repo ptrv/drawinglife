@@ -20,7 +20,6 @@ public:
     Timeline();
     ~Timeline();
 
-    static void sortGpsDataVecs(const std::vector<GpsData*>& gpsDatas);
     /**
     * \brief Set timeline for gps data.
     * \param gpsDatas vector with gps data.
