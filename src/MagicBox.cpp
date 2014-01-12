@@ -22,7 +22,7 @@ m_defaultSize(10000.0)
 
 MagicBox::~MagicBox()
 {
-    ofLogVerbose("MagicBox", "destroying");
+    ofLogVerbose(AppLogTag::MAGIC_BOX, "destroying");
     --m_boxNum;
 }
 
@@ -76,13 +76,17 @@ void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
     m_centerUtm = currUtm;
     m_currentSize = width;
     m_padding = 0;
-    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf",
-          m_boxId+1, m_centerUtm.x, m_centerUtm.y);
+
+    ofLogVerbose(AppLogTag::MAGIC_BOX)
+            << "Center box " << m_boxId+1 << ", "
+            << "x: " << m_centerUtm.x << ", y: " << m_centerUtm.y;
 
     m_theBox.setFromCenter(m_centerUtm , width, height);
-    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf",
-          m_boxId+1, m_theBox.getX(), m_theBox.getY(),
-          m_theBox.getWidth(), m_theBox.getHeight());
+
+    ofLogVerbose(AppLogTag::DATA_LOADER)
+            << "Box: " << m_boxId+1 << ", "
+            << "x: " << m_theBox.getX() << ", y: " << m_theBox.getY() << ", "
+            << "w: " << m_theBox.getWidth() << ", h:" << m_theBox.getHeight();
 
     m_paddedBox.setFromCenter(m_centerUtm, width, height);
 }

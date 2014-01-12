@@ -27,7 +27,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
             app.getCurrentPointImageList();
     const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
 
-    ofLog(OF_LOG_VERBOSE, "------------------------\n");
+    ofLogVerbose(AppLogTag::DATA_LOADER) << "------------------------\n";
 
     const size_t numPersons = settings.getNumPersons();
 
@@ -200,29 +200,33 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
             if (dbOk)
             {
-                ofLog(OF_LOG_SILENT, "--> GpsData load ok!");
-                ofLog(OF_LOG_SILENT, "--> Total data: %d GpsSegments, %d GpsPoints!\n",
-                      gpsData->getSegments().size(),
-                      gpsData->getTotalGpsPoints());
+                ofLogNotice(AppLogTag::DATA_LOADER) << "--> GpsData load ok!";
+                ofLogNotice(AppLogTag::DATA_LOADER)
+                        << "--> Total data: "
+                        << gpsData->getSegments().size() << " GpsSegments, "
+                        << gpsData->getTotalGpsPoints() << " GpsPoints!"
+                        << std::endl;
 
                 walk->setGpsData(gpsData->shared_from_this());
             }
             else
             {
-                ofLog(OF_LOG_SILENT, "--> No GpsData loaded!");
+                ofLogNotice(AppLogTag::DATA_LOADER) << "--> No GpsData loaded!";
                 break;
             }
             dbReader->closeDbConnection();
         }
         // -----------------------------------------------------------------------------
 
-        ofLog(OF_LOG_VERBOSE, "minLon: %lf, maxLon: %lf, minLat: %lf, maxLat: %lf",
-          gpsData->getMinUtmX(),
-          gpsData->getMaxUtmX(),
-          gpsData->getMinUtmY(),
-          gpsData->getMaxUtmY());
-        ofLog(OF_LOG_VERBOSE, "Central Meridian: %lf",
-              gpsData->getProjectionCentralMeridian());
+        ofLogVerbose(AppLogTag::DATA_LOADER)
+                << "minLon: " << gpsData->getMinUtmX() << ", "
+                << "maxLon: " << gpsData->getMaxUtmX() << ", "
+                << "minLat: " << gpsData->getMinUtmY() << ", "
+                << "maxLat: " << gpsData->getMaxUtmY();
+
+        ofLogVerbose(AppLogTag::DATA_LOADER)
+                << "Central Meridian: "
+                << gpsData->getProjectionCentralMeridian();
     }
 
     processGpsData(app);
