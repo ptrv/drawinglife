@@ -28,8 +28,7 @@ public:
 	 */
 	void setViewBounds(int screenWidth,
 					   int screenHeight,
-					   double viewXOffset,
-					   double viewYOffset,
+                       const ofxPoint<double>& viewOffset,
 					   double viewMinDimension,
 					   double viewPadding);
 
@@ -158,11 +157,6 @@ private:
 
     GpsDataWeak m_gpsData;
 
-	static double maxDrawX;
-    static double minDrawX;
-    static double maxDrawY;
-    static double minDrawY;
-
 	static float m_dotSize;
     static int m_dotAlpha;
 
@@ -173,8 +167,7 @@ private:
 
 	int m_screenWidth;
 	int m_screenHeight;
-	double m_viewXOffset;
-	double m_viewYOffset;
+    ofxPoint<double> m_viewOffset;
 	double m_viewMinDimension;
 	double m_viewPadding;
 

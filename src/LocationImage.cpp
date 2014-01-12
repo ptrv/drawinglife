@@ -9,8 +9,7 @@ m_magicBox(magicBox),
 m_lid(lid),
 m_viewMinDimension(0.0),
 m_viewPadding(0.0),
-m_viewXOffset(0.0),
-m_viewYOffset(0.0)
+m_viewOffset(0.0, 0.0)
 {
     m_image.loadImage(lid.path);
     m_image.resize(lid.width, lid.height);
@@ -56,22 +55,20 @@ void LocationImage::draw()
 
 double LocationImage::getScaledUtmX(const double normalizedUtmX)
 {
-    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
+    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewOffset.x);
 }
 
 double LocationImage::getScaledUtmY(const double normalizedUtmY)
 {
     // Flip y coordinates ??
-    return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
+    return ofGetHeight() - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewOffset.y);
 }
 
 void LocationImage::setViewBounds(const double minDim, const double padding,
-                                  const double offsetX, double offsetY)
+                                  const ofxPoint<double>& offset)
 {
     m_viewMinDimension = minDim;
     m_viewPadding = padding;
-    m_viewXOffset = offsetX;
-    m_viewYOffset = offsetY;
-
+    m_viewOffset = offset;
 }
 

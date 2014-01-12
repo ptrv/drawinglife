@@ -128,8 +128,7 @@ void DrawingLifeApp::setup()
 
     for(size_t i = 0; i < m_numPerson; ++i)
     {
-        m_viewAspectRatioData.offsetX.push_back(0);
-        m_viewAspectRatioData.offsetY.push_back(0);
+        m_viewAspectRatioData.offset.push_back(ofxPoint<double>(0, 0));
         m_viewAspectRatioData.minDimension.push_back(0);
         m_viewAspectRatioData.padding.push_back(15);
     }
@@ -237,8 +236,7 @@ void DrawingLifeApp::setup()
 
                 lImg->setViewBounds(m_viewAspectRatioData.minDimension[0],
                                     m_viewAspectRatioData.padding[0],
-                                    m_viewAspectRatioData.offsetX[0],
-                                    m_viewAspectRatioData.offsetY[0]);
+                                    m_viewAspectRatioData.offset[0]);
 
                 m_locationImgs.push_back(lImg);
             }
@@ -545,7 +543,7 @@ void DrawingLifeApp::draw()
 //                    infoText.append(" (stopped)");
                 m_fonts["info"].drawString(infoText,
                                            m_viewAspectRatioData.padding[0],
-                                           m_viewAspectRatioData.offsetY[0] + 10);
+                                           m_viewAspectRatioData.offset[0].y + 10);
 
             }
 
@@ -570,7 +568,7 @@ void DrawingLifeApp::draw()
 //                        infoText.append(" (stopped)");
                     int infoX = m_viewAspectRatioData.padding[i]
                             + (ofGetWidth() / m_numPerson) * i;
-                    int infoY = m_viewAspectRatioData.offsetY[i] + 10;
+                    int infoY = m_viewAspectRatioData.offset[i].y + 10;
                     m_fonts["info"].drawString(infoText, infoX, infoY);
                 }
 
@@ -900,8 +898,7 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 //        if(m_walks[personIndex])
         m_walks[i].setViewBounds(ofGetWidth(),
                                  ofGetHeight(),
-                                 m_viewAspectRatioData.offsetX[i],
-                                 m_viewAspectRatioData.offsetY[i],
+                                 m_viewAspectRatioData.offset[i],
                                  m_viewAspectRatioData.minDimension[i],
                                  m_viewAspectRatioData.padding[i]);
     }
@@ -909,7 +906,6 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
     {
         m_locationImgs[i].setViewBounds(m_viewAspectRatioData.minDimension[0],
                                         m_viewAspectRatioData.padding[0],
-                                        m_viewAspectRatioData.offsetX[0],
-                                        m_viewAspectRatioData.offsetY[0]);
+                                        m_viewAspectRatioData.offset[0]);
     }
 }

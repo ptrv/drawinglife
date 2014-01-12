@@ -12,11 +12,6 @@
 #include <limits>
 
 
-double Walk::maxDrawX = -std::numeric_limits<double>::max();
-double Walk::minDrawX = std::numeric_limits<double>::max();
-double Walk::maxDrawY = -std::numeric_limits<double>::max();
-double Walk::minDrawY = std::numeric_limits<double>::max();
-
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
@@ -29,8 +24,7 @@ m_currentPoint(-1),
 m_firstPoint(true),
 m_screenWidth(0),
 m_screenHeight(0),
-m_viewXOffset(0.0),
-m_viewYOffset(0.0),
+m_viewOffset(0.0, 0.0),
 m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_currentGpsPointInfoDebug(""),
@@ -391,15 +385,13 @@ void Walk::drawAll()
 // -----------------------------------------------------------------------------
 void Walk::setViewBounds(const int screenWidth,
                          const int screenHeight,
-                         const double viewXOffset,
-                         const double viewYOffset,
+                         const ofxPoint<double>& viewOffset,
                          const double viewMinDimension,
                          const double viewPadding)
 {
     m_screenWidth = screenWidth;
     m_screenHeight = screenHeight;
-    m_viewXOffset = viewXOffset;
-    m_viewYOffset = viewYOffset;
+    m_viewOffset = viewOffset;
     m_viewMinDimension = viewMinDimension;
     m_viewPadding = viewPadding;
 }
@@ -498,13 +490,13 @@ double Walk::getCurrentUtmY() const
 // -----------------------------------------------------------------------------
 double Walk::getScaledUtmX(const double normalizedUtmX) const
 {
-    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewXOffset);
+    return ( normalizedUtmX * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewOffset.x);
 }
 
 double Walk::getScaledUtmY(const double normalizedUtmY) const
 {
     // Flip y coordinates ??
-    return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewYOffset);
+    return m_screenHeight - ( normalizedUtmY * (m_viewMinDimension - 2.0 * m_viewPadding) + m_viewOffset.y);
 }
 
 UtmPoint Walk::getScaledUtm(const UtmPoint& normalizedUtmPoint) const

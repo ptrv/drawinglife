@@ -14,10 +14,13 @@
 
 using namespace GeographicLib;
 
-double GpsData::maxDrawX = -numeric_limits<double>::max();
-double GpsData::minDrawX = numeric_limits<double>::max();
-double GpsData::maxDrawY = -numeric_limits<double>::max();
-double GpsData::minDrawY = numeric_limits<double>::max();
+ofxPoint<double> GpsData::drawMaxima =
+        ofxPoint<double>(-std::numeric_limits<double>::max(),
+                         -std::numeric_limits<double>::max());
+ofxPoint<double> GpsData::drawMinima =
+        ofxPoint<double>(std::numeric_limits<double>::max(),
+                         std::numeric_limits<double>::max());
+
 double GpsData::m_lon0Global = 0.0;
 
 double regionsLon0[5] = {-119.0, -74.0, 12.0, 116.0, 146.0};
@@ -295,39 +298,37 @@ void GpsData::setMinMaxRatioUTM()
 }
 void GpsData::setGlobalMinMaxRatioUTM()
 {
-	double minLon = minDrawX;
-	double maxLon = maxDrawX;
-	double minLat = minDrawY;
-	double maxLat = maxDrawY;
+    ofxPoint<double> maxLonLat = drawMaxima;
+    ofxPoint<double> minLonLat = drawMinima;
 
 	// Calculate horizontal and vertical range.
-	double deltaLon = maxLon - minLon;
-	double deltaLat = maxLat - minLat;
+    double deltaLon = maxLonLat.x - minLonLat.x;
+    double deltaLat = maxLonLat.y - minLonLat.y;
 
 	// Aspect ratio is: width < height.
 	if (deltaLon <	deltaLat)
 	{
-		minDrawX = minLon - (deltaLat - deltaLon)/2.0;
-		maxDrawX = maxLon + (deltaLat - deltaLon)/2.0;
-		minDrawY = minLat;
-		maxDrawY = maxLat;
+        drawMinima.x = minLonLat.x - (deltaLat - deltaLon)/2.0;
+        drawMaxima.x = maxLonLat.x + (deltaLat - deltaLon)/2.0;
+        drawMinima.y = minLonLat.x;
+        drawMaxima.y = maxLonLat.y;
 	}
 	// Aspect ratio is: width > height.
 	else if (deltaLon > deltaLat)
 	{
-		minDrawX = minLon;
-		maxDrawX = maxLon;
-		minDrawY = minLat - (deltaLon - deltaLat)/2.0;
-		maxDrawY = maxLat + (deltaLon - deltaLat)/2.0;
+        drawMinima.x = minLonLat.x;
+        drawMaxima.x = maxLonLat.x;
+        drawMinima.y = minLonLat.y - (deltaLon - deltaLat)/2.0;
+        drawMaxima.y = maxLonLat.y + (deltaLon - deltaLat)/2.0;
 	}
 	// Aspect ratio is: height == width.
 	else
 	{
-		minDrawX = minLon;
-		maxDrawX = maxLon;
-		minDrawY = minLat;
-		maxDrawY = maxLat;
-	}
+        drawMinima.x = minLonLat.x;
+        drawMaxima.x = maxLonLat.x;
+        drawMinima.y = minLonLat.x;
+        drawMaxima.y = maxLonLat.y;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -556,10 +557,8 @@ void GpsData::setGlobalValues(double minX,
                               double maxY,
                               double lon0)
 {
-    minDrawX = minX;
-    maxDrawX = maxX;
-    minDrawY = minY;
-    maxDrawY = maxY;
+    drawMaxima = ofxPoint<double>(maxX, maxY);
+    drawMinima = ofxPoint<double>(minX, minY);
 
     m_lon0Global = lon0;
     //normalizeUtmPointsGlobal();

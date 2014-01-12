@@ -239,10 +239,8 @@ private:
     */
     void calculateUtmPoints();
 
-    static double maxDrawX;
-    static double minDrawX;
-    static double maxDrawY;
-    static double minDrawY;
+    static ofxPoint<double> drawMaxima;
+    static ofxPoint<double> drawMinima;
 
     static double m_lon0Global;
 

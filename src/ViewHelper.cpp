@@ -79,8 +79,8 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
     for(size_t i = 0; i < numPerson; ++i)
     {
         // Reset for view padding.
-        viewAspectRatioData.offsetX[i] = 0;
-        viewAspectRatioData.offsetY[i] = 0;
+        viewAspectRatioData.offset[i].x = 0;
+        viewAspectRatioData.offset[i].y = 0;
 
 //        if(false)
 //        {
@@ -95,12 +95,12 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
         if (height < width)
         {
             viewAspectRatioData.minDimension[i] = height;
-            viewAspectRatioData.offsetX[i] = (width - height) / 2.0;
+            viewAspectRatioData.offset[i].x = (width - height) / 2.0;
         }
         else if (width < height)
         {
             viewAspectRatioData.minDimension[i] = width;
-            viewAspectRatioData.offsetY[i] = (height - width) / 2.0;
+            viewAspectRatioData.offset[i].y = (height - width) / 2.0;
         }
         else
         {
@@ -108,12 +108,12 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
         }
 
         // Left and top indentation.
-        viewAspectRatioData.offsetX[i] += viewAspectRatioData.padding[i];
-        viewAspectRatioData.offsetY[i] += viewAspectRatioData.padding[i];
+        viewAspectRatioData.offset[i].x += viewAspectRatioData.padding[i];
+        viewAspectRatioData.offset[i].y += viewAspectRatioData.padding[i];
 
         if(!isMultiMode)
         {
-            viewAspectRatioData.offsetX[i] += width * i;
+            viewAspectRatioData.offset[i].x += width * i;
         }
 
 //        m_viewYOffset += m_viewPadding;

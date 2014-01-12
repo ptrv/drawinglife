@@ -95,14 +95,6 @@ struct GpsRegion
     double maxLon;
 };
 
-struct ViewAspectRatioData
-{
-    std::vector<double> offsetX;
-    std::vector<double> offsetY;
-    std::vector<double> minDimension;
-    std::vector<double> padding;
-};
-
 // -----------------------------------------------------------------------------
 // templated version of openFramworks datatypes.
 // -----------------------------------------------------------------------------
@@ -111,6 +103,13 @@ struct ViewAspectRatioData
 #include "ofxRectangle.h"
 
 //---------------------------------------------------------------------------
+
+struct ViewAspectRatioData
+{
+    std::vector<ofxPoint<double> > offset;
+    std::vector<double> minDimension;
+    std::vector<double> padding;
+};
 
 /**
  * \brief Represents x and y value of an UTM coordinate.

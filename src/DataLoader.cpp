@@ -184,8 +184,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
         walk->setViewBounds(ofGetWidth(),
                             ofGetHeight(),
-                            viewAspectRatioData.offsetX[i],
-                            viewAspectRatioData.offsetY[i],
+                            viewAspectRatioData.offset[i],
                             viewAspectRatioData.minDimension[i],
                             viewAspectRatioData.padding[i]);
         walk->reset();

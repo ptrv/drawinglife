@@ -11,7 +11,8 @@ public:
     virtual ~LocationImage();
 
 //    void setup(double minX, double maxX, double minY, double maxY);
-    void setViewBounds(double minDim, double padding, double offsetX, double offsetY);
+    void setViewBounds(double minDim, double padding,
+                       const ofxPoint<double>& offset);
     void draw();
 
 protected:
@@ -27,8 +28,7 @@ private:
 
     double m_viewMinDimension;
     double m_viewPadding;
-    double m_viewXOffset;
-    double m_viewYOffset;
+    ofxPoint<double> m_viewOffset;
 
 
     ofImage m_image;
