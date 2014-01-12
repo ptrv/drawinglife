@@ -85,17 +85,17 @@ public:
 	 * \brief Get current Gps location.
 	 * \return location string for current GpsPoint.
 	 */
-	const std::string getGpsLocationCurrent();
+    const std::string getGpsLocationCurrent() const;
     /**
 	 * \brief Get current GpsSegment number.
 	 * \return index of current GpsSegment.
 	 */
-	int getCurrentSegmentNum();
+    int getCurrentSegmentNum() const;
     /**
 	 * \brief Get current GpsPoint number.
 	 * \return index of current GpsSegment.
 	 */
-	int getCurrentPointNum();
+    int getCurrentPointNum() const;
     /**
 	 * \brief Get timestamp for current GpsPoint.
 	 * \return timestamp string of current GpsPoint.

@@ -56,7 +56,7 @@ Walk::~Walk()
 // -----------------------------------------------------------------------------
 void Walk::update()
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
     {
         return;
@@ -111,7 +111,7 @@ void Walk::updateToPreviousSegment()
 
 void Walk::updateToSegment(bool prev)
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
     {
         return;
@@ -156,8 +156,8 @@ void Walk::reset()
 
 void Walk::draw()
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
-    MagicBoxPtr magicBox = m_magicBox.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
+    const MagicBoxPtr magicBox = m_magicBox.lock();
     if (!gpsData || !magicBox)
     {
         return;
@@ -261,7 +261,7 @@ void Walk::draw()
                 if (isInBox)
                 {
 //                    ofSetColor(255, 0,0);
-                    ofxPoint<double> tmp = magicBox->getDrawablePoint(utm);
+                    const ofxPoint<double> tmp = magicBox->getDrawablePoint(utm);
                     glVertex2d(getScaledUtmX(tmp.x),
                                getScaledUtmY(tmp.y));
                 }
@@ -273,7 +273,7 @@ void Walk::draw()
         }
 //        ofDisableSmoothing();
 
-        ofxPoint<double> currentDrawablePoint =
+        const ofxPoint<double> currentDrawablePoint =
                 magicBox->getDrawablePoint(currentUtm);
 
 		if (m_currentPointIsImage)
@@ -343,8 +343,8 @@ void Walk::draw()
 // -----------------------------------------------------------------------------
 void Walk::drawAll()
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
-    MagicBoxPtr magicBox = m_magicBox.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
+    const MagicBoxPtr magicBox = m_magicBox.lock();
     if (!gpsData || !magicBox)
     {
         return;
@@ -388,9 +388,9 @@ void Walk::setViewBounds(const int screenWidth,
     m_viewPadding = viewPadding;
 }
 // -----------------------------------------------------------------------------
-const std::string Walk::getGpsLocationCurrent()
+const std::string Walk::getGpsLocationCurrent() const
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
     {
         return std::string();
@@ -399,9 +399,9 @@ const std::string Walk::getGpsLocationCurrent()
     return gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
 
-int Walk::getCurrentSegmentNum()
+int Walk::getCurrentSegmentNum() const
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
     {
         return 0;
@@ -418,14 +418,14 @@ int Walk::getCurrentSegmentNum()
     }
 }
 
-int Walk::getCurrentPointNum()
+int Walk::getCurrentPointNum() const
 {
     return m_currentPoint;
 }
 
 std::string Walk::getCurrentTimestamp() const
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
     {
         return std::string();
@@ -446,7 +446,7 @@ std::string Walk::getCurrentTimestamp() const
 
 double Walk::getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const
 {
-    if (GpsDataPtr gpsData = m_gpsData.lock())
+    if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
         return fnGetCurrentDouble(gpsData, m_currentGpsSegment, m_currentGpsPoint);
     }
@@ -499,8 +499,8 @@ UtmPoint Walk::getScaledUtm(const UtmPoint& normalizedUtmPoint) const
 
 const std::string& Walk::getCurrentGpsInfoDebug()
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
-    MagicBoxPtr magicBox = m_magicBox.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
+    const MagicBoxPtr magicBox = m_magicBox.lock();
     if (gpsData && magicBox)
     {
         GpsPoint boxCenter = magicBox->getCenterGps();
@@ -536,7 +536,7 @@ const std::string& Walk::getCurrentGpsInfoDebug()
 
 const std::string& Walk::getCurrentGpsInfo()
 {
-    GpsDataPtr gpsData = m_gpsData.lock();
+    const GpsDataPtr gpsData = m_gpsData.lock();
     if (gpsData && gpsData->getTotalGpsPoints() != 0)
 	{
 		std::string timeString = getCurrentTimestamp();
