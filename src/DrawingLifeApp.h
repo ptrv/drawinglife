@@ -101,7 +101,7 @@ private:
 
     std::map<std::string, ofTrueTypeFont> m_fonts;
     // -----------------------------------------------------------------------------
-    unsigned int m_numPerson;
+    unsigned int m_numPersons;
     StringVec m_names;
 	std::string m_currentCity;
     // -----------------------------------------------------------------------------

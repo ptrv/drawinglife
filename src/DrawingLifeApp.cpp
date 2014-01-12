@@ -25,7 +25,7 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_isAnimation(true),
     m_showFps(false),
     m_startScreenMode(false),
-    m_numPerson(0),
+    m_numPersons(0),
     m_timeline(0),
 //    m_drawSpeed(1),
 //	m_trackAlpha(64),
@@ -123,10 +123,10 @@ void DrawingLifeApp::setup()
         m_imageList = m_settings->getCurrentImageData();
     }
 
-    m_numPerson = m_settings->getNumPerson();
+    m_numPersons = m_settings->getNumPersons();
     m_names = m_settings->getNames();
 
-    for (size_t i = 0; i < m_numPerson; ++i)
+    for (size_t i = 0; i < m_numPersons; ++i)
     {
         m_viewAspectRatioData.offset.push_back(ofxPoint<double>(0, 0));
         m_viewAspectRatioData.minDimension.push_back(0);
@@ -207,7 +207,7 @@ void DrawingLifeApp::setup()
         if (gpsDataAreLoaded)
         {
 			// GpsData are loaded now. Drawing routine can start.
-            for (size_t personIndex = 0; personIndex < m_numPerson; ++personIndex)
+            for (size_t personIndex = 0; personIndex < m_numPersons; ++personIndex)
 	        {
                 const GpsDataPtr gpsData = m_gpsDatas[personIndex];
                 if (gpsData->getTotalGpsPoints() == 0)
@@ -450,7 +450,7 @@ void DrawingLifeApp::update()
             for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
             {
                 int id = m_timeline->getNext();
-                if (id < (int)m_numPerson)
+                if (id < (int)m_numPersons)
                 {
                     m_walks[id].update();
                 }
@@ -549,14 +549,14 @@ void DrawingLifeApp::draw()
 
             }
 
-            for (size_t i = 0; i < m_numPerson; ++i)
+            for (size_t i = 0; i < m_numPersons; ++i)
             {
                 Walk& walk = m_walks[i];
                 if (m_isDebugMode)
                 {
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
 
-                    int debugTextX = 30 + (ofGetWidth() / m_numPerson) * i;
+                    int debugTextX = 30 + (ofGetWidth() / m_numPersons) * i;
                     int debugTextY = 30;
                     ofDrawBitmapString(walk.getCurrentGpsInfoDebug(),
                                        debugTextX, debugTextY);
@@ -569,7 +569,7 @@ void DrawingLifeApp::draw()
 //                    if (m_pause)
 //                        infoText.append(" (stopped)");
                     int infoX = m_viewAspectRatioData.padding[i]
-                            + (ofGetWidth() / m_numPerson) * i;
+                            + (ofGetWidth() / m_numPersons) * i;
                     int infoY = m_viewAspectRatioData.offset[i].y + 10;
                     m_fonts["info"].drawString(infoText, infoX, infoY);
                 }
@@ -607,7 +607,7 @@ void DrawingLifeApp::draw()
                        m_settings->getColorForegroundB(),
                        m_settings->getAlphaTrack());
             ofNoFill();
-            for (size_t i = 0; i < m_numPerson; ++i)
+            for (size_t i = 0; i < m_numPersons; ++i)
             {
                 m_walks[i].drawAll();
             }
@@ -894,7 +894,7 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 {
     ViewHelper::setViewAspectRatio(*this);
-    for (size_t i = 0; i < m_numPerson; ++i)
+    for (size_t i = 0; i < m_numPersons; ++i)
     {
 //        if (m_walks[personIndex])
         m_walks[i].setViewBounds(ofGetWidth(),

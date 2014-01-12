@@ -59,7 +59,7 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
     const bool isMultiMode = settings.isMultiMode();
-    const size_t numPerson = settings.getNumPerson();
+    const size_t numPersons = settings.getNumPersons();
 
     ViewAspectRatioData& viewAspectRatioData = app.getViewAspectRatioData();
     double width;
@@ -71,12 +71,12 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
     }
     else
     {
-        width = ofGetWidth() / static_cast<int>(numPerson);
+        width = ofGetWidth() / static_cast<int>(numPersons);
     }
 
     height = ofGetHeight();
 
-    for (size_t i = 0; i < numPerson; ++i)
+    for (size_t i = 0; i < numPersons; ++i)
     {
         // Reset for view padding.
         viewAspectRatioData.offset[i].x = 0;
@@ -123,7 +123,7 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
 void ViewHelper::fillViewAreaUTM(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
-    const size_t numPerson = settings.getNumPerson();
+    const size_t numPerson = settings.getNumPersons();
     const ofColor foregroundColor(settings.getColorViewboxR(),
                                   settings.getColorViewboxG(),
                                   settings.getColorViewboxB());

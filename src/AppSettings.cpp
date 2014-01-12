@@ -142,7 +142,7 @@ m_queryType(0),
 m_queryYearStart(0),
 m_queryYearEnd(0),
 m_queryCity(""),
-m_numPerson(0),
+m_numPersons(0),
 m_interactiveMode(false),
 m_interactiveTraced(true),
 m_meridianAuto(true),
@@ -263,8 +263,8 @@ bool AppSettings::loadXML()
     m_xml.pushTag("data");
     m_xml.pushTag("person");
 
-    m_numPerson = m_xml.getNumTags("name");
-    for (unsigned int i = 0; i < m_numPerson; ++i)
+    m_numPersons = m_xml.getNumTags("name");
+    for (unsigned int i = 0; i < m_numPersons; ++i)
     {
         m_names.push_back(m_xml.getValue("name", "", i));
         ofColor tmpColor;
@@ -550,8 +550,8 @@ bool AppSettings::loadJSON()
         //----------------------------------------------------------------------
         // users
         json = jsonRoot["users"];
-        m_numPerson = json.size();
-        for (size_t i = 0; i < m_numPerson; ++i)
+        m_numPersons = json.size();
+        for (size_t i = 0; i < m_numPersons; ++i)
         {
             Json::Value person = json[i];
             m_names.push_back(JsonHelper::getString(person, "name", ""));
@@ -752,7 +752,7 @@ void AppSettings::print()
 
     ofLog(OF_LOG_SILENT, "Database path: %s", m_databasePath.c_str());
 
-    ofLog(OF_LOG_SILENT, "Number of person: %d", m_numPerson);
+    ofLog(OF_LOG_SILENT, "Number of person: %d", m_numPersons);
 
     ofLog(OF_LOG_SILENT,
           "Query: type = %d, start year = %d, end year = %d, city = %s",
