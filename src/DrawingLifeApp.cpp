@@ -69,7 +69,7 @@ void DrawingLifeApp::setup()
 
     if (!m_settings->initialized())
     {
-        ofLog() << "Could not load settings" << endl;
+        ofLogError(AppLogTag::APP) << "Could not load settings" << endl;
         OF_EXIT_APP(1);
     }
 
@@ -134,7 +134,6 @@ void DrawingLifeApp::setup()
     }
 
     m_dbPath = m_settings->getDatabasePath();
-    DBG_VAL(m_dbPath);
 
     ofBackground(m_settings->getColorBackgroundR(),
                  m_settings->getColorBackgroundG(),
@@ -158,7 +157,6 @@ void DrawingLifeApp::setup()
     double dampCenter = m_settings->getZoomAnimationDampCenter();
     double attrCenter = m_settings->getZoomAnimationAttractionCenter();
 
-    DBG_VAL((ofToString(damp) + " " + ofToString(attr)));
     m_zoomIntegrator.reset(new Integrator<double>(0.0f, damp, attr));
     m_isZoomAnimation = m_settings->isZoomAnimation();
     m_theIntegrator.reset(new Integrator<ofxPoint<double> >(0.0f,
@@ -171,7 +169,6 @@ void DrawingLifeApp::setup()
     	//    	m_zoomIntegrator->setTarget();
     }
 
-    DBG_VAL(m_numPerson);
     // -----------------------------------------------------------------------------
 
     ViewHelper::setViewAspectRatio(*this);
@@ -655,7 +652,6 @@ void DrawingLifeApp::resetData()
 //--------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
-//    DBG_VAL(key);
     switch (key)
     {
     case 'a':

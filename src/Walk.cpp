@@ -242,7 +242,6 @@ void Walk::draw()
 //                    isInBox = true;
                 if (m_settings.useSpeed())
                 {
-                    //DBG_VAL(utm.speed);
                     if (utm.speed > m_settings.getSpeedThreshold())
                     {
                         const ofColor tmpColor = m_settings.getSpeedColorAbove();

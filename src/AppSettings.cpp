@@ -1,3 +1,4 @@
+#include "DrawingLifeIncludes.h"
 #include "AppSettings.h"
 #include "ofxXmlSettings.h"
 #include "ofxJSONElement.h"
@@ -9,8 +10,10 @@ namespace JsonHelper
 #define CATCH_JSON_PARSE_ERROR                                                  \
 catch (std::exception& ex)                                                      \
 {                                                                               \
-    ofLogError() << "Json parse error with key: <" << key << ">"                \
-                 << ", msg: " << ex.what();                                     \
+    ofLogError(AppLogTag::SETTINGS) << "Json parse error with key: <"           \
+                                    << key                                      \
+                                    << ">, msg: "                               \
+                                    << ex.what();                               \
     return defaultValue;                                                        \
 }                                                                               \
 // -----------------------------------------------------------------------------
@@ -41,7 +44,7 @@ std::string getString(const Json::Value& value, const std::string& defaultValue)
     }
     catch (const std::exception& ex)
     {
-        ofLogError() << "Json parse error: " << ex.what();
+        ofLogError(AppLogTag::SETTINGS) << "Json parse error: " << ex.what();
         return defaultValue;
     }
 }

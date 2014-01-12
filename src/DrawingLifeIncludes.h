@@ -56,4 +56,14 @@
 
 // -----------------------------------------------------------------------------
 
+namespace AppLogTag
+{
+static const char* APP          = "DrawingLifeApp";
+static const char* DBREADER     = "DBReader";
+static const char* SETTINGS     = "AppSettings";
+};
+
+
+// -----------------------------------------------------------------------------
+
 #endif // _DRAWINGLIFEINCLUDES_H_

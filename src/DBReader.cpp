@@ -18,19 +18,20 @@ using namespace sqlite3x;
 #include <sqlite3.h>
 #include <spatialite.h>
 
-// --------------------------------------------------------------------------------------
-#define CATCHDBERRORS																	\
-catch(const std::exception& ex)																	\
-{																						\
-ofLog(OF_LOG_ERROR, "Database error: %s", ex.what());									\
-}																						\
-// --------------------------------------------------------------------------------------
-#define CATCHDBERRORSQ(query)															\
-catch(const std::exception& ex)																	\
-{																						\
-ofLog(OF_LOG_ERROR, "Database error: %s, \nwith query: %s", ex.what(), query.c_str());	\
-}																						\
-// --------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+#define CATCHDBERRORS                                                           \
+    catch(const std::exception& ex)                                             \
+{                                                                               \
+    ofLogError(AppLogTag::DBREADER) << "Database error: " << ex.what();         \
+}                                                                               \
+    // -------------------------------------------------------------------------
+#define CATCHDBERRORSQ(query)                                                   \
+catch(const std::exception& ex)                                                 \
+{                                                                               \
+    ofLogError(AppLogTag::DBREADER) << "Database error: " <<  ex.what()         \
+                                    << ", \nwith query: " << query.c_str();     \
+}                                                                               \
+// -----------------------------------------------------------------------------
 
 DBReader::DBReader(const std::string& dbpath, bool useSpeed)
 :
@@ -41,14 +42,15 @@ m_useSpeed(useSpeed)
 
 DBReader::~DBReader()
 {
-    ofLogVerbose("DBReader", "destroying");
+    ofLogVerbose(AppLogTag::DBREADER, "destroying");
 }
 
 bool DBReader::setupDbConnection()
 {
 
     spatialite_init(0);
-    ofLog() << "Spatialite version: " << spatialite_version();
+    ofLogVerbose(AppLogTag::DBREADER) << "Spatialite version: "
+                                      << spatialite_version();
 
 	bool result = false;
 	try {
@@ -76,8 +78,6 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 	try {
 		sqlite3_command cmd(*m_dbconn, query.c_str());
 		sqlite3_reader reader=cmd.executereader();
-
-		//DBG_VAL(query);
 
 		int lastSegment = -1;
         string user = "";
@@ -138,8 +138,6 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
                     << "min(y(a.geom)), max(y(a.geom)) ";
 		// Retrieve select conditions from original database query.
 		queryMinMax << query.substr(posS, (posE - posS));
-
-		//DBG_VAL(queryMinMax.str());
 
 		sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
 		sqlite3_reader readerMinMax = cmd2.executereader();
@@ -332,7 +330,6 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
     query << getBasicQueryString();
     query << sqlFileSource;
 //    query << ";";
-//    DBG_VAL(query.str());
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
