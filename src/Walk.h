@@ -113,6 +113,7 @@ private:
 
     typedef boost::function<double(const GpsDataPtr, int, int)> tFuncGetCurrentDouble;
     double getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const;
+
     void updateToSegment(bool prev);
 
     const AppSettings& m_settings;

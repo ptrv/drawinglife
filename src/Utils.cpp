@@ -14,6 +14,8 @@ Utils::Utils()
 {
 }
 
+//------------------------------------------------------------------------------
+
 void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
 {
     ofxPoint<double> minXY = getPointDoubleMax();
@@ -61,6 +63,8 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
     }
 }
 
+//------------------------------------------------------------------------------
+
 static double timeThen = 0.0;
 static double timeSum = 0.0;
 static float fpsToShow = 0.0;
@@ -79,6 +83,8 @@ float Utils::getFPS()
     return fpsToShow;
 }
 
+//------------------------------------------------------------------------------
+
 static unsigned currentFrame = 0;
 void Utils::grabScreen()
 {
@@ -87,6 +93,8 @@ void Utils::grabScreen()
     ofSaveScreen(fileNameStr);
     ++currentFrame;
 }
+
+//------------------------------------------------------------------------------
 
 ofxPoint<double> Utils::getPointDoubleMin()
 {
@@ -99,6 +107,8 @@ ofxPoint<double> Utils::getPointDoubleMax()
     return ofxPoint<double>(std::numeric_limits<double>::max(),
                             std::numeric_limits<double>::max());
 }
+
+//------------------------------------------------------------------------------
 
 const std::string Utils::getCurrentGpsInfo(const GpsData *gpsData,
                                            const Walk *walk)
@@ -151,3 +161,5 @@ const std::string Utils::getCurrentGpsInfoDebug(const GpsData *gpsData,
     }
     return gpsInfoDebug;
 }
+
+//------------------------------------------------------------------------------

@@ -306,7 +306,8 @@ bool DrawingLifeApp::zoomHasChanged()
 		return true;
 	}
 
-	switch (m_settings->getZoomAnimationCriteria()) {
+    switch (m_settings->getZoomAnimationCriteria())
+    {
 		case 1:
 			return zoomHasChangedTime();
 		case 2:
@@ -645,10 +646,10 @@ void DrawingLifeApp::resetData()
     m_magicBoxes.clear();
 }
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Input
 // TODO Add function for processing keys
-//--------------------------------------------------------------
+//------------------------------------------------------------------------------
 void DrawingLifeApp::keyPressed  (int key)
 {
     switch (key)
