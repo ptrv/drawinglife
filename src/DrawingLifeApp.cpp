@@ -127,9 +127,11 @@ void DrawingLifeApp::setup()
 
     for (size_t i = 0; i < m_numPersons; ++i)
     {
-        m_viewAspectRatioData.offset.push_back(ofxPoint<double>(0, 0));
-        m_viewAspectRatioData.minDimension.push_back(0);
-        m_viewAspectRatioData.padding.push_back(15);
+        ViewDimensions viewDimensions;
+        viewDimensions.offset = ofxPoint<double>(0, 0);
+        viewDimensions.minDimension = 0;
+        viewDimensions.padding = 15;
+        m_viewDimensions.push_back(viewDimensions);
     }
 
     m_dbPath = m_settings->getDatabasePath();
@@ -230,9 +232,7 @@ void DrawingLifeApp::setup()
                     lImg = new LocationImage(*m_magicBoxes[0].get(), locImgData);
                 }
 
-                lImg->setViewBounds(m_viewAspectRatioData.offset[0],
-                                    m_viewAspectRatioData.minDimension[0],
-                                    m_viewAspectRatioData.padding[0]);
+                lImg->setViewBounds(m_viewDimensions[0]);
 
                 m_locationImgs.push_back(lImg);
             }
@@ -539,8 +539,8 @@ void DrawingLifeApp::draw()
 //                if (m_pause)
 //                    infoText.append(" (stopped)");
                 m_fonts["info"].drawString(infoText,
-                                           m_viewAspectRatioData.padding[0],
-                                           m_viewAspectRatioData.offset[0].y + 10);
+                                           m_viewDimensions[0].padding,
+                                           m_viewDimensions[0].offset.y + 10);
 
             }
 
@@ -568,9 +568,9 @@ void DrawingLifeApp::draw()
                                 gpsData.get(), &walk);
 //                    if (m_pause)
 //                        infoText.append(" (stopped)");
-                    int infoX = m_viewAspectRatioData.padding[i]
+                    int infoX = m_viewDimensions[i].padding
                             + (ofGetWidth() / m_numPersons) * i;
-                    int infoY = m_viewAspectRatioData.offset[i].y + 10;
+                    int infoY = m_viewDimensions[i].offset.y + 10;
                     m_fonts["info"].drawString(infoText, infoX, infoY);
                 }
 
@@ -879,15 +879,11 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 
     for (size_t i = 0; i < m_numPersons; ++i)
     {
-        m_walks[i].setViewBounds(m_viewAspectRatioData.offset[i],
-                                 m_viewAspectRatioData.minDimension[i],
-                                 m_viewAspectRatioData.padding[i]);
+        m_walks[i].setViewBounds(m_viewDimensions[i]);
     }
 
     BOOST_FOREACH(LocationImage& locImg, m_locationImgs)
     {
-        locImg.setViewBounds(m_viewAspectRatioData.offset[0],
-                m_viewAspectRatioData.minDimension[0],
-                m_viewAspectRatioData.padding[0]);
+        locImg.setViewBounds(m_viewDimensions[0]);
     }
 }

@@ -150,7 +150,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
     GpsDataVector& gpsDatas = app.getGpsDataVector();
     WalkVector& walks = app.getWalkVector();
     MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-    ViewAspectRatioData viewAspectRatioData = app.getViewAspectRatioData();
+    ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
 
     prepareGpsData(app);
 
@@ -181,9 +181,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                               settings.getNameColors()[i]);
         walks.push_back(walk);
 
-        walk->setViewBounds(viewAspectRatioData.offset[i],
-                            viewAspectRatioData.minDimension[i],
-                            viewAspectRatioData.padding[i]);
+        walk->setViewBounds(viewDimensions[i]);
         walk->reset();
 
         DBReaderPtr dbReader(new DBReader(settings.getDatabasePath(),

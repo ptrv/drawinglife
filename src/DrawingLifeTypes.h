@@ -104,11 +104,11 @@ struct GpsRegion
 
 //---------------------------------------------------------------------------
 
-struct ViewAspectRatioData
+struct ViewDimensions
 {
-    std::vector<ofxPoint<double> > offset;
-    std::vector<double> minDimension;
-    std::vector<double> padding;
+    ofxPoint<double> offset;
+    double minDimension;
+    double padding;
 };
 
 /**
@@ -154,6 +154,8 @@ typedef std::vector<GpsSegment> GpsSegmentVector;
 typedef std::vector<GpsPoint> GpsPointVector;
 
 typedef std::map<std::string, std::pair<std::string, int> > DrawingLifeFontMap;
+
+typedef std::vector<ViewDimensions> ViewDimensionsVec;
 
 //---------------------------------------------------------------------------
 

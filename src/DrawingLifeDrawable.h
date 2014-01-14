@@ -9,8 +9,7 @@ public:
 
     DrawingLifeDrawable();
 
-    void setViewBounds(const ofxPoint<double>& offset,
-                       double minDimension, double padding);
+    void setViewBounds(const ViewDimensions& viewDimensions);
 
     virtual void draw() = 0;
 
@@ -20,9 +19,7 @@ public:
 
 private:
 
-    double m_viewMinDimension;
-    double m_viewPadding;
-    ofxPoint<double> m_viewOffset;
+    ViewDimensions m_viewDimensions;
 
 };
 

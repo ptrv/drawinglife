@@ -61,7 +61,7 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
     const bool isMultiMode = settings.isMultiMode();
     const size_t numPersons = settings.getNumPersons();
 
-    ViewAspectRatioData& viewAspectRatioData = app.getViewAspectRatioData();
+    ViewDimensionsVec& viewDimensionsVec = app.getViewDimensionsVec();
     double width;
     double height;
 
@@ -78,9 +78,10 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
 
     for (size_t i = 0; i < numPersons; ++i)
     {
+        ViewDimensions& viewDimensions = viewDimensionsVec[i];
+
         // Reset for view padding.
-        viewAspectRatioData.offset[i].x = 0;
-        viewAspectRatioData.offset[i].y = 0;
+        viewDimensions.offset.set(0, 0);
 
 //        if (false)
 //        {
@@ -94,26 +95,26 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
         // Set square view area and center.
         if (height < width)
         {
-            viewAspectRatioData.minDimension[i] = height;
-            viewAspectRatioData.offset[i].x = (width - height) / 2.0;
+            viewDimensions.minDimension = height;
+            viewDimensions.offset.x = (width - height) / 2.0;
         }
         else if (width < height)
         {
-            viewAspectRatioData.minDimension[i] = width;
-            viewAspectRatioData.offset[i].y = (height - width) / 2.0;
+            viewDimensions.minDimension = width;
+            viewDimensions.offset.y = (height - width) / 2.0;
         }
         else
         {
-            viewAspectRatioData.minDimension[i] = width;
+            viewDimensions.minDimension = width;
         }
 
         // Left and top indentation.
-        viewAspectRatioData.offset[i].x += viewAspectRatioData.padding[i];
-        viewAspectRatioData.offset[i].y += viewAspectRatioData.padding[i];
+        viewDimensions.offset.x += viewDimensions.padding;
+        viewDimensions.offset.y += viewDimensions.padding;
 
         if (!isMultiMode)
         {
-            viewAspectRatioData.offset[i].x += width * i;
+            viewDimensions.offset.x += width * i;
         }
 
 //        m_viewYOffset += m_viewPadding;

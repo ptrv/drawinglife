@@ -55,10 +55,7 @@ public:
 
     void resetData();
 
-    ViewAspectRatioData& getViewAspectRatioData()
-    { return m_viewAspectRatioData; }
-//    void setViewAspectRatioData(const ViewAspectRatioData& v)
-//    { m_viewAspectRatioData = v; }
+    ViewDimensionsVec& getViewDimensionsVec() { return m_viewDimensions; }
 
 private:
     //---------------------------------------------------------------------------
@@ -90,7 +87,7 @@ private:
 
 	std::string m_dbPath;
 	//---------------------------------------------------------------------------
-    ViewAspectRatioData m_viewAspectRatioData;
+    ViewDimensionsVec m_viewDimensions;
     //---------------------------------------------------------------------------
 	bool m_isFullscreen;
 	bool m_isDebugMode;
