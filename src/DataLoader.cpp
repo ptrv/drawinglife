@@ -182,9 +182,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                               settings.getNameColors()[i]);
         walks.push_back(walk);
 
-        walk->setViewBounds(ofGetWidth(),
-                            ofGetHeight(),
-                            viewAspectRatioData.offset[i],
+        walk->setViewBounds(viewAspectRatioData.offset[i],
                             viewAspectRatioData.minDimension[i],
                             viewAspectRatioData.padding[i]);
         walk->reset();

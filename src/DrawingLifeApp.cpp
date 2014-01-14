@@ -230,9 +230,7 @@ void DrawingLifeApp::setup()
                     lImg = new LocationImage(*m_magicBoxes[0].get(), locImgData);
                 }
 
-                lImg->setViewBounds(ofGetWidth(),
-                                    ofGetHeight(),
-                                    m_viewAspectRatioData.offset[0],
+                lImg->setViewBounds(m_viewAspectRatioData.offset[0],
                                     m_viewAspectRatioData.minDimension[0],
                                     m_viewAspectRatioData.padding[0]);
 
@@ -900,21 +898,18 @@ void DrawingLifeApp::mouseReleased(int x, int y, int button)
 void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 {
     ViewHelper::setViewAspectRatio(*this);
+
     for (size_t i = 0; i < m_numPersons; ++i)
     {
-//        if (m_walks[personIndex])
-        m_walks[i].setViewBounds(ofGetWidth(),
-                                 ofGetHeight(),
-                                 m_viewAspectRatioData.offset[i],
+        m_walks[i].setViewBounds(m_viewAspectRatioData.offset[i],
                                  m_viewAspectRatioData.minDimension[i],
                                  m_viewAspectRatioData.padding[i]);
     }
-    for (size_t i = 0; i < m_locationImgs.size(); ++i)
+
+    BOOST_FOREACH(LocationImage& locImg, m_locationImgs)
     {
-        m_locationImgs[i].setViewBounds(ofGetWidth(),
-                                        ofGetHeight(),
-                                        m_viewAspectRatioData.offset[0],
-                                        m_viewAspectRatioData.minDimension[0],
-                                        m_viewAspectRatioData.padding[0]);
+        locImg.setViewBounds(m_viewAspectRatioData.offset[0],
+                m_viewAspectRatioData.minDimension[0],
+                m_viewAspectRatioData.padding[0]);
     }
 }

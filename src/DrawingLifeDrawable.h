@@ -9,8 +9,7 @@ public:
 
     DrawingLifeDrawable();
 
-    void setViewBounds(double screenWidth, double screenHeight,
-                       const ofxPoint<double>& offset,
+    void setViewBounds(const ofxPoint<double>& offset,
                        double minDimension, double padding);
 
     virtual void draw() = 0;
@@ -21,8 +20,6 @@ public:
 
 private:
 
-    double m_screenWidth;
-    double m_screenHeight;
     double m_viewMinDimension;
     double m_viewPadding;
     ofxPoint<double> m_viewOffset;

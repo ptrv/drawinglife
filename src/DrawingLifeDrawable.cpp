@@ -2,20 +2,15 @@
 
 DrawingLifeDrawable::DrawingLifeDrawable()
 :
-m_screenWidth(0.0),
-m_screenHeight(0.0),
 m_viewMinDimension(0.0),
 m_viewPadding(0.0),
 m_viewOffset(0.0, 0.0)
 {
 }
 
-void DrawingLifeDrawable::setViewBounds(double screenWidth, double screenHeight,
-                                        const ofxPoint<double>& offset,
+void DrawingLifeDrawable::setViewBounds(const ofxPoint<double>& offset,
                                         double minDimension, double padding)
 {
-    m_screenWidth = screenWidth;
-    m_screenHeight = screenHeight;
     m_viewOffset = offset;
     m_viewMinDimension = minDimension;
     m_viewPadding = padding;
