@@ -54,8 +54,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
                 //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
                 double bbLat = settings.getBoundingBoxLat();
                 double bbLon = settings.getBoundingBoxLon();
-                walk.setMagicBoxStatic(magicBoxes[i]->shared_from_this(),
-                                       bbLat, bbLon);
+                walk.setMagicBoxStatic(magicBoxes[i], bbLat, bbLon);
             }
             else
             {
@@ -69,7 +68,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
                 }
                 else
                 {
-                    walk.setMagicBox(magicBoxes[i]->shared_from_this());
+                    walk.setMagicBox(magicBoxes[i]);
                 }
             }
 
