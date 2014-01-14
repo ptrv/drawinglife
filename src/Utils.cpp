@@ -21,7 +21,7 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
     ofxPoint<double> minLonLat = getPointDoubleMax();
     ofxPoint<double> maxLonLat = getPointDoubleMin();
 
-    GpsDataVector& gpsDatas = app.getGpsDataVector();
+    const GpsDataVector& gpsDatas = app.getGpsDataVector();
     const AppSettings& settings = app.getAppSettings();
 
     BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)

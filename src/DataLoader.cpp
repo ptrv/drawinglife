@@ -17,10 +17,10 @@ void DataLoader::prepareGpsData(DrawingLifeApp& app)
 void DataLoader::processGpsData(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
+    const GpsDataVector& gpsDatas = app.getGpsDataVector();
+    const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
     Timeline& timeline = app.getTimeline();
-    GpsDataVector& gpsDatas = app.getGpsDataVector();
     WalkVector& walks = app.getWalkVector();
-    MagicBoxVector& magicBoxes = app.getMagicBoxVector();
     MagicBox& magicBox = app.getMagicBox();
 
     const std::vector<CurrentImageData>& imageList =
