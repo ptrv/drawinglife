@@ -270,10 +270,8 @@ void DrawingLifeApp::soundUpdate()
         if (m_timeline->isFirst())
 		{
 			currentSoundFile = 0;
-            for (size_t i = 0; i < m_soundPlayer.size(); ++i)
-			{
-                m_soundPlayer[i].stop();
-			}
+            std::for_each(m_soundPlayer.begin(), m_soundPlayer.end(),
+                          boost::bind(&ofSoundPlayer::stop, _1));
             if (m_soundPlayer.size() > 0)
 			{
                 m_soundPlayer[currentSoundFile].play();
@@ -461,10 +459,8 @@ void DrawingLifeApp::update()
                 if (m_timeline->isFirst())
                 {
 //                            std::cout << "First timeline object!" << std::endl;
-                    for (size_t i = 0; i < m_walks.size(); ++i)
-                    {
-                        m_walks[i].reset();
-                    }
+                    std::for_each(m_walks.begin(), m_walks.end(),
+                                  boost::bind(&Walk::reset, _1));
                     zoomFrameCount = 0;
 #if defined (TARGET_WIN32)
                     Sleep(m_settings->getSleepTime()*1000);
@@ -531,10 +527,9 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
 //            fillViewAreaUTM();
             //---------------------------------------------------------------------------
-            for (size_t i = 0; i < m_locationImgs.size(); ++i)
-            {
-                m_locationImgs[i].draw();
-            }
+            std::for_each(m_locationImgs.begin(), m_locationImgs.end(),
+                          boost::bind(&LocationImage::draw, _1));
+
             if (m_multiMode && m_multiModeInfo)
             {
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
@@ -772,51 +767,39 @@ void DrawingLifeApp::keyPressed  (int key)
 //        loadGpsDataCity(m_names, "Banff");
 //        break;
     case '+':
-        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->zoom(MagicBox::ZOOM_IN);
-        }
+        std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
+                      boost::bind(&MagicBox::zoom, _1, MagicBox::ZOOM_IN));
         if (m_multiMode)
             m_magicBox->zoom(MagicBox::ZOOM_IN);
         break;
     case '-':
-        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->zoom(MagicBox::ZOOM_OUT);
-        }
+        std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
+                      boost::bind(&MagicBox::zoom, _1, MagicBox::ZOOM_OUT));
         if (m_multiMode)
             m_magicBox->zoom(MagicBox::ZOOM_OUT);
         break;
     case OF_KEY_UP:
-        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->move(MagicBox::UP);
-        }
+        std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
+                      boost::bind(&MagicBox::move, _1, MagicBox::UP));
         if (m_multiMode)
             m_magicBox->move(MagicBox::UP);
         break;
     case OF_KEY_DOWN:
-        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->move(MagicBox::DOWN);
-        }
+        std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
+                      boost::bind(&MagicBox::move, _1, MagicBox::DOWN));
         if (m_multiMode)
             m_magicBox->move(MagicBox::DOWN);
         break;
        break;
     case OF_KEY_RIGHT:
-        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->move(MagicBox::RIGHT);
-        }
+        std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
+                      boost::bind(&MagicBox::move, _1, MagicBox::RIGHT));
         if (m_multiMode)
             m_magicBox->move(MagicBox::RIGHT);
         break;
     case OF_KEY_LEFT:
-        for (size_t i = 0; i < m_magicBoxes.size(); ++i)
-        {
-            m_magicBoxes[i]->move(MagicBox::LEFT);
-        }
+        std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
+                      boost::bind(&MagicBox::move, _1, MagicBox::LEFT));
         if (m_multiMode)
             m_magicBox->move(MagicBox::LEFT);
 
@@ -824,10 +807,8 @@ void DrawingLifeApp::keyPressed  (int key)
     case ' ':
         if (m_interactiveMode)
         {
-            for (size_t i = 0; i < m_walks.size(); ++i)
-            {
-                m_walks[i].updateToNextSegment();
-            }
+            std::for_each(m_walks.begin(), m_walks.end(),
+                          boost::bind(&Walk::updateToNextSegment, _1));
         }
         else
         {
@@ -837,19 +818,15 @@ void DrawingLifeApp::keyPressed  (int key)
     case OF_KEY_BACKSPACE:
         if (m_interactiveMode)
         {
-            for (size_t i = 0; i < m_walks.size(); ++i)
-            {
-                m_walks[i].updateToPreviousSegment();
-            }
+            std::for_each(m_walks.begin(), m_walks.end(),
+                          boost::bind(&Walk::updateToPreviousSegment, _1));
         }
         break;
     case 't':
         if (m_interactiveMode)
         {
-            for (size_t i = 0; i < m_walks.size(); ++i)
-            {
-                m_walks[i].toggleTraced();
-            }
+            std::for_each(m_walks.begin(), m_walks.end(),
+                          boost::bind(&Walk::toggleTraced, _1));
         }
         break;
     case 's':
