@@ -37,7 +37,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
             && ((magicBoxes.size() == numPersons && !settings.isMultiMode())
                 || settings.isMultiMode()))
     {
-        timeline.setTimeline(gpsDatas);
+        timeline.setData(gpsDatas);
 
         Utils::calculateGlobalMinMaxValues(app);
 

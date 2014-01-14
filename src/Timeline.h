@@ -24,7 +24,7 @@ public:
     * \brief Set timeline for gps data.
     * \param gpsDatas vector with gps data.
     */
-    void setTimeline(const GpsDataVector& gpsDatas);
+    void setData(const GpsDataVector& gpsDatas);
 
     /**
     * \brief Get next user id on the timeline.

@@ -23,7 +23,7 @@ Timeline::~Timeline()
     ofLogVerbose("Timeline", "destroying");
 }
 
-void Timeline::setTimeline(const GpsDataVector& gpsDatas)
+void Timeline::setData(const GpsDataVector& gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
