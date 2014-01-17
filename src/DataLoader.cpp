@@ -150,7 +150,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
     GpsDataVector& gpsDatas = app.getGpsDataVector();
     WalkVector& walks = app.getWalkVector();
     MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-    ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
+    const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
 
     prepareGpsData(app);
 
