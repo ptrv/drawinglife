@@ -438,40 +438,23 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
     if (settings.isRegionsOn())
     {
         double lon0 = 0.0;
-        if (lon >= regions[0].minLon && lon < regions[0].maxLon)
+        for (size_t i = 0; i < AppSettings::NUM_REGIONS; ++i)
         {
-            lon0 = regions[0].lon0;
+            if (lon >= regions[i].minLon && lon < regions[i].maxLon)
+            {
+                lon0 = regions[i].lon0;
+                break;
+            }
         }
-        else if (lon >= regions[1].minLon && lon < regions[1].maxLon)
-        {
-            lon0 = regions[1].lon0;
-        }
-        else if (lon >= regions[2].minLon && lon < regions[2].maxLon)
-        {
-            lon0 = regions[2].lon0;
-        }
-        else if (lon >= regions[3].minLon && lon < regions[3].maxLon)
-        {
-            lon0 = regions[3].lon0;
-        }
-        else if (lon >= regions[4].minLon && lon <= regions[4].maxLon)
-        {
-            lon0 = regions[4].lon0;
-        }
-        TMS.Forward(Math::real(lon0),
-                    lat,
-                    lon,
-                    utmP.x, utmP.y, gamma, k);
+        TMS.Forward(Math::real(lon0), lat, lon, utmP.x, utmP.y, gamma, k);
         utmP.lon0 = lon0;
 
     }
     else
     {
 
-        TMS.Forward(Math::real(m_lon0Global),
-                    lat,
-                    lon,
-                    utmP.x, utmP.y, gamma, k);
+        TMS.Forward(Math::real(m_lon0Global), lat, lon, utmP.x, utmP.y,
+                    gamma, k);
         utmP.lon0 = m_lon0Global;
     }
 
@@ -488,11 +471,8 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
     double lon = 0.0;
     // Works just for lon > -35 and lon < 65,
     // see AppSettings.xml settings->meridian->region3
-    TMS.Reverse(Math::real(12.0),
-                utmP.x,
-                utmP.y,
-                lat, lon, gamma, k);
-    p.setGpsPointFromLatLon(lat, lon);
+    TMS.Reverse(Math::real(12.0), utmP.x, utmP.y, lat, lon, gamma, k);
+    p.setDataFromLatLon(lat, lon);
 
 //    std::cout << "lat: " << lat << ", lon: " << lon << std::endl;
     return p;

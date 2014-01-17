@@ -82,6 +82,7 @@ public:
 
     bool showInfo() const { return m_showInfo; }
 
+    static const size_t NUM_REGIONS = 5;
     const GpsRegion* getRegions() const { return m_regions; }
     bool isRegionsOn() const { return m_regionsOn; }
 
@@ -210,7 +211,7 @@ private:
 
     bool m_showInfo;
 
-    GpsRegion m_regions[5];
+    GpsRegion m_regions[NUM_REGIONS];
     bool m_regionsOn;
 
     bool m_loop;

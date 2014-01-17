@@ -432,9 +432,7 @@ bool AppSettings::loadJSON()
 {
     ofxJSONElement jsonRoot;
 
-    bool parsingSuccessful = jsonRoot.open(ofToDataPath("AppSettings.json"));
-
-    if (parsingSuccessful)
+    if (jsonRoot.open(ofToDataPath(m_settingsFilePath)))
     {
         //----------------------------------------------------------------------
         // ui
@@ -539,7 +537,7 @@ bool AppSettings::loadJSON()
                                 {116.0, 65.0, 130.0},
                                 {146.0, 130.0, 180.0}};
 
-        for (size_t i = 0; i < MAX(5, json.size()); ++i)
+        for (size_t i = 0; i < MIN(5, json.size()); ++i)
         {
             Json::Value region = json[i];
             m_regions[i].lon0 = JsonHelper::getDouble(region, "lon0", regions[i][0]);
@@ -695,7 +693,7 @@ bool AppSettings::loadJSON()
     }
     else
     {
-        cout  << "Failed to parse JSON" << endl;
+        cout  << "Failed to parse '" << m_settingsFilePath << "'" << endl;
         return false;
     }
 }
