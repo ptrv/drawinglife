@@ -50,7 +50,7 @@ GpsData::~GpsData()
 // -----------------------------------------------------------------------------
 // Set Gps data.
 // -----------------------------------------------------------------------------
-void GpsData::setGpsData(const std::vector<GpsSegment>& segments,
+void GpsData::setGpsData(const GpsSegmentVector& segments,
                          const ofxPoint<double>& minLonLat,
                          const ofxPoint<double>& maxLonLat,
                          const std::string& user)
@@ -500,7 +500,7 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 }
 
 // TODO parameter m_lon0
-void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
+void GpsData::calculateUtmPointsGlobalLon(bool /*regionsOn*/)
 {
     m_indices.clear();
     int counter = 0;
@@ -510,18 +510,18 @@ void GpsData::calculateUtmPointsGlobalLon(bool regionsOn)
 
 //    const GpsRegion* regions = m_settings.getRegions();
     int i = 0;
-    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
+    BOOST_FOREACH(const GpsSegment& segment, m_segments)
     {
         int j = 0;
         std::vector<UtmPoint> utmVec;
-        utmVec.reserve( rSegment.getPoints().size());
-        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
+        utmVec.reserve( segment.getPoints().size());
+        BOOST_FOREACH(const GpsPoint& point, segment.getPoints())
         {
-            UtmPoint utmP = getUtmPointWithRegion(rPoint.getLatitude(),
-                                                  rPoint.getLongitude(),
+            UtmPoint utmP = getUtmPointWithRegion(point.getLatitude(),
+                                                  point.getLongitude(),
                                                   m_settings);
 
-            utmP.speed = rPoint.getSpeed();
+            utmP.speed = point.getSpeed();
 
             utmVec.push_back(utmP);
 

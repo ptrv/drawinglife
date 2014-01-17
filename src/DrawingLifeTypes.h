@@ -142,6 +142,8 @@ typedef boost::shared_ptr<GpsData> GpsDataPtr;
 typedef boost::weak_ptr<GpsData> GpsDataWeak;
 typedef std::vector<GpsDataPtr> GpsDataVector;
 
+typedef std::vector<GpsDataIndex> GpsDataIndexVector;
+
 typedef boost::ptr_vector<Walk> WalkVector;
 
 typedef boost::shared_ptr<MagicBox> MagicBoxPtr;

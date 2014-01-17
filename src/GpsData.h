@@ -34,7 +34,7 @@ public:
 	* \param maxLat maximum  latitude value.
 	* \param user string with user name.
 	*/
-	void setGpsData(const std::vector<GpsSegment>& segments,
+    void setGpsData(const GpsSegmentVector& segments,
                     const ofxPoint<double>& minLonLat,
                     const ofxPoint<double>& maxLonLat,
 					const std::string& user);
@@ -45,7 +45,7 @@ public:
 	 * \brief Get GpsSegment objects.
 	 * \return vector with GpsSegments.
 	 */
-	const std::vector<GpsSegment>& getSegments() const { return m_segments; }
+    const GpsSegmentVector& getSegments() const { return m_segments; }
 	/**
 	* \brief Get minimum longitude value.
 	* \return minimum longitude value.
@@ -208,7 +208,7 @@ public:
     */
     void calculateUtmPoints(double lon0);
 
-    const std::vector<GpsDataIndex>& getIndices() const { return m_indices; }
+    const GpsDataIndexVector& getIndices() const { return m_indices; }
 
 private:
     /**
@@ -242,7 +242,7 @@ private:
 
     const AppSettings& m_settings;
     int m_gpsDataId;
-	std::vector<GpsSegment> m_segments;
+    GpsSegmentVector m_segments;
 	std::string m_user;
 
     ofxPoint<double> m_minLonLat;
@@ -255,7 +255,7 @@ private:
     UtmDataVector m_normalizedUtmPointsGlobal;
     double m_lon0;
 
-    std::vector<GpsDataIndex > m_indices;
+    GpsDataIndexVector m_indices;
 };
 
 #endif // _GPSDATA_H_
