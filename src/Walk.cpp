@@ -15,7 +15,7 @@ DrawingLifeDrawable(),
 m_settings(settings),
 m_currentGpsPoint(0),
 m_currentGpsSegment(0),
-m_currentPoint(-1),
+m_currentPoint(0),
 m_firstPoint(true),
 m_currentPointIsImage(false),
 m_interactiveMode(false),
@@ -89,7 +89,7 @@ void Walk::update()
             std::cout << "I'm the last gps point" << std::endl;
             m_currentGpsPoint = 0;
             m_currentGpsSegment = 0;
-            m_currentPoint = -1;
+            m_currentPoint = 0;
         }
     }
     ++m_currentPoint;
@@ -97,14 +97,14 @@ void Walk::update()
 
 void Walk::updateToNextSegment()
 {
-    updateToSegment(false);
+    updateToSegment(FORWARD);
 }
 void Walk::updateToPreviousSegment()
 {
-    updateToSegment(true);
+    updateToSegment(BACKWARD);
 }
 
-void Walk::updateToSegment(bool prev)
+void Walk::updateToSegment(const tWalkDir direction)
 {
     const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
@@ -117,34 +117,44 @@ void Walk::updateToSegment(bool prev)
     if (gpsData->getTotalGpsPoints() > 0
             && static_cast<int>(utmData.size()) > 0)
     {
-        if (!prev && m_currentGpsSegment < static_cast<int>(utmData.size()) - 1)
+        if (m_firstPoint
+                || m_currentGpsSegment < static_cast<int>(utmData.size()) - 1)
         {
-            ++m_currentGpsSegment;
+            if (m_firstPoint)
+            {
+                m_firstPoint = false;
+            }
+            else if (direction == FORWARD)
+            {
+                ++m_currentGpsSegment;
+            }
+            else if (direction == BACKWARD)
+            {
+                if (m_currentGpsSegment == 0)
+                {
+                    m_currentGpsSegment = static_cast<int>(utmData.size());
+                }
+                --m_currentGpsSegment;
+            }
             const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
             m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
-
-        }
-        else if (prev && m_currentGpsSegment > 0)
-        {
-            --m_currentGpsSegment;
-            const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
-            m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
+            m_currentPoint += m_currentGpsPoint;
         }
         else
         {
             m_currentGpsPoint = 0;
             m_currentGpsSegment = 0;
-            m_currentPoint = -1;
+            m_currentPoint = 0;
+            m_firstPoint = true;
         }
     }
-
 }
 
 void Walk::reset()
 {
     m_currentGpsPoint = 0;
     m_currentGpsSegment = 0;
-    m_currentPoint = -1;
+    m_currentPoint = 0;
     m_firstPoint = true;
 }
 // -----------------------------------------------------------------------------

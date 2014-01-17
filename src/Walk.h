@@ -14,6 +14,12 @@
 class Walk : public DrawingLifeDrawable
 {
 public:
+
+    enum tWalkDir
+    {
+        FORWARD, BACKWARD
+    };
+
     Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled=true);
 	~Walk();
 
@@ -114,7 +120,7 @@ private:
     typedef boost::function<double(const GpsDataPtr, int, int)> tFuncGetCurrentDouble;
     double getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const;
 
-    void updateToSegment(bool prev);
+    void updateToSegment(const tWalkDir direction);
 
     const AppSettings& m_settings;
 
