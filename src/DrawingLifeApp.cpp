@@ -55,6 +55,9 @@ DrawingLifeApp::~DrawingLifeApp()
     m_magicBoxes.clear();
 
     m_images.clear();
+
+    clearLocationOfImages();
+    clearLocationImageVec();
 }
 
 void DrawingLifeApp::setup()
@@ -78,18 +81,7 @@ void DrawingLifeApp::setup()
 	// Fonts.
     // -------------------------------------------------------------------------
 
-    DrawingLifeFontMap::const_iterator it = m_settings->getFonts().begin();
-    DrawingLifeFontMap::const_iterator itEnd = m_settings->getFonts().end();
-    for (; it != itEnd; ++it)
-    {
-        string fontId = it->first;
-        const pair<string, int>& f = it->second;
-        string fontName = f.first;
-        int fontSize = f.second;
-        ofTrueTypeFont font;
-        font.loadFont(fontName, fontSize);
-        m_fonts[fontId] = font;
-    }
+    DataLoader::loadFonts(*this, m_fonts);
 
     // -----------------------------------------------------------------------------
 	// Settings.
@@ -218,24 +210,7 @@ void DrawingLifeApp::setup()
                 }
             }
 
-            const vector<LocationImageData>& locImgVec =
-                    m_settings->getLocationImageData();
-            BOOST_FOREACH(const LocationImageData& locImgData, locImgVec)
-            {
-                LocationImage* lImg;
-                if (m_multiMode)
-                {
-                    lImg = new LocationImage(*m_magicBox.get(), locImgData);
-                }
-                else
-                {
-                    lImg = new LocationImage(*m_magicBoxes[0].get(), locImgData);
-                }
-
-                lImg->setViewBounds(m_viewDimensions[0]);
-
-                m_locationImgs.push_back(lImg);
-            }
+            DataLoader::loadLocationImages(*this);
         }
     }
     else
@@ -252,38 +227,32 @@ void DrawingLifeApp::setup()
 
     if (m_settings->isSoundActive())
     {
-        BOOST_FOREACH(const std::string& sndFilePath, m_settings->getSoundFiles())
-    	{
-    	    ofSoundPlayer* sndPlay = new ofSoundPlayer();
-            sndPlay->loadSound(sndFilePath);
-    	    sndPlay->setLoop(false);
-    	    m_soundPlayer.push_back(sndPlay);
-		}
+        DataLoader::loadSoundPlayers(*this);
     }
 
 }
 int currentSoundFile = 0;
 void DrawingLifeApp::soundUpdate()
 {
-    if (m_settings->isSoundActive() && m_soundPlayer.size() > 0)
+    if (m_settings->isSoundActive() && m_soundPlayers.size() > 0)
 	{
         if (m_timeline->isFirst())
 		{
 			currentSoundFile = 0;
-            std::for_each(m_soundPlayer.begin(), m_soundPlayer.end(),
+            std::for_each(m_soundPlayers.begin(), m_soundPlayers.end(),
                           boost::bind(&ofSoundPlayer::stop, _1));
-            if (m_soundPlayer.size() > 0)
+            if (m_soundPlayers.size() > 0)
 			{
-                m_soundPlayer[currentSoundFile].play();
+                m_soundPlayers[currentSoundFile].play();
 			}
 		}
 		else
 		{
-            if ( ! m_soundPlayer[currentSoundFile].getIsPlaying())
+            if ( ! m_soundPlayers[currentSoundFile].getIsPlaying())
 			{
-                m_soundPlayer[currentSoundFile].stop();
-                m_soundPlayer[currentSoundFile].setPosition(0.0);
-                if (currentSoundFile < static_cast<int>(m_soundPlayer.size()) - 1)
+                m_soundPlayers[currentSoundFile].stop();
+                m_soundPlayers[currentSoundFile].setPosition(0.0);
+                if (currentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
 				{
 					++currentSoundFile;
 				}
@@ -291,7 +260,7 @@ void DrawingLifeApp::soundUpdate()
 				{
 					currentSoundFile = 0;
 				}
-                m_soundPlayer[currentSoundFile].play();
+                m_soundPlayers[currentSoundFile].play();
 			}
 		}
 	}
@@ -528,8 +497,12 @@ void DrawingLifeApp::draw()
             // -----------------------------------------------------------------------------
 //            fillViewAreaUTM();
             //---------------------------------------------------------------------------
-            std::for_each(m_locationImgs.begin(), m_locationImgs.end(),
-                          boost::bind(&LocationImage::draw, _1));
+
+            BOOST_FOREACH(LocationImageVec& locVec, m_locationImgs)
+            {
+                std::for_each(locVec.begin(), locVec.end(),
+                              boost::bind(&LocationImage::draw, _1));
+            }
 
             if (m_multiMode && m_multiModeInfo)
             {
@@ -607,10 +580,9 @@ void DrawingLifeApp::draw()
                        m_settings->getColorForegroundB(),
                        m_settings->getAlphaTrack());
             ofNoFill();
-            for (size_t i = 0; i < m_numPersons; ++i)
-            {
-                m_walks[i].drawAll();
-            }
+
+            std::for_each(m_walks.begin(), m_walks.end(),
+                          boost::bind(&Walk::drawAll, _1));
         }
 
         if (m_showFps)
@@ -882,8 +854,38 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
         m_walks[i].setViewBounds(m_viewDimensions[i]);
     }
 
-    BOOST_FOREACH(LocationImage& locImg, m_locationImgs)
+    BOOST_FOREACH(LocationImageVec& locVec, m_locationImgs)
     {
-        locImg.setViewBounds(m_viewDimensions[0]);
+
+        if (m_multiMode)
+        {
+            locVec[0].setViewBounds(m_viewDimensions[0]);
+        }
+        else
+        {
+            for (size_t i = 0; i < locVec.size(); ++i)
+            {
+                locVec[i].setViewBounds(m_viewDimensions[i]);
+            }
+        }
     }
 }
+
+// -----------------------------------------------------------------------------
+
+void DrawingLifeApp::clearLocationOfImages()
+{
+    BOOST_FOREACH(ofImagePtr img, m_locationOfImages)
+    {
+        img.reset();
+    }
+    m_locationOfImages.clear();
+}
+
+void DrawingLifeApp::clearLocationImageVec()
+{
+    std::for_each(m_locationImgs.begin(), m_locationImgs.end(),
+                  boost::bind(&LocationImageVec::clear, _1));
+}
+
+// -----------------------------------------------------------------------------

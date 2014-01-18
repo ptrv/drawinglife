@@ -7,6 +7,10 @@ DataLoader::DataLoader()
 {
 }
 
+//------------------------------------------------------------------------------
+// GpsData loading
+//------------------------------------------------------------------------------
+
 void DataLoader::prepareGpsData(DrawingLifeApp& app)
 {
     app.resetData();
@@ -188,7 +192,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                                           settings.useSpeed()));
         if (dbReader->setupDbConnection())
         {
-            // -----------------------------------------------------------------------------
+            // -----------------------------------------------------------------
             // DB query
             tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
             dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
@@ -211,7 +215,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             }
             dbReader->closeDbConnection();
         }
-        // -----------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         ofLogVerbose(AppLogTag::DATA_LOADER)
                 << "minLon: " << gpsData->getMinUtmX() << ", "
@@ -230,6 +234,9 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
 }
 
+//------------------------------------------------------------------------------
+// Other resources
+//------------------------------------------------------------------------------
 bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
 {
     const std::vector<CurrentImageData>& imageList =
@@ -257,3 +264,95 @@ bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
     }
     return true;
 }
+
+//------------------------------------------------------------------------------
+
+void DataLoader::loadLocationImages(DrawingLifeApp& app)
+{
+    const AppSettings& settings = app.getAppSettings();
+    const ViewDimensionsVec viewDimensions = app.getViewDimensionsVec();
+    const MagicBoxVector boxes = app.getMagicBoxVector();
+    MagicBox& box = app.getMagicBox();
+
+    app.clearLocationOfImages();
+    app.clearLocationImageVec();
+
+    const vector<LocationImageData>& locImgVec = settings.getLocationImageData();
+
+    BOOST_FOREACH(const LocationImageData& locImgData, locImgVec)
+    {
+        boost::ptr_vector<LocationImage> locVec;
+
+        ofImagePtr img = boost::make_shared<ofImage>();
+
+        img->loadImage(locImgData.path);
+        img->resize(locImgData.width, locImgData.height);
+        if (locImgData.anchorType == 1)
+        {
+            img->setAnchorPercent(locImgData.anchorX, locImgData.anchorY);
+        }
+        else if (locImgData.anchorType == 2)
+        {
+            img->setAnchorPoint(locImgData.anchorX, locImgData.anchorY);
+        }
+
+        app.addLocationOfImage(img);
+        if (settings.isMultiMode())
+        {
+            LocationImage* lImg = new LocationImage(img, box.shared_from_this(),
+                                                    locImgData);
+            lImg->setViewBounds(viewDimensions[0]);
+            locVec.push_back(lImg);
+        }
+        else
+        {
+            for (size_t i = 0; boxes.size(); ++i)
+            {
+                LocationImage* lImg = new LocationImage(img, boxes[i], locImgData);
+                lImg->setViewBounds(viewDimensions[i]);
+                locVec.push_back(lImg);
+            }
+        }
+        app.addLocationImageVec(locVec);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void DataLoader::loadSoundPlayers(DrawingLifeApp& app)
+{
+    const AppSettings& settings = app.getAppSettings();
+
+    app.clearSoundPlayers();
+
+    BOOST_FOREACH(const std::string& sndFilePath, settings.getSoundFiles())
+    {
+        ofSoundPlayer* sndPlay = new ofSoundPlayer();
+        sndPlay->loadSound(sndFilePath);
+        sndPlay->setLoop(false);
+        app.addSoundPlayer(sndPlay);
+    }
+
+}
+
+void DataLoader::loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts)
+{
+    const AppSettings& settings = app.getAppSettings();
+
+    fonts.clear();
+
+    DrawingLifeFontMap::const_iterator it = settings.getFonts().begin();
+    DrawingLifeFontMap::const_iterator itEnd = settings.getFonts().end();
+    for (; it != itEnd; ++it)
+    {
+        string fontId = it->first;
+        const pair<string, int>& f = it->second;
+        string fontName = f.first;
+        int fontSize = f.second;
+        ofTrueTypeFont font;
+        font.loadFont(fontName, fontSize);
+        fonts[fontId] = font;
+    }
+}
+
+//------------------------------------------------------------------------------

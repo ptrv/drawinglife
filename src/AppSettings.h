@@ -21,7 +21,7 @@ public:
     const std::string& getFontName(const std::string& id);
     int getFontSize(const std::string& id);
 
-    const DrawingLifeFontMap& getFonts() { return m_fonts; }
+    const DrawingLifeFontMap& getFonts() const { return m_fonts; }
 
     int getColorForegroundR () const {return m_colorForegroundR; }
     int getColorForegroundG () const {return m_colorForegroundG; }

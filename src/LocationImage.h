@@ -8,19 +8,20 @@
 class LocationImage : public DrawingLifeDrawable
 {
 public:
-    LocationImage(const MagicBox& magicBox, LocationImageData lid);
+    LocationImage(ofImageWeak image, const MagicBoxWeak magicBox,
+                  LocationImageData lid);
     virtual ~LocationImage();
 
     void draw();
 
 private:
 
-    const MagicBox& m_magicBox;
+    const MagicBoxWeak m_magicBox;
     LocationImageData m_lid;
 
     UtmPoint m_utm;
 
-    ofImage m_image;
+    ofImageWeak m_image;
 };
 
 #endif // _LOCATIONIMAGE_H_

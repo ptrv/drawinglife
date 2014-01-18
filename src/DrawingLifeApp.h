@@ -50,8 +50,21 @@ public:
     bool getIsImageAsCurrentPoint() const { return m_imageAsCurrentPoint; }
     void setImageAsCurrentPoint(bool isImageAsCurrentPoint)
     { m_imageAsCurrentPoint = isImageAsCurrentPoint; }
+
     void addCurrentPointImage(ofImage* img) { m_images.push_back(img); }
     void clearCurrentPointImages() { m_images.clear(); }
+
+    void addLocationOfImage(const ofImagePtr& images)
+    { m_locationOfImages.push_back(images); }
+    void clearLocationOfImages();
+
+    void addLocationImageVec(LocationImageVec& locationImageVector)
+    { m_locationImgs.push_back(locationImageVector); }
+    void clearLocationImageVec();
+
+    void addSoundPlayer(ofSoundPlayer* soundPlayer)
+    { m_soundPlayers.push_back(soundPlayer); }
+    void clearSoundPlayers() { m_soundPlayers.clear(); }
 
     void resetData();
 
@@ -96,7 +109,7 @@ private:
 	//---------------------------------------------------------------------------
 	bool m_startScreenMode;
 
-    std::map<std::string, ofTrueTypeFont> m_fonts;
+    DrawingLifeFonts m_fonts;
     // -----------------------------------------------------------------------------
     unsigned int m_numPersons;
     StringVec m_names;
@@ -125,12 +138,13 @@ private:
     bool m_multiMode;
     bool m_multiModeInfo;
 
-    boost::ptr_vector<LocationImage> m_locationImgs;
+    ofImagePtrVec m_locationOfImages;
+    std::vector<boost::ptr_vector<LocationImage> > m_locationImgs;
 
     bool m_pause;
     MagicBoxPtr m_magicBox;
 
-    boost::ptr_vector<ofSoundPlayer> m_soundPlayer;
+    boost::ptr_vector<ofSoundPlayer> m_soundPlayers;
 
     bool m_isZoomAnimation;
 

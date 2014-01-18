@@ -34,6 +34,12 @@ public:
 
     static bool loadCurrentPointImages(DrawingLifeApp& app);
 
+    static void loadLocationImages(DrawingLifeApp& app);
+
+    static void loadSoundPlayers(DrawingLifeApp& app);
+
+    static void loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts);
+
 private:
 
     static void prepareGpsData(DrawingLifeApp& app);

@@ -133,6 +133,7 @@ class Walk;
 class MagicBox;
 class GpsSegment;
 class GpsPoint;
+class LocationImage;
 
 typedef std::vector<std::string> StringVec;
 typedef boost::scoped_ptr<DBReader> DBReaderPtr;
@@ -156,8 +157,15 @@ typedef std::vector<GpsSegment> GpsSegmentVector;
 typedef std::vector<GpsPoint> GpsPointVector;
 
 typedef std::map<std::string, std::pair<std::string, int> > DrawingLifeFontMap;
+typedef std::map<std::string, ofTrueTypeFont> DrawingLifeFonts;
 
 typedef std::vector<ViewDimensions> ViewDimensionsVec;
+
+typedef boost::shared_ptr<ofImage> ofImagePtr;
+typedef std::vector<ofImagePtr> ofImagePtrVec;
+typedef boost::weak_ptr<ofImage> ofImageWeak;
+typedef boost::ptr_vector<LocationImage> LocationImageVec;
+
 
 //---------------------------------------------------------------------------
 
