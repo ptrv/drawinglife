@@ -126,8 +126,8 @@ private:
 
     void drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm);
 
-    typedef boost::function<double(const GpsDataPtr&, int, int)> tFuncGetCurrentDouble;
-    double getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const;
+    typedef boost::function<double(const GpsDataPtr&)> tFnGetCurrentDouble;
+    double getCurrentThing(const tFnGetCurrentDouble& fnGetCurrentDouble) const;
 
     void updateToSegment(const tWalkDir direction);
 

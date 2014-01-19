@@ -459,11 +459,11 @@ std::string Walk::getCurrentTimestamp() const
     }
 }
 
-double Walk::getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const
+double Walk::getCurrentThing(const tFnGetCurrentDouble& fnGetCurrentDouble) const
 {
     if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
-        return fnGetCurrentDouble(gpsData, m_currentGpsSegment, m_currentGpsPoint);
+        return fnGetCurrentDouble(gpsData);
     }
     else
     {
@@ -473,23 +473,28 @@ double Walk::getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) co
 
 double Walk::getCurrentLongitude() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getLongitude, _1, _2, _3));
+    return getCurrentThing(boost::bind(&GpsData::getLongitude, _1,
+                                       m_currentGpsSegment, m_currentGpsPoint));
 }
 double Walk::getCurrentLatitude() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getLatitude, _1, _2, _3));
+    return getCurrentThing(boost::bind(&GpsData::getLatitude, _1,
+                                       m_currentGpsSegment, m_currentGpsPoint));
 }
 double Walk::getCurrentElevation() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getElevation, _1, _2, _3));
+    return getCurrentThing(boost::bind(&GpsData::getElevation, _1,
+                                       m_currentGpsSegment, m_currentGpsPoint));
 }
 double Walk::getCurrentUtmX() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getUtmX, _1, _2, _3));
+    return getCurrentThing(boost::bind(&GpsData::getUtmX, _1,
+                                       m_currentGpsSegment, m_currentGpsPoint));
 }
 double Walk::getCurrentUtmY() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getUtmY, _1, _2, _3));
+    return getCurrentThing(boost::bind(&GpsData::getUtmY, _1,
+                                       m_currentGpsSegment, m_currentGpsPoint));
 }
 
 // -----------------------------------------------------------------------------
