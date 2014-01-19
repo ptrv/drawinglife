@@ -138,7 +138,7 @@ class LocationImage;
 
 typedef std::vector<std::string> StringVec;
 typedef boost::scoped_ptr<DBReader> DBReaderPtr;
-typedef std::vector<ZoomAnimFrame> ZoomAnimFrames;
+typedef std::vector<ZoomAnimFrame> ZoomAnimFrameVec;
 
 typedef boost::shared_ptr<GpsData> GpsDataPtr;
 typedef boost::weak_ptr<GpsData> GpsDataWeak;

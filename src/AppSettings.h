@@ -73,10 +73,11 @@ public:
 
     unsigned int getNumPersons() const { return m_numPersons; }
 
-    const std::vector<std::string >& getNames() const { return m_names; }
-    const std::vector<ofColor >& getNameColors() const { return m_nameColors; }
-    const std::vector<std::string >& getSqlFilePaths() const { return m_sqlFilePaths; }
-    const std::vector<CurrentPointImageData >& getCurrentImageData() const { return m_currImageData; }
+    const StringVec& getNames() const { return m_names; }
+    const std::vector<ofColor>& getNameColors() const { return m_nameColors; }
+    const StringVec& getSqlFilePaths() const { return m_sqlFilePaths; }
+    const std::vector<CurrentPointImageData>& getCurrentImageData() const
+    { return m_currImageData; }
 
     bool isInteractiveMode() const { return m_interactiveMode; }
     bool drawTraced() const { return m_interactiveTraced; }
@@ -101,14 +102,15 @@ public:
     const ofColor& getSpeedColorUnder() const { return m_speedColorUnder; }
     const ofColor& getSpeedColorAbove() const { return m_speedColorAbove; }
 
-    const std::vector<LocationImageData>& getLocationImageData() const { return m_locationImgData; }
+    const std::vector<LocationImageData>& getLocationImageData() const
+    { return m_locationImgData; }
     
     bool isBoundingBoxFixed() const { return m_boundingBoxFixed; }
     double getBoundingBoxLat() const { return m_boundingBoxLat; } 
     double getBoundingBoxLon() const { return m_boundingBoxLon; }
     
     bool isZoomAnimation() const { return m_isZoomAnimation; }
-    const std::vector<ZoomAnimFrame>& getZoomAnimFrames() const { return m_zoomAnimationFrames; }
+    const ZoomAnimFrameVec& getZoomAnimFrames() const { return m_zoomAnimationFrames; }
 
     double getZoomAnimationDamp() const { return m_zoomAnimationDamp; }
     double getZoomAnimationAttraction() const { return m_zoomAnimationAttraction;}
@@ -119,7 +121,7 @@ public:
     bool getUseOnlyZ() const { return m_zoomanimationUseOnlyZ; }
 
     bool isSoundActive() const { return m_isSoundActive; }
-    const std::vector<std::string>& getSoundFiles() const { return m_soundFiles; }
+    const StringVec& getSoundFiles() const { return m_soundFiles; }
 
     const std::string& getVertexShaderSource() const { return m_vertexShaderSource; }
     const std::string& getFragmentShaderSource() const { return m_fragmentShaderSource; }
@@ -200,10 +202,10 @@ private:
     // Data
     // -----------------------------------------------------------------------------
     unsigned int m_numPersons;
-    std::vector<std::string > m_names;
-    std::vector<ofColor > m_nameColors;
-    std::vector<std::string > m_sqlFilePaths;
-    std::vector<CurrentPointImageData > m_currImageData;
+    StringVec m_names;
+    std::vector<ofColor> m_nameColors;
+    StringVec m_sqlFilePaths;
+    std::vector<CurrentPointImageData> m_currImageData;
 
     bool m_interactiveMode;
     bool m_interactiveTraced;
@@ -235,14 +237,14 @@ private:
     double m_boundingBoxLon;
 
     bool m_isZoomAnimation;
-    std::vector<ZoomAnimFrame> m_zoomAnimationFrames;
+    ZoomAnimFrameVec m_zoomAnimationFrames;
     double m_zoomAnimationDamp;
     double m_zoomAnimationAttraction;
     double m_zoomAnimationDampCenter;
     double m_zoomAnimationAttractionCenter;
 
     bool m_isSoundActive;
-    std::vector<std::string> m_soundFiles;
+    StringVec m_soundFiles;
 
     int m_zoomAnimationAttractionCriteria;
     bool m_zoomanimationUseOnlyZ;

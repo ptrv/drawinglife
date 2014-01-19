@@ -734,13 +734,14 @@ bool DrawingLifeApp::zoomHasChanged()
 
 bool DrawingLifeApp::zoomHasChangedId()
 {
-    if (m_sZoomFrameCount + 1 >= static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    const ZoomAnimFrameVec& zoomAnimFrames = m_settings->getZoomAnimFrames();
+
+    if (m_sZoomFrameCount + 1 >= static_cast<int>(zoomAnimFrames.size()))
     {
         return false;
     }
     const int currentId = m_timeline->getCurrentTimelineObj().gpsid;
-    const int zoomChangeId =
-            m_settings->getZoomAnimFrames()[m_sZoomFrameCount+1].gpsId;
+    const int zoomChangeId = zoomAnimFrames[m_sZoomFrameCount+1].gpsId;
     if (currentId == zoomChangeId)
     {
         ++m_sZoomFrameCount;
@@ -756,14 +757,16 @@ bool DrawingLifeApp::zoomHasChangedId()
 
 bool DrawingLifeApp::zoomHasChangedTimestamp()
 {
-    if (m_sZoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    const ZoomAnimFrameVec& zoomAnimFrames = m_settings->getZoomAnimFrames();
+
+    if (m_sZoomFrameCount+1 >=  static_cast<int>(zoomAnimFrames.size()))
     {
         return false;
     }
     const string& currentTimestamp =
             m_timeline->getCurrentTimelineObj().timeString;
     const string& zoomChangeTimestamp =
-            m_settings->getZoomAnimFrames()[m_sZoomFrameCount+1].timestamp;
+            zoomAnimFrames[m_sZoomFrameCount+1].timestamp;
     if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
     {
         ++m_sZoomFrameCount;
@@ -779,13 +782,15 @@ bool DrawingLifeApp::zoomHasChangedTimestamp()
 
 bool DrawingLifeApp::zoomHasChangedTime()
 {
+    const ZoomAnimFrameVec& zoomAnimFrames = m_settings->getZoomAnimFrames();
+
     const int current = m_timeline->getCurrentCount();
     const int all = m_timeline->getAllCount();
 
     int currIndex = 0;
-    for (size_t i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
+    for (size_t i = 0; i < zoomAnimFrames.size(); ++i)
     {
-        if ((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
+        if ((current / (float)all) > zoomAnimFrames[i].frameTime)
         {
             currIndex = i;
         }
@@ -797,7 +802,7 @@ bool DrawingLifeApp::zoomHasChangedTime()
     if (m_sZoomFrameCount != currIndex)
     {
         ++m_sZoomFrameCount;
-        if (m_sZoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+        if (m_sZoomFrameCount >=  static_cast<int>(zoomAnimFrames.size()))
         {
             --m_sZoomFrameCount;
         }
