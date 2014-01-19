@@ -412,26 +412,29 @@ void DrawingLifeApp::update()
             && !m_interactiveMode
             && m_timeline->getTimeline().size() > 0)
     {
-        if (m_loopMode)
+        for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
         {
-            for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
+            const int id = m_timeline->getNext();
+            try
             {
-                int id = m_timeline->getNext();
-                if (id < (int)m_numPersons)
-                {
-                    m_walks[id].update();
-                }
+                m_walks.at(id).update();
+            }
+            catch (const std::out_of_range&) {}
 
-                zoomUpdate();
-                soundUpdate();
+            zoomUpdate();
+            soundUpdate();
 
-                m_timeline->countUp();
-                if (m_timeline->isFirst())
-                {
+            m_timeline->countUp();
+
+            if (m_timeline->isFirst())
+            {
 //                            std::cout << "First timeline object!" << std::endl;
-                    std::for_each(m_walks.begin(), m_walks.end(),
-                                  boost::bind(&Walk::reset, _1));
-                    zoomFrameCount = 0;
+                std::for_each(m_walks.begin(), m_walks.end(),
+                              boost::bind(&Walk::reset, _1));
+                zoomFrameCount = 0;
+                const int sleepTime = m_settings->getSleepTime();
+                if (sleepTime > 0)
+                {
 #if defined (TARGET_WIN32)
                     Sleep(m_settings->getSleepTime()*1000);
 #else
@@ -439,21 +442,9 @@ void DrawingLifeApp::update()
 #endif
                 }
             }
-        }
-        else
-        {
-            for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
+            else if (!m_loopMode && m_timeline->isLast())
             {
-                if (!m_timeline->isLast())
-                {
-                    int id = m_timeline->getNext();
-                    m_walks[id].update();
-                    m_timeline->countUp();
-                }
-                else
-                {
-                    OF_EXIT_APP(0);
-                }
+                OF_EXIT_APP(0);
             }
         }
     }
