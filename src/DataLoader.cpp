@@ -134,8 +134,9 @@ bool DataLoader::loadGpsDataWithSqlFile(DrawingLifeApp& app,
     {
         std::ifstream sqlFile(ofToDataPath(sqlFilePaths[i]).c_str(),
                               std::ifstream::in);
-        std::string sqlFileSource = std::string(std::istreambuf_iterator<char>(sqlFile),
-                                                std::istreambuf_iterator<char>());
+        const std::string& sqlFileSource =
+                std::string(std::istreambuf_iterator<char>(sqlFile),
+                            std::istreambuf_iterator<char>());
 
         tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2,
                                          sqlFileSource);
@@ -247,9 +248,9 @@ bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
     for (size_t i = 0; i < imageList.size(); ++i)
     {
         ofImage* tmpImg = new ofImage();
-        std::string str = imageList[i].path;
-        float width = imageList[i].width;
-        float height= imageList[i].height;
+        const std::string& str = imageList[i].path;
+        const float width = imageList[i].width;
+        const float height= imageList[i].height;
 
         if (tmpImg->loadImage(str))
         {
@@ -345,10 +346,10 @@ void DataLoader::loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts)
     DrawingLifeFontMap::const_iterator itEnd = settings.getFonts().end();
     for (; it != itEnd; ++it)
     {
-        string fontId = it->first;
+        const string& fontId = it->first;
         const pair<string, int>& f = it->second;
-        string fontName = f.first;
-        int fontSize = f.second;
+        const string& fontName = f.first;
+        const int fontSize = f.second;
         ofTrueTypeFont font;
         font.loadFont(fontName, fontSize);
         fonts[fontId] = font;

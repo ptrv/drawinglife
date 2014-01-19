@@ -167,8 +167,8 @@ void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 
 void MagicBox::addToBoxSize(const double sizeToAdd)
 {
-    double oldSize = m_currentSize;
-    double oldPadding = m_padding;
+    const double oldSize = m_currentSize;
+    const double oldPadding = m_padding;
 
     m_currentSize += sizeToAdd;
 
@@ -200,8 +200,8 @@ void MagicBox::addToBoxSize(const double sizeToAdd)
 
 void MagicBox::setSize(const double newSize)
 {
-    double oldSize = m_currentSize;
-    double oldPadding = m_padding;
+    const double oldSize = m_currentSize;
+    const double oldPadding = m_padding;
 
     m_theBox.setFromCenter(m_centerUtm, newSize, newSize);
 
@@ -280,17 +280,14 @@ static const double SIZE_ZOOM_FACTOR = 4.0;
 
 void MagicBox::zoom(Zoom z)
 {
-    double val = getSize() / SIZE_ZOOM_FACTOR;
-    if (z == ZOOM_IN)
-    {
-        val *= -1;
-    }
-    addToBoxSize(val);
+    const double val = getSize() / SIZE_ZOOM_FACTOR;
+
+    addToBoxSize(z == ZOOM_IN ? -val : val);
 }
 
 void MagicBox::move(Direction d)
 {
-    double val = getSize() / SIZE_ZOOM_FACTOR;
+    const double val = getSize() / SIZE_ZOOM_FACTOR;
     move(d, val);
 }
 

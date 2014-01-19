@@ -92,14 +92,14 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
         while (reader.read())
 		{
 			GpsPoint gpsPoint;
-            int id = reader.getint(0);
-            double lat = reader.getdouble(1);
-            double lon = reader.getdouble(2);
-            double ele = reader.getdouble(4);
-            string timeStamp = reader.getstring(3);
-            string location = reader.getstring(7);
-            double speed = m_useSpeed ? reader.getdouble(8) : 0.0;
-			int currentSegment = reader.getint(5);
+            const int id = reader.getint(0);
+            const double lat = reader.getdouble(1);
+            const double lon = reader.getdouble(2);
+            const double ele = reader.getdouble(4);
+            const string timeStamp = reader.getstring(3);
+            const string location = reader.getstring(7);
+            const double speed = m_useSpeed ? reader.getdouble(8) : 0.0;
+            const int currentSegment = reader.getint(5);
 			user = reader.getstring(6);
 
             gpsPoint.setData(id, lat, lon, ele, timeStamp, location, speed);
@@ -130,8 +130,8 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 		// -----------------------------------------------------------------------------
 		// Get min/max values for query.
 		// -----------------------------------------------------------------------------
-		size_t posS = query.find("FROM");
-		size_t posE = query.find(" ORDER");
+        const size_t posS = query.find("FROM");
+        const size_t posE = query.find(" ORDER");
 
 //        queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
         queryMinMax << "SELECT min(x(a.geom)), max(x(a.geom)), "

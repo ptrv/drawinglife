@@ -254,20 +254,23 @@ void GpsData::setMinMaxRatioUTM()
 {
 	setMinMaxValuesUTM();
 
-	double minLon = this->getMinUtmX();
-	double maxLon = this->getMaxUtmX();
-	double minLat = this->getMinUtmY();
-	double maxLat = this->getMaxUtmY();
+    const double minLon = this->getMinUtmX();
+    const double maxLon = this->getMaxUtmX();
+    const double minLat = this->getMinUtmY();
+    const double maxLat = this->getMaxUtmY();
 
 	// Calculate horizontal and vertical range.
-	double deltaLon = maxLon - minLon;
-	double deltaLat = maxLat - minLat;
+    const double deltaLon = maxLon - minLon;
+    const double deltaLat = maxLat - minLat;
+
+    const double deltaLatLonHalf = (deltaLat - deltaLon) / 2.0;
+    const double deltaLonLatHalf = (deltaLon - deltaLat) / 2.0;
 
 	// Aspect ratio is: width < height.
 	if (deltaLon <	deltaLat)
 	{
-        m_minUtm.x = minLon - (deltaLat - deltaLon)/2.0;
-        m_maxUtm.x = maxLon + (deltaLat - deltaLon)/2.0;
+        m_minUtm.x = minLon - deltaLatLonHalf;
+        m_maxUtm.x = maxLon + deltaLatLonHalf;
         m_minUtm.y = minLat;
         m_maxUtm.y = maxLat;
 	}
@@ -276,8 +279,8 @@ void GpsData::setMinMaxRatioUTM()
 	{
         m_minUtm.x = minLon;
         m_maxUtm.x = maxLon;
-        m_minUtm.y = minLat - (deltaLon - deltaLat)/2.0;
-        m_maxUtm.y = maxLat + (deltaLon - deltaLat)/2.0;
+        m_minUtm.y = minLat - deltaLonLatHalf;
+        m_maxUtm.y = maxLat + deltaLonLatHalf;
 	}
 	// Aspect ratio is: height == width.
 	else
@@ -290,18 +293,21 @@ void GpsData::setMinMaxRatioUTM()
 }
 void GpsData::setGlobalMinMaxRatioUTM()
 {
-    ofxPoint<double> maxLonLat = drawMaxima;
-    ofxPoint<double> minLonLat = drawMinima;
+    const ofxPoint<double> maxLonLat = drawMaxima;
+    const ofxPoint<double> minLonLat = drawMinima;
 
 	// Calculate horizontal and vertical range.
-    double deltaLon = maxLonLat.x - minLonLat.x;
-    double deltaLat = maxLonLat.y - minLonLat.y;
+    const double deltaLon = maxLonLat.x - minLonLat.x;
+    const double deltaLat = maxLonLat.y - minLonLat.y;
+
+    const double deltaLatLonHalf = (deltaLat - deltaLon) / 2.0;
+    const double deltaLonLatHalf = (deltaLon - deltaLat) / 2.0;
 
 	// Aspect ratio is: width < height.
 	if (deltaLon <	deltaLat)
 	{
-        drawMinima.x = minLonLat.x - (deltaLat - deltaLon)/2.0;
-        drawMaxima.x = maxLonLat.x + (deltaLat - deltaLon)/2.0;
+        drawMinima.x = minLonLat.x - deltaLatLonHalf;
+        drawMaxima.x = maxLonLat.x + deltaLatLonHalf;
         drawMinima.y = minLonLat.x;
         drawMaxima.y = maxLonLat.y;
 	}
@@ -310,8 +316,8 @@ void GpsData::setGlobalMinMaxRatioUTM()
 	{
         drawMinima.x = minLonLat.x;
         drawMaxima.x = maxLonLat.x;
-        drawMinima.y = minLonLat.y - (deltaLon - deltaLat)/2.0;
-        drawMaxima.y = maxLonLat.y + (deltaLon - deltaLat)/2.0;
+        drawMinima.y = minLonLat.y - deltaLonLatHalf;
+        drawMaxima.y = maxLonLat.y + deltaLonLatHalf;
 	}
 	// Aspect ratio is: height == width.
 	else
@@ -388,12 +394,12 @@ void GpsData::setMinMaxValuesUTM()
     {
         BOOST_FOREACH(const UtmPoint& utmPoint, segments)
         {
-            double x = utmPoint.x;
-            double y = utmPoint.y;
-            if (x < minXY.x) minXY.x = x;
-            if (x > maxXY.x) maxXY.x = x;
-            if (y < minXY.y) minXY.y = y;
-            if (y > maxXY.y) maxXY.y = y;
+            const double x = utmPoint.x;
+            const double y = utmPoint.y;
+            minXY.x = MIN(x, minXY.x);
+            maxXY.x = MAX(x, maxXY.x);
+            minXY.y = MIN(y, minXY.y);
+            maxXY.y = MAX(y, maxXY.y);
         }
     }
 

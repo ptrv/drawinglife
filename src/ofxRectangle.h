@@ -26,7 +26,7 @@ class ofxRectangle
         height	= h;
     }
 
-    void set(ofxPoint<T> p, T w, T h)
+    void set(const ofxPoint<T>& p, T w, T h)
     {
         pos = p;
         width	= w;
@@ -40,23 +40,25 @@ class ofxRectangle
         height	= h;
     }
 
-    void setFromCenter(ofxPoint<T> p, T w, T h)
+    void setFromCenter(const ofxPoint<T>& p, T w, T h)
     {
         pos.set(p.x - (w / 2), p.y - (h / 2));
         width	= w;
         height	= h;
     }
 
-    ofxPoint<T> getCenter()
+    const ofxPoint<T> getCenter()
     {
         return ofxPoint<T>(pos.x + width / 2, pos.y + height / 2, 0);
     }
 
-    bool inside (ofxPoint<T> p){
+    bool inside (const ofxPoint<T>& p) const
+    {
         return inside(p.x, p.y);
     }
 
-    bool inside(T px, T py){
+    bool inside(T px, T py) const
+    {
         if( px > pos.x && py > pos.y && px < pos.x + width
                 && py < pos.y + height )
         {

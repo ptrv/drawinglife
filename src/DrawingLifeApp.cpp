@@ -294,8 +294,9 @@ bool DrawingLifeApp::zoomHasChangedId()
     {
 		return false;
     }
-	int currentId = m_timeline->getCurrentTimelineObj().gpsid;
-	int zoomChangeId = m_settings->getZoomAnimFrames()[zoomFrameCount+1].gpsId;
+    const int currentId = m_timeline->getCurrentTimelineObj().gpsid;
+    const int zoomChangeId =
+            m_settings->getZoomAnimFrames()[zoomFrameCount+1].gpsId;
     if (currentId == zoomChangeId)
     {
 		++zoomFrameCount;
@@ -313,8 +314,10 @@ bool DrawingLifeApp::zoomHasChangedTimestamp()
     {
 		return false;
     }
-	string currentTimestamp = m_timeline->getCurrentTimelineObj().timeString;
-	string zoomChangeTimestamp = m_settings->getZoomAnimFrames()[zoomFrameCount+1].timestamp;
+    const string& currentTimestamp =
+            m_timeline->getCurrentTimelineObj().timeString;
+    const string& zoomChangeTimestamp =
+            m_settings->getZoomAnimFrames()[zoomFrameCount+1].timestamp;
     if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
     {
 		++zoomFrameCount;
@@ -328,8 +331,8 @@ bool DrawingLifeApp::zoomHasChangedTimestamp()
 
 bool DrawingLifeApp::zoomHasChangedTime()
 {
-	int current = m_timeline->getCurrentCount();
-	int all = m_timeline->getAllCount();
+    const int current = m_timeline->getCurrentCount();
+    const int all = m_timeline->getAllCount();
 
 	int currIndex = 0;
     for (size_t i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
@@ -366,9 +369,9 @@ void DrawingLifeApp::zoomUpdate()
 		{
             const ZoomAnimFrame& zoomAnimFrame =
                     m_settings->getZoomAnimFrames()[zoomFrameCount];
-            float zoomLevel = zoomAnimFrame.frameZoom;
-            double centerX = zoomAnimFrame.frameCenterX;
-            double centerY = zoomAnimFrame.frameCenterY;
+            const float zoomLevel = zoomAnimFrame.frameZoom;
+            const double centerX = zoomAnimFrame.frameCenterX;
+            const double centerY = zoomAnimFrame.frameCenterY;
             UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
                                                            *m_settings);
 
@@ -499,7 +502,7 @@ void DrawingLifeApp::draw()
             {
                 ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                 ofSetHexColor(0xffffff);
-                std::string infoText = m_timeline->getCurrentTime();
+                const std::string& infoText = m_timeline->getCurrentTime();
 //                if (m_pause)
 //                    infoText.append(" (stopped)");
                 m_fonts["info"].drawString(infoText,
@@ -518,8 +521,8 @@ void DrawingLifeApp::draw()
                             ? m_magicBox : m_magicBoxes[i];
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
 
-                    int debugTextX = 30 + (ofGetWidth() / m_numPersons) * i;
-                    int debugTextY = 30;
+                    const int debugTextX = 30 + (ofGetWidth() / m_numPersons) * i;
+                    const int debugTextY = 30;
                     ofDrawBitmapString(Utils::getCurrentGpsInfoDebug(
                                            gpsData.get(), &walk, box.get()),
                                        debugTextX, debugTextY);
@@ -528,13 +531,13 @@ void DrawingLifeApp::draw()
                 {
                     ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
                     ofSetHexColor(0xffffff);
-                    std::string infoText = Utils::getCurrentGpsInfo(
+                    const std::string& infoText = Utils::getCurrentGpsInfo(
                                 gpsData.get(), &walk);
 //                    if (m_pause)
 //                        infoText.append(" (stopped)");
-                    int infoX = m_viewDimensions[i].padding
+                    const int infoX = m_viewDimensions[i].padding
                             + (ofGetWidth() / m_numPersons) * i;
-                    int infoY = m_viewDimensions[i].offset.y + 10;
+                    const int infoY = m_viewDimensions[i].offset.y + 10;
                     m_fonts["info"].drawString(infoText, infoX, infoY);
                 }
 
@@ -583,7 +586,7 @@ void DrawingLifeApp::draw()
 
         if (m_showKeyCommands)
         {
-            ofColor c(255, 255, 255, m_settings->getAlphaLegend());
+            const ofColor c(255, 255, 255, m_settings->getAlphaLegend());
             ViewHelper::drawKeyCommands(c);
         }
 

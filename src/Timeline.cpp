@@ -93,10 +93,10 @@ bool Timeline::isNextReady()
     bool ready = false;
     if (m_last != 0)
     {
-        time_t current = m_current->secs;
-        time_t last = m_last->secs;
+        const time_t current = m_current->secs;
+        const time_t last = m_last->secs;
 
-        time_t diff = current - last;
+        const time_t diff = current - last;
 
         if (diff > 10)
         {

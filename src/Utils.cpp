@@ -38,7 +38,7 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
         if (gpsData->getMaxLat() > maxLonLat.y) maxLonLat.y = gpsData->getMaxLon();
     }
 
-    bool isRegionOn = settings.isRegionsOn();
+    const bool isRegionOn = settings.isRegionsOn();
     if (isRegionOn)
     {
         GpsData::setGlobalValues(minXY, maxXY, 0.0);
