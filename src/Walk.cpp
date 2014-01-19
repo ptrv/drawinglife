@@ -23,12 +23,7 @@ m_drawTraced(true),
 m_imageAlpha(255)
 {
     m_maxPointsToDraw = m_settings.getWalkLength();
-    //	m_dotColor.a = 127;
-//	m_dotColor.a = m_dotAlpha;
-	m_dotColor.a = dotColor.a;
-	m_dotColor.r = dotColor.r;
-	m_dotColor.g = dotColor.g;
-	m_dotColor.b = dotColor.b;
+    m_dotColor = dotColor;
 
     m_interactiveMode = m_settings.isInteractiveMode();
     m_drawTraced = m_settings.drawTraced();
@@ -56,10 +51,11 @@ void Walk::update()
     {
         return;
     }
-    const UtmDataVector& utmData= gpsData->getNormalizedUTMPoints();
-    const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
 
-    if (m_currentGpsSegment < static_cast<int>(utmData.size()))
+    const UtmDataVector& utmPoints= gpsData->getUTMPoints();
+    const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
+
+    if (m_currentGpsSegment < static_cast<int>(utmPoints.size()))
     {
         if (m_currentGpsPoint < static_cast<int>(utmSegment.size()) - 1)
         {
@@ -84,7 +80,7 @@ void Walk::update()
         {
             ++m_currentGpsPoint;
         }
-        else//	void setMinMaxRatio();
+        else
         {
             std::cout << "I'm the last gps point" << std::endl;
             m_currentGpsPoint = 0;
@@ -112,13 +108,13 @@ void Walk::updateToSegment(const tWalkDir direction)
         return;
     }
 
-    const UtmDataVector& utmData = gpsData->getNormalizedUTMPoints();
+    const UtmDataVector& utmPoints = gpsData->getUTMPoints();
 
     if (gpsData->getTotalGpsPoints() > 0
-            && static_cast<int>(utmData.size()) > 0)
+            && static_cast<int>(utmPoints.size()) > 0)
     {
         if (m_firstPoint
-                || m_currentGpsSegment < static_cast<int>(utmData.size()) - 1)
+                || m_currentGpsSegment < static_cast<int>(utmPoints.size()) - 1)
         {
             if (m_firstPoint)
             {
@@ -132,11 +128,11 @@ void Walk::updateToSegment(const tWalkDir direction)
             {
                 if (m_currentGpsSegment == 0)
                 {
-                    m_currentGpsSegment = static_cast<int>(utmData.size());
+                    m_currentGpsSegment = static_cast<int>(utmPoints.size());
                 }
                 --m_currentGpsSegment;
             }
-            const UtmSegment& utmSegment = utmData[m_currentGpsSegment];
+            const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
             m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
             m_currentPoint += m_currentGpsPoint;
         }
@@ -168,15 +164,15 @@ void Walk::draw()
         return;
     }
 
-    if (gpsData->getNormalizedUTMPoints().size() > 0
-            && gpsData->getNormalizedUTMPointsGlobal()[m_currentGpsSegment].size() > 0)
-	{
-		// -----------------------------------------------------------------------------
-		// Draw Gps data
-		// -----------------------------------------------------------------------------
+    const UtmDataVector& utmPoints = gpsData->getUTMPoints();
+    const UtmSegment& currentSegment = utmPoints[m_currentGpsSegment];
 
-        const UtmPoint& currentUtm =
-                gpsData->getUTMPoints()[m_currentGpsSegment][m_currentGpsPoint];
+    if (utmPoints.size() > 0 && currentSegment.size() > 0)
+	{
+        // ---------------------------------------------------------------------
+		// Draw Gps data
+        // ---------------------------------------------------------------------
+        const UtmPoint& currentUtm = currentSegment[m_currentGpsPoint];
 
         if (!m_interactiveMode && !m_settings.isMultiMode()
                 && !m_settings.isBoundingBoxFixed())
@@ -185,47 +181,36 @@ void Walk::draw()
         }
 
         int startSeg, startPoint;
-        if (m_maxPointsToDraw > 0 && m_currentPoint - m_maxPointsToDraw >= 0)
-        {
-            int startIndex = m_currentPoint - m_maxPointsToDraw;
-            const GpsDataIndex& gpsDataIndex = gpsData->getIndices()[startIndex];
-            startSeg = gpsDataIndex.gpsSegment;
-            startPoint = gpsDataIndex.gpsPoint;
-        }
-        else
-        {
-            startSeg = 0;
-            startPoint = 0;
-        }
+        calculateStartSegmentAndStartPoint(startSeg, startPoint, *gpsData.get());
+
         if (m_interactiveMode && !m_drawTraced)
         {
             startSeg = m_currentGpsSegment;
         }
 
-//        ofSetLineWidth(3.0);
-//        ofEnableSmoothing();
         for (int i = startSeg; i <= m_currentGpsSegment; ++i)
         {
+            const UtmSegment& segment = utmPoints[i];
             glBegin(GL_LINE_STRIP);
             int pointEnd;
             if (i == m_currentGpsSegment)
             {
                 pointEnd = m_currentGpsPoint;
                 if (m_interactiveMode && m_drawTraced)
-                    ofSetColor(m_currentSegColor.r,
-                               m_currentSegColor.g,
-                               m_currentSegColor.b,
-                               m_currentSegColor.a);
+                {
+                    ofSetColor(m_currentSegColor);
+                }
             }
             else
             {
-                pointEnd = (int)gpsData->getNormalizedUTMPointsGlobal()[i].size()-1;
+                pointEnd = static_cast<int>(segment.size()) - 1;
             }
 
             for (int j = startPoint; j <= pointEnd; ++j)
             {
-                const UtmPoint& utm = gpsData->getUTMPoints()[i][j];
+                const UtmPoint& utm = segment[j];
                 bool isInBox = true;
+
                 if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
                 {
                     isInBox = magicBox->isInBox(utm);
@@ -235,94 +220,118 @@ void Walk::draw()
                         glBegin(GL_LINE_STRIP);
                     }
                 }
-//                else
-//                    isInBox = true;
+
                 if (m_settings.useSpeed())
                 {
-                    if (utm.speed > m_settings.getSpeedThreshold())
-                    {
-                        const ofColor tmpColor = m_settings.getSpeedColorAbove();
-                        ofSetColor(tmpColor);
-                        if (tmpColor.a == 0.0)
-                        {
-                            isInBox = false;
-                            glEnd();
-                            glBegin(GL_LINE_STRIP);
-                        }
-                    }
-                    else
-                    {
-                        const ofColor tmpColor = m_settings.getSpeedColorUnder();
-                        ofSetColor(tmpColor);
-                        if (tmpColor.a == 0.0)
-                        {
-                            isInBox = false;
-                            glEnd();
-                            glBegin(GL_LINE_STRIP);
-                        }
-                    }
-                }
-                if (isInBox)
-                {
-//                    ofSetColor(255, 0,0);
-                    const ofxPoint<double> tmp = magicBox->getDrawablePoint(utm);
-                    glVertex2d(getScaledUtmX(tmp.x),
-                               getScaledUtmY(tmp.y));
+                    drawSpeedColor(utm.speed, isInBox);
                 }
 
+                if (isInBox)
+                {
+                    const ofxPoint<double>& pt = magicBox->getDrawablePoint(utm);
+                    glVertex2d(getScaledUtmX(pt.x),
+                               getScaledUtmY(pt.y));
+                }
             }
             glEnd();
 
             startPoint = 0;
         }
-//        ofDisableSmoothing();
 
-        const ofxPoint<double> currentDrawablePoint =
-                magicBox->getDrawablePoint(currentUtm);
-
-		if (m_currentPointIsImage)
-		{
-			ofSetColor(255, 255, 255, m_imageAlpha);
-            m_image.draw(getScaledUtmX(currentDrawablePoint.x),
-                         getScaledUtmY(currentDrawablePoint.y));
-
-		}
-        else if (!m_interactiveMode)
-		{
-			ofFill();
-            bool skipDrawing = false;
-            if (m_settings.useSpeed())
-			{
-                if (currentUtm.speed > m_settings.getSpeedThreshold())
-			    {
-                    skipDrawing = m_settings.getSpeedColorAbove().a == 0.0;
-                }
-                else
-                {
-                    skipDrawing = m_settings.getSpeedColorUnder().a == 0.0;
-                }
-			}
-            if (!skipDrawing)
-			{
-                ofSetColor(m_dotColor);
-                ofCircle(getScaledUtmX(currentDrawablePoint.x),
-                         getScaledUtmY(currentDrawablePoint.y),
-                         m_dotSize);
-			}
-		}
-	}
+        drawCurrentPoint(*magicBox.get(), currentUtm);
+    }
 
     // draw borders of bounding boxes.
     if (m_settings.showBoundingBox())
     {
         drawBoxes();
-
-
-
-
-
     }
 
+}
+
+// -----------------------------------------------------------------------------
+
+void Walk::calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
+                                const GpsData& gpsData)
+{
+    if (m_maxPointsToDraw > 0 && m_currentPoint - m_maxPointsToDraw >= 0)
+    {
+        const int startIndex = m_currentPoint - m_maxPointsToDraw;
+        const GpsDataIndex& gpsDataIndex = gpsData.getIndices()[startIndex];
+        startSeg = gpsDataIndex.gpsSegment;
+        startPoint = gpsDataIndex.gpsPoint;
+    }
+    else
+    {
+        startSeg = 0;
+        startPoint = 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Walk::drawSpeedColor(const double speed, bool& isInBox)
+{
+    if (speed > m_settings.getSpeedThreshold())
+    {
+        const ofColor& color = m_settings.getSpeedColorAbove();
+        ofSetColor(color);
+        if (color.a == 0.0)
+        {
+            isInBox = false;
+            glEnd();
+            glBegin(GL_LINE_STRIP);
+        }
+    }
+    else
+    {
+        const ofColor& color = m_settings.getSpeedColorUnder();
+        ofSetColor(color);
+        if (color.a == 0.0)
+        {
+            isInBox = false;
+            glEnd();
+            glBegin(GL_LINE_STRIP);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Walk::drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm)
+{
+    const ofxPoint<double>& currentPoint = box.getDrawablePoint(currentUtm);
+
+    if (m_currentPointIsImage)
+    {
+        ofSetColor(255, 255, 255, m_imageAlpha);
+        m_image.draw(getScaledUtmX(currentPoint.x),
+                     getScaledUtmY(currentPoint.y));
+
+    }
+    else if (!m_interactiveMode)
+    {
+        ofFill();
+        bool skipDrawing = false;
+        if (m_settings.useSpeed())
+        {
+            if (currentUtm.speed > m_settings.getSpeedThreshold())
+            {
+                skipDrawing = m_settings.getSpeedColorAbove().a == 0.0;
+            }
+            else
+            {
+                skipDrawing = m_settings.getSpeedColorUnder().a == 0.0;
+            }
+        }
+        if (!skipDrawing)
+        {
+            ofSetColor(m_dotColor);
+            ofCircle(getScaledUtmX(currentPoint.x),
+                     getScaledUtmY(currentPoint.y),
+                     m_dotSize);
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------

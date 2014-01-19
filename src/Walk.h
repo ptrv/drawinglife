@@ -119,7 +119,14 @@ private:
 
     void drawBoxes();
 
-    typedef boost::function<double(const GpsDataPtr, int, int)> tFuncGetCurrentDouble;
+    void calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
+                              const GpsData& gpsData);
+
+    void drawSpeedColor(double speed, bool& isInBox);
+
+    void drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm);
+
+    typedef boost::function<double(const GpsDataPtr&, int, int)> tFuncGetCurrentDouble;
     double getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const;
 
     void updateToSegment(const tWalkDir direction);
