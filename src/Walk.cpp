@@ -313,31 +313,14 @@ void Walk::draw()
 	}
 
     // draw borders of bounding boxes.
-    if (EXTRA_DEBUG_MODE)
+    if (m_settings.showBoundingBox())
     {
-        ofNoFill();
-        ofSetColor(255,0,0);
+        drawBoxes();
 
-        const ofxRectangle<double>& normalizedBox =
-                magicBox->getNormalizedBox();
-        double x = getScaledUtmX(normalizedBox.getX());
-        double y = getScaledUtmY(normalizedBox.getY());
-        double w = getScaledUtmX(normalizedBox.getWidth()) - x;
-        double h = getScaledUtmY(normalizedBox.getHeight()) - y;
 
-        ofRect(x, y , w, h);
 
-        ofNoFill();
-        ofSetColor(0,255,0);
 
-        const ofxRectangle<double>& normalizedPaddedBox =
-                magicBox->getNormalizedPaddedBox();
-        double xp = getScaledUtmX(normalizedPaddedBox.getX());
-        double yp = getScaledUtmY(normalizedPaddedBox.getY());
-        double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
-        double hp = getScaledUtmY(normalizedPaddedBox.getHeight()) - yp;
 
-        ofRect(xp, yp , wp, hp);
     }
 
 }
@@ -374,6 +357,38 @@ void Walk::drawAll()
             }
         }
         glEnd();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Walk::drawBoxes()
+{
+    if (const MagicBoxPtr magicBox = m_magicBox.lock())
+    {
+        ofNoFill();
+        ofSetColor(255,0,0);
+
+        const ofxRectangle<double>& normalizedBox =
+                magicBox->getNormalizedBox();
+        const double x = getScaledUtmX(normalizedBox.getX());
+        const double y = getScaledUtmY(normalizedBox.getY());
+        const double w = getScaledUtmX(normalizedBox.getWidth()) - x;
+        const double h = getScaledUtmY(normalizedBox.getHeight()) - y;
+
+        ofRect(x, y , w, h);
+
+        ofNoFill();
+        ofSetColor(0,255,0);
+
+        const ofxRectangle<double>& normalizedPaddedBox =
+                magicBox->getNormalizedPaddedBox();
+        const double xp = getScaledUtmX(normalizedPaddedBox.getX());
+        const double yp = getScaledUtmY(normalizedPaddedBox.getY());
+        const double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
+        const double hp = getScaledUtmY(normalizedPaddedBox.getHeight()) - yp;
+
+        ofRect(xp, yp , wp, hp);
     }
 }
 

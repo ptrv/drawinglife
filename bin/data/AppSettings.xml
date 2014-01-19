@@ -45,6 +45,7 @@
         <boundingbox>
             <auto>0</auto>
             <static>0</static>
+            <show>0</show>
             <position lat="52.49734" lon="13.44594"/>
             <size>2000.0</size>
             <padding>200.0</padding>

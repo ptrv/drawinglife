@@ -117,6 +117,8 @@ public:
 
 private:
 
+    void drawBoxes();
+
     typedef boost::function<double(const GpsDataPtr, int, int)> tFuncGetCurrentDouble;
     double getCurrentThing(const tFuncGetCurrentDouble& fnGetCurrentDouble) const;
 

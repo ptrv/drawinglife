@@ -137,6 +137,7 @@ m_hideCursor(false),
 m_boundingBoxAuto(true),
 m_boundingBoxSize(3000.0),
 m_boundingBoxPadding(500.0),
+m_boundingBoxShow(false),
 m_databasePath(""),
 m_queryType(0),
 m_queryYearStart(0),
@@ -249,6 +250,7 @@ bool AppSettings::loadXML()
     m_boundingBoxFixed = m_xml.getValue("settings:boundingbox:static", 0) == 1;
     m_boundingBoxLat = m_xml.getAttribute("settings:boundingbox:position", "lat", 52.542);
     m_boundingBoxLon = m_xml.getAttribute("settings:boundingbox:position", "lon", 13.413);
+    m_boundingBoxShow = m_xml.getValue("settings:boundingbox:show", 0) == 1;
     
     m_databasePath = ofToDataPath(m_xml.getValue("data:database", "test.sqlite"), true);
 
@@ -501,6 +503,7 @@ bool AppSettings::loadJSON()
         m_boundingBoxSize = JsonHelper::getDouble(json, "size", 3000.0);
         m_boundingBoxPadding = JsonHelper::getDouble(json, "padding", 500.0);
         m_boundingBoxFixed = JsonHelper::getBool(json, "static", false);
+        m_boundingBoxShow = JsonHelper::getBool(json, "show", false);
         json = jsonRoot["bounding_box"]["position"];
         m_boundingBoxLat = JsonHelper::getDouble(json, "latitude", 52.542);
         m_boundingBoxLon = JsonHelper::getDouble(json, "longitude", 13.413);

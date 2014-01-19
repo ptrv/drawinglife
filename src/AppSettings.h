@@ -59,6 +59,7 @@ public:
     bool isBoundingBoxAuto() const { return m_boundingBoxAuto; }
     double getBoundingBoxSize() const { return m_boundingBoxSize; }
     double getBoundingBoxPadding() const { return m_boundingBoxPadding; }
+    bool showBoundingBox() const { return m_boundingBoxShow; }
 
     bool isMeridianAuto() const { return m_meridianAuto; }
     double getMeridian() const { return m_meridianVal; }
@@ -184,6 +185,7 @@ private:
     bool m_boundingBoxAuto;
     double m_boundingBoxSize;
     double m_boundingBoxPadding;
+    bool m_boundingBoxShow;
     // -----------------------------------------------------------------------------
     // Database
     // -----------------------------------------------------------------------------
