@@ -48,23 +48,21 @@ void Timeline::setData(const GpsDataVector& gpsDatas)
     }
 
     sortTimeline();
-    if (m_timeline.size() > 0)
+    try
     {
-        m_current = &m_timeline[0];
+        m_current = &m_timeline.at(0);
     }
+    catch (const std::out_of_range&) {}
 }
 
 int Timeline::getNext() const
 {
-    if (m_timeline.size() > 0)
+    try
     {
-        int id = m_timeline[m_counter].id;
-//        ++m_counter;
-//        m_counter %= m_timeline.size();
-
+        const int id = m_timeline.at(m_counter).id;
         return id;
     }
-    else
+    catch (const std::out_of_range&)
     {
         return -1;
     }
@@ -134,9 +132,8 @@ time_t Timeline::makeTimeObject(const std::string& timeString)
     time_t t;
     time(&t);
     int year, month, day, hour, min, sec;
-    std::string str = timeString;
 //    sscanf(str.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
-    sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
+    sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
     tm = *localtime(&t);
     tm.tm_year = year - 1900;
     tm.tm_mon = month - 1;

@@ -211,6 +211,15 @@ public:
     const GpsDataIndexVector& getIndices() const { return m_indices; }
 
 private:
+
+    typedef boost::function<double(const GpsPoint&)> tFnGetGpsData;
+    double getData(size_t segmentIndex, size_t pointIndex,
+                   const tFnGetGpsData& fnGetGpsData) const;
+
+    typedef boost::function<double(const UtmPoint&)> tFnGetUtmData;
+    double getUtmData(size_t segmentIndex, size_t pointIndex,
+                      const UtmDataVector& utmVec,
+                      const tFnGetUtmData& fnGetUtmData) const;
     /**
     * \brief Normalize all UtmPoints to a value between 0 and 1.
     */

@@ -28,18 +28,12 @@ MagicBox::~MagicBox()
 
 bool MagicBox::isInBox(const ofxPoint<double>& utmPoint) const
 {
-    return utmPoint.x >= m_theBox.getX()
-            && utmPoint.y >= m_theBox.getY()
-            && utmPoint.x < m_theBox.getX() + m_theBox.getWidth()
-            && utmPoint.y < m_theBox.getY() + m_theBox.getHeight();
+    return m_theBox.inside(utmPoint);
 }
 
 bool MagicBox::isInPaddedBox(const ofxPoint<double>& utmPoint) const
 {
-    return utmPoint.x >= m_paddedBox.getX()
-            && utmPoint.y >= m_paddedBox.getY()
-            && utmPoint.x < m_paddedBox.getX() + m_paddedBox.getWidth()
-            && utmPoint.y < m_paddedBox.getY() + m_paddedBox.getHeight();
+    return m_paddedBox.inside(utmPoint);
 }
 
 const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint) const
@@ -56,16 +50,12 @@ void MagicBox::setCenter(const double x, const double y)
 void MagicBox::setupBox(const ofxPoint<double>& currUtm, const double lon0)
 {
     m_centerUtm = currUtm;
-//    ofLog(OF_LOG_VERBOSE, "Center box %d, x: %lf, y: %lf",
-//          m_boxId+1, m_centerUtm.x, m_centerUtm.y);
 
     m_theBox.setFromCenter(m_centerUtm , m_currentSize, m_currentSize);
-//    ofLog(OF_LOG_VERBOSE, "Box %d, x: %lf, box y: %lf, box w: %lf, box h: %lf",
-//          m_boxId+1, m_theBox.x, m_theBox.y, m_theBox.width, m_theBox.height);
 
     m_paddedBox.setFromCenter(m_centerUtm,
-                              m_currentSize-(2*m_padding),
-                              m_currentSize-(2*m_padding));
+                              m_currentSize - (2 * m_padding),
+                              m_currentSize - (2 * m_padding));
 }
 
 void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
@@ -77,89 +67,41 @@ void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
     m_currentSize = width;
     m_padding = 0;
 
-    ofLogVerbose(AppLogTag::MAGIC_BOX)
-            << "Center box " << m_boxId+1 << ", "
-            << "x: " << m_centerUtm.x << ", y: " << m_centerUtm.y;
-
     m_theBox.setFromCenter(m_centerUtm , width, height);
-
-    ofLogVerbose(AppLogTag::DATA_LOADER)
-            << "Box: " << m_boxId+1 << ", "
-            << "x: " << m_theBox.getX() << ", y: " << m_theBox.getY() << ", "
-            << "w: " << m_theBox.getWidth() << ", h:" << m_theBox.getHeight();
 
     m_paddedBox.setFromCenter(m_centerUtm, width, height);
 }
 
 void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 {
-
-//    if (!this->isInBox(utmPoint))
-//    {
-//        if (utmPoint.x >= m_theBox.x + m_theBox.width)
-//        {
-//            m_theBox.x += utmPoint.x - (m_theBox.x + m_theBox.width);
-//        }
-//        else if (utmPoint.x < m_theBox.x)
-//        {
-//            m_theBox.x += utmPoint.x - m_theBox.x;
-//        }
-//
-//
-//        if (utmPoint.y >= m_theBox.y + m_theBox.height )
-//        {
-//            m_theBox.y += utmPoint.y - (m_theBox.y + m_theBox.height);
-//        }
-//        else if (utmPoint.y < m_theBox.y)
-//        {
-//            m_theBox.y += utmPoint.y - m_theBox.y;
-//        }
-//    }
-
-    // -----------------------------------------------------------------------------
-
     if (!this->isInPaddedBox(utmPoint))
     {
         if (utmPoint.x >= m_paddedBox.getX() + m_paddedBox.getWidth())
         {
-            double x1 = m_theBox.getX();
-            x1 += utmPoint.x - (m_paddedBox.getX() + m_paddedBox.getWidth());
-            m_theBox.setX(x1);
-            double x2 = m_paddedBox.getX();
-            x2 += utmPoint.x - (m_paddedBox.getX() + m_paddedBox.getWidth());
-            m_paddedBox.setX(x2);
+            const double diffX = utmPoint.x - (m_paddedBox.getX()
+                                               + m_paddedBox.getWidth());
+            m_theBox.addX(diffX);
+            m_paddedBox.addX(diffX);
         }
         else if (utmPoint.x < m_paddedBox.getX())
         {
-            double x1 = m_theBox.getX();
-            x1 += utmPoint.x - m_paddedBox.getX();
-            m_theBox.setX(x1);
-
-            double x2 = m_paddedBox.getX();
-            x2 += utmPoint.x - m_paddedBox.getX();
-            m_paddedBox.setX(x2);
+            const double diffX = utmPoint.x - m_paddedBox.getX();
+            m_theBox.addX(diffX);
+            m_paddedBox.addX(diffX);
         }
-
 
         if (utmPoint.y >= m_paddedBox.getY() + m_paddedBox.getHeight())
         {
-            double y1 = m_theBox.getY();
-            y1 += utmPoint.y - (m_paddedBox.getY() + m_paddedBox.getHeight());
-            m_theBox.setY(y1);
-
-            double y2 = m_paddedBox.getY();
-            y2 += utmPoint.y - (m_paddedBox.getY() + m_paddedBox.getHeight());
-            m_paddedBox.setY(y2);
+            const double diffY = utmPoint.y - (m_paddedBox.getY()
+                                               + m_paddedBox.getHeight());
+            m_theBox.addY(diffY);
+            m_paddedBox.addY(diffY);
         }
         else if (utmPoint.y < m_paddedBox.getY())
         {
-            double y1 = m_theBox.getY();
-            y1 += utmPoint.y - m_paddedBox.getY();
-            m_theBox.setY(y1);
-
-            double y2 = m_paddedBox.getY();
-            y2 += utmPoint.y - m_paddedBox.getY();
-            m_paddedBox.setY(y2);
+            const double diffY = utmPoint.y - m_paddedBox.getY();
+            m_theBox.addY(diffY);
+            m_paddedBox.addY(diffY);
         }
         m_centerUtm = m_theBox.getCenter();
     }
@@ -174,13 +116,8 @@ void MagicBox::addToBoxSize(const double sizeToAdd)
 
     if (m_currentSize > 0)
     {
-        double x = m_theBox.getX();
-        x -= sizeToAdd / 2;
-        m_theBox.setX(x);
-
-        double y = m_theBox.getY();
-        y -= sizeToAdd / 2;
-        m_theBox.setY(y);
+        m_theBox.addX(-sizeToAdd / 2);
+        m_theBox.addY(-sizeToAdd / 2);
 
         m_theBox.setWidth(m_currentSize);
         m_theBox.setHeight(m_currentSize);
@@ -215,37 +152,16 @@ void MagicBox::setSize(const double newSize)
 
 void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
 {
-    if (zoomLevel > 4)
-        zoomLevel = 4;
+    if (zoomLevel > 3)
+        zoomLevel = 3;
 
-    switch(zoomLevel)
+    if (m_currentSize != m_zoomLevels[zoomLevel])
     {
-        case 1:
-            if (m_currentSize != m_zoomLevels[0])
-                setSize(m_zoomLevels[0]);
-            else
-                setSize(m_defaultSize);
-        break;
-        case 2:
-            if (m_currentSize != m_zoomLevels[1])
-                setSize(m_zoomLevels[1]);
-            else
-                setSize(m_defaultSize);
-        break;
-        case 3:
-            if (m_currentSize != m_zoomLevels[2])
-                setSize(m_zoomLevels[2]);
-            else
-                setSize(m_defaultSize);
-        break;
-        case 4:
-            if (m_currentSize != m_zoomLevels[3])
-                setSize(m_zoomLevels[3]);
-            else
-                setSize(m_defaultSize);
-        break;
-        default:
-        break;
+        setSize(m_zoomLevels[zoomLevel]);
+    }
+    else
+    {
+        setSize(m_defaultSize);
     }
 }
 

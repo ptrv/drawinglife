@@ -76,6 +76,9 @@ class ofxRectangle
     inline void setY(const T newY) { pos.y = newY; }
     inline void setWidth(const T newWidth) { width = newWidth; }
     inline void setHeight(const T newHeight) { height = newHeight; }
+    inline void addX(const T diffX) { pos.x += diffX; }
+    inline void addY(const T diffY) { pos.y += diffY; }
+
 
 private:
     ofxPoint<T> pos;
