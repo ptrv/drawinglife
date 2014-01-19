@@ -73,7 +73,7 @@ struct LocationImageData
     bool anchorShow;
 };
 
-struct CurrentImageData
+struct CurrentPointImageData
 {
     std::string path;
     float width;
@@ -166,6 +166,7 @@ typedef std::vector<ofImagePtr> ofImagePtrVec;
 typedef boost::weak_ptr<ofImage> ofImageWeak;
 typedef boost::ptr_vector<LocationImage> LocationImageVec;
 
+typedef boost::ptr_vector<ofSoundPlayer> ofSoundPlayerVec;
 
 //---------------------------------------------------------------------------
 

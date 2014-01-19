@@ -42,7 +42,7 @@ public:
     MagicBox& getMagicBox() { return *m_magicBox.get(); }
     void setMagicBox(MagicBox* const magicBox) { m_magicBox.reset(magicBox); }
 
-    const std::vector<CurrentImageData>& getCurrentPointImageList() const
+    const std::vector<CurrentPointImageData>& getCurrentPointImageList() const
     { return m_imageList; }
     const boost::ptr_vector<ofImage>& getCurrentPointImages() const
     { return m_images; }
@@ -119,7 +119,7 @@ private:
 
     DBQueryData m_dbQueryData;
 
-    std::vector<CurrentImageData> m_imageList;
+    std::vector<CurrentPointImageData> m_imageList;
     boost::ptr_vector<ofImage> m_images;
     bool m_imageAsCurrentPoint;
 
@@ -144,7 +144,7 @@ private:
     bool m_pause;
     MagicBoxPtr m_magicBox;
 
-    boost::ptr_vector<ofSoundPlayer> m_soundPlayers;
+    ofSoundPlayerVec m_soundPlayers;
 
     bool m_isZoomAnimation;
 

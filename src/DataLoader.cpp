@@ -27,7 +27,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
     WalkVector& walks = app.getWalkVector();
     MagicBox& magicBox = app.getMagicBox();
 
-    const std::vector<CurrentImageData>& imageList =
+    const std::vector<CurrentPointImageData>& imageList =
             app.getCurrentPointImageList();
     const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
 
@@ -239,7 +239,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 //------------------------------------------------------------------------------
 bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
 {
-    const std::vector<CurrentImageData>& imageList =
+    const std::vector<CurrentPointImageData>& imageList =
             app.getCurrentPointImageList();
 
     app.clearCurrentPointImages();

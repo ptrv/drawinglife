@@ -296,7 +296,7 @@ bool AppSettings::loadXML()
         for (int i = 0; i < numImgTags; ++i)
         {
             m_xml.pushTag("image", i);
-            CurrentImageData cid;
+            CurrentPointImageData cid;
             cid.path = m_xml.getValue("path", "");
             cid.width = m_xml.getValue("width", 0.0);
             cid.height = m_xml.getValue("height", 0.0);
@@ -578,7 +578,7 @@ bool AppSettings::loadJSON()
             for (size_t i = 0; i < json.size(); ++i)
             {
                 Json::Value img = json[i];
-                CurrentImageData cid;
+                CurrentPointImageData cid;
                 cid.path = JsonHelper::getString(img, "path", "");
                 cid.width = JsonHelper::getDouble(img, "width", 0.0);
                 cid.height = JsonHelper::getDouble(img, "height", 0.0);
