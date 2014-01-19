@@ -107,7 +107,7 @@ void DataLoader::loadLocationImages(DrawingLifeApp& app)
     const MagicBoxVector boxes = app.getMagicBoxVector();
     MagicBox& box = app.getMagicBox();
 
-    app.clearLocationOfImages();
+    app.clearLocationImageSources();
     app.clearLocationImageVec();
 
     const vector<LocationImageData>& locImgVec = settings.getLocationImageData();

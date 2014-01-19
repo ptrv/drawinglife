@@ -56,7 +56,7 @@ public:
 
     void addLocationImageSource(const ofImagePtr& image)
     { m_locationImageSources.push_back(image); }
-    void clearLocationOfImages();
+    void clearLocationImageSources();
 
     void addLocationImageVec(LocationImageVec& locationImageVector)
     { m_locationImages.push_back(locationImageVector); }
@@ -153,6 +153,9 @@ private:
 
     ofShader shader;
     bool doShader;
+
+    static int m_sZoomFrameCount;
+    static int m_sCurrentSoundFile;
 
 };
 

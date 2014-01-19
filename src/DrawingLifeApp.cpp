@@ -15,7 +15,14 @@
 #endif
 
 //const char* DrawingLifeApp::settingsPath = "AppSettings.xml";
-//--------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+
+int DrawingLifeApp::m_sZoomFrameCount = 0;
+int DrawingLifeApp::m_sCurrentSoundFile = 0;
+
+//------------------------------------------------------------------------------
+
 DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_settingsFile(settingsFile),
     m_settings(0),
@@ -48,6 +55,9 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
 //    m_magicBox(0)
 {
 }
+
+//------------------------------------------------------------------------------
+
 DrawingLifeApp::~DrawingLifeApp()
 {
     m_gpsDatas.clear();
@@ -56,15 +66,14 @@ DrawingLifeApp::~DrawingLifeApp()
 
     m_images.clear();
 
-    clearLocationOfImages();
+    clearLocationImageSources();
     clearLocationImageVec();
 }
 
+//------------------------------------------------------------------------------
+
 void DrawingLifeApp::setup()
 {
-    // -----------------------------------------------------------------------------
-//    AppSettings& settings = AppSettings::instance();
-
     ofSetWindowTitle("drawinglife");
 
     m_settings.reset(new AppSettings(m_settingsFile));
@@ -83,9 +92,9 @@ void DrawingLifeApp::setup()
 
     DataLoader::loadFonts(*this, m_fonts);
 
-    // -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 	// Settings.
-	// -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     m_isDebugMode = m_settings->isDebugMode();
     m_isFullscreen = m_settings->isFullscreen();
     m_hideCursor = m_settings->hideCursor();
@@ -96,17 +105,17 @@ void DrawingLifeApp::setup()
     m_multiMode = m_settings->isMultiMode();
     m_multiModeInfo = m_settings->isMultiModeInfo();
 
-	// -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 	// Database.
-	// -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     m_dbQueryData.type = m_settings->getQueryType();
     m_dbQueryData.yearStart = m_settings->getQueryYearStart();
     m_dbQueryData.yearEnd = m_settings->getQueryYearEnd();
     m_dbQueryData.city = m_settings->getQueryCity();
 
-	// -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 	// Visual m_settings->
-	// -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     m_imageAsCurrentPoint = m_settings->isCurrentPointImage();
 
     if (m_imageAsCurrentPoint)
@@ -162,10 +171,10 @@ void DrawingLifeApp::setup()
     	//    	m_zoomIntegrator->setTarget();
     }
 
-    // -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     ViewHelper::setViewAspectRatio(*this);
-    // -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     m_imageAsCurrentPoint = DataLoader::loadCurrentPointImages(*this);
 
     m_timeline.reset(new Timeline());
@@ -231,181 +240,10 @@ void DrawingLifeApp::setup()
     }
 
 }
-int currentSoundFile = 0;
-void DrawingLifeApp::soundUpdate()
-{
-    if (m_settings->isSoundActive() && m_soundPlayers.size() > 0)
-	{
-        if (m_timeline->isFirst())
-		{
-			currentSoundFile = 0;
-            std::for_each(m_soundPlayers.begin(), m_soundPlayers.end(),
-                          boost::bind(&ofSoundPlayer::stop, _1));
-            if (m_soundPlayers.size() > 0)
-			{
-                m_soundPlayers[currentSoundFile].play();
-			}
-		}
-		else
-		{
-            if ( ! m_soundPlayers[currentSoundFile].getIsPlaying())
-			{
-                m_soundPlayers[currentSoundFile].stop();
-                m_soundPlayers[currentSoundFile].setPosition(0.0);
-                if (currentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
-				{
-					++currentSoundFile;
-				}
-				else
-				{
-					currentSoundFile = 0;
-				}
-                m_soundPlayers[currentSoundFile].play();
-			}
-		}
-	}
-}
 
-int zoomFrameCount = 0;
-bool DrawingLifeApp::zoomHasChanged()
-{
-    if (m_timeline->isFirst())
-	{
-		zoomFrameCount = 0;
-		return true;
-	}
 
-    switch (m_settings->getZoomAnimationCriteria())
-    {
-		case 1:
-			return zoomHasChangedTime();
-		case 2:
-			return zoomHasChangedId();
-		case 3:
-			return zoomHasChangedTimestamp();
-		default:
-			return false;
-	}
-}
+//------------------------------------------------------------------------------
 
-bool DrawingLifeApp::zoomHasChangedId()
-{
-    if (zoomFrameCount + 1 >= static_cast<int>(m_settings->getZoomAnimFrames().size()))
-    {
-		return false;
-    }
-    const int currentId = m_timeline->getCurrentTimelineObj().gpsid;
-    const int zoomChangeId =
-            m_settings->getZoomAnimFrames()[zoomFrameCount+1].gpsId;
-    if (currentId == zoomChangeId)
-    {
-		++zoomFrameCount;
-		return true;
-    }
-    else
-    {
-		return false;
-	}
-}
-
-bool DrawingLifeApp::zoomHasChangedTimestamp()
-{
-    if (zoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
-    {
-		return false;
-    }
-    const string& currentTimestamp =
-            m_timeline->getCurrentTimelineObj().timeString;
-    const string& zoomChangeTimestamp =
-            m_settings->getZoomAnimFrames()[zoomFrameCount+1].timestamp;
-    if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
-    {
-		++zoomFrameCount;
-		return true;
-    }
-    else
-    {
-		return false;
-	}
-}
-
-bool DrawingLifeApp::zoomHasChangedTime()
-{
-    const int current = m_timeline->getCurrentCount();
-    const int all = m_timeline->getAllCount();
-
-	int currIndex = 0;
-    for (size_t i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
-	{
-        if ((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
-		{
-			currIndex = i;
-		}
-		else
-		{
-			break;
-		}
-	}
-    if (zoomFrameCount != currIndex)
-	{
-		++zoomFrameCount;
-        if (zoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
-        {
-			--zoomFrameCount;
-        }
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void DrawingLifeApp::zoomUpdate()
-{
-    if (m_isZoomAnimation)
-	{
-        if (zoomHasChanged())
-		{
-            const ZoomAnimFrame& zoomAnimFrame =
-                    m_settings->getZoomAnimFrames()[zoomFrameCount];
-            const float zoomLevel = zoomAnimFrame.frameZoom;
-            const double centerX = zoomAnimFrame.frameCenterX;
-            const double centerY = zoomAnimFrame.frameCenterY;
-            UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
-                                                           *m_settings);
-
-            if (m_timeline->isFirst())
-			{
-                m_zoomIntegrator->set(zoomLevel);
-                m_theIntegrator->set(utmP);
-			}
-            m_zoomIntegrator->setTarget(zoomLevel);
-            m_theIntegrator->setTarget(utmP);
-
-		}
-	}
-    m_zoomIntegrator->update();
-    m_theIntegrator->update();
-
-    if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
-    {
-        if (m_multiMode)
-        {
-            m_magicBox->setSize(m_zoomIntegrator->getValue());
-            m_magicBox->setupBox(m_theIntegrator->getValue(), 0);
-        }
-        else
-        {
-            BOOST_FOREACH(MagicBoxPtr box, m_magicBoxes)
-            {
-                box->setSize(m_zoomIntegrator->getValue());
-                box->setupBox(m_theIntegrator->getValue(), 0);
-            }
-        }
-    }
-}
-//--------------------------------------------------------------
 bool firstSleep = true;
 
 void DrawingLifeApp::update()
@@ -434,7 +272,7 @@ void DrawingLifeApp::update()
 //                            std::cout << "First timeline object!" << std::endl;
                 std::for_each(m_walks.begin(), m_walks.end(),
                               boost::bind(&Walk::reset, _1));
-                zoomFrameCount = 0;
+                m_sZoomFrameCount = 0;
                 const int sleepTime = m_settings->getSleepTime();
                 if (sleepTime > 0)
                 {
@@ -453,25 +291,8 @@ void DrawingLifeApp::update()
     }
 }
 
-//--------------------------------------------------------------
-void DrawingLifeApp::shaderBegin()
-{
-    shader.begin();
-    //we want to pass in some varrying values to animate our type / color
-    shader.setUniform1f("timeValX", ofGetElapsedTimef() * 0.1 );
-    shader.setUniform1f("timeValY", -ofGetElapsedTimef() * 0.18 );
+//------------------------------------------------------------------------------
 
-    //we also pass in the mouse position
-    //we have to transform the coords to what the shader is expecting which is 0,0 in the center and y axis flipped.
-    shader.setUniform2f("mouse", mouseX - ofGetWidth()/2, ofGetHeight()/2-mouseY );
-}
-
-void DrawingLifeApp::shaderEnd()
-{
-    shader.end();
-}
-
-//--------------------------------------------------------------
 void DrawingLifeApp::draw()
 {
     if (m_startScreenMode)
@@ -600,16 +421,6 @@ void DrawingLifeApp::draw()
     {
         Utils::grabScreen();
     }
-}
-
-// -----------------------------------------------------------------------------
-void DrawingLifeApp::resetData()
-{
-    m_startScreenMode = false;
-
-    m_gpsDatas.clear();
-    m_walks.clear();
-    m_magicBoxes.clear();
 }
 
 //------------------------------------------------------------------------------
@@ -829,16 +640,14 @@ void DrawingLifeApp::mousePressed(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
+
 void DrawingLifeApp::mouseReleased(int x, int y, int button)
 {
 
 }
 
-//--------------------------------------------------------------
+//------------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
-// Helpers
-// -----------------------------------------------------------------------------
 void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 {
     ViewHelper::setViewAspectRatio(*this);
@@ -864,9 +673,11 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
     }
 }
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
-void DrawingLifeApp::clearLocationOfImages()
+void DrawingLifeApp::clearLocationImageSources()
 {
     BOOST_FOREACH(ofImagePtr image, m_locationImageSources)
     {
@@ -875,10 +686,231 @@ void DrawingLifeApp::clearLocationOfImages()
     m_locationImageSources.clear();
 }
 
+//------------------------------------------------------------------------------
+
 void DrawingLifeApp::clearLocationImageVec()
 {
     std::for_each(m_locationImages.begin(), m_locationImages.end(),
                   boost::bind(&LocationImageVec::clear, _1));
 }
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+
+void DrawingLifeApp::resetData()
+{
+    m_startScreenMode = false;
+
+    m_gpsDatas.clear();
+    m_walks.clear();
+    m_magicBoxes.clear();
+}
+
+//------------------------------------------------------------------------------
+// Private functions
+//------------------------------------------------------------------------------
+
+bool DrawingLifeApp::zoomHasChanged()
+{
+    if (m_timeline->isFirst())
+    {
+        m_sZoomFrameCount = 0;
+        return true;
+    }
+
+    switch (m_settings->getZoomAnimationCriteria())
+    {
+        case 1:
+            return zoomHasChangedTime();
+        case 2:
+            return zoomHasChangedId();
+        case 3:
+            return zoomHasChangedTimestamp();
+        default:
+            return false;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool DrawingLifeApp::zoomHasChangedId()
+{
+    if (m_sZoomFrameCount + 1 >= static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    {
+        return false;
+    }
+    const int currentId = m_timeline->getCurrentTimelineObj().gpsid;
+    const int zoomChangeId =
+            m_settings->getZoomAnimFrames()[m_sZoomFrameCount+1].gpsId;
+    if (currentId == zoomChangeId)
+    {
+        ++m_sZoomFrameCount;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool DrawingLifeApp::zoomHasChangedTimestamp()
+{
+    if (m_sZoomFrameCount+1 >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+    {
+        return false;
+    }
+    const string& currentTimestamp =
+            m_timeline->getCurrentTimelineObj().timeString;
+    const string& zoomChangeTimestamp =
+            m_settings->getZoomAnimFrames()[m_sZoomFrameCount+1].timestamp;
+    if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
+    {
+        ++m_sZoomFrameCount;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool DrawingLifeApp::zoomHasChangedTime()
+{
+    const int current = m_timeline->getCurrentCount();
+    const int all = m_timeline->getAllCount();
+
+    int currIndex = 0;
+    for (size_t i = 0; i < m_settings->getZoomAnimFrames().size(); ++i)
+    {
+        if ((current / (float)all) > m_settings->getZoomAnimFrames()[i].frameTime)
+        {
+            currIndex = i;
+        }
+        else
+        {
+            break;
+        }
+    }
+    if (m_sZoomFrameCount != currIndex)
+    {
+        ++m_sZoomFrameCount;
+        if (m_sZoomFrameCount >=  static_cast<int>(m_settings->getZoomAnimFrames().size()))
+        {
+            --m_sZoomFrameCount;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void DrawingLifeApp::zoomUpdate()
+{
+    if (m_isZoomAnimation)
+    {
+        if (zoomHasChanged())
+        {
+            const ZoomAnimFrame& zoomAnimFrame =
+                    m_settings->getZoomAnimFrames()[m_sZoomFrameCount];
+            const float zoomLevel = zoomAnimFrame.frameZoom;
+            const double centerX = zoomAnimFrame.frameCenterX;
+            const double centerY = zoomAnimFrame.frameCenterY;
+            UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
+                                                           *m_settings);
+
+            if (m_timeline->isFirst())
+            {
+                m_zoomIntegrator->set(zoomLevel);
+                m_theIntegrator->set(utmP);
+            }
+            m_zoomIntegrator->setTarget(zoomLevel);
+            m_theIntegrator->setTarget(utmP);
+
+        }
+    }
+    m_zoomIntegrator->update();
+    m_theIntegrator->update();
+
+    if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
+    {
+        if (m_multiMode)
+        {
+            m_magicBox->setSize(m_zoomIntegrator->getValue());
+            m_magicBox->setupBox(m_theIntegrator->getValue(), 0);
+        }
+        else
+        {
+            BOOST_FOREACH(MagicBoxPtr box, m_magicBoxes)
+            {
+                box->setSize(m_zoomIntegrator->getValue());
+                box->setupBox(m_theIntegrator->getValue(), 0);
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void DrawingLifeApp::soundUpdate()
+{
+    if (m_settings->isSoundActive() && m_soundPlayers.size() > 0)
+    {
+        if (m_timeline->isFirst())
+        {
+            m_sCurrentSoundFile = 0;
+            std::for_each(m_soundPlayers.begin(), m_soundPlayers.end(),
+                          boost::bind(&ofSoundPlayer::stop, _1));
+            if (m_soundPlayers.size() > 0)
+            {
+                m_soundPlayers[m_sCurrentSoundFile].play();
+            }
+        }
+        else
+        {
+            if ( ! m_soundPlayers[m_sCurrentSoundFile].getIsPlaying())
+            {
+                m_soundPlayers[m_sCurrentSoundFile].stop();
+                m_soundPlayers[m_sCurrentSoundFile].setPosition(0.0);
+                if (m_sCurrentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
+                {
+                    ++m_sCurrentSoundFile;
+                }
+                else
+                {
+                    m_sCurrentSoundFile = 0;
+                }
+                m_soundPlayers[m_sCurrentSoundFile].play();
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void DrawingLifeApp::shaderBegin()
+{
+    shader.begin();
+    //we want to pass in some varrying values to animate our type / color
+    shader.setUniform1f("timeValX", ofGetElapsedTimef() * 0.1 );
+    shader.setUniform1f("timeValY", -ofGetElapsedTimef() * 0.18 );
+
+    //we also pass in the mouse position
+    //we have to transform the coords to what the shader is expecting which is 0,0 in the center and y axis flipped.
+    shader.setUniform2f("mouse", mouseX - ofGetWidth()/2, ofGetHeight()/2-mouseY );
+}
+
+//------------------------------------------------------------------------------
+
+void DrawingLifeApp::shaderEnd()
+{
+    shader.end();
+}
+
+//------------------------------------------------------------------------------
