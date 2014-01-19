@@ -297,7 +297,7 @@ void DataLoader::loadLocationImages(DrawingLifeApp& app)
             img->setAnchorPoint(locImgData.anchorX, locImgData.anchorY);
         }
 
-        app.addLocationOfImage(img);
+        app.addLocationImageSource(img);
         if (settings.isMultiMode())
         {
             LocationImage* lImg = new LocationImage(img, box.shared_from_this(),

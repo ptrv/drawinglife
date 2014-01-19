@@ -54,12 +54,12 @@ public:
     void addCurrentPointImage(ofImage* img) { m_images.push_back(img); }
     void clearCurrentPointImages() { m_images.clear(); }
 
-    void addLocationOfImage(const ofImagePtr& images)
-    { m_locationOfImages.push_back(images); }
+    void addLocationImageSource(const ofImagePtr& image)
+    { m_locationImageSources.push_back(image); }
     void clearLocationOfImages();
 
     void addLocationImageVec(LocationImageVec& locationImageVector)
-    { m_locationImgs.push_back(locationImageVector); }
+    { m_locationImages.push_back(locationImageVector); }
     void clearLocationImageVec();
 
     void addSoundPlayer(ofSoundPlayer* soundPlayer)
@@ -138,8 +138,8 @@ private:
     bool m_multiMode;
     bool m_multiModeInfo;
 
-    ofImagePtrVec m_locationOfImages;
-    std::vector<boost::ptr_vector<LocationImage> > m_locationImgs;
+    ofImagePtrVec m_locationImageSources;
+    std::vector<LocationImageVec> m_locationImages;
 
     bool m_pause;
     MagicBoxPtr m_magicBox;

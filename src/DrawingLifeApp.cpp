@@ -492,7 +492,7 @@ void DrawingLifeApp::draw()
 //            fillViewAreaUTM();
             //---------------------------------------------------------------------------
 
-            BOOST_FOREACH(LocationImageVec& locVec, m_locationImgs)
+            BOOST_FOREACH(LocationImageVec& locVec, m_locationImages)
             {
                 std::for_each(locVec.begin(), locVec.end(),
                               boost::bind(&LocationImage::draw, _1));
@@ -848,10 +848,9 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
         m_walks[i].setViewBounds(m_viewDimensions[i]);
     }
 
-    BOOST_FOREACH(LocationImageVec& locVec, m_locationImgs)
+    BOOST_FOREACH(LocationImageVec& locVec, m_locationImages)
     {
-
-        if (m_multiMode)
+        if (m_settings->isMultiMode())
         {
             locVec[0].setViewBounds(m_viewDimensions[0]);
         }
@@ -869,16 +868,16 @@ void DrawingLifeApp::windowResized(int /*w*/, int /*h*/)
 
 void DrawingLifeApp::clearLocationOfImages()
 {
-    BOOST_FOREACH(ofImagePtr img, m_locationOfImages)
+    BOOST_FOREACH(ofImagePtr image, m_locationImageSources)
     {
-        img.reset();
+        image.reset();
     }
-    m_locationOfImages.clear();
+    m_locationImageSources.clear();
 }
 
 void DrawingLifeApp::clearLocationImageVec()
 {
-    std::for_each(m_locationImgs.begin(), m_locationImgs.end(),
+    std::for_each(m_locationImages.begin(), m_locationImages.end(),
                   boost::bind(&LocationImageVec::clear, _1));
 }
 
