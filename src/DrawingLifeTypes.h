@@ -5,6 +5,7 @@
 #ifndef _DRAWINGLIFETYPES_H_
 #define _DRAWINGLIFETYPES_H_
 
+//------------------------------------------------------------------------------
 
 struct ZoomAnimFrame
 {
@@ -16,10 +17,9 @@ struct ZoomAnimFrame
 	int gpsId;
 
 };
-/**
- * \brief Timeline value with time and id.
- *
- */
+
+//------------------------------------------------------------------------------
+
 struct TimelineObject
 {
     std::string timeString;
@@ -32,10 +32,8 @@ struct TimelineObject
     }
 };
 
-/**
- * \brief Data for the database query
- *
- */
+//------------------------------------------------------------------------------
+
 struct DBQueryData
 {
     int type;
@@ -48,16 +46,15 @@ struct DBQueryData
     std::string city;
 };
 
+//------------------------------------------------------------------------------
 
-/**
- * \brief Represents latitude and longitude value of an Gps coordinate.
- *
- */
 struct GpsCoord
 {
     double lat;
     double lon;
 };
+
+//------------------------------------------------------------------------------
 
 struct LocationImageData
 {
@@ -73,6 +70,8 @@ struct LocationImageData
     bool anchorShow;
 };
 
+//------------------------------------------------------------------------------
+
 struct CurrentPointImageData
 {
     std::string path;
@@ -81,12 +80,16 @@ struct CurrentPointImageData
     int alpha;
 };
 
+//------------------------------------------------------------------------------
+
 struct GpsDataIndex
 {
     int gpsPoint;
     int gpsSegment;
     int point;
 };
+
+//------------------------------------------------------------------------------
 
 struct GpsRegion
 {
@@ -95,14 +98,14 @@ struct GpsRegion
     double maxLon;
 };
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // templated version of openFramworks datatypes.
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include "ofxPoint.h"
 #include "ofxRectangle.h"
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 struct ViewDimensions
 {
@@ -111,10 +114,8 @@ struct ViewDimensions
     double padding;
 };
 
-/**
- * \brief Represents x and y value of an UTM coordinate.
- *
- */
+//------------------------------------------------------------------------------
+
 struct UtmPoint : public ofxPoint<double>
 {
     UtmPoint() : ofxPoint<double>(){}
@@ -123,9 +124,9 @@ struct UtmPoint : public ofxPoint<double>
     double lon0;
 };
 
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // typedefs
-//---------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 class DBReader;
 class GpsData;
@@ -167,6 +168,8 @@ typedef boost::weak_ptr<ofImage> ofImageWeak;
 typedef boost::ptr_vector<LocationImage> LocationImageVec;
 
 typedef boost::ptr_vector<ofSoundPlayer> ofSoundPlayerVec;
+
+typedef std::vector<TimelineObject> TimelineObjectVec;
 
 //---------------------------------------------------------------------------
 

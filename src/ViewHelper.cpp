@@ -3,9 +3,13 @@
 #include "Utils.h"
 #include "DrawingLifeApp.h"
 
+//------------------------------------------------------------------------------
+
 ViewHelper::ViewHelper()
 {
 }
+
+//------------------------------------------------------------------------------
 
 void ViewHelper::drawFPS()
 {
@@ -15,6 +19,8 @@ void ViewHelper::drawFPS()
     ofDrawBitmapString(str, 30.0, ofGetHeight()-30 );
 
 }
+
+//------------------------------------------------------------------------------
 
 void ViewHelper::drawKeyCommands(const ofColor& c)
 {
@@ -41,6 +47,8 @@ void ViewHelper::drawKeyCommands(const ofColor& c)
    ofDrawBitmapString(stream.str(), 30, ofGetHeight() - 320);
 }
 
+//------------------------------------------------------------------------------
+
 void ViewHelper::drawStartScreen(ofTrueTypeFont& fontTitle,
                                  ofTrueTypeFont& fontAuthor)
 {
@@ -54,6 +62,8 @@ void ViewHelper::drawStartScreen(ofTrueTypeFont& fontTitle,
     fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
     fontAuthor.drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
 }
+
+//------------------------------------------------------------------------------
 
 void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
 {
@@ -121,6 +131,8 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
     }
 }
 
+//------------------------------------------------------------------------------
+
 void ViewHelper::fillViewAreaUTM(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
@@ -150,3 +162,5 @@ void ViewHelper::fillViewAreaUTM(DrawingLifeApp& app)
 
     }
 }
+
+//------------------------------------------------------------------------------

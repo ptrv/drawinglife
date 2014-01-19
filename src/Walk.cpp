@@ -9,6 +9,8 @@
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
+//------------------------------------------------------------------------------
+
 Walk::Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled)
 :
 DrawingLifeDrawable(),
@@ -34,6 +36,8 @@ m_imageAlpha(255)
     m_currentSegColor.a = m_settings.getColorInteractiveSegA();
 }
 
+//------------------------------------------------------------------------------
+
 Walk::~Walk()
 {
 	m_image.clear();
@@ -44,6 +48,7 @@ Walk::~Walk()
 // -----------------------------------------------------------------------------
 // Counting through GpsSegments and GpsPoints
 // -----------------------------------------------------------------------------
+
 void Walk::update()
 {
     const GpsDataPtr gpsData = m_gpsData.lock();
@@ -91,14 +96,23 @@ void Walk::update()
     ++m_currentPoint;
 }
 
+// -----------------------------------------------------------------------------
+// Update functions for interactive mode
+// -----------------------------------------------------------------------------
+
 void Walk::updateToNextSegment()
 {
     updateToSegment(FORWARD);
 }
+
+// -----------------------------------------------------------------------------
+
 void Walk::updateToPreviousSegment()
 {
     updateToSegment(BACKWARD);
 }
+
+// -----------------------------------------------------------------------------
 
 void Walk::updateToSegment(const tWalkDir direction)
 {
@@ -146,6 +160,10 @@ void Walk::updateToSegment(const tWalkDir direction)
     }
 }
 
+// -----------------------------------------------------------------------------
+// reset counters
+// -----------------------------------------------------------------------------
+
 void Walk::reset()
 {
     m_currentGpsPoint = 0;
@@ -153,6 +171,9 @@ void Walk::reset()
     m_currentPoint = 0;
     m_firstPoint = true;
 }
+
+// -----------------------------------------------------------------------------
+// Draw functions
 // -----------------------------------------------------------------------------
 
 void Walk::draw()
@@ -246,9 +267,76 @@ void Walk::draw()
     {
         drawBoxes();
     }
-
 }
 
+// -----------------------------------------------------------------------------
+
+void Walk::drawAll()
+{
+    const GpsDataPtr gpsData = m_gpsData.lock();
+    const MagicBoxPtr magicBox = m_magicBox.lock();
+    if (!gpsData || !magicBox)
+    {
+        return;
+    }
+
+    ofNoFill();
+    BOOST_FOREACH(const UtmSegment& utmSegment, gpsData->getUTMPoints())
+    {
+        glBegin(GL_LINE_STRIP);
+        BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
+        {
+            bool isInBox = true;
+            if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+            {
+                isInBox = magicBox->isInBox(utmPoint);
+            }
+            if (isInBox)
+            {
+                const ofxPoint<double>& tmp =
+                        magicBox->getDrawablePoint(utmPoint);
+                glVertex2d(getScaledUtmX(tmp.x),
+                           getScaledUtmY(tmp.y));
+            }
+        }
+        glEnd();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void Walk::drawBoxes()
+{
+    if (const MagicBoxPtr magicBox = m_magicBox.lock())
+    {
+        ofNoFill();
+        ofSetColor(255,0,0);
+
+        const ofxRectangle<double>& normalizedBox =
+                magicBox->getNormalizedBox();
+        const double x = getScaledUtmX(normalizedBox.getX());
+        const double y = getScaledUtmY(normalizedBox.getY());
+        const double w = getScaledUtmX(normalizedBox.getWidth()) - x;
+        const double h = getScaledUtmY(normalizedBox.getHeight()) - y;
+
+        ofRect(x, y , w, h);
+
+        ofNoFill();
+        ofSetColor(0,255,0);
+
+        const ofxRectangle<double>& normalizedPaddedBox =
+                magicBox->getNormalizedPaddedBox();
+        const double xp = getScaledUtmX(normalizedPaddedBox.getX());
+        const double yp = getScaledUtmY(normalizedPaddedBox.getY());
+        const double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
+        const double hp = getScaledUtmY(normalizedPaddedBox.getHeight()) - yp;
+
+        ofRect(xp, yp , wp, hp);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Draw helpers
 // -----------------------------------------------------------------------------
 
 void Walk::calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
@@ -335,75 +423,10 @@ void Walk::drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm)
 }
 
 // -----------------------------------------------------------------------------
-// Draw all Gps data
-// -----------------------------------------------------------------------------
-void Walk::drawAll()
-{
-    const GpsDataPtr gpsData = m_gpsData.lock();
-    const MagicBoxPtr magicBox = m_magicBox.lock();
-    if (!gpsData || !magicBox)
-    {
-        return;
-    }
-
-	ofNoFill();
-    BOOST_FOREACH(const UtmSegment& utmSegment, gpsData->getUTMPoints())
-    {
-        glBegin(GL_LINE_STRIP);
-        BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
-        {
-            bool isInBox = true;
-            if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
-            {
-                isInBox = magicBox->isInBox(utmPoint);
-            }
-            if (isInBox)
-            {
-                const ofxPoint<double>& tmp =
-                        magicBox->getDrawablePoint(utmPoint);
-                glVertex2d(getScaledUtmX(tmp.x),
-                           getScaledUtmY(tmp.y));
-            }
-        }
-        glEnd();
-    }
-}
-
+// Getters
 // -----------------------------------------------------------------------------
 
-void Walk::drawBoxes()
-{
-    if (const MagicBoxPtr magicBox = m_magicBox.lock())
-    {
-        ofNoFill();
-        ofSetColor(255,0,0);
-
-        const ofxRectangle<double>& normalizedBox =
-                magicBox->getNormalizedBox();
-        const double x = getScaledUtmX(normalizedBox.getX());
-        const double y = getScaledUtmY(normalizedBox.getY());
-        const double w = getScaledUtmX(normalizedBox.getWidth()) - x;
-        const double h = getScaledUtmY(normalizedBox.getHeight()) - y;
-
-        ofRect(x, y , w, h);
-
-        ofNoFill();
-        ofSetColor(0,255,0);
-
-        const ofxRectangle<double>& normalizedPaddedBox =
-                magicBox->getNormalizedPaddedBox();
-        const double xp = getScaledUtmX(normalizedPaddedBox.getX());
-        const double yp = getScaledUtmY(normalizedPaddedBox.getY());
-        const double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
-        const double hp = getScaledUtmY(normalizedPaddedBox.getHeight()) - yp;
-
-        ofRect(xp, yp , wp, hp);
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-const std::string Walk::getGpsLocationCurrent() const
+const std::string Walk::getCurrentGpsLocation() const
 {
     const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
@@ -413,6 +436,8 @@ const std::string Walk::getGpsLocationCurrent() const
 
     return gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
 }
+
+// -----------------------------------------------------------------------------
 
 int Walk::getCurrentSegmentNum() const
 {
@@ -433,10 +458,14 @@ int Walk::getCurrentSegmentNum() const
     }
 }
 
+// -----------------------------------------------------------------------------
+
 int Walk::getCurrentPointNum() const
 {
     return m_currentPoint;
 }
+
+// -----------------------------------------------------------------------------
 
 std::string Walk::getCurrentTimestamp() const
 {
@@ -459,6 +488,8 @@ std::string Walk::getCurrentTimestamp() const
     }
 }
 
+// -----------------------------------------------------------------------------
+
 double Walk::getCurrentThing(const tFnGetCurrentDouble& fnGetCurrentDouble) const
 {
     if (const GpsDataPtr gpsData = m_gpsData.lock())
@@ -471,26 +502,40 @@ double Walk::getCurrentThing(const tFnGetCurrentDouble& fnGetCurrentDouble) cons
     }
 }
 
+// -----------------------------------------------------------------------------
+
 double Walk::getCurrentLongitude() const
 {
     return getCurrentThing(boost::bind(&GpsData::getLongitude, _1,
                                        m_currentGpsSegment, m_currentGpsPoint));
 }
+
+// -----------------------------------------------------------------------------
+
 double Walk::getCurrentLatitude() const
 {
     return getCurrentThing(boost::bind(&GpsData::getLatitude, _1,
                                        m_currentGpsSegment, m_currentGpsPoint));
 }
+
+// -----------------------------------------------------------------------------
+
 double Walk::getCurrentElevation() const
 {
     return getCurrentThing(boost::bind(&GpsData::getElevation, _1,
                                        m_currentGpsSegment, m_currentGpsPoint));
 }
+
+// -----------------------------------------------------------------------------
+
 double Walk::getCurrentUtmX() const
 {
     return getCurrentThing(boost::bind(&GpsData::getUtmX, _1,
                                        m_currentGpsSegment, m_currentGpsPoint));
 }
+
+// -----------------------------------------------------------------------------
+
 double Walk::getCurrentUtmY() const
 {
     return getCurrentThing(boost::bind(&GpsData::getUtmY, _1,
@@ -498,21 +543,15 @@ double Walk::getCurrentUtmY() const
 }
 
 // -----------------------------------------------------------------------------
-
-//void Walk::setDotColors()
-//{
-////   	m_dotColor.a = m_dotAlpha;
-////	m_dotColor.r = (int)ofRandom(30,255);
-////	m_dotColor.g = (int)ofRandom(30,255);
-////	m_dotColor.b = (int)ofRandom(30,255);
-//
-//}
+// Setters
+// -----------------------------------------------------------------------------
 
 void Walk::setGpsData(const GpsDataWeak gpsDataWeak)
 {
     m_gpsData = gpsDataWeak;
 }
 
+// -----------------------------------------------------------------------------
 
 void Walk::setMagicBox(MagicBoxWeak magicBoxWeak)
 {
@@ -525,6 +564,8 @@ void Walk::setMagicBox(MagicBoxWeak magicBoxWeak)
         magicBox->setupBox(gpsData->getUtm(0, 0), GpsData::getLon0Glogal());
     }
 }
+
+// -----------------------------------------------------------------------------
 
 void Walk::setMagicBoxStatic(MagicBoxWeak magicBoxWeak,
                              const double lat,
@@ -540,6 +581,8 @@ void Walk::setMagicBoxStatic(MagicBoxWeak magicBoxWeak,
 
 }
 
+// -----------------------------------------------------------------------------
+
 void Walk::setCurrentPointImage(const ofImage& img, const int alpha)
 {
     m_image = img;
@@ -548,7 +591,12 @@ void Walk::setCurrentPointImage(const ofImage& img, const int alpha)
     m_currentPointIsImage = true;
 }
 
+// -----------------------------------------------------------------------------
+// other
+// -----------------------------------------------------------------------------
 void Walk::toggleTraced()
 {
     m_drawTraced = !m_drawTraced;
 }
+
+// -----------------------------------------------------------------------------

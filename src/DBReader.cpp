@@ -18,20 +18,20 @@ using namespace sqlite3x;
 #include <sqlite3.h>
 #include <spatialite.h>
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #define CATCHDBERRORS                                                           \
     catch(const std::exception& ex)                                             \
 {                                                                               \
     ofLogError(AppLogTag::DB_READER) << "Database error: " << ex.what();        \
 }                                                                               \
-    // -------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #define CATCHDBERRORSQ(query)                                                   \
 catch(const std::exception& ex)                                                 \
 {                                                                               \
     ofLogError(AppLogTag::DB_READER) << "Database error: " <<  ex.what()        \
                                      << ", \nwith query: " << query.c_str();    \
 }                                                                               \
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 DBReader::DBReader(const std::string& dbpath, bool useSpeed)
 :
@@ -40,10 +40,14 @@ m_useSpeed(useSpeed)
 {
 }
 
+//------------------------------------------------------------------------------
+
 DBReader::~DBReader()
 {
     ofLogVerbose(AppLogTag::DB_READER, "destroying");
 }
+
+//------------------------------------------------------------------------------
 
 bool DBReader::setupDbConnection()
 {
@@ -61,6 +65,8 @@ bool DBReader::setupDbConnection()
 	return result;
 }
 
+//------------------------------------------------------------------------------
+
 void DBReader::closeDbConnection()
 {
 	try {
@@ -70,113 +76,7 @@ void DBReader::closeDbConnection()
 	CATCHDBERRORS
 }
 
-bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
-{
-	bool result = false;
-	bool queryFirstOk = false;
-    stringstream queryMinMax;
-	try {
-		sqlite3_command cmd(*m_dbconn, query.c_str());
-		sqlite3_reader reader=cmd.executereader();
-
-		int lastSegment = -1;
-        string user = "";
-        GpsSegment gpsSeg;
-        GpsPointVector gpsPointVec;
-        GpsSegmentVector gpsSegmentVec;
-
-
-        // ---------------------------------------------------------------------
-		// Get all data from query.
-        // ---------------------------------------------------------------------
-        while (reader.read())
-		{
-			GpsPoint gpsPoint;
-            const int id = reader.getint(0);
-            const double lat = reader.getdouble(1);
-            const double lon = reader.getdouble(2);
-            const double ele = reader.getdouble(4);
-            const string timeStamp = reader.getstring(3);
-            const string location = reader.getstring(7);
-            const double speed = m_useSpeed ? reader.getdouble(8) : 0.0;
-            const int currentSegment = reader.getint(5);
-			user = reader.getstring(6);
-
-            gpsPoint.setData(id, lat, lon, ele, timeStamp, location, speed);
-
-			if (currentSegment != lastSegment)
-			{
-				// this is true only for first time getting to this point
-				if (lastSegment == -1)
-				{
-					lastSegment = currentSegment;
-				}
-				else
-				{
-					gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
-					gpsSegmentVec.push_back(gpsSeg);
-					lastSegment = currentSegment;
-					gpsPointVec.clear();
-				}
-			}
-            gpsPointVec.push_back(gpsPoint);
-		}
-		queryFirstOk = true;
-		// -----------------------------------------------------------------------------
-
-		gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
-		gpsSegmentVec.push_back(gpsSeg);
-
-		// -----------------------------------------------------------------------------
-		// Get min/max values for query.
-		// -----------------------------------------------------------------------------
-        const size_t posS = query.find("FROM");
-        const size_t posE = query.find(" ORDER");
-
-//        queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
-        queryMinMax << "SELECT min(x(a.geom)), max(x(a.geom)), "
-                    << "min(y(a.geom)), max(y(a.geom)) ";
-		// Retrieve select conditions from original database query.
-		queryMinMax << query.substr(posS, (posE - posS));
-
-		sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
-		sqlite3_reader readerMinMax = cmd2.executereader();
-		double minLon, maxLon, minLat, maxLat;
-        while (readerMinMax.read())
-		{
-			minLon = readerMinMax.getdouble(0);
-			maxLon = readerMinMax.getdouble(1);
-			minLat = readerMinMax.getdouble(2);
-			maxLat = readerMinMax.getdouble(3);
-		}
-		// -----------------------------------------------------------------------------
-		gpsData.clear();
-        gpsData.setGpsData(gpsSegmentVec,
-                           ofxPoint<double>(minLon, minLat),
-                           ofxPoint<double>(maxLon, maxLat),
-                           user);
-		result = true;
-	}
-	CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))
-	return result;
-}
-
-const std::string DBReader::getBasicQueryString()
-{
-    // This is the part of the query string that all queries have common.
-    stringstream query;
-
-    query << "SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"
-          << "a.utctimestamp AS time, a.ele AS elevation,"
-          << "a.trkseg_id AS segment, b.username AS name, "
-          << "c.city AS city "
-          << (m_useSpeed ? "a.speed AS speed " : "")
-          << "FROM trackpoints AS a "
-          << "JOIN users AS b ON (a.user_uid = b.user_uid) "
-          << "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
-
-    return query.str();
-}
+//------------------------------------------------------------------------------
 
 bool DBReader::getGpsDataDay(GpsData& gpsData,
                              const std::string& userName,
@@ -199,6 +99,9 @@ bool DBReader::getGpsDataDay(GpsData& gpsData,
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
+
+//------------------------------------------------------------------------------
+
 bool DBReader::getGpsDataDayRange(GpsData& gpsData,
                                   const std::string& userName,
                                   int year, int month, int dayStart, int dayEnd)
@@ -229,6 +132,8 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData,
 	return result;
 }
 
+//------------------------------------------------------------------------------
+
 bool DBReader::getGpsDataMonth(GpsData& gpsData,
                                const std::string& userName,
                                int year, int month)
@@ -247,6 +152,8 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData,
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
+
+//------------------------------------------------------------------------------
 
 bool DBReader::getGpsDataMonthRange(GpsData& gpsData,
                                     const std::string& userName,
@@ -272,6 +179,8 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData,
 	return result;
 }
 
+//------------------------------------------------------------------------------
+
 bool DBReader::getGpsDataYear(GpsData& gpsData,
                               const std::string& userName,
                               int year)
@@ -288,6 +197,8 @@ bool DBReader::getGpsDataYear(GpsData& gpsData,
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
+
+//------------------------------------------------------------------------------
 
 bool DBReader::getGpsDataYearRange(GpsData& gpsData,
                                    const std::string& userName,
@@ -309,6 +220,8 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData,
 	return result;
 }
 
+//------------------------------------------------------------------------------
+
 bool DBReader::getGpsDataCity(GpsData& gpsData,
                               const std::string& userName,
                               const std::string& city)
@@ -325,6 +238,8 @@ bool DBReader::getGpsDataCity(GpsData& gpsData,
 	return result;
 }
 
+//------------------------------------------------------------------------------
+
 bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
                                      const std::string& sqlFileSource)
 {
@@ -336,3 +251,116 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
 	result = getGpsData(gpsData, query.str());
 	return result;
 }
+
+//------------------------------------------------------------------------------
+bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
+{
+    bool result = false;
+    bool queryFirstOk = false;
+    stringstream queryMinMax;
+    try {
+        sqlite3_command cmd(*m_dbconn, query.c_str());
+        sqlite3_reader reader=cmd.executereader();
+
+        int lastSegment = -1;
+        string user = "";
+        GpsSegment gpsSeg;
+        GpsPointVector gpsPointVec;
+        GpsSegmentVector gpsSegmentVec;
+
+
+        // ---------------------------------------------------------------------
+        // Get all data from query.
+        // ---------------------------------------------------------------------
+        while (reader.read())
+        {
+            GpsPoint gpsPoint;
+            const int id = reader.getint(0);
+            const double lat = reader.getdouble(1);
+            const double lon = reader.getdouble(2);
+            const double ele = reader.getdouble(4);
+            const string timeStamp = reader.getstring(3);
+            const string location = reader.getstring(7);
+            const double speed = m_useSpeed ? reader.getdouble(8) : 0.0;
+            const int currentSegment = reader.getint(5);
+            user = reader.getstring(6);
+
+            gpsPoint.setData(id, lat, lon, ele, timeStamp, location, speed);
+
+            if (currentSegment != lastSegment)
+            {
+                // this is true only for first time getting to this point
+                if (lastSegment == -1)
+                {
+                    lastSegment = currentSegment;
+                }
+                else
+                {
+                    gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
+                    gpsSegmentVec.push_back(gpsSeg);
+                    lastSegment = currentSegment;
+                    gpsPointVec.clear();
+                }
+            }
+            gpsPointVec.push_back(gpsPoint);
+        }
+        queryFirstOk = true;
+        // -----------------------------------------------------------------------------
+
+        gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
+        gpsSegmentVec.push_back(gpsSeg);
+
+        // -----------------------------------------------------------------------------
+        // Get min/max values for query.
+        // -----------------------------------------------------------------------------
+        const size_t posS = query.find("FROM");
+        const size_t posE = query.find(" ORDER");
+
+//        queryMinMax << "SELECT min(a.longitude), max(a.longitude), min(a.latitude), max(a.latitude) ";
+        queryMinMax << "SELECT min(x(a.geom)), max(x(a.geom)), "
+                    << "min(y(a.geom)), max(y(a.geom)) ";
+        // Retrieve select conditions from original database query.
+        queryMinMax << query.substr(posS, (posE - posS));
+
+        sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
+        sqlite3_reader readerMinMax = cmd2.executereader();
+        double minLon, maxLon, minLat, maxLat;
+        while (readerMinMax.read())
+        {
+            minLon = readerMinMax.getdouble(0);
+            maxLon = readerMinMax.getdouble(1);
+            minLat = readerMinMax.getdouble(2);
+            maxLat = readerMinMax.getdouble(3);
+        }
+        // -----------------------------------------------------------------------------
+        gpsData.clear();
+        gpsData.setGpsData(gpsSegmentVec,
+                           ofxPoint<double>(minLon, minLat),
+                           ofxPoint<double>(maxLon, maxLat),
+                           user);
+        result = true;
+    }
+    CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))
+    return result;
+}
+
+//------------------------------------------------------------------------------
+
+const std::string DBReader::getBasicQueryString()
+{
+    // This is the part of the query string that all queries have common.
+    stringstream query;
+
+    query << "SELECT a.trkpt_uid, y(a.geom) AS latitude, x(a.geom) AS longitude,"
+          << "a.utctimestamp AS time, a.ele AS elevation,"
+          << "a.trkseg_id AS segment, b.username AS name, "
+          << "c.city AS city "
+          << (m_useSpeed ? "a.speed AS speed " : "")
+          << "FROM trackpoints AS a "
+          << "JOIN users AS b ON (a.user_uid = b.user_uid) "
+          << "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
+
+    return query.str();
+}
+
+//------------------------------------------------------------------------------

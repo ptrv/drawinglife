@@ -3,89 +3,9 @@
 #include "DrawingLifeApp.h"
 #include "DBReader.h"
 
-DataLoader::DataLoader()
-{
-}
-
 //------------------------------------------------------------------------------
 // GpsData loading
 //------------------------------------------------------------------------------
-
-void DataLoader::prepareGpsData(DrawingLifeApp& app)
-{
-    app.resetData();
-}
-
-// -----------------------------------------------------------------------------
-
-void DataLoader::processGpsData(DrawingLifeApp& app)
-{
-    const AppSettings& settings = app.getAppSettings();
-    const GpsDataVector& gpsDatas = app.getGpsDataVector();
-    const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-    Timeline& timeline = app.getTimeline();
-    WalkVector& walks = app.getWalkVector();
-    MagicBox& magicBox = app.getMagicBox();
-
-    const std::vector<CurrentPointImageData>& imageList =
-            app.getCurrentPointImageList();
-    const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
-
-    ofLogVerbose(AppLogTag::DATA_LOADER) << "------------------------\n";
-
-    const size_t numPersons = settings.getNumPersons();
-
-    if (numPersons > 0
-            && gpsDatas.size() == numPersons
-            && walks.size() == numPersons
-            && ((magicBoxes.size() == numPersons && !settings.isMultiMode())
-                || settings.isMultiMode()))
-    {
-        timeline.setData(gpsDatas);
-
-        Utils::calculateGlobalMinMaxValues(app);
-
-        Walk::setTrackAlpha(settings.getAlphaDot());
-
-        Walk::setDotSize(settings.getDotSize());
-
-        for (size_t i = 0; i < numPersons; ++i)
-        {
-            Walk& walk = walks[i];
-
-            if (!settings.isBoundingBoxAuto() && !settings.isMultiMode())
-            {
-                //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
-                double bbLat = settings.getBoundingBoxLat();
-                double bbLon = settings.getBoundingBoxLon();
-                walk.setMagicBoxStatic(magicBoxes[i], bbLat, bbLon);
-            }
-            else
-            {
-                if (settings.isMultiMode())
-                {
-                    double bbLat = settings.getBoundingBoxLat();
-                    double bbLon = settings.getBoundingBoxLon();
-                    walk.setMagicBoxStatic(magicBox.shared_from_this(),
-                                           bbLat, bbLon);
-//                    walk.setMagicBox(m_magicBox);
-                }
-                else
-                {
-                    walk.setMagicBox(magicBoxes[i]);
-                }
-            }
-
-            if (app.getIsImageAsCurrentPoint()
-                    && images.size() >= settings.getNumPersons())
-            {
-                walk.setCurrentPointImage(images[i], imageList[i].alpha);
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
 
 bool DataLoader::loadGpsDataCity(DrawingLifeApp& app,
                                  const StringVec& names,
@@ -103,7 +23,7 @@ bool DataLoader::loadGpsDataCity(DrawingLifeApp& app,
     return loadGpsData(app, funcVec);
 }
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 bool DataLoader::loadGpsDataYearRange(DrawingLifeApp& app,
                                       const StringVec& names,
@@ -122,7 +42,7 @@ bool DataLoader::loadGpsDataYearRange(DrawingLifeApp& app,
     return loadGpsData(app, funcVec);
 }
 
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 bool DataLoader::loadGpsDataWithSqlFile(DrawingLifeApp& app,
                                         const StringVec& sqlFilePaths)
@@ -146,98 +66,10 @@ bool DataLoader::loadGpsDataWithSqlFile(DrawingLifeApp& app,
     return loadGpsData(app, funcVec);
 }
 
-// -----------------------------------------------------------------------------
-
-bool DataLoader::loadGpsData(DrawingLifeApp& app,
-                             const std::vector<tFuncLoadGpsData>& funcVec)
-{
-    const AppSettings& settings = app.getAppSettings();
-    GpsDataVector& gpsDatas = app.getGpsDataVector();
-    WalkVector& walks = app.getWalkVector();
-    MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-    const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
-
-    prepareGpsData(app);
-
-    bool dbOk = false;
-
-    if (settings.isMultiMode())
-    {
-        app.setMagicBox(new MagicBox(settings,
-                                     settings.getBoundingBoxSize(),
-                                     settings.getBoundingBoxPadding()));
-    }
-    // get GpsData from database
-    const size_t numPersons = settings.getNumPersons();
-    for (size_t i = 0; i < numPersons; ++i)
-    {
-        GpsDataPtr gpsData = boost::make_shared<GpsData>(settings);
-        gpsDatas.push_back(gpsData);
-
-        if (!settings.isMultiMode())
-        {
-            magicBoxes.push_back(boost::make_shared<MagicBox>(
-                                     settings,
-                                     settings.getBoundingBoxSize(),
-                                     settings.getBoundingBoxPadding()));
-        }
-
-        Walk* walk = new Walk(settings,
-                              settings.getNameColors()[i]);
-        walks.push_back(walk);
-
-        walk->setViewBounds(viewDimensions[i]);
-        walk->reset();
-
-        DBReaderPtr dbReader(new DBReader(settings.getDatabasePath(),
-                                          settings.useSpeed()));
-        if (dbReader->setupDbConnection())
-        {
-            // -----------------------------------------------------------------
-            // DB query
-            tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
-            dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
-
-            if (dbOk)
-            {
-                ofLogNotice(AppLogTag::DATA_LOADER) << "--> GpsData load ok!";
-                ofLogNotice(AppLogTag::DATA_LOADER)
-                        << "--> Total data: "
-                        << gpsData->getSegments().size() << " GpsSegments, "
-                        << gpsData->getTotalGpsPoints() << " GpsPoints!"
-                        << std::endl;
-
-                walk->setGpsData(gpsData->shared_from_this());
-            }
-            else
-            {
-                ofLogNotice(AppLogTag::DATA_LOADER) << "--> No GpsData loaded!";
-                break;
-            }
-            dbReader->closeDbConnection();
-        }
-        // ---------------------------------------------------------------------
-
-        ofLogVerbose(AppLogTag::DATA_LOADER)
-                << "minLon: " << gpsData->getMinUtmX() << ", "
-                << "maxLon: " << gpsData->getMaxUtmX() << ", "
-                << "minLat: " << gpsData->getMinUtmY() << ", "
-                << "maxLat: " << gpsData->getMaxUtmY();
-
-        ofLogVerbose(AppLogTag::DATA_LOADER)
-                << "Central Meridian: "
-                << gpsData->getProjectionCentralMeridian();
-    }
-
-    processGpsData(app);
-
-    return dbOk;
-
-}
-
 //------------------------------------------------------------------------------
 // Other resources
 //------------------------------------------------------------------------------
+
 bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
 {
     const std::vector<CurrentPointImageData>& imageList =
@@ -336,6 +168,8 @@ void DataLoader::loadSoundPlayers(DrawingLifeApp& app)
 
 }
 
+//------------------------------------------------------------------------------
+
 void DataLoader::loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts)
 {
     const AppSettings& settings = app.getAppSettings();
@@ -354,6 +188,173 @@ void DataLoader::loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts)
         font.loadFont(fontName, fontSize);
         fonts[fontId] = font;
     }
+}
+
+//------------------------------------------------------------------------------
+// Private GpsData loading functions
+//------------------------------------------------------------------------------
+
+void DataLoader::prepareGpsData(DrawingLifeApp& app)
+{
+    app.resetData();
+}
+
+//------------------------------------------------------------------------------
+
+void DataLoader::processGpsData(DrawingLifeApp& app)
+{
+    const AppSettings& settings = app.getAppSettings();
+    const GpsDataVector& gpsDatas = app.getGpsDataVector();
+    const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
+    Timeline& timeline = app.getTimeline();
+    WalkVector& walks = app.getWalkVector();
+    MagicBox& magicBox = app.getMagicBox();
+
+    const std::vector<CurrentPointImageData>& imageList =
+            app.getCurrentPointImageList();
+    const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
+
+    ofLogVerbose(AppLogTag::DATA_LOADER) << "------------------------\n";
+
+    const size_t numPersons = settings.getNumPersons();
+
+    if (numPersons > 0
+            && gpsDatas.size() == numPersons
+            && walks.size() == numPersons
+            && ((magicBoxes.size() == numPersons && !settings.isMultiMode())
+                || settings.isMultiMode()))
+    {
+        timeline.setData(gpsDatas);
+
+        Utils::calculateGlobalMinMaxValues(app);
+
+        Walk::setTrackAlpha(settings.getAlphaDot());
+
+        Walk::setDotSize(settings.getDotSize());
+
+        for (size_t i = 0; i < numPersons; ++i)
+        {
+            Walk& walk = walks[i];
+
+            if (!settings.isBoundingBoxAuto() && !settings.isMultiMode())
+            {
+                //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
+                double bbLat = settings.getBoundingBoxLat();
+                double bbLon = settings.getBoundingBoxLon();
+                walk.setMagicBoxStatic(magicBoxes[i], bbLat, bbLon);
+            }
+            else
+            {
+                if (settings.isMultiMode())
+                {
+                    double bbLat = settings.getBoundingBoxLat();
+                    double bbLon = settings.getBoundingBoxLon();
+                    walk.setMagicBoxStatic(magicBox.shared_from_this(),
+                                           bbLat, bbLon);
+//                    walk.setMagicBox(m_magicBox);
+                }
+                else
+                {
+                    walk.setMagicBox(magicBoxes[i]);
+                }
+            }
+
+            if (app.getIsImageAsCurrentPoint()
+                    && images.size() >= settings.getNumPersons())
+            {
+                walk.setCurrentPointImage(images[i], imageList[i].alpha);
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool DataLoader::loadGpsData(DrawingLifeApp& app,
+                             const std::vector<tFuncLoadGpsData>& funcVec)
+{
+    const AppSettings& settings = app.getAppSettings();
+    GpsDataVector& gpsDatas = app.getGpsDataVector();
+    WalkVector& walks = app.getWalkVector();
+    MagicBoxVector& magicBoxes = app.getMagicBoxVector();
+    const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
+
+    prepareGpsData(app);
+
+    bool dbOk = false;
+
+    if (settings.isMultiMode())
+    {
+        app.setMagicBox(new MagicBox(settings,
+                                     settings.getBoundingBoxSize(),
+                                     settings.getBoundingBoxPadding()));
+    }
+    // get GpsData from database
+    const size_t numPersons = settings.getNumPersons();
+    for (size_t i = 0; i < numPersons; ++i)
+    {
+        GpsDataPtr gpsData = boost::make_shared<GpsData>(settings);
+        gpsDatas.push_back(gpsData);
+
+        if (!settings.isMultiMode())
+        {
+            magicBoxes.push_back(boost::make_shared<MagicBox>(
+                                     settings,
+                                     settings.getBoundingBoxSize(),
+                                     settings.getBoundingBoxPadding()));
+        }
+
+        Walk* walk = new Walk(settings,
+                              settings.getNameColors()[i]);
+        walks.push_back(walk);
+
+        walk->setViewBounds(viewDimensions[i]);
+        walk->reset();
+
+        DBReaderPtr dbReader(new DBReader(settings.getDatabasePath(),
+                                          settings.useSpeed()));
+        if (dbReader->setupDbConnection())
+        {
+            // -----------------------------------------------------------------
+            // DB query
+            tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
+            dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
+
+            if (dbOk)
+            {
+                ofLogNotice(AppLogTag::DATA_LOADER) << "--> GpsData load ok!";
+                ofLogNotice(AppLogTag::DATA_LOADER)
+                        << "--> Total data: "
+                        << gpsData->getSegments().size() << " GpsSegments, "
+                        << gpsData->getTotalGpsPoints() << " GpsPoints!"
+                        << std::endl;
+
+                walk->setGpsData(gpsData->shared_from_this());
+            }
+            else
+            {
+                ofLogNotice(AppLogTag::DATA_LOADER) << "--> No GpsData loaded!";
+                break;
+            }
+            dbReader->closeDbConnection();
+        }
+        // ---------------------------------------------------------------------
+
+        ofLogVerbose(AppLogTag::DATA_LOADER)
+                << "minLon: " << gpsData->getMinUtmX() << ", "
+                << "maxLon: " << gpsData->getMaxUtmX() << ", "
+                << "minLat: " << gpsData->getMinUtmY() << ", "
+                << "maxLat: " << gpsData->getMaxUtmY();
+
+        ofLogVerbose(AppLogTag::DATA_LOADER)
+                << "Central Meridian: "
+                << gpsData->getProjectionCentralMeridian();
+    }
+
+    processGpsData(app);
+
+    return dbOk;
+
 }
 
 //------------------------------------------------------------------------------

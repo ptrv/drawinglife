@@ -18,8 +18,8 @@ public:
 
     //bool shouldPrintSettings() const { return m_printSettings; }
 
-    const std::string& getFontName(const std::string& id);
-    int getFontSize(const std::string& id);
+    inline const std::string& getFontName(const std::string& id);
+    inline int getFontSize(const std::string& id);
 
     const DrawingLifeFontMap& getFonts() const { return m_fonts; }
 
@@ -253,5 +253,21 @@ private:
 
     bool m_grabScreen;
 };
+
+//------------------------------------------------------------------------------
+
+const std::string& AppSettings::getFontName(const string& id)
+{
+    return m_fonts[id].first;
+}
+
+//------------------------------------------------------------------------------
+
+int AppSettings::getFontSize(const string &id)
+{
+    return m_fonts[id].second;
+}
+
+//------------------------------------------------------------------------------
 
 #endif // _APPSETTINGS_H_

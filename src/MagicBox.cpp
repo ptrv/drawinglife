@@ -4,8 +4,12 @@
 
 #include "MagicBox.h"
 
+//------------------------------------------------------------------------------
+
 double MagicBox::m_zoomLevels[] = {20000.0, 30000.0, 40000.0, 50000.0};
 int MagicBox::m_boxNum = 0;
+
+//------------------------------------------------------------------------------
 
 MagicBox::MagicBox(const AppSettings& settings,
                    const double size,
@@ -20,32 +24,31 @@ m_defaultSize(10000.0)
     ++m_boxNum;
 }
 
+//------------------------------------------------------------------------------
+
 MagicBox::~MagicBox()
 {
     ofLogVerbose(AppLogTag::MAGIC_BOX, "destroying");
     --m_boxNum;
 }
 
+//------------------------------------------------------------------------------
+
 bool MagicBox::isInBox(const ofxPoint<double>& utmPoint) const
 {
     return m_theBox.inside(utmPoint);
 }
+
+//------------------------------------------------------------------------------
 
 bool MagicBox::isInPaddedBox(const ofxPoint<double>& utmPoint) const
 {
     return m_paddedBox.inside(utmPoint);
 }
 
-const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint) const
-{
-    return ofxPoint<double> ((utmPoint.x - m_theBox.getX()) / m_theBox.getWidth(),
-                             (utmPoint.y - m_theBox.getY()) / m_theBox.getHeight());
-}
-
-void MagicBox::setCenter(const double x, const double y)
-{
-//	m_centerUtm.
-}
+//------------------------------------------------------------------------------
+// Setter
+//------------------------------------------------------------------------------
 
 void MagicBox::setupBox(const ofxPoint<double>& currUtm, const double lon0)
 {
@@ -57,6 +60,8 @@ void MagicBox::setupBox(const ofxPoint<double>& currUtm, const double lon0)
                               m_currentSize - (2 * m_padding),
                               m_currentSize - (2 * m_padding));
 }
+
+//------------------------------------------------------------------------------
 
 void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
                               const double lon0,
@@ -71,6 +76,27 @@ void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
 
     m_paddedBox.setFromCenter(m_centerUtm, width, height);
 }
+
+//------------------------------------------------------------------------------
+
+void MagicBox::setSize(const double newSize)
+{
+    const double oldSize = m_currentSize;
+    const double oldPadding = m_padding;
+
+    m_theBox.setFromCenter(m_centerUtm, newSize, newSize);
+
+    m_currentSize = newSize;
+
+    m_padding = m_currentSize/(oldSize/oldPadding);
+    m_paddedBox.setFromCenter(m_centerUtm,
+                              newSize - (2 * m_padding),
+                              newSize - (2 * m_padding));
+}
+
+//------------------------------------------------------------------------------
+// Update
+//------------------------------------------------------------------------------
 
 void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 {
@@ -107,6 +133,8 @@ void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
     }
 }
 
+//------------------------------------------------------------------------------
+
 void MagicBox::addToBoxSize(const double sizeToAdd)
 {
     const double oldSize = m_currentSize;
@@ -135,21 +163,43 @@ void MagicBox::addToBoxSize(const double sizeToAdd)
     }
 }
 
-void MagicBox::setSize(const double newSize)
+//------------------------------------------------------------------------------
+// Getters
+//------------------------------------------------------------------------------
+
+const ofxRectangle<double> MagicBox::getNormalizedBox() const
 {
-    const double oldSize = m_currentSize;
-    const double oldPadding = m_padding;
-
-    m_theBox.setFromCenter(m_centerUtm, newSize, newSize);
-
-    m_currentSize = newSize;
-
-    m_padding = m_currentSize/(oldSize/oldPadding);
-    m_paddedBox.setFromCenter(m_centerUtm,
-                              newSize - (2 * m_padding),
-                              newSize - (2 * m_padding));
+    return ofxRectangle<double> (0, 0, 1, 1);
 }
 
+//------------------------------------------------------------------------------
+
+const ofxRectangle<double> MagicBox::getNormalizedPaddedBox() const
+{
+    return ofxRectangle<double> (m_padding / m_theBox.getWidth(),
+                                 m_padding / m_theBox.getHeight(),
+                                 1 - (m_padding / m_theBox.getWidth()),
+                                 1 - (m_padding / m_theBox.getHeight()));
+}
+
+//------------------------------------------------------------------------------
+
+const GpsPoint MagicBox::getCenterGps() const
+{
+    return GpsData::getGpsPoint(m_centerUtm);
+}
+
+//------------------------------------------------------------------------------
+
+const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint) const
+{
+    return ofxPoint<double> ((utmPoint.x - m_theBox.getX()) / m_theBox.getWidth(),
+                             (utmPoint.y - m_theBox.getY()) / m_theBox.getHeight());
+}
+
+//------------------------------------------------------------------------------
+// Zoom / move
+//------------------------------------------------------------------------------
 void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
 {
     if (zoomLevel > 3)
@@ -165,32 +215,7 @@ void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
     }
 }
 
-const ofxRectangle<double> MagicBox::getNormalizedBox() const
-{
-    return ofxRectangle<double> (0, 0, 1, 1);
-}
-const ofxRectangle<double> MagicBox::getNormalizedPaddedBox() const
-{
-    return ofxRectangle<double> (m_padding / m_theBox.getWidth(),
-                                 m_padding / m_theBox.getHeight(),
-                                 1 - (m_padding / m_theBox.getWidth()),
-                                 1 - (m_padding / m_theBox.getHeight()));
-}
-
-void MagicBox::setBoxes()
-{
-    m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
-    if (m_settings.isInteractiveMode())
-    {
-        m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
-    }
-    else
-    {
-        m_paddedBox.setFromCenter(m_centerUtm,
-                                  m_currentSize - (2 * m_padding),
-                                  m_currentSize - (2 * m_padding));
-    }
-}
+//------------------------------------------------------------------------------
 
 static const double SIZE_ZOOM_FACTOR = 4.0;
 
@@ -201,11 +226,15 @@ void MagicBox::zoom(Zoom z)
     addToBoxSize(z == ZOOM_IN ? -val : val);
 }
 
+//------------------------------------------------------------------------------
+
 void MagicBox::move(Direction d)
 {
     const double val = getSize() / SIZE_ZOOM_FACTOR;
     move(d, val);
 }
+
+//------------------------------------------------------------------------------
 
 void MagicBox::move(Direction d, const double val)
 {
@@ -228,7 +257,22 @@ void MagicBox::move(Direction d, const double val)
     setBoxes();
 }
 
-const GpsPoint MagicBox::getCenterGps() const
+//------------------------------------------------------------------------------
+// Helper
+//------------------------------------------------------------------------------
+void MagicBox::setBoxes()
 {
-    return GpsData::getGpsPoint(m_centerUtm);
+    m_theBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+    if (m_settings.isInteractiveMode())
+    {
+        m_paddedBox.setFromCenter(m_centerUtm, m_currentSize, m_currentSize);
+    }
+    else
+    {
+        m_paddedBox.setFromCenter(m_centerUtm,
+                                  m_currentSize - (2 * m_padding),
+                                  m_currentSize - (2 * m_padding));
+    }
 }
+
+//------------------------------------------------------------------------------

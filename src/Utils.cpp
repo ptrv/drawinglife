@@ -10,6 +10,8 @@
 #endif
 #include <limits>
 
+//------------------------------------------------------------------------------
+
 Utils::Utils()
 {
 }
@@ -126,10 +128,12 @@ const std::string Utils::getCurrentGpsInfo(const GpsData *gpsData,
         char buf[25];
         sprintf(buf, "%02d.%02d.%d %02d:%02d:%02d",
                 day, month, year, hour, min, sec);
-        gpsInfo = walk->getGpsLocationCurrent() + " " + string(buf);
+        gpsInfo = walk->getCurrentGpsLocation() + " " + string(buf);
     }
     return gpsInfo;
 }
+
+//------------------------------------------------------------------------------
 
 const std::string Utils::getCurrentGpsInfoDebug(const GpsData *gpsData,
                                                 const Walk *walk,
@@ -145,7 +149,7 @@ const std::string Utils::getCurrentGpsInfoDebug(const GpsData *gpsData,
         "UTM X             : " + ofToString(walk->getCurrentUtmX(), 7) + "\n" +
         "UTM Y             : " + ofToString(walk->getCurrentUtmY(), 7) + "\n" +
         "Time              : " + walk->getCurrentTimestamp() + "\n" +
-        "Location          : " + walk->getGpsLocationCurrent() + "\n" +
+        "Location          : " + walk->getCurrentGpsLocation() + "\n" +
         "Central meridian  : " + ofToString(gpsData->getLon0(), 7) + "\n" +
         "Meridian global   : " + ofToString(GpsData::getLon0Glogal(), 7) + "\n" +
         "Min/Max latitude  : " + ofToString(gpsData->getMinLat(), 7) + " / " + ofToString(gpsData->getMaxLat(), 7) + "\n" +

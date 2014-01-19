@@ -5,6 +5,7 @@
 #include "Timeline.h"
 #include <algorithm>
 
+//------------------------------------------------------------------------------
 
 Timeline::Timeline()
 :
@@ -18,10 +19,14 @@ m_currentCountWasUpdated(false)
     //ctor
 }
 
+//------------------------------------------------------------------------------
+
 Timeline::~Timeline()
 {
     ofLogVerbose("Timeline", "destroying");
 }
+
+//------------------------------------------------------------------------------
 
 void Timeline::setData(const GpsDataVector& gpsDatas)
 {
@@ -55,6 +60,20 @@ void Timeline::setData(const GpsDataVector& gpsDatas)
     catch (const std::out_of_range&) {}
 }
 
+//------------------------------------------------------------------------------
+
+void Timeline::countUp()
+{
+    if (m_currentCountWasUpdated)
+    {
+        m_lastUpdatedTimelineId = m_counter;
+    }
+    ++m_counter;
+    m_counter %= m_timeline.size();
+}
+
+//------------------------------------------------------------------------------
+
 int Timeline::getNext() const
 {
     try
@@ -68,20 +87,28 @@ int Timeline::getNext() const
     }
 }
 
+//------------------------------------------------------------------------------
+
 bool Timeline::isLast() const
 {
     return m_counter == m_timeline.size()-1;
 }
+
+//------------------------------------------------------------------------------
 
 bool Timeline::isFirst() const
 {
     return m_counter == 0;
 }
 
+//------------------------------------------------------------------------------
+
 bool Timeline::isTimelineIndex(unsigned int index)
 {
     return m_counter == index;
 }
+
+//------------------------------------------------------------------------------
 
 bool Timeline::isNextReady()
 {
@@ -117,15 +144,45 @@ bool Timeline::isNextReady()
     return ready;
 }
 
-void Timeline::countUp()
+//------------------------------------------------------------------------------
+
+std::string Timeline::getCurrentTime()
 {
-    if (m_currentCountWasUpdated)
-    {
-        m_lastUpdatedTimelineId = m_counter;
-    }
-    ++m_counter;
-    m_counter %= m_timeline.size();
+    const std::string& timeString = m_timeline[m_counter].timeString;
+    int year, month, day, hour, min, sec;
+//    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ",
+//           &year, &month, &day, &hour, &min, &sec);
+    sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d",
+           &year, &month, &day, &hour, &min, &sec);
+    char buf[25];
+    sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
+    return string(buf);
+
 }
+
+//------------------------------------------------------------------------------
+
+unsigned int Timeline::getCurrentCount() const
+{
+    return m_counter;
+}
+
+//------------------------------------------------------------------------------
+
+unsigned int Timeline::getAllCount() const
+{
+    return m_timeline.size();
+}
+
+//------------------------------------------------------------------------------
+
+const TimelineObject& Timeline::getCurrentTimelineObj() const
+{
+    return m_timeline[m_counter];
+}
+
+//------------------------------------------------------------------------------
+
 time_t Timeline::makeTimeObject(const std::string& timeString)
 {
     struct tm tm;
@@ -147,34 +204,11 @@ time_t Timeline::makeTimeObject(const std::string& timeString)
     return t;
 }
 
+//------------------------------------------------------------------------------
+
 void Timeline::sortTimeline()
 {
     std::sort(m_timeline.begin(), m_timeline.end(), TimelineObject());
 }
 
-std::string Timeline::getCurrentTime()
-{
-    std::string timeString = m_timeline[m_counter].timeString;
-    int year, month, day, hour, min, sec;
-//    sscanf(timeString.c_str(), "%d-%d-%dT%d:%d:%dZ", &year, &month, &day, &hour, &min, &sec);
-    sscanf(timeString.c_str(), "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
-    char buf[25];
-    sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
-    return string(buf);
-
-}
-
-unsigned int Timeline::getCurrentCount() const
-{
-	return m_counter;
-}
-
-unsigned int Timeline::getAllCount() const
-{
-	return m_timeline.size();
-}
-
-const TimelineObject& Timeline::getCurrentTimelineObj() const
-{
-	return m_timeline[m_counter];
-}
+//------------------------------------------------------------------------------

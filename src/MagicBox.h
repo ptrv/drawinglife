@@ -26,20 +26,14 @@ public:
 
     bool isInBox(const ofxPoint<double>& utmPoint) const;
 
-    const ofxPoint<double> getDrawablePoint(const UtmPoint& utmPoint) const;
-
     void setupBox(const ofxPoint<double>& currUtm, double lon0);
     void setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
                         double width, double height);
+    void setSize(double newSize);
 
     void updateBoxIfNeeded(const ofxPoint<double>& utmPoint);
 
-    void updateBoxSize(double size);
-
     void addToBoxSize(double sizeToAdd);
-
-    void setSize(double newSize);
-    void setCenter(double x, double y);
 
     const ofxRectangle<double>& getTheBox() const { return m_theBox; }
     const ofxRectangle<double> getNormalizedBox() const;
@@ -48,6 +42,8 @@ public:
     const ofxPoint<double>& getCenter() const {return m_centerUtm; }
     const GpsPoint getCenterGps() const;
     const double getSize() const { return m_currentSize; }
+
+    const ofxPoint<double> getDrawablePoint(const UtmPoint& utmPoint) const;
 
     void toggleZoomLevel(unsigned int zoomLevel);
 

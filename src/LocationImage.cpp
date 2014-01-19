@@ -3,6 +3,8 @@
 
 using namespace GeographicLib;
 
+//------------------------------------------------------------------------------
+
 LocationImage::LocationImage(ofImageWeak image, const MagicBoxWeak magicBox,
                              LocationImageData lid)
 :
@@ -21,10 +23,13 @@ m_image(image)
                 minGamma, minK);
 }
 
+//------------------------------------------------------------------------------
+
 LocationImage::~LocationImage()
 {
 }
 
+//------------------------------------------------------------------------------
 
 void LocationImage::draw()
 {
@@ -46,3 +51,5 @@ void LocationImage::draw()
     }
 
 }
+
+//------------------------------------------------------------------------------

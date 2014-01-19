@@ -4,9 +4,13 @@
 #include "ofxJSONElement.h"
 #include <jsoncpp/json/json.h>
 
+//------------------------------------------------------------------------------
+// JSON helper
+//------------------------------------------------------------------------------
+
 namespace JsonHelper
 {
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 #define CATCH_JSON_PARSE_ERROR                                                  \
 catch (std::exception& ex)                                                      \
 {                                                                               \
@@ -16,7 +20,7 @@ catch (std::exception& ex)                                                      
                                     << ex.what();                               \
     return defaultValue;                                                        \
 }                                                                               \
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 std::string getString(const Json::Value& value, const std::string& key,
                       const std::string& defaultValue)
@@ -31,6 +35,8 @@ std::string getString(const Json::Value& value, const std::string& key,
     }
     CATCH_JSON_PARSE_ERROR
 }
+
+//------------------------------------------------------------------------------
 
 std::string getString(const Json::Value& value, const std::string& defaultValue)
 {
@@ -49,6 +55,8 @@ std::string getString(const Json::Value& value, const std::string& defaultValue)
     }
 }
 
+//------------------------------------------------------------------------------
+
 bool getBool(const Json::Value& value, const std::string& key,
              const bool defaultValue)
 {
@@ -62,6 +70,8 @@ bool getBool(const Json::Value& value, const std::string& key,
     }
     CATCH_JSON_PARSE_ERROR
 }
+
+//------------------------------------------------------------------------------
 
 int getInt(const Json::Value& value, const std::string& key,
            const int defaultValue)
@@ -77,6 +87,8 @@ int getInt(const Json::Value& value, const std::string& key,
     CATCH_JSON_PARSE_ERROR
 }
 
+//------------------------------------------------------------------------------
+
 double getDouble(const Json::Value& value, const std::string& key,
                  const double defaultValue)
 {
@@ -91,8 +103,9 @@ double getDouble(const Json::Value& value, const std::string& key,
     CATCH_JSON_PARSE_ERROR
 }
 
-}
-// -----------------------------------------------------------------------------
+} // namespace JsonHelper
+
+//------------------------------------------------------------------------------
 
 static const int NUM_FONTS = 4;
 static const std::string defaultFontIds[NUM_FONTS] = {"title", "author", "text",
@@ -102,6 +115,8 @@ static const std::string defaultFontNames[NUM_FONTS] = {"mono.ttf", "mono.ttf",
 static const int defaultFontSizes[NUM_FONTS] = {50, 24, 16, 50};
 
 //static const char* settingsPath = "AppSettings.xml";
+
+//------------------------------------------------------------------------------
 
 AppSettings::AppSettings(const std::string& path)
 :
@@ -173,14 +188,17 @@ m_grabScreen(false)
     {
         print();
     }
-
-
 }
+
+//------------------------------------------------------------------------------
 
 AppSettings::~AppSettings()
 {
 }
 
+//------------------------------------------------------------------------------
+// Load XML
+//------------------------------------------------------------------------------
 bool AppSettings::loadXML()
 {
     ofxXmlSettings m_xml;
@@ -429,6 +447,10 @@ bool AppSettings::loadXML()
 
     return true;
 }
+
+//------------------------------------------------------------------------------
+// Load JSON
+//------------------------------------------------------------------------------
 
 bool AppSettings::loadJSON()
 {
@@ -701,6 +723,9 @@ bool AppSettings::loadJSON()
     }
 }
 
+//------------------------------------------------------------------------------
+// Print
+//------------------------------------------------------------------------------
 void AppSettings::print()
 {
     ofLog(OF_LOG_SILENT, "------------------------------");
@@ -773,18 +798,6 @@ void AppSettings::print()
     }
     ofLog(OF_LOG_SILENT, "------------------------------\n");
 
-}
-
-//------------------------------------------------------------------------------
-
-const std::string& AppSettings::getFontName(const string& id)
-{
-    return m_fonts[id].first;
-}
-
-int AppSettings::getFontSize(const string &id)
-{
-    return m_fonts[id].second;
 }
 
 //------------------------------------------------------------------------------

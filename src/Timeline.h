@@ -20,61 +20,26 @@ public:
     Timeline();
     ~Timeline();
 
-    /**
-    * \brief Set timeline for gps data.
-    * \param gpsDatas vector with gps data.
-    */
     void setData(const GpsDataVector& gpsDatas);
-
-    /**
-    * \brief Get next user id on the timeline.
-    * \return int value for user id.
-    */
-    int getNext() const;
-
-    /**
-    * \brief Return true if count is last in timeline.
-    * \return true if count is last.
-    */
-    bool isLast() const;
-
-    /**
-    * \brief Return true if count is last in timeline.
-    * \return true if count is last.
-    */
-    bool isFirst() const;
-
-    /**
-    * \brief Return true if count is last in timeline.
-    * \return true if count is last.
-    */
-    bool isTimelineIndex(unsigned int index);
-
-    /**
-    * \brief Get the timeline.
-    * \return vector of TimelineObjects.
-    */
-    const std::vector<TimelineObject>& getTimeline() const { return m_timeline; }
-
-    bool isNextReady();
-
-    unsigned int getNumberToUpdate()
-    {
-        unsigned int tmp = m_counter - m_lastUpdatedTimelineId;
-        return  tmp;
-    }
 
     void countUp();
 
-    std::string getCurrentTime();
+    int getNext() const;
 
+    bool isLast() const;
+    bool isFirst() const;
+    bool isTimelineIndex(unsigned int index);
+    bool isNextReady();
+
+    const TimelineObjectVec& getTimeline() const { return m_timeline; }
+    inline unsigned int getNumberToUpdate() const;
+    std::string getCurrentTime();
     unsigned int getCurrentCount() const;
     unsigned int getAllCount() const;
-
     const TimelineObject& getCurrentTimelineObj() const;
 
 private:
-    // -----------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     /**
     * \brief Get unix time for a given time string.
     * \param timeString time string.
@@ -86,8 +51,8 @@ private:
     * \brief Sort timeline objects.
     */
     void sortTimeline();
-    // -----------------------------------------------------------------------------
-    std::vector<TimelineObject> m_timeline;
+    // -------------------------------------------------------------------------
+    TimelineObjectVec m_timeline;
 
     TimelineObject* m_current;
     TimelineObject* m_last;
@@ -105,5 +70,14 @@ private:
     const Timeline& operator= (const Timeline&);
 
 };
+
+//------------------------------------------------------------------------------
+
+unsigned int Timeline::getNumberToUpdate() const
+{
+    return m_counter - m_lastUpdatedTimelineId;
+}
+
+//------------------------------------------------------------------------------
 
 #endif // _TIMELINE_H_
