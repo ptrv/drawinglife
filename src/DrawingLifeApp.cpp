@@ -9,6 +9,7 @@
 
 #include "DataLoader.h"
 #include "ViewHelper.h"
+#include "ZoomAnimation.h"
 
 #if defined (WIN32)
 #undef max
@@ -32,7 +33,7 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_showFps(false),
     m_startScreenMode(false),
     m_numPersons(0),
-    m_timeline(0),
+//    m_timeline(),
 //    m_drawSpeed(1),
 //	m_trackAlpha(64),
 //	m_dotAlpha(127),
@@ -152,24 +153,7 @@ void DrawingLifeApp::setup()
     shader.load(vertSrc, fragSrc);
     doShader = m_settings->useShader();
 
-//    int drSp = m_settings->getDrawSpeed();
-
-    double damp = m_settings->getZoomAnimationDamp();
-    double attr = m_settings->getZoomAnimationAttraction();
-    double dampCenter = m_settings->getZoomAnimationDampCenter();
-    double attrCenter = m_settings->getZoomAnimationAttractionCenter();
-
-    m_zoomIntegrator.reset(new Integrator<double>(0.0f, damp, attr));
     m_isZoomAnimation = m_settings->isZoomAnimation();
-    m_theIntegrator.reset(new Integrator<ofxPoint<double> >(0.0f,
-                                                            dampCenter,
-                                                            attrCenter));
-
-    if ( ! m_isZoomAnimation)
-    {
-
-    	//    	m_zoomIntegrator->setTarget();
-    }
 
     // -------------------------------------------------------------------------
 
@@ -220,6 +204,9 @@ void DrawingLifeApp::setup()
             }
 
             DataLoader::loadLocationImages(*this);
+
+            m_zoomAnimation.reset(new ZoomAnimation(*m_settings.get(),
+                                                    m_timeline));
         }
     }
     else
@@ -262,7 +249,7 @@ void DrawingLifeApp::update()
             }
             catch (const std::out_of_range&) {}
 
-            zoomUpdate();
+            m_zoomAnimation->update(*this);
             soundUpdate();
 
             m_timeline->countUp();
@@ -707,160 +694,6 @@ void DrawingLifeApp::resetData()
 
 //------------------------------------------------------------------------------
 // Private functions
-//------------------------------------------------------------------------------
-
-bool DrawingLifeApp::zoomHasChanged()
-{
-    if (m_timeline->isFirst())
-    {
-        m_sZoomFrameCount = 0;
-        return true;
-    }
-
-    switch (m_settings->getZoomAnimationCriteria())
-    {
-        case 1:
-            return zoomHasChangedTime();
-        case 2:
-            return zoomHasChangedId();
-        case 3:
-            return zoomHasChangedTimestamp();
-        default:
-            return false;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-bool DrawingLifeApp::zoomHasChangedId()
-{
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings->getZoomAnimFrames();
-
-    if (m_sZoomFrameCount + 1 >= static_cast<int>(zoomAnimFrames.size()))
-    {
-        return false;
-    }
-    const int currentId = m_timeline->getCurrentTimelineObj().gpsid;
-    const int zoomChangeId = zoomAnimFrames[m_sZoomFrameCount+1].gpsId;
-    if (currentId == zoomChangeId)
-    {
-        ++m_sZoomFrameCount;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-bool DrawingLifeApp::zoomHasChangedTimestamp()
-{
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings->getZoomAnimFrames();
-
-    if (m_sZoomFrameCount+1 >=  static_cast<int>(zoomAnimFrames.size()))
-    {
-        return false;
-    }
-    const string& currentTimestamp =
-            m_timeline->getCurrentTimelineObj().timeString;
-    const string& zoomChangeTimestamp =
-            zoomAnimFrames[m_sZoomFrameCount+1].timestamp;
-    if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
-    {
-        ++m_sZoomFrameCount;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-bool DrawingLifeApp::zoomHasChangedTime()
-{
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings->getZoomAnimFrames();
-
-    const int current = m_timeline->getCurrentCount();
-    const int all = m_timeline->getAllCount();
-
-    int currIndex = 0;
-    for (size_t i = 0; i < zoomAnimFrames.size(); ++i)
-    {
-        if ((current / (float)all) > zoomAnimFrames[i].frameTime)
-        {
-            currIndex = i;
-        }
-        else
-        {
-            break;
-        }
-    }
-    if (m_sZoomFrameCount != currIndex)
-    {
-        ++m_sZoomFrameCount;
-        if (m_sZoomFrameCount >=  static_cast<int>(zoomAnimFrames.size()))
-        {
-            --m_sZoomFrameCount;
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void DrawingLifeApp::zoomUpdate()
-{
-    if (m_isZoomAnimation)
-    {
-        if (zoomHasChanged())
-        {
-            const ZoomAnimFrame& zoomAnimFrame =
-                    m_settings->getZoomAnimFrames()[m_sZoomFrameCount];
-            const float zoomLevel = zoomAnimFrame.frameZoom;
-            const double centerX = zoomAnimFrame.frameCenterX;
-            const double centerY = zoomAnimFrame.frameCenterY;
-            UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
-                                                           *m_settings);
-
-            if (m_timeline->isFirst())
-            {
-                m_zoomIntegrator->set(zoomLevel);
-                m_theIntegrator->set(utmP);
-            }
-            m_zoomIntegrator->setTarget(zoomLevel);
-            m_theIntegrator->setTarget(utmP);
-
-        }
-    }
-    m_zoomIntegrator->update();
-    m_theIntegrator->update();
-
-    if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
-    {
-        if (m_multiMode)
-        {
-            m_magicBox->setSize(m_zoomIntegrator->getValue());
-            m_magicBox->setupBox(m_theIntegrator->getValue(), 0);
-        }
-        else
-        {
-            BOOST_FOREACH(MagicBoxPtr box, m_magicBoxes)
-            {
-                box->setSize(m_zoomIntegrator->getValue());
-                box->setupBox(m_theIntegrator->getValue(), 0);
-            }
-        }
-    }
-}
-
 //------------------------------------------------------------------------------
 
 void DrawingLifeApp::soundUpdate()

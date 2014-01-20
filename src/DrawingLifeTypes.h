@@ -135,6 +135,7 @@ class MagicBox;
 class GpsSegment;
 class GpsPoint;
 class LocationImage;
+class Timeline;
 
 typedef std::vector<std::string> StringVec;
 typedef boost::scoped_ptr<DBReader> DBReaderPtr;
@@ -169,6 +170,8 @@ typedef boost::ptr_vector<LocationImage> LocationImageVec;
 
 typedef boost::ptr_vector<ofSoundPlayer> ofSoundPlayerVec;
 
+typedef boost::shared_ptr<Timeline> TimelinePtr;
+typedef boost::weak_ptr<Timeline> TimelineWeak;
 typedef std::vector<TimelineObject> TimelineObjectVec;
 
 //---------------------------------------------------------------------------

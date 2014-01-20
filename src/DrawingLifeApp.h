@@ -13,6 +13,7 @@
 #include "Integrator.h"
 #include "ofSoundPlayer.h"
 
+class ZoomAnimation;
 /**
  *  \brief Main application class.
  */
@@ -75,13 +76,6 @@ private:
     // Functions
     //---------------------------------------------------------------------------
 
-	bool zoomHasChanged();
-	bool zoomHasChangedTime();
-	bool zoomHasChangedId();
-	bool zoomHasChangedTimestamp();
-
-	void zoomUpdate();
-
 	void soundUpdate();
 
     void shaderBegin();
@@ -115,7 +109,7 @@ private:
     StringVec m_names;
 	std::string m_currentCity;
     // -----------------------------------------------------------------------------
-    boost::scoped_ptr<Timeline> m_timeline;
+    boost::shared_ptr<Timeline> m_timeline;
 
     DBQueryData m_dbQueryData;
 
@@ -148,8 +142,7 @@ private:
 
     bool m_isZoomAnimation;
 
-    boost::scoped_ptr<Integrator<double> > m_zoomIntegrator;
-    boost::scoped_ptr<Integrator<ofxPoint<double> > > m_theIntegrator;
+    boost::scoped_ptr<ZoomAnimation> m_zoomAnimation;
 
     ofShader shader;
     bool doShader;
