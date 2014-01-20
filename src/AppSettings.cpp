@@ -685,8 +685,8 @@ bool AppSettings::loadJSON()
             ZoomAnimFrame zaf;
             zaf.frameTime = JsonHelper::getDouble(frame, "time", 0.0);
             zaf.frameZoom = JsonHelper::getInt(frame, "zoom", 0);
-            zaf.frameCenterX = JsonHelper::getDouble(frame, "lon", 0.0);
-            zaf.frameCenterY = JsonHelper::getDouble(frame, "lat", 0.0);
+            zaf.frameCenterX = JsonHelper::getDouble(frame, "longitude", 0.0);
+            zaf.frameCenterY = JsonHelper::getDouble(frame, "latitude", 0.0);
             zaf.gpsId = JsonHelper::getInt(frame, "gpsid", -1);
             zaf.timestamp = JsonHelper::getString(frame, "timestamp", "");
             m_zoomAnimationFrames.push_back(zaf);
