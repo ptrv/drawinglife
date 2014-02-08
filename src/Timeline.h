@@ -33,7 +33,7 @@ public:
 
     const TimelineObjectVec& getTimeline() const { return m_timeline; }
     inline unsigned int getNumberToUpdate() const;
-    std::string getCurrentTime();
+    std::string getCurrentTime() const;
     unsigned int getCurrentCount() const;
     unsigned int getAllCount() const;
     const TimelineObject& getCurrentTimelineObj() const;

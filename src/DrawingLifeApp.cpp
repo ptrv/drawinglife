@@ -308,15 +308,10 @@ void DrawingLifeApp::draw()
 
             if (m_multiMode && m_multiModeInfo)
             {
-                ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
-                ofSetHexColor(0xffffff);
-                const std::string& infoText = m_timeline->getCurrentTime();
-//                if (m_pause)
-//                    infoText.append(" (stopped)");
-                m_fonts["info"].drawString(infoText,
-                                           m_viewDimensions[0].padding,
-                                           m_viewDimensions[0].offset.y + 10);
-
+                ViewHelper::drawInfoMultiMode(*m_settings.get(),
+                                              *m_timeline.get(),
+                                              m_viewDimensions[0],
+                                              m_fonts["info"]);
             }
 
             for (size_t i = 0; i < m_numPersons; ++i)
@@ -327,26 +322,13 @@ void DrawingLifeApp::draw()
                 {
                     const MagicBoxPtr& box = m_settings->isMultiMode()
                             ? m_magicBox : m_magicBoxes[i];
-                    ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
-
-                    const int debugTextX = 30 + (ofGetWidth() / m_numPersons) * i;
-                    const int debugTextY = 30;
-                    ofDrawBitmapString(Utils::getCurrentGpsInfoDebug(
-                                           gpsData.get(), &walk, box.get()),
-                                       debugTextX, debugTextY);
+                    ViewHelper::drawInfoDebug(*m_settings.get(), *box.get(),
+                                              *gpsData.get(), walk, i);
                 }
                 else if (m_showInfo)
                 {
-                    ofSetColor(255, 255, 255, m_settings->getAlphaLegend());
-                    ofSetHexColor(0xffffff);
-                    const std::string& infoText = Utils::getCurrentGpsInfo(
-                                gpsData.get(), &walk);
-//                    if (m_pause)
-//                        infoText.append(" (stopped)");
-                    const int infoX = m_viewDimensions[i].padding
-                            + (ofGetWidth() / m_numPersons) * i;
-                    const int infoY = m_viewDimensions[i].offset.y + 10;
-                    m_fonts["info"].drawString(infoText, infoX, infoY);
+                    ViewHelper::drawInfo(*m_settings.get(), *gpsData.get(), walk,
+                                         m_viewDimensions[i], m_fonts["info"], i);
                 }
 
                 // -----------------------------------------------------------------------------

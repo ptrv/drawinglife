@@ -17,11 +17,11 @@ public:
     static ofxPoint<double> getPointDoubleMin();
     static ofxPoint<double> getPointDoubleMax();
 
-    static const std::string getCurrentGpsInfo(const GpsData* gpsData,
-                                               const Walk* walk);
-    static const std::string getCurrentGpsInfoDebug(const GpsData* gpsData,
-                                                    const Walk* walk,
-                                                    const MagicBox* box);
+    static const std::string getCurrentGpsInfo(const GpsData& gpsData,
+                                               const Walk& walk);
+    static const std::string getCurrentGpsInfoDebug(const GpsData& gpsData,
+                                                    const Walk& walk,
+                                                    const MagicBox& box);
 
 private:
     Utils();

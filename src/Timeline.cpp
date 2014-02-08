@@ -146,7 +146,7 @@ bool Timeline::isNextReady()
 
 //------------------------------------------------------------------------------
 
-std::string Timeline::getCurrentTime()
+std::string Timeline::getCurrentTime() const
 {
     const std::string& timeString = m_timeline[m_counter].timeString;
     int year, month, day, hour, min, sec;

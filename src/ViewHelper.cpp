@@ -164,3 +164,55 @@ void ViewHelper::fillViewAreaUTM(DrawingLifeApp& app)
 }
 
 //------------------------------------------------------------------------------
+
+void ViewHelper::drawInfo(const AppSettings& settings,
+                          const GpsData& gpsData,
+                          const Walk& walk,
+                          const ViewDimensions& viewDimensions,
+                          const ofTrueTypeFont& font,
+                          const size_t currentPerson)
+{
+    ofSetColor(255, 255, 255, settings.getAlphaLegend());
+    ofSetHexColor(0xffffff);
+    const std::string& infoText = Utils::getCurrentGpsInfo(gpsData, walk);
+    const unsigned numPersons = settings.getNumPersons();
+    const int infoX = viewDimensions.padding
+            + (ofGetWidth() / numPersons) * currentPerson;
+    const int infoY = viewDimensions.offset.y + 10;
+    const_cast<ofTrueTypeFont&>(font).drawString(infoText, infoX, infoY);
+}
+
+//------------------------------------------------------------------------------
+
+void ViewHelper::drawInfoDebug(const AppSettings& settings,
+                               const MagicBox& magicBox,
+                               const GpsData& gpsData,
+                               const Walk& walk,
+                               const size_t currentPerson)
+{
+    ofSetColor(255, 255, 255, settings.getAlphaLegend());
+
+    const size_t numPersons = settings.getNumPersons();
+    const int debugTextX = 30 + (ofGetWidth() / numPersons) * currentPerson;
+    const int debugTextY = 30;
+    ofDrawBitmapString(Utils::getCurrentGpsInfoDebug(gpsData, walk, magicBox),
+                       debugTextX, debugTextY);
+}
+
+//------------------------------------------------------------------------------
+
+void ViewHelper::drawInfoMultiMode(const AppSettings& settings,
+                                   const Timeline& timeline,
+                                   const ViewDimensions& viewDimensions,
+                                   const ofTrueTypeFont& font)
+{
+    ofSetColor(255, 255, 255, settings.getAlphaLegend());
+    ofSetHexColor(0xffffff);
+    const std::string& infoText = timeline.getCurrentTime();
+    const_cast<ofTrueTypeFont&>(font).drawString(infoText,
+                                                 viewDimensions.padding,
+                                                 viewDimensions.offset.y + 10);
+
+}
+
+//------------------------------------------------------------------------------
