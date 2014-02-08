@@ -11,8 +11,8 @@ public:
 
     static void drawFPS();
     static void drawKeyCommands(const ofColor& c);
-    static void drawStartScreen(ofTrueTypeFont& fontTitle,
-                                ofTrueTypeFont& fontAuthor);
+    static void drawStartScreen(const ofTrueTypeFont& fontTitle,
+                                const ofTrueTypeFont& fontAuthor);
 
     static void setViewAspectRatio(DrawingLifeApp& app);
     static void fillViewAreaUTM(DrawingLifeApp& app);

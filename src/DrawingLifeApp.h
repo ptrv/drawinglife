@@ -70,6 +70,8 @@ public:
     void resetData();
 
     ViewDimensionsVec& getViewDimensionsVec() { return m_viewDimensions; }
+    const ViewDimensionsVec& getViewDimensionsVec() const
+    { return m_viewDimensions; }
 
 private:
     //---------------------------------------------------------------------------

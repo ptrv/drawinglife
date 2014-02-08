@@ -49,18 +49,25 @@ void ViewHelper::drawKeyCommands(const ofColor& c)
 
 //------------------------------------------------------------------------------
 
-void ViewHelper::drawStartScreen(ofTrueTypeFont& fontTitle,
-                                 ofTrueTypeFont& fontAuthor)
+void ViewHelper::drawStartScreen(const ofTrueTypeFont& fontTitle,
+                                 const ofTrueTypeFont& fontAuthor)
 {
     ofSetColor(255,255,255);
 
     std::string title = APP_NAME_STR;
     title += " ";
     title += APP_VERSION_STR;
-    fontTitle.drawString(title, ofGetWidth()/2 - 365, ofGetHeight()/2 - 100);
 
-    fontAuthor.drawString(APP_AUTHOR_STR, ofGetWidth()/2 - 91, ofGetHeight()/2);
-    fontAuthor.drawString("plan b", ofGetWidth()/2 - 60, ofGetHeight()/2 + 60);
+    const_cast<ofTrueTypeFont&>(fontTitle).drawString(title,
+                                                      ofGetWidth()/2 - 365,
+                                                      ofGetHeight()/2 - 100);
+
+    const_cast<ofTrueTypeFont&>(fontAuthor).drawString(APP_AUTHOR_STR,
+                                                       ofGetWidth()/2 - 91,
+                                                       ofGetHeight()/2);
+    const_cast<ofTrueTypeFont&>(fontAuthor).drawString("plan b",
+                                                       ofGetWidth()/2 - 60,
+                                                       ofGetHeight()/2 + 60);
 }
 
 //------------------------------------------------------------------------------

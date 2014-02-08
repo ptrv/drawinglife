@@ -103,7 +103,7 @@ bool DataLoader::loadCurrentPointImages(DrawingLifeApp &app)
 void DataLoader::loadLocationImages(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
-    const ViewDimensionsVec viewDimensions = app.getViewDimensionsVec();
+    const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
     const MagicBoxVector boxes = app.getMagicBoxVector();
     MagicBox& box = app.getMagicBox();
 
