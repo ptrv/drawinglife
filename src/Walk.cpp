@@ -340,7 +340,7 @@ void Walk::drawBoxes()
 // -----------------------------------------------------------------------------
 
 void Walk::calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
-                                const GpsData& gpsData)
+                                              const GpsData& gpsData)
 {
     if (m_maxPointsToDraw > 0 && m_currentPoint - m_maxPointsToDraw >= 0)
     {
@@ -360,27 +360,16 @@ void Walk::calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
 
 void Walk::drawSpeedColor(const double speed, bool& isInBox)
 {
-    if (speed > m_settings.getSpeedThreshold())
+    const ofColor& color = speed > m_settings.getSpeedThreshold()
+                                        ? m_settings.getSpeedColorAbove()
+                                        : m_settings.getSpeedColorUnder();
+
+    ofSetColor(color);
+    if (color.a == 0.0)
     {
-        const ofColor& color = m_settings.getSpeedColorAbove();
-        ofSetColor(color);
-        if (color.a == 0.0)
-        {
-            isInBox = false;
-            glEnd();
-            glBegin(GL_LINE_STRIP);
-        }
-    }
-    else
-    {
-        const ofColor& color = m_settings.getSpeedColorUnder();
-        ofSetColor(color);
-        if (color.a == 0.0)
-        {
-            isInBox = false;
-            glEnd();
-            glBegin(GL_LINE_STRIP);
-        }
+        isInBox = false;
+        glEnd();
+        glBegin(GL_LINE_STRIP);
     }
 }
 
@@ -403,14 +392,9 @@ void Walk::drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm)
         bool skipDrawing = false;
         if (m_settings.useSpeed())
         {
-            if (currentUtm.speed > m_settings.getSpeedThreshold())
-            {
-                skipDrawing = m_settings.getSpeedColorAbove().a == 0.0;
-            }
-            else
-            {
-                skipDrawing = m_settings.getSpeedColorUnder().a == 0.0;
-            }
+            skipDrawing = currentUtm.speed > m_settings.getSpeedThreshold()
+                    ? m_settings.getSpeedColorAbove().a == 0.0
+                    : m_settings.getSpeedColorUnder().a == 0.0;
         }
         if (!skipDrawing)
         {
@@ -428,34 +412,27 @@ void Walk::drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm)
 
 const std::string Walk::getCurrentGpsLocation() const
 {
-    const GpsDataPtr gpsData = m_gpsData.lock();
-    if (!gpsData)
+    if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
-        return std::string();
+        return gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
     }
-
-    return gpsData->getGpsLocation(m_currentGpsSegment, m_currentGpsPoint);
+    return std::string();
 }
 
 // -----------------------------------------------------------------------------
 
 int Walk::getCurrentSegmentNum() const
 {
-    const GpsDataPtr gpsData = m_gpsData.lock();
-    if (!gpsData)
+    if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
-        return 0;
+        try
+        {
+            const GpsSegmentVector& segments = gpsData->getSegments();
+            return segments.at(m_currentGpsSegment).getSegmentNum();
+        }
+        catch (const std::out_of_range&) {}
     }
-
-    try
-    {
-        const GpsSegmentVector& segments = gpsData->getSegments();
-        return segments.at(m_currentGpsSegment).getSegmentNum();
-    }
-    catch (const std::out_of_range&)
-    {
-        return 0;
-    }
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -469,23 +446,18 @@ int Walk::getCurrentPointNum() const
 
 std::string Walk::getCurrentTimestamp() const
 {
-    const GpsDataPtr gpsData = m_gpsData.lock();
-    if (!gpsData)
+    if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
-        return std::string();
+        try
+        {
+            const GpsSegmentVector& segments = gpsData->getSegments();
+            const GpsPointVector& points =
+                    segments.at(m_currentGpsSegment).getPoints();
+            return points.at(m_currentGpsPoint).getTimestamp();
+        }
+        catch (const std::out_of_range&) {}
     }
-
-    try
-    {
-        const GpsSegmentVector& segments = gpsData->getSegments();
-        const GpsPointVector& points =
-                segments.at(m_currentGpsSegment).getPoints();
-        return points.at(m_currentGpsPoint).getTimestamp();
-    }
-    catch (const std::out_of_range&)
-    {
-        return std::string();
-    }
+    return std::string();
 }
 
 // -----------------------------------------------------------------------------
@@ -494,7 +466,7 @@ double Walk::getCurrentThing(const tFnGetCurrentDouble& fnGetCurrentDouble) cons
 {
     if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
-        return fnGetCurrentDouble(gpsData);
+        return fnGetCurrentDouble(gpsData, m_currentGpsSegment, m_currentGpsPoint);
     }
     else
     {
@@ -506,40 +478,35 @@ double Walk::getCurrentThing(const tFnGetCurrentDouble& fnGetCurrentDouble) cons
 
 double Walk::getCurrentLongitude() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getLongitude, _1,
-                                       m_currentGpsSegment, m_currentGpsPoint));
+    return getCurrentThing(boost::bind(&GpsData::getLongitude, _1, _2, _3));
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentLatitude() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getLatitude, _1,
-                                       m_currentGpsSegment, m_currentGpsPoint));
+    return getCurrentThing(boost::bind(&GpsData::getLatitude, _1, _2, _3));
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentElevation() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getElevation, _1,
-                                       m_currentGpsSegment, m_currentGpsPoint));
+    return getCurrentThing(boost::bind(&GpsData::getElevation, _1, _2, _3));
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentUtmX() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getUtmX, _1,
-                                       m_currentGpsSegment, m_currentGpsPoint));
+    return getCurrentThing(boost::bind(&GpsData::getUtmX, _1, _2, _3));
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentUtmY() const
 {
-    return getCurrentThing(boost::bind(&GpsData::getUtmY, _1,
-                                       m_currentGpsSegment, m_currentGpsPoint));
+    return getCurrentThing(boost::bind(&GpsData::getUtmY, _1, _2, _3));
 }
 
 // -----------------------------------------------------------------------------
