@@ -15,7 +15,7 @@ class Walk : public DrawingLifeDrawable
 {
 public:
 
-    enum tWalkDir
+    enum tWalkDirection
     {
         FORWARD, BACKWARD
     };
@@ -54,7 +54,7 @@ public:
 
 private:
 
-    void updateToSegment(const tWalkDir direction);
+    void updateToSegment(const tWalkDirection direction);
 
     void drawBoxes();
 

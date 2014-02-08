@@ -114,7 +114,7 @@ void Walk::updateToPreviousSegment()
 
 // -----------------------------------------------------------------------------
 
-void Walk::updateToSegment(const tWalkDir direction)
+void Walk::updateToSegment(const tWalkDirection direction)
 {
     const GpsDataPtr gpsData = m_gpsData.lock();
     if (!gpsData)
