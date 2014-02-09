@@ -1,3 +1,6 @@
 [submodule "scripts/gpx2spatialite"]
 	path = scripts/gpx2spatialite
 	url = https://github.com/ptrv/gpx2spatialite.git
+[submodule "libs/ofxJSON"]
+	path = libs/ofxJSON
+	url = https://github.com/ptrv/ofxJSON.git
