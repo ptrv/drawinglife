@@ -112,7 +112,7 @@ PROJECT_LDFLAGS=-lsqlite3 -lGeographic -lspatialite -ljsoncpp
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 PROJECT_CFLAGS = -I /usr/include -I libs/sqlite3x -Ilibs/tclap-1.2.0/include \
-    -Ilibs/ofxTimer/src -Ilibs/ofxJSON/src -I/usr/include/jsoncpp
+    -Ilibs/ofxTimer/src
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
