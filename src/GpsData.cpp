@@ -43,6 +43,13 @@ m_maxUtm(0.0, 0.0),
 m_lon0(0.0)
 {
 	m_segments.reserve(1000); // TODO good amount.
+
+    tGetLongitudeFn = boost::bind(&GpsPoint::getLongitude, _1);
+    tGetLatitudeFn = boost::bind(&GpsPoint::getLatitude, _1);
+    tGetElevationFn = boost::bind(&GpsPoint::getElevation, _1);
+
+    tGetUtmXFn = boost::bind(&UtmPoint::x, _1);
+    tGetUtmYFn = boost::bind(&UtmPoint::y, _1);
 }
 
 //------------------------------------------------------------------------------
@@ -122,8 +129,7 @@ double GpsData::getData(const size_t segmentIndex, const size_t pointIndex,
 double GpsData::getLongitude(const size_t segmentIndex,
                              const size_t pointIndex) const
 {
-    return getData(segmentIndex, pointIndex,
-                   boost::bind(&GpsPoint::getLongitude, _1));
+    return getData(segmentIndex, pointIndex, tGetLongitudeFn);
 }
 
 //------------------------------------------------------------------------------
@@ -131,8 +137,7 @@ double GpsData::getLongitude(const size_t segmentIndex,
 double GpsData::getLatitude(const size_t segmentIndex,
                             const size_t pointIndex) const
 {
-    return getData(segmentIndex, pointIndex,
-                   boost::bind(&GpsPoint::getLatitude, _1));
+    return getData(segmentIndex, pointIndex, tGetLatitudeFn);
 }
 
 //------------------------------------------------------------------------------
@@ -140,8 +145,7 @@ double GpsData::getLatitude(const size_t segmentIndex,
 double GpsData::getElevation(const size_t segmentIndex,
                              const size_t pointIndex) const
 {
-    return getData(segmentIndex, pointIndex,
-                   boost::bind(&GpsPoint::getElevation, _1));
+    return getData(segmentIndex, pointIndex, tGetElevationFn);
 }
 
 //------------------------------------------------------------------------------
@@ -167,8 +171,7 @@ double GpsData::getUtmData(size_t segmentIndex, size_t pointIndex,
 double GpsData::getUtmX(const size_t segmentIndex,
                         const size_t pointIndex) const
 {
-    return getUtmData(segmentIndex, pointIndex, m_utmPoints,
-                      boost::bind(&UtmPoint::x, _1));
+    return getUtmData(segmentIndex, pointIndex, m_utmPoints, tGetUtmXFn);
 }
 
 //------------------------------------------------------------------------------
@@ -176,8 +179,7 @@ double GpsData::getUtmX(const size_t segmentIndex,
 double GpsData::getUtmY(const size_t segmentIndex,
                         const size_t pointIndex) const
 {
-    return getUtmData(segmentIndex, pointIndex, m_utmPoints,
-                      boost::bind(&UtmPoint::y, _1));
+    return getUtmData(segmentIndex, pointIndex, m_utmPoints, tGetUtmYFn);
 }
 
 //------------------------------------------------------------------------------
@@ -201,8 +203,7 @@ UtmPoint GpsData::getUtm(const size_t segmentIndex,
 double GpsData::getNormalizedUtmX(const size_t segmentIndex,
                                   const size_t pointIndex) const
 {
-    return getUtmData(segmentIndex, pointIndex, m_normalizedUtmPoints,
-                      boost::bind(&UtmPoint::x, _1));
+    return getUtmData(segmentIndex, pointIndex, m_normalizedUtmPoints, tGetUtmXFn);
 }
 
 //------------------------------------------------------------------------------
@@ -210,8 +211,7 @@ double GpsData::getNormalizedUtmX(const size_t segmentIndex,
 double GpsData::getNormalizedUtmY(const size_t segmentIndex,
                                   const size_t pointIndex) const
 {
-    return getUtmData(segmentIndex, pointIndex, m_normalizedUtmPoints,
-                      boost::bind(&UtmPoint::y, _1));
+    return getUtmData(segmentIndex, pointIndex, m_normalizedUtmPoints, tGetUtmYFn);
 }
 
 //------------------------------------------------------------------------------

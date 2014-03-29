@@ -68,6 +68,12 @@ private:
     typedef boost::function<double(const GpsDataPtr&,int,int)> tFnGetCurrentDouble;
     double getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble) const;
 
+    tFnGetCurrentDouble tGetCurrentLongitudeFn;
+    tFnGetCurrentDouble tGetCurrentLatitudeFn;
+    tFnGetCurrentDouble tGetCurrentElevationFn;
+    tFnGetCurrentDouble tGetCurrentUtmXFn;
+    tFnGetCurrentDouble tGetCurrentUtmYFn;
+
     const AppSettings& m_settings;
 
     GpsDataWeak m_gpsData;

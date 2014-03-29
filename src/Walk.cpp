@@ -34,6 +34,13 @@ m_imageAlpha(255)
     m_currentSegColor.g = m_settings.getColorInteractiveSegG();
     m_currentSegColor.b = m_settings.getColorInteractiveSegB();
     m_currentSegColor.a = m_settings.getColorInteractiveSegA();
+
+    tGetCurrentLongitudeFn = boost::bind(&GpsData::getLongitude, _1, _2, _3);
+    tGetCurrentLatitudeFn = boost::bind(&GpsData::getLatitude, _1, _2, _3);
+    tGetCurrentElevationFn = boost::bind(&GpsData::getElevation, _1, _2, _3);
+    tGetCurrentUtmXFn = boost::bind(&GpsData::getUtmX, _1, _2, _3);
+    tGetCurrentUtmYFn = boost::bind(&GpsData::getUtmY, _1, _2, _3);
+
 }
 
 //------------------------------------------------------------------------------
@@ -478,35 +485,35 @@ double Walk::getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble
 
 double Walk::getCurrentLongitude() const
 {
-    return getCurrentDoubleValue(boost::bind(&GpsData::getLongitude, _1, _2, _3));
+    return getCurrentDoubleValue(tGetCurrentLongitudeFn);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentLatitude() const
 {
-    return getCurrentDoubleValue(boost::bind(&GpsData::getLatitude, _1, _2, _3));
+    return getCurrentDoubleValue(tGetCurrentLatitudeFn);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentElevation() const
 {
-    return getCurrentDoubleValue(boost::bind(&GpsData::getElevation, _1, _2, _3));
+    return getCurrentDoubleValue(tGetCurrentElevationFn);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentUtmX() const
 {
-    return getCurrentDoubleValue(boost::bind(&GpsData::getUtmX, _1, _2, _3));
+    return getCurrentDoubleValue(tGetCurrentUtmXFn);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentUtmY() const
 {
-    return getCurrentDoubleValue(boost::bind(&GpsData::getUtmY, _1, _2, _3));
+    return getCurrentDoubleValue(tGetCurrentUtmYFn);
 }
 
 // -----------------------------------------------------------------------------

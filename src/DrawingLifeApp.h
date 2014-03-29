@@ -152,6 +152,9 @@ private:
     static int m_sZoomFrameCount;
     static int m_sCurrentSoundFile;
 
+    boost::function<void(Walk&)> tWalkResetFn;
+    boost::function<void(LocationImage&)> tLocationImageDrawFn;
+
 };
 
 #endif // _DRAWINGLIFEAPP_H_

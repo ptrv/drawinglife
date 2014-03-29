@@ -55,6 +55,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_pause(false)
 //    m_magicBox(0)
 {
+    tWalkResetFn = boost::bind(&Walk::reset, _1);
+    tLocationImageDrawFn = boost::bind(&LocationImage::draw, _1);
 }
 
 //------------------------------------------------------------------------------
@@ -257,8 +259,7 @@ void DrawingLifeApp::update()
             if (m_timeline->isFirst())
             {
 //                            std::cout << "First timeline object!" << std::endl;
-                std::for_each(m_walks.begin(), m_walks.end(),
-                              boost::bind(&Walk::reset, _1));
+                std::for_each(m_walks.begin(), m_walks.end(), tWalkResetFn);
                 m_sZoomFrameCount = 0;
                 const int sleepTime = m_settings->getSleepTime();
                 if (sleepTime > 0)
@@ -302,8 +303,7 @@ void DrawingLifeApp::draw()
 
             BOOST_FOREACH(LocationImageVec& locVec, m_locationImages)
             {
-                std::for_each(locVec.begin(), locVec.end(),
-                              boost::bind(&LocationImage::draw, _1));
+                std::for_each(locVec.begin(), locVec.end(), tLocationImageDrawFn);
             }
 
             if (m_multiMode && m_multiModeInfo)

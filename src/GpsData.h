@@ -96,10 +96,17 @@ private:
     double getData(size_t segmentIndex, size_t pointIndex,
                    const tFnGetGpsData& fnGetGpsData) const;
 
+    tFnGetGpsData tGetLongitudeFn;
+    tFnGetGpsData tGetLatitudeFn;
+    tFnGetGpsData tGetElevationFn;
+
     typedef boost::function<double(const UtmPoint&)> tFnGetUtmData;
     double getUtmData(size_t segmentIndex, size_t pointIndex,
                       const UtmDataVector& utmVec,
                       const tFnGetUtmData& fnGetUtmData) const;
+
+    tFnGetUtmData tGetUtmXFn;
+    tFnGetUtmData tGetUtmYFn;
 
     //--------------------------------------------------------------------------
 
