@@ -26,7 +26,7 @@ int DrawingLifeApp::m_sCurrentSoundFile = 0;
 
 DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_settingsFile(settingsFile),
-    m_settings(0),
+    //m_settings(0),
     m_isFullscreen(false),
     m_isDebugMode(false),
     m_isAnimation(true),
@@ -207,7 +207,7 @@ void DrawingLifeApp::setup()
 
             DataLoader::loadLocationImages(*this);
 
-            m_zoomAnimation.reset(new ZoomAnimation(*m_settings.get(),
+            m_zoomAnimation.reset(new ZoomAnimation(*m_settings,
                                                     m_timeline));
         }
     }
@@ -411,10 +411,7 @@ void DrawingLifeApp::keyPressed  (int key)
         m_isDebugMode = !m_isDebugMode;
         if (m_hideCursor)
         {
-            if (!m_isDebugMode)
-                ofHideCursor();
-            else
-                ofShowCursor();
+            m_isDebugMode ? ofShowCursor() : ofHideCursor();
         }
         break;
     case 'p':

@@ -227,7 +227,7 @@ void Walk::draw()
 
         for (int i = startSeg; i <= m_currentGpsSegment; ++i)
         {
-            const UtmSegment& segment = utmPoints[i];
+            const UtmSegment& segment = utmData[i];
             glBegin(GL_LINE_STRIP);
             int pointEnd;
             if (i == m_currentGpsSegment)
@@ -266,8 +266,7 @@ void Walk::draw()
                 if (isInBox)
                 {
                     const ofxPoint<double>& pt = magicBox->getDrawablePoint(utm);
-                    glVertex2d(getScaledUtmX(pt.x),
-                               getScaledUtmY(pt.y));
+                    glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
                 }
             }
             glEnd();
@@ -311,8 +310,7 @@ void Walk::drawAll()
             {
                 const ofxPoint<double>& tmp =
                         magicBox->getDrawablePoint(utmPoint);
-                glVertex2d(getScaledUtmX(tmp.x),
-                           getScaledUtmY(tmp.y));
+                glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
             }
         }
         glEnd();
