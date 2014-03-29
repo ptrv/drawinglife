@@ -482,7 +482,7 @@ double Walk::getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble
 {
     if (const GpsDataPtr gpsData = m_gpsData.lock())
     {
-        return fnGetCurrentDouble(gpsData, m_currentGpsSegment, m_currentGpsPoint);
+        return fnGetCurrentDouble(*gpsData, m_currentGpsSegment, m_currentGpsPoint);
     }
     else
     {

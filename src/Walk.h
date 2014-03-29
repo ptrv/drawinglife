@@ -65,7 +65,7 @@ private:
 
     void drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm);
 
-    typedef boost::function<double(const GpsDataPtr&,int,int)> tFnGetCurrentDouble;
+    typedef boost::function<double(const GpsData&,int,int)> tFnGetCurrentDouble;
     double getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble) const;
 
     tFnGetCurrentDouble tGetCurrentLongitudeFn;
