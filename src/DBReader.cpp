@@ -22,14 +22,14 @@ using namespace sqlite3x;
 #define CATCHDBERRORS                                                           \
     catch(const std::exception& ex)                                             \
 {                                                                               \
-    ofLogError(AppLogTag::DB_READER) << "Database error: " << ex.what();        \
+    ofLogError(Logger::DB_READER) << "Database error: " << ex.what();           \
 }                                                                               \
 //------------------------------------------------------------------------------
 #define CATCHDBERRORSQ(query)                                                   \
 catch(const std::exception& ex)                                                 \
 {                                                                               \
-    ofLogError(AppLogTag::DB_READER) << "Database error: " <<  ex.what()        \
-                                     << ", \nwith query: " << query.c_str();    \
+    ofLogError(Logger::DB_READER) << "Database error: " <<  ex.what()           \
+                                  << ", \nwith query: " << query.c_str();       \
 }                                                                               \
 //------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ m_useSpeed(useSpeed)
 
 DBReader::~DBReader()
 {
-    ofLogVerbose(AppLogTag::DB_READER, "destroying");
+    ofLogVerbose(Logger::DB_READER, "destroying");
 }
 
 //------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ bool DBReader::setupDbConnection()
 {
 
     spatialite_init(0);
-    ofLogVerbose(AppLogTag::DB_READER) << "Spatialite version: "
+    ofLogVerbose(Logger::DB_READER) << "Spatialite version: "
                                       << spatialite_version();
 
 	bool result = false;

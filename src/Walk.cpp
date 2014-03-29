@@ -42,7 +42,7 @@ Walk::~Walk()
 {
 	m_image.clear();
 
-    ofLogVerbose(AppLogTag::WALK, "destroying");
+    ofLogVerbose(Logger::WALK, "destroying");
 }
 
 // -----------------------------------------------------------------------------

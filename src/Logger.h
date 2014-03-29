@@ -5,6 +5,8 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
+#include <string>
+
 #ifndef __GNUC__
 # define __PRETTY_FUNCTION__ __FUNCTION__
 #endif
@@ -16,39 +18,23 @@
  */
 class Logger {
 private:
-	Logger();
-	~Logger();
+    Logger(){};
+    ~Logger(){};
 public:
-	static void logValue(const char* function, const char* name, const string& value)
-	{
-		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %s\n<--", ofGetTimestampString().c_str(), 
-              function, name, value.c_str());
-	}
-	static void logValue(const char* function, const char* name, int value)
-	{
-		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %d\n<--", ofGetTimestampString().c_str(), 
-              function, name, value);
-	}
-	static void logValue(const char* function, const char* name, unsigned int value)
-	{
-		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %u\n<--", ofGetTimestampString().c_str(), 
-              function, name, value);
-	}
-	static void logValue(const char* function, const char* name, double value)
-	{
-		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %f\n<--", ofGetTimestampString().c_str(), 
-              function, name, value);
-	}
-	static void logValue(const char* function, const char* name, float value)
-	{
-		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %f\n<--", ofGetTimestampString().c_str(), 
-              function, name, value);
-	}
-	static void logValue(const char* function, const char* name, bool value)
-	{
-		ofLog(OF_LOG_VERBOSE, "%s --> %s \n%s : %s\n<--", ofGetTimestampString().c_str(), 
-              function, name, (value ? "true" : "false"));
-	}
+    static const char* APP;
+    static const char* DB_READER;
+    static const char* SETTINGS;
+    static const char* GPS_DATA;
+    static const char* WALK;
+    static const char* MAGIC_BOX;
+    static const char* DATA_LOADER;
+
+    static void logValue(const char* function, const char* name, const std::string& value);
+    static void logValue(const char* function, const char* name, int value);
+    static void logValue(const char* function, const char* name, unsigned int value);
+    static void logValue(const char* function, const char* name, double value);
+    static void logValue(const char* function, const char* name, float value);
+    static void logValue(const char* function, const char* name, bool value);
 };
 
 

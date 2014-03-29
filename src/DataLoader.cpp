@@ -214,7 +214,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
             app.getCurrentPointImageList();
     const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
 
-    ofLogVerbose(AppLogTag::DATA_LOADER) << "------------------------\n";
+    ofLogVerbose(Logger::DATA_LOADER) << "------------------------\n";
 
     const size_t numPersons = settings.getNumPersons();
 
@@ -322,8 +322,8 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
             if (dbOk)
             {
-                ofLogNotice(AppLogTag::DATA_LOADER) << "--> GpsData load ok!";
-                ofLogNotice(AppLogTag::DATA_LOADER)
+                ofLogNotice(Logger::DATA_LOADER) << "--> GpsData load ok!";
+                ofLogNotice(Logger::DATA_LOADER)
                         << "--> Total data: "
                         << gpsData->getSegments().size() << " GpsSegments, "
                         << gpsData->getTotalGpsPoints() << " GpsPoints!"
@@ -333,20 +333,20 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             }
             else
             {
-                ofLogNotice(AppLogTag::DATA_LOADER) << "--> No GpsData loaded!";
+                ofLogNotice(Logger::DATA_LOADER) << "--> No GpsData loaded!";
                 break;
             }
             dbReader->closeDbConnection();
         }
         // ---------------------------------------------------------------------
 
-        ofLogVerbose(AppLogTag::DATA_LOADER)
+        ofLogVerbose(Logger::DATA_LOADER)
                 << "minLon: " << gpsData->getMinUtmX() << ", "
                 << "maxLon: " << gpsData->getMaxUtmX() << ", "
                 << "minLat: " << gpsData->getMinUtmY() << ", "
                 << "maxLat: " << gpsData->getMaxUtmY();
 
-        ofLogVerbose(AppLogTag::DATA_LOADER)
+        ofLogVerbose(Logger::DATA_LOADER)
                 << "Central Meridian: "
                 << gpsData->getProjectionCentralMeridian();
     }

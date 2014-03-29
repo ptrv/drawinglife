@@ -28,7 +28,7 @@ m_defaultSize(10000.0)
 
 MagicBox::~MagicBox()
 {
-    ofLogVerbose(AppLogTag::MAGIC_BOX, "destroying");
+    ofLogVerbose(Logger::MAGIC_BOX, "destroying");
     --m_boxNum;
 }
 

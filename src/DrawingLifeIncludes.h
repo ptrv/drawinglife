@@ -34,10 +34,6 @@
 
 //------------------------------------------------------------------------------
 
-#include "Logger.h"
-
-//------------------------------------------------------------------------------
-
 #include "DrawingLifeTypes.h"
 
 //------------------------------------------------------------------------------
@@ -48,19 +44,10 @@
 
 #include "Utils.h"
 
-//------------------------------------------------------------------------------
-
-namespace AppLogTag
-{
-static const char* APP          = "DrawingLifeApp";
-static const char* DB_READER    = "DBReader";
-static const char* SETTINGS     = "AppSettings";
-static const char* GPS_DATA     = "GpsData";
-static const char* WALK         = "Walk";
-static const char* MAGIC_BOX    = "MagicBox";
-static const char* DATA_LOADER  = "DataLoader";
-}
-
 // -----------------------------------------------------------------------------
+
+#include "Logger.h"
+
+//------------------------------------------------------------------------------
 
 #endif // _DRAWINGLIFEINCLUDES_H_

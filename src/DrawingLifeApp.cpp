@@ -81,7 +81,7 @@ void DrawingLifeApp::setup()
 
     if (!m_settings->initialized())
     {
-        ofLogError(AppLogTag::APP) << "Could not load settings" << endl;
+        ofLogError(Logger::APP) << "Could not load settings" << endl;
         OF_EXIT_APP(1);
     }
 

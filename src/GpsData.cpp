@@ -49,7 +49,7 @@ m_lon0(0.0)
 
 GpsData::~GpsData()
 {
-    ofLogVerbose(AppLogTag::GPS_DATA, "destroying");
+    ofLogVerbose(Logger::GPS_DATA, "destroying");
 }
 
 //------------------------------------------------------------------------------
