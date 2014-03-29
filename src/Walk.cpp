@@ -67,9 +67,12 @@ void Walk::update()
     const UtmDataVector& utmPoints= gpsData->getUTMPoints();
     const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
 
-    if (m_currentGpsSegment < static_cast<int>(utmPoints.size()))
+    const int numSegments = static_cast<int>(utmPoints.size());
+    const int numPoints = static_cast<int>(utmSegment.size());
+
+    if (m_currentGpsSegment < numSegments)
     {
-        if (m_currentGpsPoint < static_cast<int>(utmSegment.size()) - 1)
+        if (m_currentGpsPoint < numPoints - 1)
         {
             if (!m_firstPoint)
             {
@@ -88,7 +91,7 @@ void Walk::update()
     }
     else
     {
-        if (m_currentGpsPoint < static_cast<int>(utmSegment.size()) - 1)
+        if (m_currentGpsPoint < numPoints - 1)
         {
             ++m_currentGpsPoint;
         }
@@ -131,11 +134,11 @@ void Walk::updateToSegment(const tWalkDirection direction)
 
     const UtmDataVector& utmPoints = gpsData->getUTMPoints();
 
-    if (gpsData->getTotalGpsPoints() > 0
-            && static_cast<int>(utmPoints.size()) > 0)
+    const int numSegments = static_cast<int>(utmPoints.size());
+
+    if (gpsData->getTotalGpsPoints() > 0 && numSegments > 0)
     {
-        if (m_firstPoint
-                || m_currentGpsSegment < static_cast<int>(utmPoints.size()) - 1)
+        if (m_firstPoint || m_currentGpsSegment < (numSegments - 1))
         {
             if (m_firstPoint)
             {
@@ -149,7 +152,7 @@ void Walk::updateToSegment(const tWalkDirection direction)
             {
                 if (m_currentGpsSegment == 0)
                 {
-                    m_currentGpsSegment = static_cast<int>(utmPoints.size());
+                    m_currentGpsSegment = numSegments;
                 }
                 --m_currentGpsSegment;
             }
@@ -192,10 +195,16 @@ void Walk::draw()
         return;
     }
 
-    const UtmDataVector& utmPoints = gpsData->getUTMPoints();
-    const UtmSegment& currentSegment = utmPoints[m_currentGpsSegment];
+    const UtmDataVector& utmData = gpsData->getUTMPoints();
+    if (m_currentGpsSegment >= static_cast<int>(utmData.size()))
+    {
+        return;
+    }
+    const UtmSegment& currentSegment = utmData[m_currentGpsSegment];
 
-    if (utmPoints.size() > 0 && currentSegment.size() > 0)
+    if (utmData.size() > 0
+            && currentSegment.size() > 0
+            && m_currentGpsPoint < static_cast<int>(currentSegment.size()))
 	{
         // ---------------------------------------------------------------------
 		// Draw Gps data
