@@ -692,22 +692,21 @@ void DrawingLifeApp::soundUpdate()
                 m_soundPlayers[m_sCurrentSoundFile].play();
             }
         }
-        else
+        else if (!m_soundPlayers[m_sCurrentSoundFile].getIsPlaying())
         {
-            if ( ! m_soundPlayers[m_sCurrentSoundFile].getIsPlaying())
+            ofSoundPlayer& player = m_soundPlayers[m_sCurrentSoundFile];
+            player.stop();
+            player.setPosition(0.0);
+            if (m_sCurrentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
             {
-                m_soundPlayers[m_sCurrentSoundFile].stop();
-                m_soundPlayers[m_sCurrentSoundFile].setPosition(0.0);
-                if (m_sCurrentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
-                {
-                    ++m_sCurrentSoundFile;
-                }
-                else
-                {
-                    m_sCurrentSoundFile = 0;
-                }
-                m_soundPlayers[m_sCurrentSoundFile].play();
+                ++m_sCurrentSoundFile;
             }
+            else
+            {
+                m_sCurrentSoundFile = 0;
+            }
+
+            m_soundPlayers[m_sCurrentSoundFile].play();
         }
     }
 }
