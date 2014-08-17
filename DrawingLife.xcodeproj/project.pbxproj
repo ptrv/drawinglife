@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		D089169D19A134F200AE74F1 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D089169B19A134F200AE74F1 /* sqlite3.c */; };
 		D0E1DEED13DC309C00268AD9 /* Walk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DED913DC309C00268AD9 /* Walk.cpp */; };
 		D0E1DEEE13DC309C00268AD9 /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DEDB13DC309C00268AD9 /* Timeline.cpp */; };
 		D0E1DEEF13DC309C00268AD9 /* MagicBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DEDD13DC309C00268AD9 /* MagicBox.cpp */; };
@@ -26,9 +27,17 @@
 		D0E1DF4D13DC32EB00268AD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DF4913DC32EB00268AD9 /* tinyxml.cpp */; };
 		D0E1DF4E13DC32EB00268AD9 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DF4B13DC32EB00268AD9 /* tinyxmlerror.cpp */; };
 		D0E1DF4F13DC32EB00268AD9 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DF4C13DC32EB00268AD9 /* tinyxmlparser.cpp */; };
-		D0F86E8214DEB98F000EC12D /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D0F86E7F14DEB98F000EC12D /* sqlite3.c */; };
+		D0EC48D9199A85ED00AC8B2E /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0EC48D8199A85D400AC8B2E /* openFrameworksDebug.a */; };
+		D0EC48E2199A866200AC8B2E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0EC48E1199A866200AC8B2E /* Accelerate.framework */; };
+		D0EC48E4199A867600AC8B2E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0EC48E3199A867600AC8B2E /* QTKit.framework */; };
+		D0EC48E6199A868700AC8B2E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0EC48E5199A868700AC8B2E /* CoreVideo.framework */; };
+		D0EC48F4199A89E100AC8B2E /* DataLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48E7199A89E100AC8B2E /* DataLoader.cpp */; };
+		D0EC48F5199A89E100AC8B2E /* DrawingLifeDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48E9199A89E100AC8B2E /* DrawingLifeDrawable.cpp */; };
+		D0EC48F6199A89E100AC8B2E /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48EB199A89E100AC8B2E /* Logger.cpp */; };
+		D0EC48F7199A89E100AC8B2E /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48EE199A89E100AC8B2E /* Utils.cpp */; };
+		D0EC48F8199A89E100AC8B2E /* ViewHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48F0199A89E100AC8B2E /* ViewHelper.cpp */; };
+		D0EC48F9199A89E100AC8B2E /* ZoomAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48F2199A89E100AC8B2E /* ZoomAnimation.cpp */; };
 		D0F86E8C14DEBA01000EC12D /* libGeographicD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F86E8B14DEB9EC000EC12D /* libGeographicD.a */; };
-		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -46,6 +55,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D0EC48D7199A85D400AC8B2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0EC48D3199A85D400AC8B2E /* openFrameworksLib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4B27C1510CBEB8E00536013;
+			remoteInfo = openFrameworks;
+		};
+		D0EC48DA199A85F500AC8B2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D0EC48D3199A85D400AC8B2E /* openFrameworksLib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
+			remoteInfo = openFrameworks;
+		};
 		D0F86E8A14DEB9EC000EC12D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */;
@@ -59,20 +82,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC045055464E500DB518D;
 			remoteInfo = GeographicLibrary;
-		};
-		E4328147138ABC890047C5CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E4B27C1510CBEB8E00536013;
-			remoteInfo = openFrameworks;
-		};
-		E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
-			remoteInfo = openFrameworks;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -91,6 +100,8 @@
 
 /* Begin PBXFileReference section */
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		D089169B19A134F200AE74F1 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs_mac/sqlite3/sqlite3.c; sourceTree = "<group>"; };
+		D089169C19A134F200AE74F1 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs_mac/sqlite3/sqlite3.h; sourceTree = "<group>"; };
 		D0E1DED813DC309C00268AD9 /* Walk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Walk.h; sourceTree = "<group>"; };
 		D0E1DED913DC309C00268AD9 /* Walk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Walk.cpp; sourceTree = "<group>"; };
 		D0E1DEDA13DC309C00268AD9 /* Timeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timeline.h; sourceTree = "<group>"; };
@@ -127,13 +138,30 @@
 		D0E1DF4A13DC32EB00268AD9 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinyxml.h; path = ../../../addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SOURCE_ROOT; };
 		D0E1DF4B13DC32EB00268AD9 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlerror.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
 		D0E1DF4C13DC32EB00268AD9 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SOURCE_ROOT; };
-		D0F86E7F14DEB98F000EC12D /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs_mac/sqlite3/sqlite3.c; sourceTree = "<group>"; };
-		D0F86E8014DEB98F000EC12D /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs_mac/sqlite3/sqlite3.h; sourceTree = "<group>"; };
-		D0F86E8114DEB98F000EC12D /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = libs_mac/sqlite3/sqlite3ext.h; sourceTree = "<group>"; };
+		D0EC48D3199A85D400AC8B2E /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = "<group>"; };
+		D0EC48DC199A860D00AC8B2E /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = "<group>"; };
+		D0EC48DD199A860D00AC8B2E /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/Debug.xcconfig; sourceTree = "<group>"; };
+		D0EC48DE199A860E00AC8B2E /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/Release.xcconfig; sourceTree = "<group>"; };
+		D0EC48DF199A860E00AC8B2E /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Shared.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/Shared.xcconfig; sourceTree = "<group>"; };
+		D0EC48E1199A866200AC8B2E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		D0EC48E3199A867600AC8B2E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		D0EC48E5199A868700AC8B2E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		D0EC48E7199A89E100AC8B2E /* DataLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataLoader.cpp; sourceTree = "<group>"; };
+		D0EC48E8199A89E100AC8B2E /* DataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataLoader.h; sourceTree = "<group>"; };
+		D0EC48E9199A89E100AC8B2E /* DrawingLifeDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawingLifeDrawable.cpp; sourceTree = "<group>"; };
+		D0EC48EA199A89E100AC8B2E /* DrawingLifeDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingLifeDrawable.h; sourceTree = "<group>"; };
+		D0EC48EB199A89E100AC8B2E /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		D0EC48EC199A89E100AC8B2E /* ofxPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPoint.h; sourceTree = "<group>"; };
+		D0EC48ED199A89E100AC8B2E /* ofxRectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRectangle.h; sourceTree = "<group>"; };
+		D0EC48EE199A89E100AC8B2E /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		D0EC48EF199A89E100AC8B2E /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		D0EC48F0199A89E100AC8B2E /* ViewHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ViewHelper.cpp; sourceTree = "<group>"; };
+		D0EC48F1199A89E100AC8B2E /* ViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHelper.h; sourceTree = "<group>"; };
+		D0EC48F2199A89E100AC8B2E /* ZoomAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZoomAnimation.cpp; sourceTree = "<group>"; };
+		D0EC48F3199A89E100AC8B2E /* ZoomAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomAnimation.h; sourceTree = "<group>"; };
 		D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs_mac/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
 		D0F86E9C14DFF226000EC12D /* Integrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Integrator.h; sourceTree = "<group>"; };
 		D0FE245713DC3C9500AAA6CE /* AppSettings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = AppSettings.xml; path = bin/data/AppSettings.xml; sourceTree = "<group>"; };
-		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -149,7 +177,6 @@
 		E4C2424410CC5A17004149E2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		E4C2424510CC5A17004149E2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,9 +185,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC48E6199A868700AC8B2E /* CoreVideo.framework in Frameworks */,
+				D0EC48E4199A867600AC8B2E /* QTKit.framework in Frameworks */,
+				D0EC48D9199A85ED00AC8B2E /* openFrameworksDebug.a in Frameworks */,
 				D0F86E8C14DEBA01000EC12D /* libGeographicD.a in Frameworks */,
+				D0EC48E2199A866200AC8B2E /* Accelerate.framework in Frameworks */,
+				E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */,
 				E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */,
-				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
 				E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */,
 				E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */,
@@ -170,7 +201,6 @@
 				E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */,
 				E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */,
 				E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */,
-				E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */,
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 			);
@@ -190,6 +220,9 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0EC48E5199A868700AC8B2E /* CoreVideo.framework */,
+				D0EC48E3199A867600AC8B2E /* QTKit.framework */,
+				D0EC48E1199A866200AC8B2E /* Accelerate.framework */,
 				E4C2424410CC5A17004149E2 /* AppKit.framework */,
 				E4C2424510CC5A17004149E2 /* Cocoa.framework */,
 				E4C2424610CC5A17004149E2 /* IOKit.framework */,
@@ -212,6 +245,15 @@
 				BBAB23BE13894E4700AA2426 /* GLUT.framework */,
 			);
 			name = "3rd party frameworks";
+			sourceTree = "<group>";
+		};
+		D089169A19A134E200AE74F1 /* sqlite3 */ = {
+			isa = PBXGroup;
+			children = (
+				D089169B19A134F200AE74F1 /* sqlite3.c */,
+				D089169C19A134F200AE74F1 /* sqlite3.h */,
+			);
+			name = sqlite3;
 			sourceTree = "<group>";
 		};
 		D0E1DEF813DC30B900268AD9 /* ofxTimer */ = {
@@ -274,28 +316,18 @@
 			name = libs;
 			sourceTree = "<group>";
 		};
-		D0F86E7E14DEB960000EC12D /* sqlite3 */ = {
+		D0EC48D4199A85D400AC8B2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D0F86E7F14DEB98F000EC12D /* sqlite3.c */,
-				D0F86E8014DEB98F000EC12D /* sqlite3.h */,
-				D0F86E8114DEB98F000EC12D /* sqlite3ext.h */,
+				D0EC48D8199A85D400AC8B2E /* openFrameworksDebug.a */,
 			);
-			name = sqlite3;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		D0F86E8414DEB9EC000EC12D /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				D0F86E8B14DEB9EC000EC12D /* libGeographicD.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E4328144138ABC890047C5CB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E4328148138ABC890047C5CB /* openFrameworksDebug.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -318,7 +350,7 @@
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				D0E1DEF813DC30B900268AD9 /* ofxTimer */,
 				D0E1DEF913DC30C300268AD9 /* sqlite3x */,
-				D0F86E7E14DEB960000EC12D /* sqlite3 */,
+				D089169A19A134E200AE74F1 /* sqlite3 */,
 				D0E1DEFA13DC30D600268AD9 /* GeographicLibrary */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
@@ -330,6 +362,19 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D0EC48E7199A89E100AC8B2E /* DataLoader.cpp */,
+				D0EC48E8199A89E100AC8B2E /* DataLoader.h */,
+				D0EC48E9199A89E100AC8B2E /* DrawingLifeDrawable.cpp */,
+				D0EC48EA199A89E100AC8B2E /* DrawingLifeDrawable.h */,
+				D0EC48EB199A89E100AC8B2E /* Logger.cpp */,
+				D0EC48EC199A89E100AC8B2E /* ofxPoint.h */,
+				D0EC48ED199A89E100AC8B2E /* ofxRectangle.h */,
+				D0EC48EE199A89E100AC8B2E /* Utils.cpp */,
+				D0EC48EF199A89E100AC8B2E /* Utils.h */,
+				D0EC48F0199A89E100AC8B2E /* ViewHelper.cpp */,
+				D0EC48F1199A89E100AC8B2E /* ViewHelper.h */,
+				D0EC48F2199A89E100AC8B2E /* ZoomAnimation.cpp */,
+				D0EC48F3199A89E100AC8B2E /* ZoomAnimation.h */,
 				D0F86E9C14DFF226000EC12D /* Integrator.h */,
 				D0E1DED813DC309C00268AD9 /* Walk.h */,
 				D0E1DED913DC309C00268AD9 /* Walk.cpp */,
@@ -360,8 +405,11 @@
 		E4EEC9E9138DF44700A80321 /* openFrameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */,
-				E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */,
+				D0EC48DC199A860D00AC8B2E /* CoreOF.xcconfig */,
+				D0EC48DD199A860D00AC8B2E /* Debug.xcconfig */,
+				D0EC48DE199A860E00AC8B2E /* Release.xcconfig */,
+				D0EC48DF199A860E00AC8B2E /* Shared.xcconfig */,
+				D0EC48D3199A85D400AC8B2E /* openFrameworksLib.xcodeproj */,
 			);
 			name = openFrameworks;
 			sourceTree = "<group>";
@@ -381,8 +429,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				D0EC48DB199A85F500AC8B2E /* PBXTargetDependency */,
 				D0F86E8F14DEBCB1000EC12D /* PBXTargetDependency */,
-				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
 			name = DrawingLife;
 			productName = myOFApp;
@@ -394,6 +442,8 @@
 /* Begin PBXProject section */
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "DrawingLife" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
@@ -413,8 +463,8 @@
 					ProjectRef = D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */;
 				},
 				{
-					ProductGroup = E4328144138ABC890047C5CB /* Products */;
-					ProjectRef = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
+					ProductGroup = D0EC48D4199A85D400AC8B2E /* Products */;
+					ProjectRef = D0EC48D3199A85D400AC8B2E /* openFrameworksLib.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -425,18 +475,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		D0EC48D8199A85D400AC8B2E /* openFrameworksDebug.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = openFrameworksDebug.a;
+			remoteRef = D0EC48D7199A85D400AC8B2E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D0F86E8B14DEB9EC000EC12D /* libGeographicD.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libGeographicD.a;
 			remoteRef = D0F86E8A14DEB9EC000EC12D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E4328148138ABC890047C5CB /* openFrameworksDebug.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = openFrameworksDebug.a;
-			remoteRef = E4328147138ABC890047C5CB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -462,12 +512,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC48F4199A89E100AC8B2E /* DataLoader.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				D0E1DEED13DC309C00268AD9 /* Walk.cpp in Sources */,
 				D0E1DEEE13DC309C00268AD9 /* Timeline.cpp in Sources */,
+				D0EC48F5199A89E100AC8B2E /* DrawingLifeDrawable.cpp in Sources */,
+				D0EC48F8199A89E100AC8B2E /* ViewHelper.cpp in Sources */,
 				D0E1DEEF13DC309C00268AD9 /* MagicBox.cpp in Sources */,
 				D0E1DEF013DC309C00268AD9 /* LocationImage.cpp in Sources */,
 				D0E1DEF113DC309C00268AD9 /* GpsData.cpp in Sources */,
+				D089169D19A134F200AE74F1 /* sqlite3.c in Sources */,
 				D0E1DEF213DC309C00268AD9 /* DrawingLifeApp.cpp in Sources */,
 				D0E1DEF313DC309C00268AD9 /* DBReader.cpp in Sources */,
 				D0E1DEF413DC309C00268AD9 /* AppSettings.cpp in Sources */,
@@ -475,28 +529,30 @@
 				D0E1DF0E13DC311500268AD9 /* sqlite3x_connection.cpp in Sources */,
 				D0E1DF0F13DC311500268AD9 /* sqlite3x_exception.cpp in Sources */,
 				D0E1DF1013DC311500268AD9 /* sqlite3x_reader.cpp in Sources */,
+				D0EC48F6199A89E100AC8B2E /* Logger.cpp in Sources */,
 				D0E1DF1113DC311500268AD9 /* sqlite3x_transaction.cpp in Sources */,
 				D0E1DF1513DC312D00268AD9 /* TimedCounter.cpp in Sources */,
 				D0E1DF4813DC32E200268AD9 /* ofxXmlSettings.cpp in Sources */,
+				D0EC48F7199A89E100AC8B2E /* Utils.cpp in Sources */,
 				D0E1DF4D13DC32EB00268AD9 /* tinyxml.cpp in Sources */,
 				D0E1DF4E13DC32EB00268AD9 /* tinyxmlerror.cpp in Sources */,
 				D0E1DF4F13DC32EB00268AD9 /* tinyxmlparser.cpp in Sources */,
-				D0F86E8214DEB98F000EC12D /* sqlite3.c in Sources */,
+				D0EC48F9199A89E100AC8B2E /* ZoomAnimation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D0EC48DB199A85F500AC8B2E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = openFrameworks;
+			targetProxy = D0EC48DA199A85F500AC8B2E /* PBXContainerItemProxy */;
+		};
 		D0F86E8F14DEBCB1000EC12D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GeographicLibrary;
 			targetProxy = D0F86E8E14DEBCB1000EC12D /* PBXContainerItemProxy */;
-		};
-		E4EEB9AC138B136A00A80321 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = openFrameworks;
-			targetProxy = E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -513,7 +569,6 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
@@ -521,16 +576,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(OF_CORE_HEADERS)",
-					"libs_mac/geographiclib-1.1/include",
-				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",
 				);
-				OTHER_LDFLAGS = "$(OF_CORE_LIBS)";
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.9;
 				USER_HEADER_SEARCH_PATHS = "$(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxXmlSettings/src $(OF_PATH)/addons/ofxXmlSettings/libs libs_mac/geographiclib-1.1/include";
 			};
 			name = Debug;
@@ -547,7 +598,6 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_UNROLL_LOOPS = YES;
@@ -557,17 +607,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
-					"libs_mac/geographiclib-1.1/include",
-					"$(OF_CORE_HEADERS)",
-					"$(OF_PATH)/addons/ofxXmlSettings/src",
-					"$(OF_PATH)/addons/ofxXmlSettings/libs",
-				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",
 				);
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.9;
 				USER_HEADER_SEARCH_PATHS = "$(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxXmlSettings/src $(OF_PATH)/addons/ofxXmlSettings/libs libs_mac/geographiclib-1.1/include";
 			};
 			name = Release;
@@ -581,17 +626,11 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G4;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				HEADER_SEARCH_PATHS = (
-					"$(OF_CORE_HEADERS)",
-					"libs_mac/geographiclib-1.1/include",
-				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -658,8 +697,17 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__MACOSX_CORE__",
+					"-lpthread",
+					"-D__ASSERTMACROS__",
+					"-mtune=native",
+					"-DSPATIALITE_EXTENSION",
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = DrawingLifeDebug;
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -676,15 +724,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G4;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				HEADER_SEARCH_PATHS = (
-					"$(OF_CORE_HEADERS)",
-					"$(OF_PATH)/addons/ofxXmlSettings/src",
-					"$(OF_PATH)/addons/ofxXmlSettings/libs",
-					"libs_mac/geographiclib-1.1/include",
-				);
+				GCC_VERSION = "";
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -751,8 +791,17 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__MACOSX_CORE__",
+					"-lpthread",
+					"-D__ASSERTMACROS__",
+					"-mtune=native",
+					"-DSPATIALITE_EXTENSION",
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = DrawingLife;
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

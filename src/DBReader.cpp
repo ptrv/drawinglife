@@ -15,8 +15,10 @@
 #include "sqlite3x.hpp"
 using namespace sqlite3x;
 
-#include <sqlite3.h>
+#ifdef TARGET_LINUX
+#include <spatialite/sqlite.h>
 #include <spatialite.h>
+#endif
 
 //------------------------------------------------------------------------------
 #define CATCHDBERRORS                                                           \
@@ -51,18 +53,25 @@ DBReader::~DBReader()
 
 bool DBReader::setupDbConnection()
 {
-
+#ifdef TARGET_LINUX
     spatialite_init(0);
     ofLogVerbose(Logger::DB_READER) << "Spatialite version: "
-                                      << spatialite_version();
-
-	bool result = false;
-	try {
-        m_dbconn.reset(new sqlite3_connection(m_dbPath.c_str()));
-		result = true;
-	}
-	CATCHDBERRORS
-	return result;
+                                    << spatialite_version()
+                                    << " db path:" << m_dbPath;
+#endif
+    try
+    {
+        m_dbconn.reset(new sqlite3_connection(ofToDataPath(m_dbPath, true).c_str()));
+#ifdef TARGET_OSX
+        m_dbconn->enable_load_extension(true);
+        std::string libspatialitePath =
+            ofToDataPath("../../libs_mac/libspatialite/mod_spatialite.dylib", true);
+        m_dbconn->executenonquery("SELECT load_extension('" + libspatialitePath + "')");
+#endif
+        return true;
+    }
+    CATCHDBERRORS
+    return false;
 }
 
 //------------------------------------------------------------------------------

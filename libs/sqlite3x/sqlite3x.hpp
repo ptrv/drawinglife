@@ -43,6 +43,8 @@ namespace sqlite3x {
 		sqlite3_connection(const wchar_t *db);
 		~sqlite3_connection();
 
+        void enable_load_extension(bool enable);
+
 		void open(const char *db);
 		void open(const wchar_t *db);
 		void close();

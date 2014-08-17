@@ -54,6 +54,13 @@ void sqlite3_connection::close() {
 	}
 }
 
+void sqlite3_connection::enable_load_extension(const bool enable)
+{
+    if(!this->db) throw database_error("database is not open");
+    if (sqlite3_enable_load_extension(this->db, enable ? 1 : 0) != SQLITE_OK)
+        throw database_error("unable to enable extension");
+}
+
 long long sqlite3_connection::insertid() {
 	if(!this->db) throw database_error("database is not open");
 	return sqlite3_last_insert_rowid(this->db);

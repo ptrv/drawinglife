@@ -7,7 +7,8 @@
 
 #include "GpsData.h"
 #include <string>
-#include "sqlite3x.hpp"
+
+namespace sqlite3x { class sqlite3_connection; }
 
 class DBReader
 {
@@ -52,7 +53,6 @@ private:
 
 	string m_dbPath;
     boost::scoped_ptr<sqlite3x::sqlite3_connection> m_dbconn;
-//    boost::scoped_ptr<sqlite3x::sqlite3_transaction> m_trans;
 
 	bool m_useSpeed;
 
