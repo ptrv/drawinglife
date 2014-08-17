@@ -16,7 +16,7 @@
 using namespace sqlite3x;
 
 #ifdef TARGET_LINUX
-#include <spatialite/sqlite.h>
+#include "sqlite3.h"
 #include <spatialite.h>
 #endif
 
