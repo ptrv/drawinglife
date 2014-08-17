@@ -65,7 +65,7 @@ bool DBReader::setupDbConnection()
 #ifdef TARGET_OSX
         m_dbconn->enable_load_extension(true);
         std::string libspatialitePath =
-            ofToDataPath("../../libs_mac/libspatialite/mod_spatialite.dylib", true);
+            ofToDataPath("libspatialite_mac/mod_spatialite.dylib", true);
         m_dbconn->executenonquery("SELECT load_extension('" + libspatialitePath + "')");
 #endif
         return true;
