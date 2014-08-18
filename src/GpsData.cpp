@@ -296,7 +296,7 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
 
 GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 {
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM();
+    const TransverseMercatorExact& TMS = GeoUtils::getTransversMercatorExact();
     Math::real gamma, k;
 
     GpsPoint p;
