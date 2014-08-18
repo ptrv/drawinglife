@@ -1,7 +1,5 @@
 #include "LocationImage.h"
-#include "GeographicLib/TransverseMercatorExact.hpp"
-
-using namespace GeographicLib;
+#include "GeoUtils.h"
 
 //------------------------------------------------------------------------------
 
@@ -16,7 +14,7 @@ m_image(image)
     m_utm.x = 0.0;
     m_utm.y = 0.0;
 
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    const TransverseMercatorExact& TMS = TRANSVERSE_MERCATOR();
     Math::real minGamma, minK;//, maxGamma, maxK;
 
     TMS.Forward(Math::real(12.0), lid.gps.lat, lid.gps.lon, m_utm.x, m_utm.y,

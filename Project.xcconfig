@@ -6,12 +6,13 @@ OF_PATH = ../../..
 #include "../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig"
 
 BOOST_INCLUDE = /usr/local/opt/boost/include
-GEOGRAPHICLIB_INCLUDE = "libs_mac/geographiclib-1.1/include"
+GEOGRAPHICLIB_INCLUDE = "libs_mac/geographiclib-1.37/include"
+GEOGRAPHICLIB_LIB = "libs_mac/geographiclib-1.37/libs/osx/libGeographic.a"
 
 //ICONS
 ICON_NAME_DEBUG = icon-debug.icns
 ICON_NAME_RELEASE = icon.icns
 ICON_FILE_PATH = $(OF_PATH)/libs/openFrameworksCompiled/project/osx/
 
-OTHER_LDFLAGS = $(OF_CORE_LIBS) 
+OTHER_LDFLAGS = $(OF_CORE_LIBS) $(GEOGRAPHICLIB_LIB)
 HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(OF_PATH)/addons/ofxXmlSettings/src $(OF_PATH)/addons/ofxXmlSettings/libs libs/sqlite3 $(BOOST_INCLUDE) $(GEOGRAPHICLIB_INCLUDE)

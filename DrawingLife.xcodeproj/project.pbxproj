@@ -37,7 +37,6 @@
 		D0EC48F7199A89E100AC8B2E /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48EE199A89E100AC8B2E /* Utils.cpp */; };
 		D0EC48F8199A89E100AC8B2E /* ViewHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48F0199A89E100AC8B2E /* ViewHelper.cpp */; };
 		D0EC48F9199A89E100AC8B2E /* ZoomAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC48F2199A89E100AC8B2E /* ZoomAnimation.cpp */; };
-		D0F86E8C14DEBA01000EC12D /* libGeographicD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F86E8B14DEB9EC000EC12D /* libGeographicD.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -69,20 +68,6 @@
 			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
 			remoteInfo = openFrameworks;
 		};
-		D0F86E8A14DEB9EC000EC12D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC046055464E500DB518D;
-			remoteInfo = GeographicLibrary;
-		};
-		D0F86E8E14DEBCB1000EC12D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC045055464E500DB518D;
-			remoteInfo = GeographicLibrary;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -102,6 +87,7 @@
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		D08916A219A1483800AE74F1 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs/sqlite3/sqlite3.c; sourceTree = "<group>"; };
 		D08916A319A1483800AE74F1 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs/sqlite3/sqlite3.h; sourceTree = "<group>"; };
+		D08916B619A29B3900AE74F1 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
 		D0E1DED813DC309C00268AD9 /* Walk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Walk.h; sourceTree = "<group>"; };
 		D0E1DED913DC309C00268AD9 /* Walk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Walk.cpp; sourceTree = "<group>"; };
 		D0E1DEDA13DC309C00268AD9 /* Timeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timeline.h; sourceTree = "<group>"; };
@@ -156,7 +142,6 @@
 		D0EC48F1199A89E100AC8B2E /* ViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHelper.h; sourceTree = "<group>"; };
 		D0EC48F2199A89E100AC8B2E /* ZoomAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZoomAnimation.cpp; sourceTree = "<group>"; };
 		D0EC48F3199A89E100AC8B2E /* ZoomAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomAnimation.h; sourceTree = "<group>"; };
-		D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeographicLibrary.xcodeproj; path = "libs_mac/geographiclib-1.1/xcode/GeographicLibrary.xcodeproj"; sourceTree = "<group>"; };
 		D0F86E9C14DFF226000EC12D /* Integrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Integrator.h; sourceTree = "<group>"; };
 		D0FE245713DC3C9500AAA6CE /* AppSettings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = AppSettings.xml; path = bin/data/AppSettings.xml; sourceTree = "<group>"; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -185,7 +170,6 @@
 				D0EC48E6199A868700AC8B2E /* CoreVideo.framework in Frameworks */,
 				D0EC48E4199A867600AC8B2E /* QTKit.framework in Frameworks */,
 				D0EC48D9199A85ED00AC8B2E /* openFrameworksDebug.a in Frameworks */,
-				D0F86E8C14DEBA01000EC12D /* libGeographicD.a in Frameworks */,
 				D0EC48E2199A866200AC8B2E /* Accelerate.framework in Frameworks */,
 				E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */,
 				E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */,
@@ -279,7 +263,6 @@
 		D0E1DEFA13DC30D600268AD9 /* GeographicLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */,
 			);
 			name = GeographicLibrary;
 			sourceTree = "<group>";
@@ -321,14 +304,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D0F86E8414DEB9EC000EC12D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D0F86E8B14DEB9EC000EC12D /* libGeographicD.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		E45BE5980E8CC70C009D7055 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,6 +334,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D08916B619A29B3900AE74F1 /* GeoUtils.h */,
 				D0EC48E7199A89E100AC8B2E /* DataLoader.cpp */,
 				D0EC48E8199A89E100AC8B2E /* DataLoader.h */,
 				D0EC48E9199A89E100AC8B2E /* DrawingLifeDrawable.cpp */,
@@ -424,7 +400,6 @@
 			);
 			dependencies = (
 				D0EC48DB199A85F500AC8B2E /* PBXTargetDependency */,
-				D0F86E8F14DEBCB1000EC12D /* PBXTargetDependency */,
 			);
 			name = DrawingLife;
 			productName = myOFApp;
@@ -453,10 +428,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = D0F86E8414DEB9EC000EC12D /* Products */;
-					ProjectRef = D0F86E8314DEB9EC000EC12D /* GeographicLibrary.xcodeproj */;
-				},
-				{
 					ProductGroup = D0EC48D4199A85D400AC8B2E /* Products */;
 					ProjectRef = D0EC48D3199A85D400AC8B2E /* openFrameworksLib.xcodeproj */;
 				},
@@ -474,13 +445,6 @@
 			fileType = archive.ar;
 			path = openFrameworksDebug.a;
 			remoteRef = D0EC48D7199A85D400AC8B2E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D0F86E8B14DEB9EC000EC12D /* libGeographicD.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGeographicD.a;
-			remoteRef = D0F86E8A14DEB9EC000EC12D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -542,11 +506,6 @@
 			isa = PBXTargetDependency;
 			name = openFrameworks;
 			targetProxy = D0EC48DA199A85F500AC8B2E /* PBXContainerItemProxy */;
-		};
-		D0F86E8F14DEBCB1000EC12D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GeographicLibrary;
-			targetProxy = D0F86E8E14DEBCB1000EC12D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -4,15 +4,13 @@
 
 #include "DrawingLifeIncludes.h"
 #include "GpsData.h"
-#include "GeographicLib/TransverseMercatorExact.hpp"
+#include "GeoUtils.h"
 
 #if defined (WIN32)
 #undef max
 #undef min
 #endif
 #include <limits>
-
-using namespace GeographicLib;
 
 //------------------------------------------------------------------------------
 
@@ -73,7 +71,7 @@ void GpsData::setGpsData(const GpsSegmentVector& segments,
 	m_segments = segments;
     m_minLonLat = minLonLat;
     m_maxLonLat = maxLonLat;
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    const TransverseMercatorExact& TMS = TRANSVERSE_MERCATOR();
     Math::real minGamma, minK, maxGamma, maxK;
     // -------------------------------------------------------------------------
     // Calculating central meridian for projection.
@@ -266,7 +264,7 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
     const GpsRegion* regions = settings.getRegions();
     UtmPoint utmP;
     Math::real gamma, k;
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    const TransverseMercatorExact& TMS = TRANSVERSE_MERCATOR();
 
     if (settings.isRegionsOn())
     {
@@ -298,7 +296,7 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
 
 GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 {
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM();
     Math::real gamma, k;
 
     GpsPoint p;
@@ -316,7 +314,7 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 
 void GpsData::calculateUtmPoints(double lon0)
 {
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    const TransverseMercatorExact& TMS = TRANSVERSE_MERCATOR();
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
     BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
@@ -541,7 +539,7 @@ void GpsData::setMinMaxValuesUTM()
 
 void GpsData::calculateUtmPoints()
 {
-    const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
+    const TransverseMercatorExact& TMS = TRANSVERSE_MERCATOR();
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
     BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
