@@ -71,20 +71,13 @@ void GpsData::setGpsData(const GpsSegmentVector& segments,
 	m_segments = segments;
     m_minLonLat = minLonLat;
     m_maxLonLat = maxLonLat;
-    const TransverseMercatorExact& TMS = GeoUtils::getTransversMercatorExact();
-    Math::real minGamma, minK, maxGamma, maxK;
     // -------------------------------------------------------------------------
     // Calculating central meridian for projection.
     m_lon0 = m_minLonLat.x + (m_maxLonLat.x - m_minLonLat.x) / 2;
     // -------------------------------------------------------------------------
-    TMS.Forward(Math::real(m_lon0),
-                m_minLonLat.y, m_minLonLat.x,
-                m_minUtm.x, m_minUtm.y,
-                minGamma, minK);
-    TMS.Forward(Math::real(m_lon0),
-                m_maxLonLat.y, m_maxLonLat.x,
-                m_maxUtm.x, m_maxUtm.y,
-                maxGamma, maxK);
+    m_minUtm = GeoUtils::LatLon2Utm(m_lon0, m_minLonLat.y, m_minLonLat.x);
+
+    m_maxUtm = GeoUtils::LatLon2Utm(m_lon0, m_maxLonLat.y, m_maxLonLat.x);
 	m_user = user;
 	calculateUtmPoints();
     normalizeUtmPoints();
@@ -263,8 +256,6 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
 {
     const GpsRegion* regions = settings.getRegions();
     UtmPoint utmP;
-    Math::real gamma, k;
-    const TransverseMercatorExact& TMS = GeoUtils::getTransversMercatorExact();
 
     if (settings.isRegionsOn())
     {
@@ -277,15 +268,13 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
                 break;
             }
         }
-        TMS.Forward(Math::real(lon0), lat, lon, utmP.x, utmP.y, gamma, k);
+        utmP = GeoUtils::LatLon2Utm(lon0, lat, lon);
         utmP.lon0 = lon0;
 
     }
     else
     {
-
-        TMS.Forward(Math::real(m_lon0Global), lat, lon, utmP.x, utmP.y,
-                    gamma, k);
+        utmP = GeoUtils::LatLon2Utm(m_lon0Global, lat, lon);
         utmP.lon0 = m_lon0Global;
     }
 
@@ -296,16 +285,11 @@ UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
 
 GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 {
-    const TransverseMercatorExact& TMS = GeoUtils::getTransversMercatorExact();
-    Math::real gamma, k;
-
     GpsPoint p;
-    double lat = 0.0;
-    double lon = 0.0;
     // Works just for lon > -35 and lon < 65,
     // see AppSettings.xml settings->meridian->region3
-    TMS.Reverse(Math::real(12.0), utmP.x, utmP.y, lat, lon, gamma, k);
-    p.setDataFromLatLon(lat, lon);
+    ofxPoint<double> latLon = GeoUtils::Utm2LatLon(12.0, utmP.x, utmP.y);
+    p.setDataFromLatLon(latLon.y, latLon.x);
 
     return p;
 }
@@ -314,7 +298,6 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 
 void GpsData::calculateUtmPoints(double lon0)
 {
-    const TransverseMercatorExact& TMS = GeoUtils::getTransversMercatorExact();
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
     BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
@@ -323,12 +306,8 @@ void GpsData::calculateUtmPoints(double lon0)
         utmVec.reserve(rSegment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
-            Math::real gamma, k;
-            UtmPoint utmP;
-            TMS.Forward(Math::real(m_lon0Global),
-                        rPoint.getLatitude(),
-                        rPoint.getLongitude(),
-                        utmP.x, utmP.y, gamma, k);
+            UtmPoint utmP = GeoUtils::LatLon2Utm(
+                m_lon0Global, rPoint.getLatitude(), rPoint.getLongitude());
             utmVec.push_back(utmP);
         }
         m_utmPoints.push_back(utmVec);
@@ -341,7 +320,6 @@ void GpsData::calculateUtmPointsGlobalLon(bool /*regionsOn*/)
 {
     m_indices.clear();
     int counter = 0;
-    //const TransverseMercatorExact& TMS = TransverseMercatorExact::UTM;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 
@@ -539,7 +517,6 @@ void GpsData::setMinMaxValuesUTM()
 
 void GpsData::calculateUtmPoints()
 {
-    const TransverseMercatorExact& TMS = GeoUtils::getTransversMercatorExact();
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
     BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
@@ -548,13 +525,8 @@ void GpsData::calculateUtmPoints()
         utmVec.reserve( rSegment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
-            Math::real gamma, k;
-            UtmPoint utmP;
-            TMS.Forward(Math::real(m_lon0),
-                        rPoint.getLatitude(),
-                        rPoint.getLongitude(),
-                        utmP.x, utmP.y, gamma, k);
-
+            UtmPoint utmP = GeoUtils::LatLon2Utm(
+                m_lon0, rPoint.getLatitude(), rPoint.getLongitude());
             utmP.speed = rPoint.getSpeed();
 
             utmVec.push_back(utmP);
