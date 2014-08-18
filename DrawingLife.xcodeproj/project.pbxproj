@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		D08916A419A1483800AE74F1 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D08916A219A1483800AE74F1 /* sqlite3.c */; };
+		D08916B819A2C22E00AE74F1 /* GeoUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D08916B719A2C22E00AE74F1 /* GeoUtils.cpp */; };
 		D0E1DEED13DC309C00268AD9 /* Walk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DED913DC309C00268AD9 /* Walk.cpp */; };
 		D0E1DEEE13DC309C00268AD9 /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DEDB13DC309C00268AD9 /* Timeline.cpp */; };
 		D0E1DEEF13DC309C00268AD9 /* MagicBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DEDD13DC309C00268AD9 /* MagicBox.cpp */; };
@@ -88,6 +89,7 @@
 		D08916A219A1483800AE74F1 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs/sqlite3/sqlite3.c; sourceTree = "<group>"; };
 		D08916A319A1483800AE74F1 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs/sqlite3/sqlite3.h; sourceTree = "<group>"; };
 		D08916B619A29B3900AE74F1 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
+		D08916B719A2C22E00AE74F1 /* GeoUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeoUtils.cpp; sourceTree = "<group>"; };
 		D0E1DED813DC309C00268AD9 /* Walk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Walk.h; sourceTree = "<group>"; };
 		D0E1DED913DC309C00268AD9 /* Walk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Walk.cpp; sourceTree = "<group>"; };
 		D0E1DEDA13DC309C00268AD9 /* Timeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timeline.h; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D08916B719A2C22E00AE74F1 /* GeoUtils.cpp */,
 				D08916B619A29B3900AE74F1 /* GeoUtils.h */,
 				D0EC48E7199A89E100AC8B2E /* DataLoader.cpp */,
 				D0EC48E8199A89E100AC8B2E /* DataLoader.h */,
@@ -471,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0EC48F4199A89E100AC8B2E /* DataLoader.cpp in Sources */,
+				D08916B819A2C22E00AE74F1 /* GeoUtils.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				D0E1DEED13DC309C00268AD9 /* Walk.cpp in Sources */,
 				D0E1DEEE13DC309C00268AD9 /* Timeline.cpp in Sources */,
