@@ -19,11 +19,18 @@ using namespace GeographicLib;
 
 //------------------------------------------------------------------------------
 
+class GeoUtils
+{
+public:
+    static const TransverseMercatorExact& getTransversMercatorExact()
+    {
 #if GEOGRAPHICLIB_VERSION >= 1003700
-#define TRANSVERSE_MERCATOR() TransverseMercatorExact::UTM()
+        return TransverseMercatorExact::UTM();
 #else
-#define TRANSVERSE_MERCATOR() TransverseMercatorExact::UTM
+        return TransverseMercatorExact::UTM;
 #endif
+    }
+};
 
 //------------------------------------------------------------------------------
 
