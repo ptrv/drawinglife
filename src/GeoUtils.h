@@ -11,42 +11,18 @@
 
 //------------------------------------------------------------------------------
 
-#include "GeographicLib/TransverseMercatorExact.hpp"
-
-//------------------------------------------------------------------------------
-
-using namespace GeographicLib;
+namespace GeographicLib { class TransverseMercatorExact; };
 
 //------------------------------------------------------------------------------
 
 class GeoUtils
 {
 public:
-    static UtmPoint LatLon2Utm(double meridian, double lat, double lon)
-    {
-        const TransverseMercatorExact& TMS = getTransverseMercatorExact();
-        Math::real x, y, gamma, k;
-        TMS.Forward(Math::real(meridian), lat, lon, x, y, gamma, k);
-        return UtmPoint(x, y);
-    }
-
-    static ofxPoint<double> Utm2LatLon(double meridian, double x, double y)
-    {
-        const TransverseMercatorExact& TMS = getTransverseMercatorExact();
-        Math::real lat , lon, gamma, k;
-        TMS.Reverse(Math::real(meridian), x, y, lat, lon, gamma, k);
-        return ofxPoint<double>(lon, lat);
-    }
+    static UtmPoint LatLon2Utm(double meridian, double lat, double lon);
+    static ofxPoint<double> Utm2LatLon(double meridian, double x, double y);
 
 private:
-    static const TransverseMercatorExact& getTransverseMercatorExact()
-    {
-#if GEOGRAPHICLIB_VERSION >= 1003700
-        return TransverseMercatorExact::UTM();
-#else
-        return TransverseMercatorExact::UTM;
-#endif
-    }
+    static const GeographicLib::TransverseMercatorExact& getTransverseMercatorExact();
 };
 
 //------------------------------------------------------------------------------
