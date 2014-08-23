@@ -22,7 +22,7 @@ using namespace sqlite3x;
 
 //------------------------------------------------------------------------------
 #define CATCHDBERRORS                                                           \
-    catch(const std::exception& ex)                                             \
+catch(const std::exception& ex)                                                 \
 {                                                                               \
     ofLogError(Logger::DB_READER) << "Database error: " << ex.what();           \
 }                                                                               \
@@ -78,11 +78,12 @@ bool DBReader::setupDbConnection()
 
 void DBReader::closeDbConnection()
 {
-	try {
+    try
+    {
         m_dbconn->close();
         m_dbconn.reset();
-	}
-	CATCHDBERRORS
+    }
+    CATCHDBERRORS
 }
 
 //------------------------------------------------------------------------------
@@ -91,22 +92,20 @@ bool DBReader::getGpsDataDay(GpsData& gpsData,
                              const std::string& userName,
                              int year, int month, int day)
 {
-	bool result = false;
     std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND strftime('%Y-%m-%d', a.utctimestamp) = '";
-	query << year;
-	query << "-";
-	query << (month < 10 ? "0" : "");
-	query << month;
-	query << "-";
-	query << (day < 10 ? "0" : "");
-	query << day;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND strftime('%Y-%m-%d', a.utctimestamp) = '";
+    query << year;
+    query << "-";
+    query << (month < 10 ? "0" : "");
+    query << month;
+    query << "-";
+    query << (day < 10 ? "0" : "");
+    query << day;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -115,30 +114,28 @@ bool DBReader::getGpsDataDayRange(GpsData& gpsData,
                                   const std::string& userName,
                                   int year, int month, int dayStart, int dayEnd)
 {
-	bool result = false;
-	std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND strftime('%Y-%m-%d', a.utctimestamp) >= '";
-	query << year;
-	query << "-";
-	query << (month < 10 ? "0" : "");
-	query << month;
-	query << "-";
-	query << (dayStart < 10 ? "0" : "");
-	query << dayStart;
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND strftime('%Y-%m-%d', a.utctimestamp) >= '";
+    query << year;
+    query << "-";
+    query << (month < 10 ? "0" : "");
+    query << month;
+    query << "-";
+    query << (dayStart < 10 ? "0" : "");
+    query << dayStart;
     query << "' AND strftime('%Y-%m-%d', a.utctimestamp) <= '";
-	query << year;
-	query << "-";
-	query << (month < 10 ? "0" : "");
-	query << month;
-	query << "-";
-	query << (dayEnd < 10 ? "0" : "");
-	query << dayEnd;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    query << year;
+    query << "-";
+    query << (month < 10 ? "0" : "");
+    query << month;
+    query << "-";
+    query << (dayEnd < 10 ? "0" : "");
+    query << dayEnd;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -147,19 +144,17 @@ bool DBReader::getGpsDataMonth(GpsData& gpsData,
                                const std::string& userName,
                                int year, int month)
 {
-	bool result = false;
-	std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND strftime('%Y-%m', a.utctimestamp) = '";
-	query << year;
-	query << "-";
-	query << (month < 10 ? "0" : "");
-	query << month;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND strftime('%Y-%m', a.utctimestamp) = '";
+    query << year;
+    query << "-";
+    query << (month < 10 ? "0" : "");
+    query << month;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -168,24 +163,22 @@ bool DBReader::getGpsDataMonthRange(GpsData& gpsData,
                                     const std::string& userName,
                                     int year, int monthStart, int monthEnd)
 {
-	bool result = false;
-	std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND strftime('%Y-%m', a.utctimestamp) >= '";
-	query << year;
-	query << "-";
-	query << (monthStart < 10 ? "0" : "");
-	query << monthStart;
-	query << "' AND strftime('%Y-%m', a.utctimestamp) <= '";
-	query << year;
-	query << "-";
-	query << (monthEnd < 10 ? "0" : "");
-	query << monthEnd;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND strftime('%Y-%m', a.utctimestamp) >= '";
+    query << year;
+    query << "-";
+    query << (monthStart < 10 ? "0" : "");
+    query << monthStart;
+    query << "' AND strftime('%Y-%m', a.utctimestamp) <= '";
+    query << year;
+    query << "-";
+    query << (monthEnd < 10 ? "0" : "");
+    query << monthEnd;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -194,17 +187,15 @@ bool DBReader::getGpsDataYear(GpsData& gpsData,
                               const std::string& userName,
                               int year)
 {
-	bool result = false;
-	std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND strftime('%Y', a.utctimestamp) = '";
-	query << (year < 10 ? "0" : "");
-	query << year;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND strftime('%Y', a.utctimestamp) = '";
+    query << (year < 10 ? "0" : "");
+    query << year;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -213,20 +204,18 @@ bool DBReader::getGpsDataYearRange(GpsData& gpsData,
                                    const std::string& userName,
                                    int yearStart, int yearEnd)
 {
-	bool result = false;
-	std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND strftime('%Y', a.utctimestamp) >= '";
-	query << (yearStart < 10 ? "0" : "");
-	query << yearStart;
-	query << "' AND strftime('%Y', a.utctimestamp) <= '";
-	query << (yearEnd < 10 ? "0" : "");
-	query << yearEnd;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND strftime('%Y', a.utctimestamp) >= '";
+    query << (yearStart < 10 ? "0" : "");
+    query << yearStart;
+    query << "' AND strftime('%Y', a.utctimestamp) <= '";
+    query << (yearEnd < 10 ? "0" : "");
+    query << yearEnd;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -235,16 +224,14 @@ bool DBReader::getGpsDataCity(GpsData& gpsData,
                               const std::string& userName,
                               const std::string& city)
 {
-	bool result = false;
-	std::stringstream query;
-	query << getBasicQueryString();
-	query << "WHERE b.username = '";
-	query << userName;
-	query << "' AND c.city = '";
-	query << city;
-	query << "' ORDER BY datetime(a.utctimestamp);";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' AND c.city = '";
+    query << city;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
@@ -252,24 +239,22 @@ bool DBReader::getGpsDataCity(GpsData& gpsData,
 bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
                                      const std::string& sqlFileSource)
 {
-	bool result = false;
-	std::stringstream query;
+    std::stringstream query;
     query << getBasicQueryString();
     query << sqlFileSource;
 //    query << ";";
-	result = getGpsData(gpsData, query.str());
-	return result;
+    return getGpsData(gpsData, query.str());
 }
 
 //------------------------------------------------------------------------------
 bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 {
-    bool result = false;
     bool queryFirstOk = false;
     stringstream queryMinMax;
-    try {
-        sqlite3_command cmd(*m_dbconn, query.c_str());
-        sqlite3_reader reader=cmd.executereader();
+    try
+    {
+        sqlite3_command cmd(*m_dbconn, query);
+        sqlite3_reader reader = cmd.executereader();
 
         int lastSegment = -1;
         string user = "";
@@ -331,7 +316,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
         // Retrieve select conditions from original database query.
         queryMinMax << query.substr(posS, (posE - posS));
 
-        sqlite3_command cmd2(*m_dbconn, queryMinMax.str().c_str());
+        sqlite3_command cmd2(*m_dbconn, queryMinMax.str());
         sqlite3_reader readerMinMax = cmd2.executereader();
         double minLon, maxLon, minLat, maxLat;
         while (readerMinMax.read())
@@ -347,10 +332,10 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
                            ofxPoint<double>(minLon, minLat),
                            ofxPoint<double>(maxLon, maxLat),
                            user);
-        result = true;
+        return true;
     }
     CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))
-    return result;
+    return false;
 }
 
 //------------------------------------------------------------------------------
@@ -364,7 +349,7 @@ const std::string DBReader::getBasicQueryString()
           << "a.utctimestamp AS time, a.ele AS elevation,"
           << "a.trkseg_id AS segment, b.username AS name, "
           << "c.city AS city "
-          << (m_useSpeed ? "a.speed AS speed " : "")
+          << (m_useSpeed ? ", a.speed AS speed " : "")
           << "FROM trackpoints AS a "
           << "JOIN users AS b ON (a.user_uid = b.user_uid) "
           << "JOIN citydefs AS c ON (a.citydef_uid = c.citydef_uid) ";
