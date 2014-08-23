@@ -11,7 +11,7 @@
 
 //------------------------------------------------------------------------------
 
-namespace GeographicLib { class TransverseMercatorExact; };
+namespace GeographicLib { class TransverseMercator; }
 
 //------------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ public:
     static ofxPoint<double> Utm2LatLon(double meridian, double x, double y);
 
 private:
-    static const GeographicLib::TransverseMercatorExact& getTransverseMercatorExact();
+    static const GeographicLib::TransverseMercator& getTransverseMercator();
 };
 
 //------------------------------------------------------------------------------
