@@ -34,6 +34,15 @@ sqlite3_connection::sqlite3_connection(const char *db) : db(NULL) { this->open(d
 
 sqlite3_connection::sqlite3_connection(const wchar_t *db) : db(NULL) { this->open(db); }
 
+sqlite3_connection::sqlite3_connection(const std::string &dbPath, const bool readOnly)
+    : db(NULL)
+{
+    const int flags = readOnly ?
+        SQLITE_OPEN_READONLY :
+        SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+    this->open(dbPath, flags);
+}
+
 sqlite3_connection::~sqlite3_connection() { if(this->db) sqlite3_close(this->db); }
 
 void sqlite3_connection::open(const char *db) {
@@ -44,6 +53,11 @@ void sqlite3_connection::open(const char *db) {
 void sqlite3_connection::open(const wchar_t *db) {
 	if(sqlite3_open16(db, &this->db)!=SQLITE_OK)
 		throw database_error("unable to open database");
+}
+
+void sqlite3_connection::open(const std::string &dbPath, const int flags) {
+    if(sqlite3_open_v2(dbPath.data(), &this->db, flags, NULL) != SQLITE_OK)
+        throw database_error("unable to open database");
 }
 
 void sqlite3_connection::close() {
@@ -58,7 +72,7 @@ void sqlite3_connection::enable_load_extension(const bool enable)
 {
     if(!this->db) throw database_error("database is not open");
     if (sqlite3_enable_load_extension(this->db, enable ? 1 : 0) != SQLITE_OK)
-        throw database_error("unable to enable extension");
+        throw database_error("unable to turn on extension support");
 }
 
 long long sqlite3_connection::insertid() {

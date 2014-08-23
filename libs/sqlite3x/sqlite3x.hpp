@@ -41,12 +41,14 @@ namespace sqlite3x {
 		sqlite3_connection();
 		sqlite3_connection(const char *db);
 		sqlite3_connection(const wchar_t *db);
+		sqlite3_connection(const std::string &dbPath, bool readOnly=true);
 		~sqlite3_connection();
 
         void enable_load_extension(bool enable);
 
 		void open(const char *db);
 		void open(const wchar_t *db);
+		void open(const std::string &dbPath, int flags);
 		void close();
 
 		long long insertid();

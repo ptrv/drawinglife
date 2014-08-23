@@ -15,7 +15,10 @@
 #include "sqlite3x.hpp"
 using namespace sqlite3x;
 
-#ifdef TARGET_LINUX
+#ifdef TARGET_OSX
+static const std::string libspatialiteDylibPath =
+    "libspatialite_mac/mod_spatialite.dylib";
+#else
 #include "sqlite3.h"
 #include <spatialite.h>
 #endif
@@ -46,14 +49,13 @@ m_useSpeed(useSpeed)
 
 DBReader::~DBReader()
 {
-    ofLogVerbose(Logger::DB_READER, "destroying");
 }
 
 //------------------------------------------------------------------------------
 
 bool DBReader::setupDbConnection()
 {
-#ifdef TARGET_LINUX
+#ifndef TARGET_OSX
     spatialite_init(0);
     ofLogVerbose(Logger::DB_READER) << "Spatialite version: "
                                     << spatialite_version()
@@ -61,12 +63,14 @@ bool DBReader::setupDbConnection()
 #endif
     try
     {
-        m_dbconn.reset(new sqlite3_connection(ofToDataPath(m_dbPath, true).c_str()));
+        m_dbconn.reset(new sqlite3_connection(ofToDataPath(m_dbPath, true)));
 #ifdef TARGET_OSX
         m_dbconn->enable_load_extension(true);
-        std::string libspatialitePath =
-            ofToDataPath("libspatialite_mac/mod_spatialite.dylib", true);
-        m_dbconn->executenonquery("SELECT load_extension('" + libspatialitePath + "')");
+        std::stringstream loadExtQuery;
+        loadExtQuery << "SELECT load_extension('"
+                     << ofToDataPath(libspatialiteDylibPath, true)
+                     << "')";
+        m_dbconn->executenonquery(loadExtQuery.str());
 #endif
         return true;
     }
