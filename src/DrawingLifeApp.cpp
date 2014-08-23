@@ -55,8 +55,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_pause(false)
 //    m_magicBox(0)
 {
-    tWalkResetFn = boost::bind(&Walk::reset, _1);
-    tLocationImageDrawFn = boost::bind(&LocationImage::draw, _1);
+    fnWalkReset = boost::bind(&Walk::reset, _1);
+    fnLocationImageDraw = boost::bind(&LocationImage::draw, _1);
 }
 
 //------------------------------------------------------------------------------
@@ -179,17 +179,16 @@ void DrawingLifeApp::setup()
 			// TODO 101028_1701_TP: Not implemented yet.
 			break;
             case DBReader::DB_QUERY_CITY:
-            gpsDataAreLoaded = DataLoader::loadGpsDataCity(*this, m_names,
-                                                           m_dbQueryData.city);
+            gpsDataAreLoaded = DataLoader::loadGpsDataCity(
+                *this, m_names, m_dbQueryData.city);
             break;
             case DBReader::DB_QUERY_YEAR:
-            gpsDataAreLoaded = DataLoader::loadGpsDataYearRange(*this, m_names,
-                                                                m_dbQueryData.yearStart,
-                                                                m_dbQueryData.yearEnd);
+            gpsDataAreLoaded = DataLoader::loadGpsDataYearRange(
+                *this, m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
             break;
             case DBReader::DB_QUERY_SQLFILE:
-            gpsDataAreLoaded = DataLoader::loadGpsDataWithSqlFile(*this,
-                                                                  m_sqlFilePaths);
+            gpsDataAreLoaded = DataLoader::loadGpsDataWithSqlFile(
+                *this, m_sqlFilePaths);
 			break;
         }
         if (gpsDataAreLoaded)
@@ -233,18 +232,51 @@ void DrawingLifeApp::setup()
 
 //------------------------------------------------------------------------------
 
-bool firstSleep = true;
+bool firstRun = true;
+void DrawingLifeApp::handleFirstTimelineObject()
+{
+    if (m_timeline->isFirst())
+    {
+        if (firstRun)
+        {
+            firstRun = false;
+        }
+        else
+        {
+            if (m_loopMode)
+            {
+                std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
+                m_sZoomFrameCount = 0;
+                const int sleepTime = m_settings->getSleepTime();
+                if (sleepTime > 0)
+                {
+#if defined (TARGET_WIN32)
+                    Sleep(sleepTime*1000);
+#else
+                    sleep(sleepTime);
+#endif
+                }
+            }
+            else
+            {
+                OF_EXIT_APP(0);
+            }
+        }
+    }
+}
 
 void DrawingLifeApp::update()
 {
-    if (m_isAnimation
-            && !m_pause
-            && !m_interactiveMode
-            && m_timeline->getTimeline().size() > 0)
+    if (m_isAnimation &&
+        !m_pause &&
+        !m_interactiveMode &&
+        m_timeline->getTimeline().size() > 0)
     {
         for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
         {
-            const int id = m_timeline->getNext();
+            handleFirstTimelineObject();
+
+            const int id = m_timeline->getCurrentId();
             try
             {
                 m_walks.at(id).update();
@@ -255,26 +287,6 @@ void DrawingLifeApp::update()
             soundUpdate();
 
             m_timeline->countUp();
-
-            if (m_timeline->isFirst())
-            {
-//                            std::cout << "First timeline object!" << std::endl;
-                std::for_each(m_walks.begin(), m_walks.end(), tWalkResetFn);
-                m_sZoomFrameCount = 0;
-                const int sleepTime = m_settings->getSleepTime();
-                if (sleepTime > 0)
-                {
-#if defined (TARGET_WIN32)
-                    Sleep(m_settings->getSleepTime()*1000);
-#else
-                    sleep(m_settings->getSleepTime());
-#endif
-                }
-            }
-            else if (!m_loopMode && m_timeline->isLast())
-            {
-                OF_EXIT_APP(0);
-            }
         }
     }
 }
@@ -303,7 +315,7 @@ void DrawingLifeApp::draw()
 
             BOOST_FOREACH(LocationImageVec& locVec, m_locationImages)
             {
-                std::for_each(locVec.begin(), locVec.end(), tLocationImageDrawFn);
+                std::for_each(locVec.begin(), locVec.end(), fnLocationImageDraw);
             }
 
             if (m_multiMode && m_multiModeInfo)

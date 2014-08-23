@@ -83,6 +83,8 @@ private:
     void shaderBegin();
     void shaderEnd();
 
+    void handleFirstTimelineObject();
+
     //---------------------------------------------------------------------------
     // Member variables
     //---------------------------------------------------------------------------
@@ -152,8 +154,8 @@ private:
     static int m_sZoomFrameCount;
     static int m_sCurrentSoundFile;
 
-    boost::function<void(Walk&)> tWalkResetFn;
-    boost::function<void(LocationImage&)> tLocationImageDrawFn;
+    boost::function<void(Walk&)> fnWalkReset;
+    boost::function<void(LocationImage&)> fnLocationImageDraw;
 
 };
 

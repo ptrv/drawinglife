@@ -24,7 +24,7 @@ public:
 
     void countUp();
 
-    int getNext() const;
+    int getCurrentId() const;
 
     bool isLast() const;
     bool isFirst() const;

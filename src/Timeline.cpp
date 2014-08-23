@@ -74,7 +74,7 @@ void Timeline::countUp()
 
 //------------------------------------------------------------------------------
 
-int Timeline::getNext() const
+int Timeline::getCurrentId() const
 {
     try
     {
