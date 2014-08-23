@@ -176,13 +176,14 @@ void DataLoader::loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts)
 
     fonts.clear();
 
-    DrawingLifeFontMap::const_iterator it = settings.getFonts().begin();
-    DrawingLifeFontMap::const_iterator itEnd = settings.getFonts().end();
+    const DrawingLifeFontsRaw& allFonts = settings.getFonts();
+    DrawingLifeFontsRaw::const_iterator it = allFonts.begin();
+    DrawingLifeFontsRaw::const_iterator itEnd = allFonts.end();
     for (; it != itEnd; ++it)
     {
-        const string& fontId = it->first;
-        const pair<string, int>& f = it->second;
-        const string& fontName = f.first;
+        const std::string& fontId = it->first;
+        const std::pair<std::string, int>& f = it->second;
+        const std::string& fontName = f.first;
         const int fontSize = f.second;
         ofTrueTypeFont font;
         font.loadFont(fontName, fontSize);

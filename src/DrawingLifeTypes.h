@@ -158,7 +158,7 @@ typedef std::vector<std::vector<UtmPoint> > UtmDataVector;
 typedef std::vector<GpsSegment> GpsSegmentVector;
 typedef std::vector<GpsPoint> GpsPointVector;
 
-typedef std::map<std::string, std::pair<std::string, int> > DrawingLifeFontMap;
+typedef std::map<std::string, std::pair<std::string, int> > DrawingLifeFontsRaw;
 typedef std::map<std::string, ofTrueTypeFont> DrawingLifeFonts;
 
 typedef std::vector<ViewDimensions> ViewDimensionsVec;
