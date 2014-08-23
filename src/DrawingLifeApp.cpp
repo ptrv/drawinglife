@@ -55,6 +55,7 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_pause(false)
 //    m_magicBox(0)
 {
+    fnWalkDrawAll = boost::bind(&Walk::drawAll, _1);
     fnWalkReset = boost::bind(&Walk::reset, _1);
     fnLocationImageDraw = boost::bind(&LocationImage::draw, _1);
 }
@@ -377,8 +378,7 @@ void DrawingLifeApp::draw()
                        m_settings->getAlphaTrack());
             ofNoFill();
 
-            std::for_each(m_walks.begin(), m_walks.end(),
-                          boost::bind(&Walk::drawAll, _1));
+            std::for_each(m_walks.begin(), m_walks.end(), fnWalkDrawAll);
         }
 
         if (m_showFps)

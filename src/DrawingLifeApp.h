@@ -154,6 +154,7 @@ private:
     static int m_sZoomFrameCount;
     static int m_sCurrentSoundFile;
 
+    boost::function<void(Walk&)> fnWalkDrawAll;
     boost::function<void(Walk&)> fnWalkReset;
     boost::function<void(LocationImage&)> fnLocationImageDraw;
 
