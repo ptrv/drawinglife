@@ -170,33 +170,32 @@ void DrawingLifeApp::setup()
 
     if (m_settings->loadGpsOnStart())
     {
-		bool gpsDataAreLoaded = false;
+        bool gpsDataLoadOk = false;
         switch(m_dbQueryData.type)
         {
-			case DBReader::DB_QUERY_DAY:
-			// TODO 101028_1700_TP: Not implemented yet.
-			break;
-			case DBReader::DB_QUERY_MONTH:
-			// TODO 101028_1701_TP: Not implemented yet.
-			break;
+            case DBReader::DB_QUERY_DAY:
+            // TODO 101028_1700_TP: Not implemented yet.
+            break;
+            case DBReader::DB_QUERY_MONTH:
+            // TODO 101028_1701_TP: Not implemented yet.
+            break;
             case DBReader::DB_QUERY_CITY:
-            gpsDataAreLoaded = DataLoader::loadGpsDataCity(
+            gpsDataLoadOk = DataLoader::loadGpsDataCity(
                 *this, m_names, m_dbQueryData.city);
             break;
             case DBReader::DB_QUERY_YEAR:
-            gpsDataAreLoaded = DataLoader::loadGpsDataYearRange(
+            gpsDataLoadOk = DataLoader::loadGpsDataYearRange(
                 *this, m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
             break;
             case DBReader::DB_QUERY_SQLFILE:
-            gpsDataAreLoaded = DataLoader::loadGpsDataWithSqlFile(
-                *this, m_sqlFilePaths);
-			break;
+            gpsDataLoadOk = DataLoader::loadGpsDataWithSqlFile(*this, m_sqlFilePaths);
+            break;
         }
-        if (gpsDataAreLoaded)
+        if (gpsDataLoadOk)
         {
-			// GpsData are loaded now. Drawing routine can start.
+            // GpsData are loaded now. Drawing routine can start.
             for (size_t personIndex = 0; personIndex < m_numPersons; ++personIndex)
-	        {
+            {
                 const GpsDataPtr gpsData = m_gpsDatas[personIndex];
                 if (gpsData->getTotalGpsPoints() == 0)
                 {
