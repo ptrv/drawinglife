@@ -424,7 +424,7 @@ void GpsData::setMinMaxRatioUTM()
     const double deltaLonLatHalf = (deltaLon - deltaLat) / 2.0;
 
     // Aspect ratio is: width < height.
-    if (deltaLon <	deltaLat)
+    if (deltaLon < deltaLat)
     {
         m_minUtm.x = minLon - deltaLatLonHalf;
         m_maxUtm.x = maxLon + deltaLatLonHalf;

@@ -202,9 +202,9 @@ void Walk::draw()
     }
     const UtmSegment& currentSegment = utmData[m_currentGpsSegment];
 
-    if (utmData.size() > 0
-            && currentSegment.size() > 0
-            && m_currentGpsPoint < static_cast<int>(currentSegment.size()))
+    if (utmData.size() > 0 &&
+        currentSegment.size() > 0 &&
+        m_currentGpsPoint < static_cast<int>(currentSegment.size()))
 	{
         // ---------------------------------------------------------------------
 		// Draw Gps data
@@ -212,7 +212,7 @@ void Walk::draw()
         const UtmPoint& currentUtm = currentSegment[m_currentGpsPoint];
 
         if (!m_interactiveMode && !m_settings.isMultiMode()
-                && !m_settings.isBoundingBoxFixed())
+            && !m_settings.isBoundingBoxFixed())
         {
             magicBox->updateBoxIfNeeded(currentUtm);
         }

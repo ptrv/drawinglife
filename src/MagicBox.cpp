@@ -100,7 +100,7 @@ void MagicBox::setSize(const double newSize)
 
 void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 {
-    if (!this->isInPaddedBox(utmPoint))
+    if (!isInPaddedBox(utmPoint))
     {
         if (utmPoint.x >= m_paddedBox.getX() + m_paddedBox.getWidth())
         {

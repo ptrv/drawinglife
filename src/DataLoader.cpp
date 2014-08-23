@@ -219,11 +219,11 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
     const size_t numPersons = settings.getNumPersons();
 
-    if (numPersons > 0
-            && gpsDatas.size() == numPersons
-            && walks.size() == numPersons
-            && ((magicBoxes.size() == numPersons && !settings.isMultiMode())
-                || settings.isMultiMode()))
+    if (numPersons > 0 &&
+        gpsDatas.size() == numPersons &&
+        walks.size() == numPersons &&
+        ((magicBoxes.size() == numPersons && !settings.isMultiMode()) ||
+         settings.isMultiMode()))
     {
         timeline.setData(gpsDatas);
 
@@ -260,8 +260,8 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
                 }
             }
 
-            if (app.getIsImageAsCurrentPoint()
-                    && images.size() >= settings.getNumPersons())
+            if (app.getIsImageAsCurrentPoint() &&
+                images.size() >= settings.getNumPersons())
             {
                 walk.setCurrentPointImage(images[i], imageList[i].alpha);
             }
