@@ -91,12 +91,6 @@ struct GpsDataIndex
 
 //------------------------------------------------------------------------------
 
-struct GpsRegion
-{
-    double lon0;
-    double minLon;
-    double maxLon;
-};
 
 //------------------------------------------------------------------------------
 // templated version of openFramworks datatypes.
@@ -121,7 +115,6 @@ struct UtmPoint : public ofxPoint<double>
     UtmPoint() : ofxPoint<double>(){}
     UtmPoint(double utmX, double utmY) : ofxPoint<double>(utmX, utmY) {}
     double speed;
-    double lon0;
 };
 
 //------------------------------------------------------------------------------

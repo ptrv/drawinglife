@@ -6,6 +6,8 @@
 
 #include "Walk.h"
 
+#include "GeoUtils.h"
+
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
@@ -542,7 +544,7 @@ void Walk::setMagicBox(MagicBoxWeak magicBoxWeak)
     MagicBoxPtr magicBox = m_magicBox.lock();
     if (gpsData && magicBox)
     {
-        magicBox->setupBox(gpsData->getUtm(0, 0), GpsData::getLon0Glogal());
+        magicBox->setupBox(gpsData->getUtm(0, 0));
     }
 }
 
@@ -554,10 +556,10 @@ void Walk::setMagicBoxStatic(MagicBoxWeak magicBoxWeak,
 {
     m_magicBox = magicBoxWeak;
     reset();
-    UtmPoint utmP = GpsData::getUtmPointWithRegion(lat, lon, m_settings);
+    UtmPoint utmP = GeoUtils::LatLon2Utm(lat, lon);
     if (MagicBoxPtr magicBox = m_magicBox.lock())
     {
-        magicBox->setupBox(utmP, GpsData::getLon0Glogal());
+        magicBox->setupBox(utmP);
     }
 
 }

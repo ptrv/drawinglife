@@ -5,6 +5,7 @@
 
 #include "ZoomAnimation.h"
 
+#include "GeoUtils.h"
 
 int ZoomAnimation::m_sZoomFrameCount = 0;
 
@@ -41,8 +42,8 @@ void ZoomAnimation::update(DrawingLifeApp& app)
             const float zoomLevel = zoomAnimFrame.frameZoom;
             const double centerX = zoomAnimFrame.frameCenterX;
             const double centerY = zoomAnimFrame.frameCenterY;
-            UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
-                                                           m_settings);
+
+            UtmPoint utmP = GeoUtils::LatLon2Utm(centerY, centerX);
 
             if (timeline->isFirst())
             {
@@ -63,7 +64,7 @@ void ZoomAnimation::update(DrawingLifeApp& app)
         {
             MagicBox& magicBox = app.getMagicBox();
             magicBox.setSize(m_zoomIntegrator->getValue());
-            magicBox.setupBox(m_theIntegrator->getValue(), 0);
+            magicBox.setupBox(m_theIntegrator->getValue());
         }
         else
         {
@@ -71,7 +72,7 @@ void ZoomAnimation::update(DrawingLifeApp& app)
             BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
             {
                 box->setSize(m_zoomIntegrator->getValue());
-                box->setupBox(m_theIntegrator->getValue(), 0);
+                box->setupBox(m_theIntegrator->getValue());
             }
         }
     }

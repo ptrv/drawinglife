@@ -46,21 +46,10 @@
             <auto>0</auto>
             <static>0</static>
             <show>0</show>
-            <position lat="52.49734" lon="13.44594"/>
-            <size>2000.0</size>
+            <position lat="52.50934" lon="13.46094"/>
+            <size>3500.0</size>
             <padding>200.0</padding>
         </boundingbox>
-        <meridian>
-            <regions>1</regions>
-            <region1 lon0="-119.0" minlon="-180.0" maxlon="-100.0" />
-            <region2 lon0="-74.0" minlon="-100.0" maxlon="-35.0" />
-            <region3 lon0="12.0" minlon="-35.0" maxlon="65.0" />
-            <region4 lon0="116.0" minlon="65.0" maxlon="130.0" />
-            <region5 lon0="146.0" minlon="130.0" maxlon="180.0" />
-            <auto>1</auto>
-            <!-- value in degrees -->
-            <lon0>0.0</lon0>
-        </meridian>
         <grabscreen>0</grabscreen>
     </settings>
     <ui>

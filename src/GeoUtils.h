@@ -11,18 +11,11 @@
 
 //------------------------------------------------------------------------------
 
-namespace GeographicLib { class TransverseMercator; }
-
-//------------------------------------------------------------------------------
-
 class GeoUtils
 {
 public:
-    static UtmPoint LatLon2Utm(double meridian, double lat, double lon);
-    static ofxPoint<double> Utm2LatLon(double meridian, double x, double y);
-
-private:
-    static const GeographicLib::TransverseMercator& getTransverseMercator();
+    static UtmPoint LatLon2Utm(double lat, double lon);
+    static ofxPoint<double> Utm2LatLon(double x, double y);
 };
 
 //------------------------------------------------------------------------------

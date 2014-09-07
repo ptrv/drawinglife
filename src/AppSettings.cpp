@@ -58,10 +58,7 @@ m_queryCity(""),
 m_numPersons(0),
 m_interactiveMode(false),
 m_interactiveTraced(true),
-m_meridianAuto(true),
-m_meridianVal(0.0),
 m_showInfo(true),
-m_regionsOn(true),
 m_loop(true),
 m_multiMode(false),
 m_multiModeInfo(false),
@@ -170,9 +167,6 @@ bool AppSettings::loadXML()
     m_queryYearEnd = m_xml.getValue("dbquery:time:yearend", 2010);
     m_queryCity = m_xml.getValue("dbquery:city", "Berlin");
 
-    m_meridianAuto = m_xml.getValue("settings:meridian:auto", 1) == 1;
-    m_meridianVal = m_xml.getValue("settings:meridian:lon0", 0.0);
-
     m_xml.pushTag("data");
     m_xml.pushTag("person");
 
@@ -226,24 +220,6 @@ bool AppSettings::loadXML()
     m_interactiveTraced = m_xml.getValue("settings:interactivemode:traced", 1) == 1;
 
     m_showInfo = m_xml.getValue("settings:showinfo", 1) == 1;
-
-    m_regionsOn = m_xml.getValue("settings:meridian:regions", 1) == 1;
-
-    m_regions[0].lon0 = m_xml.getAttribute("settings:meridian:region1", "lon0", -119.0);
-    m_regions[0].minLon = m_xml.getAttribute("settings:meridian:region1", "minlon", -180.0);
-    m_regions[0].maxLon = m_xml.getAttribute("settings:meridian:region1", "maxlon", -100.0);
-    m_regions[1].lon0 = m_xml.getAttribute("settings:meridian:region2", "lon0", -74.0);
-    m_regions[1].minLon = m_xml.getAttribute("settings:meridian:region2", "minlon", -100.0);
-    m_regions[1].maxLon = m_xml.getAttribute("settings:meridian:region2", "maxlon", -35.0);
-    m_regions[2].lon0 = m_xml.getAttribute("settings:meridian:region3", "lon0", 12.0);
-    m_regions[2].minLon = m_xml.getAttribute("settings:meridian:region3", "minlon", -35.0);
-    m_regions[2].maxLon = m_xml.getAttribute("settings:meridian:region3", "maxlon", 65.0);
-    m_regions[3].lon0 = m_xml.getAttribute("settings:meridian:region4", "lon0", 116.0);
-    m_regions[3].minLon = m_xml.getAttribute("settings:meridian:region4", "minlon", 65.0);
-    m_regions[3].maxLon = m_xml.getAttribute("settings:meridian:region4", "maxlon", 130.0);
-    m_regions[4].lon0 = m_xml.getAttribute("settings:meridian:region5", "lon0", 146.0);
-    m_regions[4].minLon = m_xml.getAttribute("settings:meridian:region5", "minlon", 130.0);
-    m_regions[4].maxLon = m_xml.getAttribute("settings:meridian:region5", "maxlon", 180.0);
 
     m_loop = m_xml.getValue("settings:loop", 1) == 1;
 
@@ -390,9 +366,6 @@ void AppSettings::print()
 
     ofLog(OF_LOG_SILENT, "Bounding box: size = %lf, padding = %lf",
           m_boundingBoxSize, m_boundingBoxPadding);
-
-    ofLog(OF_LOG_SILENT, "Meridian value: %lf, auto = %d",
-          m_meridianVal, m_meridianAuto);
 
     ofLog(OF_LOG_SILENT, "Database path: %s", m_databasePath.c_str());
 

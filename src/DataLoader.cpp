@@ -346,10 +346,6 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                 << "maxLon: " << gpsData->getMaxUtmX() << ", "
                 << "minLat: " << gpsData->getMinUtmY() << ", "
                 << "maxLat: " << gpsData->getMaxUtmY();
-
-        ofLogVerbose(Logger::DATA_LOADER)
-                << "Central Meridian: "
-                << gpsData->getProjectionCentralMeridian();
     }
 
     processGpsData(app);

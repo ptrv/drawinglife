@@ -83,7 +83,7 @@ PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/ofxJSON/lib%
 # incorporated directly into the final executable application binary.
 ################################################################################
 # PROJECT_LDFLAGS=-Wl,-rpath=./libs
-PROJECT_LDFLAGS= -lGeographic -lspatialite
+PROJECT_LDFLAGS= -lspatialite -lproj
 
 ################################################################################
 # PROJECT DEFINES

@@ -61,9 +61,6 @@ public:
     double getBoundingBoxPadding() const { return m_boundingBoxPadding; }
     bool showBoundingBox() const { return m_boundingBoxShow; }
 
-    bool isMeridianAuto() const { return m_meridianAuto; }
-    double getMeridian() const { return m_meridianVal; }
-
     const std::string& getDatabasePath() const { return m_databasePath; }
 
     int getQueryType() const { return m_queryType; }
@@ -83,10 +80,6 @@ public:
     bool drawTraced() const { return m_interactiveTraced; }
 
     bool showInfo() const { return m_showInfo; }
-
-    static const size_t NUM_REGIONS = 5;
-    const GpsRegion* getRegions() const { return m_regions; }
-    bool isRegionsOn() const { return m_regionsOn; }
 
     bool isLoopOn() const { return m_loop; }
 
@@ -210,13 +203,7 @@ private:
     bool m_interactiveMode;
     bool m_interactiveTraced;
 
-    bool m_meridianAuto;
-    double m_meridianVal;
-
     bool m_showInfo;
-
-    GpsRegion m_regions[NUM_REGIONS];
-    bool m_regionsOn;
 
     bool m_loop;
 
