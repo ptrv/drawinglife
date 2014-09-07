@@ -14,7 +14,7 @@ m_image(image)
     m_utm.x = 0.0;
     m_utm.y = 0.0;
 
-    m_utm = GeoUtils::LatLon2Utm(lid.gps.lat, lid.gps.lon);
+    m_utm = GeoUtils::LonLat2Utm(lid.gps.lon, lid.gps.lat);
 }
 
 //------------------------------------------------------------------------------

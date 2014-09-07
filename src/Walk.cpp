@@ -556,7 +556,7 @@ void Walk::setMagicBoxStatic(MagicBoxWeak magicBoxWeak,
 {
     m_magicBox = magicBoxWeak;
     reset();
-    UtmPoint utmP = GeoUtils::LatLon2Utm(lat, lon);
+    UtmPoint utmP = GeoUtils::LonLat2Utm(lon, lat);
     if (MagicBoxPtr magicBox = m_magicBox.lock())
     {
         magicBox->setupBox(utmP);

@@ -14,8 +14,8 @@
 class GeoUtils
 {
 public:
-    static UtmPoint LatLon2Utm(double lat, double lon);
-    static ofxPoint<double> Utm2LatLon(double x, double y);
+    static UtmPoint LonLat2Utm(double lon, double lat);
+    static ofxPoint<double> Utm2LonLat(double x, double y);
 };
 
 //------------------------------------------------------------------------------

@@ -43,7 +43,7 @@ void ZoomAnimation::update(DrawingLifeApp& app)
             const double centerX = zoomAnimFrame.frameCenterX;
             const double centerY = zoomAnimFrame.frameCenterY;
 
-            UtmPoint utmP = GeoUtils::LatLon2Utm(centerY, centerX);
+            UtmPoint utmP = GeoUtils::LonLat2Utm(centerX, centerY);
 
             if (timeline->isFirst())
             {

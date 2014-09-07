@@ -65,8 +65,8 @@ void GpsData::setGpsData(const GpsSegmentVector& segments,
     m_minLonLat = minLonLat;
     m_maxLonLat = maxLonLat;
     // -------------------------------------------------------------------------
-    m_minUtm = GeoUtils::LatLon2Utm(m_minLonLat.y, m_minLonLat.x);
-    m_maxUtm = GeoUtils::LatLon2Utm(m_maxLonLat.y, m_maxLonLat.x);
+    m_minUtm = GeoUtils::LonLat2Utm(m_minLonLat.x, m_minLonLat.y);
+    m_maxUtm = GeoUtils::LonLat2Utm(m_maxLonLat.x, m_maxLonLat.y);
     m_user = user;
     calculateUtmPoints();
     normalizeUtmPoints();
@@ -243,7 +243,7 @@ int GpsData::getTotalGpsPoints() const
 GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 {
     GpsPoint p;
-    ofxPoint<double> latLon = GeoUtils::Utm2LatLon(utmP.x, utmP.y);
+    ofxPoint<double> latLon = GeoUtils::Utm2LonLat(utmP.x, utmP.y);
     p.setDataFromLatLon(latLon.y, latLon.x);
 
     return p;
@@ -261,9 +261,8 @@ void GpsData::calculateUtmPoints()
         utmVec.reserve(rSegment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
         {
-            // UtmPoint utmP(rPoint.getUtmX(), rPoint.getUtmY());
             UtmPoint utmP =
-                GeoUtils::LatLon2Utm(rPoint.getLatitude(), rPoint.getLongitude());
+                GeoUtils::LonLat2Utm(rPoint.getLongitude(), rPoint.getLatitude());
             utmVec.push_back(utmP);
         }
         m_utmPoints.push_back(utmVec);
@@ -287,9 +286,8 @@ void GpsData::calculateUtmPointsWithIndex()
         utmVec.reserve(segment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& point, segment.getPoints())
         {
-            // UtmPoint utmP(point.getUtmX(), point.getUtmY());
-            UtmPoint utmP = GeoUtils::LatLon2Utm(point.getLatitude(),
-                                                 point.getLongitude());
+            UtmPoint utmP = GeoUtils::LonLat2Utm(point.getLongitude(),
+                                                 point.getLatitude());
             utmP.speed = point.getSpeed();
 
             utmVec.push_back(utmP);
