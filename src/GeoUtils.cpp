@@ -14,9 +14,10 @@ static const char* projMercStr =
 
 static const char* projLatLonStr =
     "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+
 //------------------------------------------------------------------------------
 
-void transformPoint(projPJ& src, projPJ& dst, double& x, double& y)
+void initProj()
 {
     if (!projInitialized)
     {
@@ -29,7 +30,12 @@ void transformPoint(projPJ& src, projPJ& dst, double& x, double& y)
             ofExit(1);
         }
     }
+}
 
+//------------------------------------------------------------------------------
+
+void transformPoint(projPJ& src, projPJ& dst, double& x, double& y)
+{
     if (pj_transform(src, dst, 1, 1, &x, &y, NULL) != 0)
     {
         ofLogError() << "Proj4 transform failed!";
@@ -41,6 +47,7 @@ void transformPoint(projPJ& src, projPJ& dst, double& x, double& y)
 
 UtmPoint GeoUtils::LatLon2Utm(const double lat, const double lon)
 {
+    initProj();
     double x = lon * DEG_TO_RAD;
     double y = lat * DEG_TO_RAD;
     transformPoint(pjLatLon, pjMerc, x, y);
@@ -51,6 +58,7 @@ UtmPoint GeoUtils::LatLon2Utm(const double lat, const double lon)
 
 ofxPoint<double> GeoUtils::Utm2LatLon(const double x, const double y)
 {
+    initProj();
     double lon = x;
     double lat = y;
     transformPoint(pjMerc, pjLatLon, lon, lat);
