@@ -36,9 +36,11 @@ void initProj()
 
 void transformPoint(projPJ& src, projPJ& dst, double& x, double& y)
 {
-    if (pj_transform(src, dst, 1, 1, &x, &y, NULL) != 0)
+    const int pjErrno = pj_transform(src, dst, 1, 1, &x, &y, NULL);
+
+    if (pjErrno != 0)
     {
-        ofLogError() << "Proj4 transform failed!";
+        ofLogError() << "Proj4 transform error: " << pj_strerrno(pjErrno);
         x = y = 0.0;
     }
 }
