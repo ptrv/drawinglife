@@ -111,8 +111,7 @@ PROJECT_LDFLAGS= -lGeographic -lspatialite
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -Ilibs/sqlite3 -Ilibs/sqlite3x -Ilibs/tclap-1.2.0/include \
-	-Ilibs/ofxTimer/src
+PROJECT_CFLAGS = -Ilibs/sqlite3 -Ilibs/sqlite3x -Ilibs/tclap-1.2.0/include
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
