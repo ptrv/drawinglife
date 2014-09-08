@@ -282,8 +282,6 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
     prepareGpsData(app);
 
-    bool dbOk = false;
-
     if (settings.isMultiMode())
     {
         app.setMagicBox(new MagicBox(settings,
@@ -319,7 +317,9 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             // -----------------------------------------------------------------
             // DB query
             tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
-            dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
+            bool dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
+
+            dbReader->closeDbConnection();
 
             if (dbOk)
             {
@@ -335,9 +335,8 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             else
             {
                 ofLogNotice(Logger::DATA_LOADER) << "--> No GpsData loaded!";
-                break;
+                return false;
             }
-            dbReader->closeDbConnection();
         }
         // ---------------------------------------------------------------------
 
@@ -350,7 +349,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
     processGpsData(app);
 
-    return dbOk;
+    return true;
 
 }
 
