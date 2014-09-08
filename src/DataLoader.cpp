@@ -231,7 +231,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
                                                  settings.getBoundingBoxPadding()));
             }
 
-            MagicBoxPtr box = magicBoxes.back();
+            MagicBoxWeak boxWeak = magicBoxes.back();
 
             Walk* walk = new Walk(settings, settings.getNameColors()[i]);
             walks.push_back(walk);
@@ -243,13 +243,13 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
             if (settings.isBoundingBoxAuto())
             {
-                walk->setMagicBox(box);
+                walk->setMagicBox(boxWeak);
             }
             else
             {
                 double bbLat = settings.getBoundingBoxLat();
                 double bbLon = settings.getBoundingBoxLon();
-                walk->setMagicBoxStatic(box, bbLat, bbLon);
+                walk->setMagicBoxStatic(boxWeak, bbLat, bbLon);
             }
 
             if (app.getIsImageAsCurrentPoint() &&
