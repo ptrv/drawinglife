@@ -333,7 +333,7 @@ void DrawingLifeApp::draw()
                 if (m_isDebugMode)
                 {
                     const MagicBoxPtr& box = m_settings->isMultiMode()
-                            ? m_magicBox : m_magicBoxes[i];
+                            ? m_magicBoxes[0] : m_magicBoxes[i];
                     ViewHelper::drawInfoDebug(*m_settings.get(), *box.get(),
                                               *gpsData.get(), walk, i);
                 }
@@ -524,40 +524,27 @@ void DrawingLifeApp::keyPressed  (int key)
     case '+':
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::zoom, _1, MagicBox::ZOOM_IN));
-        if (m_multiMode)
-            m_magicBox->zoom(MagicBox::ZOOM_IN);
         break;
     case '-':
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::zoom, _1, MagicBox::ZOOM_OUT));
-        if (m_multiMode)
-            m_magicBox->zoom(MagicBox::ZOOM_OUT);
         break;
     case OF_KEY_UP:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::UP));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::UP);
         break;
     case OF_KEY_DOWN:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::DOWN));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::DOWN);
         break;
        break;
     case OF_KEY_RIGHT:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::RIGHT));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::RIGHT);
         break;
     case OF_KEY_LEFT:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::LEFT));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::LEFT);
-
         break;
     case ' ':
         if (m_interactiveMode)

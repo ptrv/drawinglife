@@ -40,8 +40,6 @@ public:
     GpsDataVector& getGpsDataVector() { return m_gpsDatas; }
     WalkVector& getWalkVector() { return m_walks; }
     MagicBoxVector& getMagicBoxVector() { return m_magicBoxes; }
-    MagicBox& getMagicBox() { return *m_magicBox.get(); }
-    void setMagicBox(MagicBox* const magicBox) { m_magicBox.reset(magicBox); }
 
     const std::vector<CurrentPointImageData>& getCurrentPointImageList() const
     { return m_imageList; }
@@ -140,7 +138,6 @@ private:
     std::vector<LocationImageVec> m_locationImages;
 
     bool m_pause;
-    MagicBoxPtr m_magicBox;
 
     ofSoundPlayerVec m_soundPlayers;
 

@@ -105,7 +105,6 @@ void DataLoader::loadLocationImages(DrawingLifeApp& app)
     const AppSettings& settings = app.getAppSettings();
     const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
     const MagicBoxVector boxes = app.getMagicBoxVector();
-    MagicBox& box = app.getMagicBox();
 
     app.clearLocationImageSources();
     app.clearLocationImageVec();
@@ -130,22 +129,14 @@ void DataLoader::loadLocationImages(DrawingLifeApp& app)
         }
 
         app.addLocationImageSource(img);
-        if (settings.isMultiMode())
+
+        for (size_t i = 0; boxes.size(); ++i)
         {
-            LocationImage* lImg = new LocationImage(img, box.shared_from_this(),
-                                                    locImgData);
-            lImg->setViewBounds(viewDimensions[0]);
+            LocationImage* lImg = new LocationImage(img, boxes[i], locImgData);
+            lImg->setViewBounds(viewDimensions[i]);
             locVec.push_back(lImg);
         }
-        else
-        {
-            for (size_t i = 0; boxes.size(); ++i)
-            {
-                LocationImage* lImg = new LocationImage(img, boxes[i], locImgData);
-                lImg->setViewBounds(viewDimensions[i]);
-                locVec.push_back(lImg);
-            }
-        }
+
         app.addLocationImageVec(locVec);
     }
 }
@@ -206,24 +197,21 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
     const GpsDataVector& gpsDatas = app.getGpsDataVector();
-    const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
+
+    const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
+    const std::vector<CurrentPointImageData>& imageList =
+        app.getCurrentPointImageList();
+    const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
+
+    MagicBoxVector& magicBoxes = app.getMagicBoxVector();
     Timeline& timeline = app.getTimeline();
     WalkVector& walks = app.getWalkVector();
-    MagicBox& magicBox = app.getMagicBox();
-
-    const std::vector<CurrentPointImageData>& imageList =
-            app.getCurrentPointImageList();
-    const boost::ptr_vector<ofImage>& images = app.getCurrentPointImages();
 
     ofLogVerbose(Logger::DATA_LOADER) << "------------------------\n";
 
     const size_t numPersons = settings.getNumPersons();
 
-    if (numPersons > 0 &&
-        gpsDatas.size() == numPersons &&
-        walks.size() == numPersons &&
-        ((magicBoxes.size() == numPersons && !settings.isMultiMode()) ||
-         settings.isMultiMode()))
+    if (numPersons > 0 && gpsDatas.size() == numPersons)
     {
         timeline.setData(gpsDatas);
 
@@ -235,35 +223,39 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
         for (size_t i = 0; i < numPersons; ++i)
         {
-            Walk& walk = walks[i];
-
-            if (!settings.isBoundingBoxAuto() && !settings.isMultiMode())
+            if (!settings.isMultiMode() || magicBoxes.empty())
             {
-                //m_walks[i]->setMagicBoxStatic(m_magicBoxes[i]);
-                double bbLat = settings.getBoundingBoxLat();
-                double bbLon = settings.getBoundingBoxLon();
-                walk.setMagicBoxStatic(magicBoxes[i], bbLat, bbLon);
+                magicBoxes.push_back(
+                    boost::make_shared<MagicBox>(settings,
+                                                 settings.getBoundingBoxSize(),
+                                                 settings.getBoundingBoxPadding()));
+            }
+
+            MagicBoxPtr box = magicBoxes.back();
+
+            Walk* walk = new Walk(settings, settings.getNameColors()[i]);
+            walks.push_back(walk);
+
+            walk->setViewBounds(viewDimensions[i]);
+            walk->reset();
+
+            walk->setGpsData(gpsDatas[i]->shared_from_this());
+
+            if (settings.isBoundingBoxAuto())
+            {
+                walk->setMagicBox(box);
             }
             else
             {
-                if (settings.isMultiMode())
-                {
-                    double bbLat = settings.getBoundingBoxLat();
-                    double bbLon = settings.getBoundingBoxLon();
-                    walk.setMagicBoxStatic(magicBox.shared_from_this(),
-                                           bbLat, bbLon);
-//                    walk.setMagicBox(m_magicBox);
-                }
-                else
-                {
-                    walk.setMagicBox(magicBoxes[i]);
-                }
+                double bbLat = settings.getBoundingBoxLat();
+                double bbLon = settings.getBoundingBoxLon();
+                walk->setMagicBoxStatic(box, bbLat, bbLon);
             }
 
             if (app.getIsImageAsCurrentPoint() &&
                 images.size() >= settings.getNumPersons())
             {
-                walk.setCurrentPointImage(images[i], imageList[i].alpha);
+                walk->setCurrentPointImage(images[i], imageList[i].alpha);
             }
         }
     }
@@ -276,39 +268,15 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 {
     const AppSettings& settings = app.getAppSettings();
     GpsDataVector& gpsDatas = app.getGpsDataVector();
-    WalkVector& walks = app.getWalkVector();
-    MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-    const ViewDimensionsVec& viewDimensions = app.getViewDimensionsVec();
 
     prepareGpsData(app);
 
-    if (settings.isMultiMode())
-    {
-        app.setMagicBox(new MagicBox(settings,
-                                     settings.getBoundingBoxSize(),
-                                     settings.getBoundingBoxPadding()));
-    }
     // get GpsData from database
     const size_t numPersons = settings.getNumPersons();
     for (size_t i = 0; i < numPersons; ++i)
     {
         GpsDataPtr gpsData = boost::make_shared<GpsData>(settings);
         gpsDatas.push_back(gpsData);
-
-        if (!settings.isMultiMode())
-        {
-            magicBoxes.push_back(boost::make_shared<MagicBox>(
-                                     settings,
-                                     settings.getBoundingBoxSize(),
-                                     settings.getBoundingBoxPadding()));
-        }
-
-        Walk* walk = new Walk(settings,
-                              settings.getNameColors()[i]);
-        walks.push_back(walk);
-
-        walk->setViewBounds(viewDimensions[i]);
-        walk->reset();
 
         DBReaderPtr dbReader(new DBReader(settings.getDatabasePath(),
                                           settings.useSpeed()));
@@ -317,11 +285,11 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             // -----------------------------------------------------------------
             // DB query
             tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
-            bool dbOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
+            const bool loadOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
 
             dbReader->closeDbConnection();
 
-            if (dbOk)
+            if (loadOk)
             {
                 ofLogNotice(Logger::DATA_LOADER) << "--> GpsData load ok!";
                 ofLogNotice(Logger::DATA_LOADER)
@@ -329,8 +297,6 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
                         << gpsData->getSegments().size() << " GpsSegments, "
                         << gpsData->getTotalGpsPoints() << " GpsPoints!"
                         << std::endl;
-
-                walk->setGpsData(gpsData->shared_from_this());
             }
             else
             {

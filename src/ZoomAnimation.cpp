@@ -60,20 +60,11 @@ void ZoomAnimation::update(DrawingLifeApp& app)
 
     if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
     {
-        if (m_settings.isMultiMode())
+        const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
+        BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
         {
-            MagicBox& magicBox = app.getMagicBox();
-            magicBox.setSize(m_zoomIntegrator->getValue());
-            magicBox.setupBox(m_theIntegrator->getValue());
-        }
-        else
-        {
-            const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-            BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
-            {
-                box->setSize(m_zoomIntegrator->getValue());
-                box->setupBox(m_theIntegrator->getValue());
-            }
+            box->setSize(m_zoomIntegrator->getValue());
+            box->setupBox(m_theIntegrator->getValue());
         }
     }
 }
