@@ -42,11 +42,6 @@ void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
     }
 
     GpsData::setGlobalValues(minXY, maxXY);
-
-    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
-    {
-        gpsData->calculateUtmPointsWithIndex();
-    }
 }
 
 //------------------------------------------------------------------------------

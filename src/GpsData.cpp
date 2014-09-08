@@ -68,7 +68,7 @@ void GpsData::setGpsData(const GpsSegmentVector& segments,
     m_minUtm = GeoUtils::LonLat2Utm(m_minLonLat.x, m_minLonLat.y);
     m_maxUtm = GeoUtils::LonLat2Utm(m_maxLonLat.x, m_maxLonLat.y);
     m_user = user;
-    calculateUtmPoints();
+    calculateUtmPointsWithIndex();
     normalizeUtmPoints();
 }
 
@@ -247,26 +247,6 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
     p.setDataFromLatLon(latLon.y, latLon.x);
 
     return p;
-}
-
-//------------------------------------------------------------------------------
-
-void GpsData::calculateUtmPoints()
-{
-    m_utmPoints.clear();
-    m_utmPoints.reserve(m_segments.size());
-    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
-    {
-        std::vector<UtmPoint> utmVec;
-        utmVec.reserve(rSegment.getPoints().size());
-        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
-        {
-            UtmPoint utmP =
-                GeoUtils::LonLat2Utm(rPoint.getLongitude(), rPoint.getLatitude());
-            utmVec.push_back(utmP);
-        }
-        m_utmPoints.push_back(utmVec);
-    }
 }
 
 //------------------------------------------------------------------------------
