@@ -311,8 +311,6 @@ void GpsData::setGlobalValues(const ofxPoint<double>& minXY,
 {
     drawMaxima = maxXY;
     drawMinima = minXY;
-
-    //normalizeUtmPointsGlobal();
 }
 
 //------------------------------------------------------------------------------
@@ -322,22 +320,8 @@ void GpsData::setGlobalValues(const ofxPoint<double>& minXY,
 void GpsData::normalizeUtmPoints()
 {
 	setMinMaxRatioUTM();
-    normalizeUtmPoints(m_normalizedUtmPoints);
-}
 
-//------------------------------------------------------------------------------
-
-void GpsData::normalizeUtmPointsGlobal()
-{
-	setGlobalMinMaxRatioUTM();
-    normalizeUtmPoints(m_normalizedUtmPointsGlobal);
-}
-
-//------------------------------------------------------------------------------
-
-void GpsData::normalizeUtmPoints(UtmDataVector& utmDataVec)
-{
-    utmDataVec.clear();
+    m_normalizedUtmPoints.clear();
     BOOST_FOREACH(const UtmSegment& utmSegment, m_utmPoints)
     {
         UtmSegment normalizedSegments;
@@ -350,7 +334,7 @@ void GpsData::normalizeUtmPoints(UtmDataVector& utmDataVec)
 
             normalizedSegments.push_back(UtmPoint(x, y));
         }
-        utmDataVec.push_back(normalizedSegments);
+        m_normalizedUtmPoints.push_back(normalizedSegments);
     }
 }
 

@@ -63,8 +63,6 @@ public:
     const UtmDataVector& getUTMPoints() const { return m_utmPoints; }
     const UtmDataVector& getNormalizedUTMPoints() const
     { return m_normalizedUtmPoints; }
-    const UtmDataVector& getNormalizedUTMPointsGlobal() const
-    { return m_normalizedUtmPointsGlobal; }
 
 	const std::string& getUser() const { return m_user; }
     const GpsDataIndexVector& getIndices() const { return m_indices; }
@@ -80,8 +78,6 @@ public:
                                 const ofxPoint<double>& maxXY);
 
     //--------------------------------------------------------------------------
-
-    void normalizeUtmPointsGlobal();
 
 private:
 
@@ -104,7 +100,6 @@ private:
     //--------------------------------------------------------------------------
 
     void normalizeUtmPoints();
-    void normalizeUtmPoints(UtmDataVector& utmDataVec);
 
     //--------------------------------------------------------------------------
 
@@ -130,7 +125,6 @@ private:
 
     UtmDataVector m_utmPoints;
     UtmDataVector m_normalizedUtmPoints;
-    UtmDataVector m_normalizedUtmPointsGlobal;
 
     GpsDataIndexVector m_indices;
 };
