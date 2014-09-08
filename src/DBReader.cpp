@@ -310,6 +310,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
             gpsPointVec.push_back(gpsPoint);
         }
         queryFirstOk = true;
+        reader.close();
         // -----------------------------------------------------------------------------
 
         gpsSeg.setGpsSegment(gpsPointVec, lastSegment);
@@ -337,6 +338,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
             minLat = readerMinMax.getdouble(2);
             maxLat = readerMinMax.getdouble(3);
         }
+        readerMinMax.close();
         // -----------------------------------------------------------------------------
         gpsData.clear();
         gpsData.setGpsData(gpsSegmentVec,
