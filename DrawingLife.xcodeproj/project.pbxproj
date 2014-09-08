@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		D073C9FA19BCE1D000204BFB /* libproj.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D073C9F919BCE1D000204BFB /* libproj.a */; };
 		D08916A419A1483800AE74F1 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D08916A219A1483800AE74F1 /* sqlite3.c */; };
 		D08916B819A2C22E00AE74F1 /* GeoUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D08916B719A2C22E00AE74F1 /* GeoUtils.cpp */; };
 		D0E1DEED13DC309C00268AD9 /* Walk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0E1DED913DC309C00268AD9 /* Walk.cpp */; };
@@ -86,8 +85,6 @@
 
 /* Begin PBXFileReference section */
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
-		D073C9F619BCE1D000204BFB /* proj_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proj_api.h; sourceTree = "<group>"; };
-		D073C9F919BCE1D000204BFB /* libproj.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libproj.a; sourceTree = "<group>"; };
 		D08916A219A1483800AE74F1 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = libs/sqlite3/sqlite3.c; sourceTree = "<group>"; };
 		D08916A319A1483800AE74F1 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = libs/sqlite3/sqlite3.h; sourceTree = "<group>"; };
 		D08916B619A29B3900AE74F1 /* GeoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoUtils.h; sourceTree = "<group>"; };
@@ -170,7 +167,6 @@
 			files = (
 				D0EC48E6199A868700AC8B2E /* CoreVideo.framework in Frameworks */,
 				D0EC48E4199A867600AC8B2E /* QTKit.framework in Frameworks */,
-				D073C9FA19BCE1D000204BFB /* libproj.a in Frameworks */,
 				D0EC48D9199A85ED00AC8B2E /* openFrameworksDebug.a in Frameworks */,
 				D0EC48E2199A866200AC8B2E /* Accelerate.framework in Frameworks */,
 				E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */,
@@ -228,41 +224,6 @@
 				BBAB23BE13894E4700AA2426 /* GLUT.framework */,
 			);
 			name = "3rd party frameworks";
-			sourceTree = "<group>";
-		};
-		D073C9F319BCE08300204BFB /* proj */ = {
-			isa = PBXGroup;
-			children = (
-				D073C9F519BCE1D000204BFB /* include */,
-				D073C9F719BCE1D000204BFB /* libs */,
-			);
-			name = proj;
-			sourceTree = "<group>";
-		};
-		D073C9F519BCE1D000204BFB /* include */ = {
-			isa = PBXGroup;
-			children = (
-				D073C9F619BCE1D000204BFB /* proj_api.h */,
-			);
-			name = include;
-			path = libs_mac/proj/include;
-			sourceTree = "<group>";
-		};
-		D073C9F719BCE1D000204BFB /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				D073C9F819BCE1D000204BFB /* osx */,
-			);
-			name = libs;
-			path = libs_mac/proj/libs;
-			sourceTree = "<group>";
-		};
-		D073C9F819BCE1D000204BFB /* osx */ = {
-			isa = PBXGroup;
-			children = (
-				D073C9F919BCE1D000204BFB /* libproj.a */,
-			);
-			path = osx;
 			sourceTree = "<group>";
 		};
 		D089169A19A134E200AE74F1 /* sqlite3 */ = {
@@ -342,7 +303,6 @@
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				D0E1DEF913DC30C300268AD9 /* sqlite3x */,
 				D089169A19A134E200AE74F1 /* sqlite3 */,
-				D073C9F319BCE08300204BFB /* proj */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
@@ -606,11 +566,6 @@
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs_mac/geographiclib-1.37/libs/osx",
-					"$(PROJECT_DIR)/libs_mac/proj/libs/osx",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
@@ -643,11 +598,6 @@
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs_mac/geographiclib-1.37/libs/osx",
-					"$(PROJECT_DIR)/libs_mac/proj/libs/osx",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
