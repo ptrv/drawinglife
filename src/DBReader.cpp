@@ -55,11 +55,11 @@ DBReader::~DBReader()
 
 bool DBReader::setupDbConnection()
 {
+    std::string spatialiteVersion;
+
 #ifndef TARGET_OSX
     spatialite_init(0);
-    ofLogVerbose(Logger::DB_READER) << "Spatialite version: "
-                                    << spatialite_version()
-                                    << " db path:" << m_dbPath;
+    spatialiteVersion = spatialite_version();
 #endif
     try
     {
@@ -71,10 +71,17 @@ bool DBReader::setupDbConnection()
                      << ofToDataPath(libspatialiteDylibPath, true)
                      << "')";
         m_dbconn->executenonquery(loadExtQuery.str());
+        spatialiteVersion =
+            m_dbconn->executestring("SELECT spatialite_version()");
+
 #endif
+        ofLogVerbose(Logger::DB_READER)
+            << "Spatialite version: " << spatialiteVersion;
+
         return true;
     }
     CATCHDBERRORS
+
     return false;
 }
 
