@@ -5,9 +5,9 @@ OF_PATH = ../../..
 //THIS HAS ALL THE HEADER AND LIBS FOR OF CORE
 #include "../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig"
 
-BOOST_INCLUDE = /usr/local/opt/boost/include
-PROJ4_INCLUDE = libs_mac/proj/include
-PROJ4_LIB = libs_mac/proj/lib/libproj.a
+BOOST_INCLUDE = "/usr/local/opt/boost/include"
+PROJ4_INCLUDE = "libs_mac/proj/include"
+PROJ4_LIB = "libs_mac/proj/lib/libproj.a"
 
 //ICONS
 ICON_NAME_DEBUG = icon-debug.icns
