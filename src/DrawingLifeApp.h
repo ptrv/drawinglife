@@ -140,6 +140,7 @@ private:
     bool m_pause;
 
     ofSoundPlayerVec m_soundPlayers;
+    ofSoundPlayerVec::iterator m_currentSoundPlayer;
 
     bool m_isZoomAnimation;
 
@@ -149,7 +150,6 @@ private:
     bool doShader;
 
     static int m_sZoomFrameCount;
-    static int m_sCurrentSoundFile;
 
     boost::function<void(Walk&)> fnWalkDrawAll;
     boost::function<void(Walk&)> fnWalkReset;

@@ -20,7 +20,6 @@
 //------------------------------------------------------------------------------
 
 int DrawingLifeApp::m_sZoomFrameCount = 0;
-int DrawingLifeApp::m_sCurrentSoundFile = 0;
 
 //------------------------------------------------------------------------------
 
@@ -58,6 +57,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     fnWalkDrawAll = boost::bind(&Walk::drawAll, _1);
     fnWalkReset = boost::bind(&Walk::reset, _1);
     fnLocationImageDraw = boost::bind(&LocationImage::draw, _1);
+
+    m_currentSoundPlayer = m_soundPlayers.end();
 }
 
 //------------------------------------------------------------------------------
@@ -675,33 +676,30 @@ void DrawingLifeApp::resetData()
 
 void DrawingLifeApp::soundUpdate()
 {
-    if (m_settings->isSoundActive() && m_soundPlayers.size() > 0)
+    if (m_settings->isSoundActive() && !m_soundPlayers.empty())
     {
-        if (m_timeline->isFirst())
+        if (m_timeline->isFirst() ||
+            m_currentSoundPlayer == m_soundPlayers.end())
         {
-            m_sCurrentSoundFile = 0;
+            m_currentSoundPlayer = m_soundPlayers.begin();
+
             std::for_each(m_soundPlayers.begin(), m_soundPlayers.end(),
                           boost::bind(&ofSoundPlayer::stop, _1));
-            if (m_soundPlayers.size() > 0)
-            {
-                m_soundPlayers[m_sCurrentSoundFile].play();
-            }
+
+            m_currentSoundPlayer->play();
         }
-        else if (!m_soundPlayers[m_sCurrentSoundFile].getIsPlaying())
+        else if (!m_currentSoundPlayer->getIsPlaying())
         {
-            ofSoundPlayer& player = m_soundPlayers[m_sCurrentSoundFile];
-            player.stop();
-            player.setPosition(0.0);
-            if (m_sCurrentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
+            m_currentSoundPlayer->stop();
+            m_currentSoundPlayer->setPosition(0.0);
+
+            ++m_currentSoundPlayer;
+            if (m_currentSoundPlayer == m_soundPlayers.end())
             {
-                ++m_sCurrentSoundFile;
-            }
-            else
-            {
-                m_sCurrentSoundFile = 0;
+                m_currentSoundPlayer = m_soundPlayers.begin();
             }
 
-            m_soundPlayers[m_sCurrentSoundFile].play();
+            m_currentSoundPlayer->play();
         }
     }
 }
