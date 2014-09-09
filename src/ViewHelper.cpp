@@ -44,7 +44,7 @@ void ViewHelper::drawKeyCommands(const ofColor& c)
     stream << "space       : go to next segment (interactive mode)\n";
     stream << "backspace   : go to previous segment (interactive mode)\n";
 
-   ofDrawBitmapString(stream.str(), 30, ofGetHeight() - 320);
+    ofDrawBitmapString(stream.str(), 30, ofGetHeight() - 320);
 }
 
 //------------------------------------------------------------------------------
@@ -82,13 +82,10 @@ void ViewHelper::setViewAspectRatio(DrawingLifeApp& app)
     double width;
     double height;
 
-    if (isMultiMode)
+    width = ofGetWidth();
+    if (!isMultiMode)
     {
-        width = ofGetWidth();
-    }
-    else
-    {
-        width = ofGetWidth() / static_cast<int>(numPersons);
+        width /= static_cast<int>(numPersons);
     }
 
     height = ofGetHeight();

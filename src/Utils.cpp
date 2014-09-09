@@ -18,34 +18,6 @@ Utils::Utils()
 
 //------------------------------------------------------------------------------
 
-void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
-{
-    ofxPoint<double> minXY = getPointDoubleMax();
-    ofxPoint<double> maxXY = getPointDoubleMin();
-    ofxPoint<double> minLonLat = getPointDoubleMax();
-    ofxPoint<double> maxLonLat = getPointDoubleMin();
-
-    const GpsDataVector& gpsDatas = app.getGpsDataVector();
-    const AppSettings& settings = app.getAppSettings();
-
-    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
-    {
-        minXY.x = MIN(gpsData->getMinUtmX(), minXY.x);
-        maxXY.x = MAX(gpsData->getMaxUtmX(), maxXY.x);
-        minXY.y = MIN(gpsData->getMinUtmY(), minXY.y);
-        maxXY.y = MAX(gpsData->getMaxUtmY(), maxXY.y);
-
-        minLonLat.x = MIN(gpsData->getMinLon(), minLonLat.x);
-        minLonLat.x = MAX(gpsData->getMaxLon(), minLonLat.x);
-        minLonLat.y = MIN(gpsData->getMinLat(), minLonLat.y);
-        minLonLat.y = MAX(gpsData->getMaxLat(), minLonLat.y);
-    }
-
-    GpsData::setGlobalValues(minXY, maxXY);
-}
-
-//------------------------------------------------------------------------------
-
 static double timeThen = 0.0;
 static double timeSum = 0.0;
 static float fpsToShow = 0.0;

@@ -73,11 +73,6 @@ public:
 
     //--------------------------------------------------------------------------
 
-    static void setGlobalValues(const ofxPoint<double>& minXY,
-                                const ofxPoint<double>& maxXY);
-
-    //--------------------------------------------------------------------------
-
 private:
 
     typedef boost::function<double(const GpsPoint&)> tFnGetGpsData;
@@ -103,14 +98,9 @@ private:
     //--------------------------------------------------------------------------
 
     void setMinMaxRatioUTM();
-	void setGlobalMinMaxRatioUTM();
 	void setMinMaxValuesUTM();
 
     //--------------------------------------------------------------------------
-    static ofxPoint<double> drawMaxima;
-    static ofxPoint<double> drawMinima;
-
-    static double m_lon0Global;
 
     const AppSettings& m_settings;
     int m_gpsDataId;

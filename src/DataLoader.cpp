@@ -186,13 +186,6 @@ void DataLoader::loadFonts(DrawingLifeApp& app, DrawingLifeFonts& fonts)
 // Private GpsData loading functions
 //------------------------------------------------------------------------------
 
-void DataLoader::prepareGpsData(DrawingLifeApp& app)
-{
-    app.resetData();
-}
-
-//------------------------------------------------------------------------------
-
 void DataLoader::processGpsData(DrawingLifeApp& app)
 {
     const AppSettings& settings = app.getAppSettings();
@@ -215,10 +208,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
     {
         timeline.setData(gpsDatas);
 
-        Utils::calculateGlobalMinMaxValues(app);
-
         Walk::setTrackAlpha(settings.getAlphaDot());
-
         Walk::setDotSize(settings.getDotSize());
 
         for (size_t i = 0; i < numPersons; ++i)
@@ -269,7 +259,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
     const AppSettings& settings = app.getAppSettings();
     GpsDataVector& gpsDatas = app.getGpsDataVector();
 
-    prepareGpsData(app);
+    app.resetData();
 
     // get GpsData from database
     const size_t numPersons = settings.getNumPersons();

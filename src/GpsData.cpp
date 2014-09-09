@@ -6,21 +6,6 @@
 #include "GpsData.h"
 #include "GeoUtils.h"
 
-#if defined (WIN32)
-#undef max
-#undef min
-#endif
-#include <limits>
-
-//------------------------------------------------------------------------------
-
-ofxPoint<double> GpsData::drawMaxima =
-        ofxPoint<double>(-std::numeric_limits<double>::max(),
-                         -std::numeric_limits<double>::max());
-ofxPoint<double> GpsData::drawMinima =
-        ofxPoint<double>(std::numeric_limits<double>::max(),
-                         std::numeric_limits<double>::max());
-
 //------------------------------------------------------------------------------
 
 GpsData::GpsData(const AppSettings& settings)
@@ -285,21 +270,12 @@ void GpsData::calculateUtmPointsWithIndex()
 }
 
 //------------------------------------------------------------------------------
-
-void GpsData::setGlobalValues(const ofxPoint<double>& minXY,
-                              const ofxPoint<double>& maxXY)
-{
-    drawMaxima = maxXY;
-    drawMinima = minXY;
-}
-
-//------------------------------------------------------------------------------
 // Normalize Utm points.
 //------------------------------------------------------------------------------
 
 void GpsData::normalizeUtmPoints()
 {
-	setMinMaxRatioUTM();
+    setMinMaxRatioUTM();
 
     m_normalizedUtmPoints.clear();
     BOOST_FOREACH(const UtmSegment& utmSegment, m_utmPoints)
@@ -360,46 +336,6 @@ void GpsData::setMinMaxRatioUTM()
         m_maxUtm.x = maxLon;
         m_minUtm.y = minLat;
         m_maxUtm.y = maxLat;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void GpsData::setGlobalMinMaxRatioUTM()
-{
-    const ofxPoint<double> maxLonLat = drawMaxima;
-    const ofxPoint<double> minLonLat = drawMinima;
-
-    // Calculate horizontal and vertical range.
-    const double deltaLon = maxLonLat.x - minLonLat.x;
-    const double deltaLat = maxLonLat.y - minLonLat.y;
-
-    const double deltaLatLonHalf = (deltaLat - deltaLon) / 2.0;
-    const double deltaLonLatHalf = (deltaLon - deltaLat) / 2.0;
-
-    // Aspect ratio is: width < height.
-    if (deltaLon <	deltaLat)
-    {
-        drawMinima.x = minLonLat.x - deltaLatLonHalf;
-        drawMaxima.x = maxLonLat.x + deltaLatLonHalf;
-        drawMinima.y = minLonLat.x;
-        drawMaxima.y = maxLonLat.y;
-    }
-    // Aspect ratio is: width > height.
-    else if (deltaLon > deltaLat)
-    {
-        drawMinima.x = minLonLat.x;
-        drawMaxima.x = maxLonLat.x;
-        drawMinima.y = minLonLat.y - deltaLonLatHalf;
-        drawMaxima.y = maxLonLat.y + deltaLonLatHalf;
-    }
-    // Aspect ratio is: height == width.
-    else
-    {
-        drawMinima.x = minLonLat.x;
-        drawMaxima.x = maxLonLat.x;
-        drawMinima.y = minLonLat.x;
-        drawMaxima.y = maxLonLat.y;
     }
 }
 
