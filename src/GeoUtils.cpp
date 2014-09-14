@@ -24,7 +24,11 @@ void initProj()
         pjMerc = pj_init_plus(projMercStr);
         pjLonLat = pj_init_plus(projLonLatStr);
         projInitialized = pjMerc && pjLonLat;
-        if (!projInitialized)
+        if (projInitialized)
+        {
+            ofLogVerbose() << "Proj4 version: " << PJ_VERSION;
+        }
+        else
         {
             ofLogError() << "Could not initialize Proj4!";
             ofExit(1);
