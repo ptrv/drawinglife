@@ -321,8 +321,8 @@ void DrawingLifeApp::draw()
 
             if (m_multiMode && m_multiModeInfo)
             {
-                ViewHelper::drawInfoMultiMode(*m_settings.get(),
-                                              *m_timeline.get(),
+                ViewHelper::drawInfoMultiMode(*m_settings,
+                                              *m_timeline,
                                               m_viewDimensions[0],
                                               m_fonts["info"]);
             }
@@ -335,12 +335,11 @@ void DrawingLifeApp::draw()
                 {
                     const MagicBoxPtr& box = m_settings->isMultiMode()
                             ? m_magicBoxes[0] : m_magicBoxes[i];
-                    ViewHelper::drawInfoDebug(*m_settings.get(), *box.get(),
-                                              *gpsData.get(), walk, i);
+                    ViewHelper::drawInfoDebug(*m_settings, *box, *gpsData, walk, i);
                 }
                 else if (m_showInfo)
                 {
-                    ViewHelper::drawInfo(*m_settings.get(), *gpsData.get(), walk,
+                    ViewHelper::drawInfo(*m_settings, *gpsData, walk,
                                          m_viewDimensions[i], m_fonts["info"], i);
                 }
 

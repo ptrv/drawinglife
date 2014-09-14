@@ -277,7 +277,7 @@ void Walk::draw()
             startPoint = 0;
         }
 
-        drawCurrentPoint(*magicBox.get(), currentUtm);
+        drawCurrentPoint(*magicBox, currentUtm);
     }
 
     // draw borders of bounding boxes.

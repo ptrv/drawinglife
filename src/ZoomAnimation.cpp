@@ -35,7 +35,7 @@ void ZoomAnimation::update(DrawingLifeApp& app)
 
     if (m_settings.isZoomAnimation())
     {
-        if (zoomHasChanged(*timeline.get()))
+        if (zoomHasChanged(*timeline))
         {
             const ZoomAnimFrame& zoomAnimFrame =
                     m_settings.getZoomAnimFrames()[m_sZoomFrameCount];

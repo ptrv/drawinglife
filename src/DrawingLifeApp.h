@@ -35,8 +35,8 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
 
-    Timeline& getTimeline() const { return *m_timeline.get(); }
-    const AppSettings& getAppSettings() const { return *m_settings.get(); }
+    Timeline& getTimeline() const { return *m_timeline; }
+    const AppSettings& getAppSettings() const { return *m_settings; }
     GpsDataVector& getGpsDataVector() { return m_gpsDatas; }
     WalkVector& getWalkVector() { return m_walks; }
     MagicBoxVector& getMagicBoxVector() { return m_magicBoxes; }

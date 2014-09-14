@@ -275,7 +275,7 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
             // -----------------------------------------------------------------
             // DB query
             tFuncLoadGpsData getGpsDataFunc = funcVec.at(i);
-            const bool loadOk = getGpsDataFunc(dbReader.get(), *gpsData.get());
+            const bool loadOk = getGpsDataFunc(dbReader.get(), *gpsData);
 
             dbReader->closeDbConnection();
 
