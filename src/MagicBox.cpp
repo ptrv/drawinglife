@@ -71,9 +71,8 @@ void MagicBox::setupBox(const ofxPoint<double>& currUtm)
 
     m_theBox.setFromCenter(m_centerUtm , m_currentSize, m_currentSize);
 
-    m_paddedBox.setFromCenter(m_centerUtm,
-                              m_currentSize - (2 * m_padding),
-                              m_currentSize - (2 * m_padding));
+    m_paddedBox.setFromCenter(
+        m_centerUtm, getSizeWithPadding(), getSizeWithPadding());
 }
 
 //------------------------------------------------------------------------------
@@ -98,14 +97,14 @@ void MagicBox::setSize(const double newSize)
     const double oldSize = m_currentSize;
     const double oldPadding = m_padding;
 
+    m_currentSize = newSize;
+    m_padding = m_currentSize/(oldSize/oldPadding);
+
     m_theBox.setFromCenter(m_centerUtm, newSize, newSize);
 
-    m_currentSize = newSize;
-
-    m_padding = m_currentSize/(oldSize/oldPadding);
-    m_paddedBox.setFromCenter(m_centerUtm,
-                              newSize - (2 * m_padding),
-                              newSize - (2 * m_padding));
+    const double newSizeWithPadding = newSize - (2 * m_padding);
+    m_paddedBox.setFromCenter(
+        m_centerUtm, newSizeWithPadding, newSizeWithPadding);
 }
 
 //------------------------------------------------------------------------------
@@ -162,9 +161,8 @@ void MagicBox::addToBoxSize(const double sizeToAdd)
         // calcuzlates new padding with old size/padding ratio.
         m_padding = m_currentSize / (oldSize / oldPadding);
 
-        m_paddedBox.setFromCenter(m_theBox.getCenter(),
-                                  m_currentSize - (2 * m_padding),
-                                  m_currentSize - (2 * m_padding));
+        m_paddedBox.setFromCenter(
+            m_theBox.getCenter(), getSizeWithPadding(), getSizeWithPadding());
     }
     else
     {
@@ -275,10 +273,16 @@ void MagicBox::setBoxes()
     }
     else
     {
-        m_paddedBox.setFromCenter(m_centerUtm,
-                                  m_currentSize - (2 * m_padding),
-                                  m_currentSize - (2 * m_padding));
+        m_paddedBox.setFromCenter(
+            m_centerUtm, getSizeWithPadding(), getSizeWithPadding());
     }
+}
+
+//------------------------------------------------------------------------------
+
+double MagicBox::getSizeWithPadding() const
+{
+    return m_currentSize - (2 * m_padding);
 }
 
 //------------------------------------------------------------------------------

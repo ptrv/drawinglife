@@ -58,7 +58,8 @@ private:
     void addY(double val);
 
     void setBoxes();
-    // ist auch m_lon0
+    double getSizeWithPadding() const;
+
     ofxPoint<double> m_centerUtm;
 
     ofxRectangle<double> m_theBox;
