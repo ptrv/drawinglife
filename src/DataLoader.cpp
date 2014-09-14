@@ -231,15 +231,15 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
             walk->setGpsData(gpsDatas[i]->shared_from_this());
 
-            if (settings.isBoundingBoxCropMode())
-            {
-                walk->setMagicBox(boxWeak);
-            }
-            else
+            if (settings.isBoundingBoxFixed())
             {
                 double bbLat = settings.getBoundingBoxLat();
                 double bbLon = settings.getBoundingBoxLon();
                 walk->setMagicBoxStatic(boxWeak, bbLat, bbLon);
+            }
+            else
+            {
+                walk->setMagicBox(boxWeak);
             }
 
             if (app.getIsImageAsCurrentPoint() &&
