@@ -77,21 +77,6 @@ void MagicBox::setupBox(const ofxPoint<double>& currUtm)
 
 //------------------------------------------------------------------------------
 
-void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
-                              const double width,
-                              const double height)
-{
-    m_centerUtm = currUtm;
-    m_currentSize = width;
-    m_padding = 0;
-
-    m_theBox.setFromCenter(m_centerUtm , width, height);
-
-    m_paddedBox.setFromCenter(m_centerUtm, width, height);
-}
-
-//------------------------------------------------------------------------------
-
 void MagicBox::setSize(const double newSize)
 {
     const double oldSize = m_currentSize;
