@@ -239,14 +239,14 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 void GpsData::calculateUtmPointsWithIndex()
 {
     m_indices.clear();
-    int counter = 0;
+    int numAllPoints = 0;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 
-    int i = 0;
+    int indexSegment = 0;
     BOOST_FOREACH(const GpsSegment& segment, m_segments)
     {
-        int j = 0;
+        int indexPoint = 0;
         std::vector<UtmPoint> utmVec;
         utmVec.reserve(segment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& point, segment.getPoints())
@@ -257,15 +257,11 @@ void GpsData::calculateUtmPointsWithIndex()
 
             utmVec.push_back(utmP);
 
-            GpsDataIndex idx;
-            idx.point = counter;
-            idx.gpsPoint = j++;
-            idx.gpsSegment = i;
+            GpsDataIndex idx(indexPoint++, indexSegment, numAllPoints++);
             m_indices.push_back(idx);
-            ++counter;
         }
         m_utmPoints.push_back(utmVec);
-        ++i;
+        ++indexSegment;
     }
 }
 

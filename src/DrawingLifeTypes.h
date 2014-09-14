@@ -84,9 +84,11 @@ struct CurrentPointImageData
 
 struct GpsDataIndex
 {
+    GpsDataIndex(int p, int s, int n)
+        : gpsPoint(p), gpsSegment(s), numPoints(n) {}
     int gpsPoint;
     int gpsSegment;
-    int point;
+    int numPoints;
 };
 
 //------------------------------------------------------------------------------
