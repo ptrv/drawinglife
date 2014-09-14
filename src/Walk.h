@@ -58,8 +58,7 @@ private:
 
     void drawBoxes();
 
-    void calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
-                              const GpsData& gpsData);
+    std::pair<int, int> calculateStartSegmentAndStartPoint(const GpsData& gpsData);
 
     void drawSpeedColor(double speed, bool& isInBox);
 

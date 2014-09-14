@@ -220,7 +220,8 @@ void Walk::draw()
         }
 
         int startSeg, startPoint;
-        calculateStartSegmentAndStartPoint(startSeg, startPoint, *gpsData.get());
+        boost::tie(startSeg, startPoint) =
+            calculateStartSegmentAndStartPoint(*gpsData);
 
         if (m_interactiveMode && !m_drawTraced)
         {
@@ -356,21 +357,16 @@ void Walk::drawBoxes()
 // Draw helpers
 // -----------------------------------------------------------------------------
 
-void Walk::calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
-                                              const GpsData& gpsData)
+std::pair<int, int> Walk::calculateStartSegmentAndStartPoint(const GpsData& gpsData)
 {
     if (m_maxPointsToDraw > 0 && m_currentPoint - m_maxPointsToDraw >= 0)
     {
         const int startIndex = m_currentPoint - m_maxPointsToDraw;
         const GpsDataIndex& gpsDataIndex = gpsData.getIndices()[startIndex];
-        startSeg = gpsDataIndex.gpsSegment;
-        startPoint = gpsDataIndex.gpsPoint;
+        return std::make_pair(gpsDataIndex.gpsSegment, gpsDataIndex.gpsPoint);
     }
-    else
-    {
-        startSeg = 0;
-        startPoint = 0;
-    }
+
+    return std::make_pair(0, 0);
 }
 
 // -----------------------------------------------------------------------------
