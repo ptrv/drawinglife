@@ -67,11 +67,11 @@ private:
     typedef boost::function<double(const GpsData&,int,int)> tFnGetCurrentDouble;
     double getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble) const;
 
-    tFnGetCurrentDouble tGetCurrentLongitudeFn;
-    tFnGetCurrentDouble tGetCurrentLatitudeFn;
-    tFnGetCurrentDouble tGetCurrentElevationFn;
-    tFnGetCurrentDouble tGetCurrentUtmXFn;
-    tFnGetCurrentDouble tGetCurrentUtmYFn;
+    tFnGetCurrentDouble fnGetCurrentLongitude;
+    tFnGetCurrentDouble fnGetCurrentLatitude;
+    tFnGetCurrentDouble fnGetCurrentElevation;
+    tFnGetCurrentDouble fnGetCurrentUtmX;
+    tFnGetCurrentDouble fnGetCurrentUtmY;
 
     const AppSettings& m_settings;
 

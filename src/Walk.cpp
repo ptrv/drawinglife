@@ -37,11 +37,11 @@ m_imageAlpha(255)
     m_currentSegColor.b = m_settings.getColorInteractiveSegB();
     m_currentSegColor.a = m_settings.getColorInteractiveSegA();
 
-    tGetCurrentLongitudeFn = boost::bind(&GpsData::getLongitude, _1, _2, _3);
-    tGetCurrentLatitudeFn = boost::bind(&GpsData::getLatitude, _1, _2, _3);
-    tGetCurrentElevationFn = boost::bind(&GpsData::getElevation, _1, _2, _3);
-    tGetCurrentUtmXFn = boost::bind(&GpsData::getUtmX, _1, _2, _3);
-    tGetCurrentUtmYFn = boost::bind(&GpsData::getUtmY, _1, _2, _3);
+    fnGetCurrentLongitude = boost::bind(&GpsData::getLongitude, _1, _2, _3);
+    fnGetCurrentLatitude = boost::bind(&GpsData::getLatitude, _1, _2, _3);
+    fnGetCurrentElevation = boost::bind(&GpsData::getElevation, _1, _2, _3);
+    fnGetCurrentUtmX = boost::bind(&GpsData::getUtmX, _1, _2, _3);
+    fnGetCurrentUtmY = boost::bind(&GpsData::getUtmY, _1, _2, _3);
 
 }
 
@@ -491,35 +491,35 @@ double Walk::getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble
 
 double Walk::getCurrentLongitude() const
 {
-    return getCurrentDoubleValue(tGetCurrentLongitudeFn);
+    return getCurrentDoubleValue(fnGetCurrentLongitude);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentLatitude() const
 {
-    return getCurrentDoubleValue(tGetCurrentLatitudeFn);
+    return getCurrentDoubleValue(fnGetCurrentLatitude);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentElevation() const
 {
-    return getCurrentDoubleValue(tGetCurrentElevationFn);
+    return getCurrentDoubleValue(fnGetCurrentElevation);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentUtmX() const
 {
-    return getCurrentDoubleValue(tGetCurrentUtmXFn);
+    return getCurrentDoubleValue(fnGetCurrentUtmX);
 }
 
 // -----------------------------------------------------------------------------
 
 double Walk::getCurrentUtmY() const
 {
-    return getCurrentDoubleValue(tGetCurrentUtmYFn);
+    return getCurrentDoubleValue(fnGetCurrentUtmY);
 }
 
 // -----------------------------------------------------------------------------
