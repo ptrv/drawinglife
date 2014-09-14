@@ -58,37 +58,20 @@ public:
 
     int getTotalGpsPoints() const;
 
-    static UtmPoint getUtmPointWithRegion(double lat, double lon,
-                                          const AppSettings& settings);
-
     static GpsPoint getGpsPoint(const ofxPoint<double>& utmP);
 
     const UtmDataVector& getUTMPoints() const { return m_utmPoints; }
     const UtmDataVector& getNormalizedUTMPoints() const
     { return m_normalizedUtmPoints; }
-    const UtmDataVector& getNormalizedUTMPointsGlobal() const
-    { return m_normalizedUtmPointsGlobal; }
 
-    double getProjectionCentralMeridian() const { return m_lon0; }
-	double getLon0() const { return m_lon0; }
 	const std::string& getUser() const { return m_user; }
     const GpsDataIndexVector& getIndices() const { return m_indices; }
 
     //--------------------------------------------------------------------------
 
-    void calculateUtmPoints(double lon0);
-    void calculateUtmPointsGlobalLon(bool regionsOn);
+    void calculateUtmPointsWithIndex();
 
     //--------------------------------------------------------------------------
-
-    static void setGlobalValues(const ofxPoint<double>& minXY,
-                                const ofxPoint<double>& maxXY,
-                                double lon0);
-    static double getLon0Glogal() { return GpsData::m_lon0Global; }
-
-    //--------------------------------------------------------------------------
-
-    void normalizeUtmPointsGlobal();
 
 private:
 
@@ -111,21 +94,13 @@ private:
     //--------------------------------------------------------------------------
 
     void normalizeUtmPoints();
-    void normalizeUtmPoints(UtmDataVector& utmDataVec);
 
     //--------------------------------------------------------------------------
 
     void setMinMaxRatioUTM();
-	void setGlobalMinMaxRatioUTM();
 	void setMinMaxValuesUTM();
 
-    void calculateUtmPoints();
-
     //--------------------------------------------------------------------------
-    static ofxPoint<double> drawMaxima;
-    static ofxPoint<double> drawMinima;
-
-    static double m_lon0Global;
 
     const AppSettings& m_settings;
     int m_gpsDataId;
@@ -139,8 +114,6 @@ private:
 
     UtmDataVector m_utmPoints;
     UtmDataVector m_normalizedUtmPoints;
-    UtmDataVector m_normalizedUtmPointsGlobal;
-    double m_lon0;
 
     GpsDataIndexVector m_indices;
 };

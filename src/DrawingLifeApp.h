@@ -35,13 +35,11 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
 
-    Timeline& getTimeline() const { return *m_timeline.get(); }
-    const AppSettings& getAppSettings() const { return *m_settings.get(); }
+    Timeline& getTimeline() const { return *m_timeline; }
+    const AppSettings& getAppSettings() const { return *m_settings; }
     GpsDataVector& getGpsDataVector() { return m_gpsDatas; }
     WalkVector& getWalkVector() { return m_walks; }
     MagicBoxVector& getMagicBoxVector() { return m_magicBoxes; }
-    MagicBox& getMagicBox() { return *m_magicBox.get(); }
-    void setMagicBox(MagicBox* const magicBox) { m_magicBox.reset(magicBox); }
 
     const std::vector<CurrentPointImageData>& getCurrentPointImageList() const
     { return m_imageList; }
@@ -140,9 +138,9 @@ private:
     std::vector<LocationImageVec> m_locationImages;
 
     bool m_pause;
-    MagicBoxPtr m_magicBox;
 
     ofSoundPlayerVec m_soundPlayers;
+    ofSoundPlayerVec::iterator m_currentSoundPlayer;
 
     bool m_isZoomAnimation;
 
@@ -152,7 +150,6 @@ private:
     bool doShader;
 
     static int m_sZoomFrameCount;
-    static int m_sCurrentSoundFile;
 
     boost::function<void(Walk&)> fnWalkDrawAll;
     boost::function<void(Walk&)> fnWalkReset;

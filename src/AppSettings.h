@@ -56,13 +56,10 @@ public:
     bool isCurrentPointImage() const { return m_imageAsCurrentPoint; }
     bool hideCursor() const { return m_hideCursor; }
 
-    bool isBoundingBoxAuto() const { return m_boundingBoxAuto; }
+    bool isBoundingBoxCropMode() const { return m_boundingBoxCropMode; }
     double getBoundingBoxSize() const { return m_boundingBoxSize; }
     double getBoundingBoxPadding() const { return m_boundingBoxPadding; }
     bool showBoundingBox() const { return m_boundingBoxShow; }
-
-    bool isMeridianAuto() const { return m_meridianAuto; }
-    double getMeridian() const { return m_meridianVal; }
 
     const std::string& getDatabasePath() const { return m_databasePath; }
 
@@ -83,10 +80,6 @@ public:
     bool drawTraced() const { return m_interactiveTraced; }
 
     bool showInfo() const { return m_showInfo; }
-
-    static const size_t NUM_REGIONS = 5;
-    const GpsRegion* getRegions() const { return m_regions; }
-    bool isRegionsOn() const { return m_regionsOn; }
 
     bool isLoopOn() const { return m_loop; }
 
@@ -184,7 +177,7 @@ private:
     bool m_imageAsCurrentPoint;
     bool m_hideCursor;
 
-    bool m_boundingBoxAuto;
+    bool m_boundingBoxCropMode;
     double m_boundingBoxSize;
     double m_boundingBoxPadding;
     bool m_boundingBoxShow;
@@ -210,13 +203,7 @@ private:
     bool m_interactiveMode;
     bool m_interactiveTraced;
 
-    bool m_meridianAuto;
-    double m_meridianVal;
-
     bool m_showInfo;
-
-    GpsRegion m_regions[NUM_REGIONS];
-    bool m_regionsOn;
 
     bool m_loop;
 

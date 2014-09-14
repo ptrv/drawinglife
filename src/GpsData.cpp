@@ -6,27 +6,6 @@
 #include "GpsData.h"
 #include "GeoUtils.h"
 
-#if defined (WIN32)
-#undef max
-#undef min
-#endif
-#include <limits>
-
-//------------------------------------------------------------------------------
-
-ofxPoint<double> GpsData::drawMaxima =
-        ofxPoint<double>(-std::numeric_limits<double>::max(),
-                         -std::numeric_limits<double>::max());
-ofxPoint<double> GpsData::drawMinima =
-        ofxPoint<double>(std::numeric_limits<double>::max(),
-                         std::numeric_limits<double>::max());
-
-double GpsData::m_lon0Global = 0.0;
-
-double regionsLon0[5] = {-119.0, -74.0, 12.0, 116.0, 146.0};
-double regionsMinLon[5] = {-180.0, -100.0, -35.0, 65.0, 130.0};
-double regionsMaxLon[5] = {-100.0, -35.0, 65.0, 130.0, 180.0};
-
 //------------------------------------------------------------------------------
 
 GpsData::GpsData(const AppSettings& settings)
@@ -37,8 +16,7 @@ m_user(""),
 m_minLonLat(0.0, 0.0),
 m_maxLonLat(0.0, 0.0),
 m_minUtm(0.0, 0.0),
-m_maxUtm(0.0, 0.0),
-m_lon0(0.0)
+m_maxUtm(0.0, 0.0)
 {
 	m_segments.reserve(1000); // TODO good amount.
 
@@ -72,14 +50,10 @@ void GpsData::setGpsData(const GpsSegmentVector& segments,
     m_minLonLat = minLonLat;
     m_maxLonLat = maxLonLat;
     // -------------------------------------------------------------------------
-    // Calculating central meridian for projection.
-    m_lon0 = m_minLonLat.x + (m_maxLonLat.x - m_minLonLat.x) / 2;
-    // -------------------------------------------------------------------------
-    m_minUtm = GeoUtils::LatLon2Utm(m_lon0, m_minLonLat.y, m_minLonLat.x);
-
-    m_maxUtm = GeoUtils::LatLon2Utm(m_lon0, m_maxLonLat.y, m_maxLonLat.x);
-	m_user = user;
-	calculateUtmPoints();
+    m_minUtm = GeoUtils::LonLat2Utm(m_minLonLat.x, m_minLonLat.y);
+    m_maxUtm = GeoUtils::LonLat2Utm(m_maxLonLat.x, m_maxLonLat.y);
+    m_user = user;
+    calculateUtmPointsWithIndex();
     normalizeUtmPoints();
 }
 
@@ -251,44 +225,10 @@ int GpsData::getTotalGpsPoints() const
 
 //------------------------------------------------------------------------------
 
-UtmPoint GpsData::getUtmPointWithRegion(double lat, double lon,
-                                        const AppSettings& settings)
-{
-    const GpsRegion* regions = settings.getRegions();
-    UtmPoint utmP;
-
-    if (settings.isRegionsOn())
-    {
-        double lon0 = 0.0;
-        for (size_t i = 0; i < AppSettings::NUM_REGIONS; ++i)
-        {
-            if (lon >= regions[i].minLon && lon < regions[i].maxLon)
-            {
-                lon0 = regions[i].lon0;
-                break;
-            }
-        }
-        utmP = GeoUtils::LatLon2Utm(lon0, lat, lon);
-        utmP.lon0 = lon0;
-
-    }
-    else
-    {
-        utmP = GeoUtils::LatLon2Utm(m_lon0Global, lat, lon);
-        utmP.lon0 = m_lon0Global;
-    }
-
-    return utmP;
-}
-
-//------------------------------------------------------------------------------
-
 GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 {
     GpsPoint p;
-    // Works just for lon > -35 and lon < 65,
-    // see AppSettings.xml settings->meridian->region3
-    ofxPoint<double> latLon = GeoUtils::Utm2LatLon(12.0, utmP.x, utmP.y);
+    ofxPoint<double> latLon = GeoUtils::Utm2LonLat(utmP.x, utmP.y);
     p.setDataFromLatLon(latLon.y, latLon.x);
 
     return p;
@@ -296,46 +236,23 @@ GpsPoint GpsData::getGpsPoint(const ofxPoint<double>& utmP)
 
 //------------------------------------------------------------------------------
 
-void GpsData::calculateUtmPoints(double lon0)
-{
-    m_utmPoints.clear();
-    m_utmPoints.reserve(m_segments.size());
-    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
-    {
-        std::vector<UtmPoint> utmVec;
-        utmVec.reserve(rSegment.getPoints().size());
-        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
-        {
-            UtmPoint utmP = GeoUtils::LatLon2Utm(
-                m_lon0Global, rPoint.getLatitude(), rPoint.getLongitude());
-            utmVec.push_back(utmP);
-        }
-        m_utmPoints.push_back(utmVec);
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void GpsData::calculateUtmPointsGlobalLon(bool /*regionsOn*/)
+void GpsData::calculateUtmPointsWithIndex()
 {
     m_indices.clear();
     int counter = 0;
     m_utmPoints.clear();
     m_utmPoints.reserve(m_segments.size());
 
-//    const GpsRegion* regions = m_settings.getRegions();
     int i = 0;
     BOOST_FOREACH(const GpsSegment& segment, m_segments)
     {
         int j = 0;
         std::vector<UtmPoint> utmVec;
-        utmVec.reserve( segment.getPoints().size());
+        utmVec.reserve(segment.getPoints().size());
         BOOST_FOREACH(const GpsPoint& point, segment.getPoints())
         {
-            UtmPoint utmP = getUtmPointWithRegion(point.getLatitude(),
-                                                  point.getLongitude(),
-                                                  m_settings);
-
+            UtmPoint utmP = GeoUtils::LonLat2Utm(point.getLongitude(),
+                                                 point.getLatitude());
             utmP.speed = point.getSpeed();
 
             utmVec.push_back(utmP);
@@ -353,41 +270,14 @@ void GpsData::calculateUtmPointsGlobalLon(bool /*regionsOn*/)
 }
 
 //------------------------------------------------------------------------------
-
-void GpsData::setGlobalValues(const ofxPoint<double>& minXY,
-                              const ofxPoint<double>& maxXY,
-                              double lon0)
-{
-    drawMaxima = maxXY;
-    drawMinima = minXY;
-
-    m_lon0Global = lon0;
-    //normalizeUtmPointsGlobal();
-}
-
-//------------------------------------------------------------------------------
 // Normalize Utm points.
 //------------------------------------------------------------------------------
 
 void GpsData::normalizeUtmPoints()
 {
-	setMinMaxRatioUTM();
-    normalizeUtmPoints(m_normalizedUtmPoints);
-}
+    setMinMaxRatioUTM();
 
-//------------------------------------------------------------------------------
-
-void GpsData::normalizeUtmPointsGlobal()
-{
-	setGlobalMinMaxRatioUTM();
-    normalizeUtmPoints(m_normalizedUtmPointsGlobal);
-}
-
-//------------------------------------------------------------------------------
-
-void GpsData::normalizeUtmPoints(UtmDataVector& utmDataVec)
-{
-    utmDataVec.clear();
+    m_normalizedUtmPoints.clear();
     BOOST_FOREACH(const UtmSegment& utmSegment, m_utmPoints)
     {
         UtmSegment normalizedSegments;
@@ -400,7 +290,7 @@ void GpsData::normalizeUtmPoints(UtmDataVector& utmDataVec)
 
             normalizedSegments.push_back(UtmPoint(x, y));
         }
-        utmDataVec.push_back(normalizedSegments);
+        m_normalizedUtmPoints.push_back(normalizedSegments);
     }
 }
 
@@ -451,46 +341,6 @@ void GpsData::setMinMaxRatioUTM()
 
 //------------------------------------------------------------------------------
 
-void GpsData::setGlobalMinMaxRatioUTM()
-{
-    const ofxPoint<double> maxLonLat = drawMaxima;
-    const ofxPoint<double> minLonLat = drawMinima;
-
-    // Calculate horizontal and vertical range.
-    const double deltaLon = maxLonLat.x - minLonLat.x;
-    const double deltaLat = maxLonLat.y - minLonLat.y;
-
-    const double deltaLatLonHalf = (deltaLat - deltaLon) / 2.0;
-    const double deltaLonLatHalf = (deltaLon - deltaLat) / 2.0;
-
-    // Aspect ratio is: width < height.
-    if (deltaLon <	deltaLat)
-    {
-        drawMinima.x = minLonLat.x - deltaLatLonHalf;
-        drawMaxima.x = maxLonLat.x + deltaLatLonHalf;
-        drawMinima.y = minLonLat.x;
-        drawMaxima.y = maxLonLat.y;
-    }
-    // Aspect ratio is: width > height.
-    else if (deltaLon > deltaLat)
-    {
-        drawMinima.x = minLonLat.x;
-        drawMaxima.x = maxLonLat.x;
-        drawMinima.y = minLonLat.y - deltaLonLatHalf;
-        drawMaxima.y = maxLonLat.y + deltaLonLatHalf;
-    }
-    // Aspect ratio is: height == width.
-    else
-    {
-        drawMinima.x = minLonLat.x;
-        drawMaxima.x = maxLonLat.x;
-        drawMinima.y = minLonLat.x;
-        drawMaxima.y = maxLonLat.y;
-    }
-}
-
-//------------------------------------------------------------------------------
-
 void GpsData::setMinMaxValuesUTM()
 {
     ofxPoint<double> minXY = Utils::getPointDoubleMax();
@@ -511,28 +361,6 @@ void GpsData::setMinMaxValuesUTM()
 
     m_minUtm = minXY;
     m_maxUtm = maxXY;
-}
-
-//------------------------------------------------------------------------------
-
-void GpsData::calculateUtmPoints()
-{
-    m_utmPoints.clear();
-    m_utmPoints.reserve(m_segments.size());
-    BOOST_FOREACH(const GpsSegment& rSegment, m_segments)
-    {
-        std::vector<UtmPoint> utmVec;
-        utmVec.reserve( rSegment.getPoints().size());
-        BOOST_FOREACH(const GpsPoint& rPoint, rSegment.getPoints())
-        {
-            UtmPoint utmP = GeoUtils::LatLon2Utm(
-                m_lon0, rPoint.getLatitude(), rPoint.getLongitude());
-            utmP.speed = rPoint.getSpeed();
-
-            utmVec.push_back(utmP);
-        }
-        m_utmPoints.push_back(utmVec);
-    }
 }
 
 //------------------------------------------------------------------------------

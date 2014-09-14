@@ -83,7 +83,7 @@ PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/ofxJSON/lib%
 # incorporated directly into the final executable application binary.
 ################################################################################
 # PROJECT_LDFLAGS=-Wl,-rpath=./libs
-PROJECT_LDFLAGS= -lGeographic -lspatialite
+PROJECT_LDFLAGS= -lspatialite -lproj
 
 ################################################################################
 # PROJECT DEFINES
@@ -111,8 +111,7 @@ PROJECT_LDFLAGS= -lGeographic -lspatialite
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -Ilibs/sqlite3 -Ilibs/sqlite3x -Ilibs/tclap-1.2.0/include \
-	-Ilibs/ofxTimer/src
+PROJECT_CFLAGS = -Ilibs/sqlite3 -Ilibs/sqlite3x -Ilibs/tclap-1.2.0/include
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS

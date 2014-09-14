@@ -50,7 +50,7 @@ bool MagicBox::isInPaddedBox(const ofxPoint<double>& utmPoint) const
 // Setter
 //------------------------------------------------------------------------------
 
-void MagicBox::setupBox(const ofxPoint<double>& currUtm, const double lon0)
+void MagicBox::setupBox(const ofxPoint<double>& currUtm)
 {
     m_centerUtm = currUtm;
 
@@ -64,7 +64,6 @@ void MagicBox::setupBox(const ofxPoint<double>& currUtm, const double lon0)
 //------------------------------------------------------------------------------
 
 void MagicBox::setupBoxStatic(const ofxPoint<double>& currUtm,
-                              const double lon0,
                               const double width,
                               const double height)
 {

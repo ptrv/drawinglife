@@ -9,7 +9,7 @@
 
 #define APP_NAME_STR "DrawingLife"
 #define APP_AUTHOR_STR "avp::ptr"
-#define APP_DATE "2013"
+#define APP_DATE "2014"
 #define APP_VERSION_STR "5.0.0dev"
 
 //------------------------------------------------------------------------------
@@ -25,6 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/tuple/tuple.hpp>
 
 //------------------------------------------------------------------------------
 // include openFrameworks source tree.

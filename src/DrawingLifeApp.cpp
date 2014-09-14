@@ -20,7 +20,6 @@
 //------------------------------------------------------------------------------
 
 int DrawingLifeApp::m_sZoomFrameCount = 0;
-int DrawingLifeApp::m_sCurrentSoundFile = 0;
 
 //------------------------------------------------------------------------------
 
@@ -58,6 +57,8 @@ DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     fnWalkDrawAll = boost::bind(&Walk::drawAll, _1);
     fnWalkReset = boost::bind(&Walk::reset, _1);
     fnLocationImageDraw = boost::bind(&LocationImage::draw, _1);
+
+    m_currentSoundPlayer = m_soundPlayers.end();
 }
 
 //------------------------------------------------------------------------------
@@ -320,8 +321,8 @@ void DrawingLifeApp::draw()
 
             if (m_multiMode && m_multiModeInfo)
             {
-                ViewHelper::drawInfoMultiMode(*m_settings.get(),
-                                              *m_timeline.get(),
+                ViewHelper::drawInfoMultiMode(*m_settings,
+                                              *m_timeline,
                                               m_viewDimensions[0],
                                               m_fonts["info"]);
             }
@@ -333,13 +334,12 @@ void DrawingLifeApp::draw()
                 if (m_isDebugMode)
                 {
                     const MagicBoxPtr& box = m_settings->isMultiMode()
-                            ? m_magicBox : m_magicBoxes[i];
-                    ViewHelper::drawInfoDebug(*m_settings.get(), *box.get(),
-                                              *gpsData.get(), walk, i);
+                            ? m_magicBoxes[0] : m_magicBoxes[i];
+                    ViewHelper::drawInfoDebug(*m_settings, *box, *gpsData, walk, i);
                 }
                 else if (m_showInfo)
                 {
-                    ViewHelper::drawInfo(*m_settings.get(), *gpsData.get(), walk,
+                    ViewHelper::drawInfo(*m_settings, *gpsData, walk,
                                          m_viewDimensions[i], m_fonts["info"], i);
                 }
 
@@ -524,40 +524,27 @@ void DrawingLifeApp::keyPressed  (int key)
     case '+':
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::zoom, _1, MagicBox::ZOOM_IN));
-        if (m_multiMode)
-            m_magicBox->zoom(MagicBox::ZOOM_IN);
         break;
     case '-':
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::zoom, _1, MagicBox::ZOOM_OUT));
-        if (m_multiMode)
-            m_magicBox->zoom(MagicBox::ZOOM_OUT);
         break;
     case OF_KEY_UP:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::UP));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::UP);
         break;
     case OF_KEY_DOWN:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::DOWN));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::DOWN);
         break;
        break;
     case OF_KEY_RIGHT:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::RIGHT));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::RIGHT);
         break;
     case OF_KEY_LEFT:
         std::for_each(m_magicBoxes.begin(), m_magicBoxes.end(),
                       boost::bind(&MagicBox::move, _1, MagicBox::LEFT));
-        if (m_multiMode)
-            m_magicBox->move(MagicBox::LEFT);
-
         break;
     case ' ':
         if (m_interactiveMode)
@@ -688,33 +675,30 @@ void DrawingLifeApp::resetData()
 
 void DrawingLifeApp::soundUpdate()
 {
-    if (m_settings->isSoundActive() && m_soundPlayers.size() > 0)
+    if (m_settings->isSoundActive() && !m_soundPlayers.empty())
     {
-        if (m_timeline->isFirst())
+        if (m_timeline->isFirst() ||
+            m_currentSoundPlayer == m_soundPlayers.end())
         {
-            m_sCurrentSoundFile = 0;
+            m_currentSoundPlayer = m_soundPlayers.begin();
+
             std::for_each(m_soundPlayers.begin(), m_soundPlayers.end(),
                           boost::bind(&ofSoundPlayer::stop, _1));
-            if (m_soundPlayers.size() > 0)
-            {
-                m_soundPlayers[m_sCurrentSoundFile].play();
-            }
+
+            m_currentSoundPlayer->play();
         }
-        else if (!m_soundPlayers[m_sCurrentSoundFile].getIsPlaying())
+        else if (!m_currentSoundPlayer->getIsPlaying())
         {
-            ofSoundPlayer& player = m_soundPlayers[m_sCurrentSoundFile];
-            player.stop();
-            player.setPosition(0.0);
-            if (m_sCurrentSoundFile < static_cast<int>(m_soundPlayers.size()) - 1)
+            m_currentSoundPlayer->stop();
+            m_currentSoundPlayer->setPosition(0.0);
+
+            ++m_currentSoundPlayer;
+            if (m_currentSoundPlayer == m_soundPlayers.end())
             {
-                ++m_sCurrentSoundFile;
-            }
-            else
-            {
-                m_sCurrentSoundFile = 0;
+                m_currentSoundPlayer = m_soundPlayers.begin();
             }
 
-            m_soundPlayers[m_sCurrentSoundFile].play();
+            m_currentSoundPlayer->play();
         }
     }
 }

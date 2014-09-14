@@ -6,6 +6,8 @@
 
 #include "Walk.h"
 
+#include "GeoUtils.h"
+
 float Walk::m_dotSize = 2.0;
 int Walk::m_dotAlpha = 127;
 
@@ -218,7 +220,8 @@ void Walk::draw()
         }
 
         int startSeg, startPoint;
-        calculateStartSegmentAndStartPoint(startSeg, startPoint, *gpsData.get());
+        boost::tie(startSeg, startPoint) =
+            calculateStartSegmentAndStartPoint(*gpsData);
 
         if (m_interactiveMode && !m_drawTraced)
         {
@@ -248,7 +251,8 @@ void Walk::draw()
                 const UtmPoint& utm = segment[j];
                 bool isInBox = true;
 
-                if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+                if (m_settings.isBoundingBoxCropMode() &&
+                    !m_settings.isMultiMode())
                 {
                     isInBox = magicBox->isInBox(utm);
                     if (!isInBox)
@@ -274,7 +278,7 @@ void Walk::draw()
             startPoint = 0;
         }
 
-        drawCurrentPoint(*magicBox.get(), currentUtm);
+        drawCurrentPoint(*magicBox, currentUtm);
     }
 
     // draw borders of bounding boxes.
@@ -302,7 +306,7 @@ void Walk::drawAll()
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
         {
             bool isInBox = true;
-            if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+            if (m_settings.isBoundingBoxCropMode() && !m_settings.isMultiMode())
             {
                 isInBox = magicBox->isInBox(utmPoint);
             }
@@ -353,21 +357,16 @@ void Walk::drawBoxes()
 // Draw helpers
 // -----------------------------------------------------------------------------
 
-void Walk::calculateStartSegmentAndStartPoint(int& startSeg, int& startPoint,
-                                              const GpsData& gpsData)
+std::pair<int, int> Walk::calculateStartSegmentAndStartPoint(const GpsData& gpsData)
 {
     if (m_maxPointsToDraw > 0 && m_currentPoint - m_maxPointsToDraw >= 0)
     {
         const int startIndex = m_currentPoint - m_maxPointsToDraw;
         const GpsDataIndex& gpsDataIndex = gpsData.getIndices()[startIndex];
-        startSeg = gpsDataIndex.gpsSegment;
-        startPoint = gpsDataIndex.gpsPoint;
+        return std::make_pair(gpsDataIndex.gpsSegment, gpsDataIndex.gpsPoint);
     }
-    else
-    {
-        startSeg = 0;
-        startPoint = 0;
-    }
+
+    return std::make_pair(0, 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -542,7 +541,7 @@ void Walk::setMagicBox(MagicBoxWeak magicBoxWeak)
     MagicBoxPtr magicBox = m_magicBox.lock();
     if (gpsData && magicBox)
     {
-        magicBox->setupBox(gpsData->getUtm(0, 0), GpsData::getLon0Glogal());
+        magicBox->setupBox(gpsData->getUtm(0, 0));
     }
 }
 
@@ -554,10 +553,10 @@ void Walk::setMagicBoxStatic(MagicBoxWeak magicBoxWeak,
 {
     m_magicBox = magicBoxWeak;
     reset();
-    UtmPoint utmP = GpsData::getUtmPointWithRegion(lat, lon, m_settings);
+    UtmPoint utmP = GeoUtils::LonLat2Utm(lon, lat);
     if (MagicBoxPtr magicBox = m_magicBox.lock())
     {
-        magicBox->setupBox(utmP, GpsData::getLon0Glogal());
+        magicBox->setupBox(utmP);
     }
 
 }

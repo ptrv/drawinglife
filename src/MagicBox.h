@@ -26,9 +26,8 @@ public:
 
     bool isInBox(const ofxPoint<double>& utmPoint) const;
 
-    void setupBox(const ofxPoint<double>& currUtm, double lon0);
-    void setupBoxStatic(const ofxPoint<double>& currUtm, double lon0,
-                        double width, double height);
+    void setupBox(const ofxPoint<double>& currUtm);
+    void setupBoxStatic(const ofxPoint<double>& currUtm, double width, double height);
     void setSize(double newSize);
 
     void updateBoxIfNeeded(const ofxPoint<double>& utmPoint);

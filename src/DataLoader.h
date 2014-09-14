@@ -27,7 +27,6 @@ public:
 
 private:
 
-    static void prepareGpsData(DrawingLifeApp& app);
     static void processGpsData(DrawingLifeApp& app);
 
     typedef boost::function<bool(DBReader*,GpsData&)> tFuncLoadGpsData;

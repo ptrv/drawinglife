@@ -8,8 +8,6 @@ class DrawingLifeApp;
 class Utils
 {
 public:
-    static void calculateGlobalMinMaxValues(DrawingLifeApp& app);
-
     static float getFPS();
 
     static void grabScreen();

@@ -18,56 +18,6 @@ Utils::Utils()
 
 //------------------------------------------------------------------------------
 
-void Utils::calculateGlobalMinMaxValues(DrawingLifeApp& app)
-{
-    ofxPoint<double> minXY = getPointDoubleMax();
-    ofxPoint<double> maxXY = getPointDoubleMin();
-    ofxPoint<double> minLonLat = getPointDoubleMax();
-    ofxPoint<double> maxLonLat = getPointDoubleMin();
-
-    const GpsDataVector& gpsDatas = app.getGpsDataVector();
-    const AppSettings& settings = app.getAppSettings();
-
-    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
-    {
-        minXY.x = MIN(gpsData->getMinUtmX(), minXY.x);
-        maxXY.x = MAX(gpsData->getMaxUtmX(), maxXY.x);
-        minXY.y = MIN(gpsData->getMinUtmY(), minXY.y);
-        maxXY.y = MAX(gpsData->getMaxUtmY(), maxXY.y);
-
-        minLonLat.x = MIN(gpsData->getMinLon(), minLonLat.x);
-        minLonLat.x = MAX(gpsData->getMaxLon(), minLonLat.x);
-        minLonLat.y = MIN(gpsData->getMinLat(), minLonLat.y);
-        minLonLat.y = MAX(gpsData->getMaxLat(), minLonLat.y);
-    }
-
-    const bool isRegionOn = settings.isRegionsOn();
-    if (isRegionOn)
-    {
-        GpsData::setGlobalValues(minXY, maxXY, 0.0);
-    }
-    else
-    {
-        if (settings.isMeridianAuto())
-            GpsData::setGlobalValues(minXY, maxXY,
-                                     minLonLat.x + (maxLonLat.x - minLonLat.x) / 2);
-        else
-        {
-            double lon0 = 0.0;
-            lon0 = settings.getMeridian();
-            GpsData::setGlobalValues(minXY, maxXY, lon0);
-        }
-    }
-
-    BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
-    {
-        gpsData->calculateUtmPointsGlobalLon(isRegionOn);
-        gpsData->normalizeUtmPointsGlobal();
-    }
-}
-
-//------------------------------------------------------------------------------
-
 static double timeThen = 0.0;
 static double timeSum = 0.0;
 static float fpsToShow = 0.0;
@@ -148,17 +98,15 @@ const std::string Utils::getCurrentGpsInfoDebug(const GpsData& gpsData,
     "UTM Y             : " + ofToString(walk.getCurrentUtmY(), 7) + "\n" +
     "Time              : " + walk.getCurrentTimestamp() + "\n" +
     "Location          : " + walk.getCurrentGpsLocation() + "\n" +
-    "Central meridian  : " + ofToString(gpsData.getLon0(), 7) + "\n" +
-    "Meridian global   : " + ofToString(GpsData::getLon0Glogal(), 7) + "\n" +
-    "Min/Max latitude  : " + ofToString(gpsData.getMinLat(), 7) + " / " + ofToString(gpsData.getMaxLat(), 7) + "\n" +
     "Min/Max longitude : " + ofToString(gpsData.getMinLon(), 7) + " / " + ofToString(gpsData.getMaxLon(), 7) + "\n" +
+    "Min/Max latitude  : " + ofToString(gpsData.getMinLat(), 7) + " / " + ofToString(gpsData.getMaxLat(), 7) + "\n" +
     "Min/Max UTM X     : " + ofToString(gpsData.getMinUtmX(), 7) + " / " + ofToString(gpsData.getMaxUtmX(), 7) + "\n" +
     "Min/Max UTM Y     : " + ofToString(gpsData.getMinUtmY(), 7) + " / " + ofToString(gpsData.getMaxUtmY(), 7) + "\n" +
     "Currrent pt.      : " + ofToString(walk.getCurrentPointNum()) + "\n" +
     "Segment nr.       : " + ofToString(walk.getCurrentSegmentNum()) + "\n" +
     "Total pts.        : " + ofToString(gpsData.getTotalGpsPoints()) + "\n" +
 //	"Viewbox center    : " + ofToString(m_magicBox.getCenter().x,7) + " / " + ofToString(m_magicBox.getCenter().y, 7) + "\n" +
-    "Viewbox center    : " + ofToString(boxCenter.getLatitude(),7) + " / " + ofToString(boxCenter.getLongitude(), 7) + "\n" +
+    "Viewbox center    : " + ofToString(boxCenter.getLongitude(),7) + " / " + ofToString(boxCenter.getLatitude(), 7) + "\n" +
     "Viewbox size      : " + ofToString(box.getSize(),7) + "\n" +
     "Person            : " + gpsData.getUser();
     return gpsInfoDebug;

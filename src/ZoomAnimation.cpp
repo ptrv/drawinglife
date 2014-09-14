@@ -5,6 +5,7 @@
 
 #include "ZoomAnimation.h"
 
+#include "GeoUtils.h"
 
 int ZoomAnimation::m_sZoomFrameCount = 0;
 
@@ -34,15 +35,15 @@ void ZoomAnimation::update(DrawingLifeApp& app)
 
     if (m_settings.isZoomAnimation())
     {
-        if (zoomHasChanged(*timeline.get()))
+        if (zoomHasChanged(*timeline))
         {
             const ZoomAnimFrame& zoomAnimFrame =
                     m_settings.getZoomAnimFrames()[m_sZoomFrameCount];
             const float zoomLevel = zoomAnimFrame.frameZoom;
             const double centerX = zoomAnimFrame.frameCenterX;
             const double centerY = zoomAnimFrame.frameCenterY;
-            UtmPoint utmP = GpsData::getUtmPointWithRegion(centerY, centerX,
-                                                           m_settings);
+
+            UtmPoint utmP = GeoUtils::LonLat2Utm(centerX, centerY);
 
             if (timeline->isFirst())
             {
@@ -59,20 +60,11 @@ void ZoomAnimation::update(DrawingLifeApp& app)
 
     if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
     {
-        if (m_settings.isMultiMode())
+        const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
+        BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
         {
-            MagicBox& magicBox = app.getMagicBox();
-            magicBox.setSize(m_zoomIntegrator->getValue());
-            magicBox.setupBox(m_theIntegrator->getValue(), 0);
-        }
-        else
-        {
-            const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-            BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
-            {
-                box->setSize(m_zoomIntegrator->getValue());
-                box->setupBox(m_theIntegrator->getValue(), 0);
-            }
+            box->setSize(m_zoomIntegrator->getValue());
+            box->setupBox(m_theIntegrator->getValue());
         }
     }
 }
