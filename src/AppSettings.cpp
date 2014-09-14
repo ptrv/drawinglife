@@ -46,7 +46,7 @@ m_frameRate(30),
 m_fullscreen(false),
 m_imageAsCurrentPoint(false),
 m_hideCursor(false),
-m_boundingBoxAuto(true),
+m_boundingBoxCropMode(true),
 m_boundingBoxSize(3000.0),
 m_boundingBoxPadding(500.0),
 m_boundingBoxShow(false),
@@ -117,49 +117,71 @@ bool AppSettings::loadXML()
         m_fonts[id] = std::make_pair(fontName, fontSize);
     }
     m_xml.popTag();
+
+    m_xml.pushTag("color");
+
+    m_colorForegroundR = m_xml.getAttribute("foreground", "r", 255);
+    m_colorForegroundG = m_xml.getAttribute("foreground", "g", 255);
+    m_colorForegroundB = m_xml.getAttribute("foreground", "b", 255);
+
+    m_colorBackgroundR = m_xml.getAttribute("background", "r", 0);
+    m_colorBackgroundG = m_xml.getAttribute("background", "g", 0);
+    m_colorBackgroundB = m_xml.getAttribute("background", "b", 0);
+
+    m_colorViewboxR = m_xml.getAttribute("viewbox", "r", 0);
+    m_colorViewboxG = m_xml.getAttribute("viewbox", "g", 0);
+    m_colorViewboxB = m_xml.getAttribute("viewbox", "b", 0);
+
+    m_colorInteractiveSegR = m_xml.getAttribute("interactiveseg", "r", 255);
+    m_colorInteractiveSegG = m_xml.getAttribute("interactiveseg", "g", 255);
+    m_colorInteractiveSegB = m_xml.getAttribute("interactiveseg", "b", 0);
+    m_colorInteractiveSegA = m_xml.getAttribute("interactiveseg", "a", 255);
+
     m_xml.popTag();
 
-    m_colorForegroundR = m_xml.getAttribute("ui:color:foreground", "r", 255);
-    m_colorForegroundG = m_xml.getAttribute("ui:color:foreground", "g", 255);
-    m_colorForegroundB = m_xml.getAttribute("ui:color:foreground", "b", 255);
+    m_xml.pushTag("alpha");
 
-    m_colorBackgroundR = m_xml.getAttribute("ui:color:background", "r", 0);
-    m_colorBackgroundG = m_xml.getAttribute("ui:color:background", "g", 0);
-    m_colorBackgroundB = m_xml.getAttribute("ui:color:background", "b", 0);
+    m_alphaTracks = m_xml.getValue("tracks", 64);
+    m_alphaDots = m_xml.getValue("dots", 127);
+    m_alphaLegend = m_xml.getValue("legend", 255);
 
-    m_colorViewboxR = m_xml.getAttribute("ui:color:viewbox", "r", 0);
-    m_colorViewboxG = m_xml.getAttribute("ui:color:viewbox", "g", 0);
-    m_colorViewboxB = m_xml.getAttribute("ui:color:viewbox", "b", 0);
+    m_xml.popTag();
 
-    m_colorInteractiveSegR = m_xml.getAttribute("ui:color:interactiveseg", "r", 255);
-    m_colorInteractiveSegG = m_xml.getAttribute("ui:color:interactiveseg", "g", 255);
-    m_colorInteractiveSegB = m_xml.getAttribute("ui:color:interactiveseg", "b", 0);
-    m_colorInteractiveSegA = m_xml.getAttribute("ui:color:interactiveseg", "a", 255);
+    m_dotSize = m_xml.getValue("dotsize", 5);
 
-    m_alphaTracks = m_xml.getValue("ui:alpha:tracks", 64);
-    m_alphaDots = m_xml.getValue("ui:alpha:dots", 127);
-    m_alphaLegend = m_xml.getValue("ui:alpha:legend", 255);
+    m_xml.popTag();
 
-    m_dotSize = m_xml.getValue("ui:dotsize", 5);
+    m_xml.pushTag("settings");
 
-    m_logLevel = m_xml.getAttribute("settings:log", "level", 0);
+    m_logLevel = m_xml.getAttribute("log", "level", 0);
     if (m_logLevel < 0 || m_logLevel > 5)
     {
         m_logLevel = 0;
     }
 
-    m_debugMode = m_xml.getValue("settings:debugmode", 0) == 1;
+    m_debugMode = m_xml.getValue("debugmode", 0) == 1;
 
-    m_walkLength = m_xml.getValue("settings:walklength", 10000);
+    m_walkLength = m_xml.getValue("walklength", 10000);
 
-    m_boundingBoxAuto = m_xml.getValue("settings:boundingbox:auto", 1) == 1;
-    m_boundingBoxSize = m_xml.getValue("settings:boundingbox:size", 3000.0);
-    m_boundingBoxPadding = m_xml.getValue("settings:boundingbox:padding", 500.0);
-    m_boundingBoxFixed = m_xml.getValue("settings:boundingbox:static", 0) == 1;
-    m_boundingBoxLat = m_xml.getAttribute("settings:boundingbox:position", "lat", 52.542);
-    m_boundingBoxLon = m_xml.getAttribute("settings:boundingbox:position", "lon", 13.413);
-    m_boundingBoxShow = m_xml.getValue("settings:boundingbox:show", 0) == 1;
-    
+    m_xml.pushTag("boundingbox");
+
+    std::string cropModeTag = "cropmode";
+    if (m_xml.getNumTags(cropModeTag) == 0)
+    {
+        cropModeTag = "auto";
+    }
+    m_boundingBoxCropMode = m_xml.getValue(cropModeTag, 1) == 1;
+
+    m_boundingBoxSize = m_xml.getValue("size", 3000.0);
+    m_boundingBoxPadding = m_xml.getValue("padding", 500.0);
+    m_boundingBoxFixed = m_xml.getValue("static", 0) == 1;
+    m_boundingBoxLat = m_xml.getAttribute("position", "lat", 52.542);
+    m_boundingBoxLon = m_xml.getAttribute("position", "lon", 13.413);
+    m_boundingBoxShow = m_xml.getValue("show", 0) == 1;
+
+    m_xml.popTag();
+    m_xml.popTag();
+
     m_databasePath = ofToDataPath(m_xml.getValue("data:database", "test.sqlite"), true);
 
     m_queryType = m_xml.getValue("dbquery:type", 4);

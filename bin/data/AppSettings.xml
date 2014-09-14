@@ -43,7 +43,7 @@
         <!-- To draw all points set 0 (very cpu intensive) -->
         <walklength>0</walklength>
         <boundingbox>
-            <auto>0</auto>
+            <cropmode>1</cropmode>
             <static>0</static>
             <show>0</show>
             <position lat="52.50934" lon="13.46094"/>

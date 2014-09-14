@@ -250,7 +250,8 @@ void Walk::draw()
                 const UtmPoint& utm = segment[j];
                 bool isInBox = true;
 
-                if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+                if (m_settings.isBoundingBoxCropMode() &&
+                    !m_settings.isMultiMode())
                 {
                     isInBox = magicBox->isInBox(utm);
                     if (!isInBox)
@@ -304,7 +305,7 @@ void Walk::drawAll()
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
         {
             bool isInBox = true;
-            if (m_settings.isBoundingBoxAuto() && !m_settings.isMultiMode())
+            if (m_settings.isBoundingBoxCropMode() && !m_settings.isMultiMode())
             {
                 isInBox = magicBox->isInBox(utmPoint);
             }

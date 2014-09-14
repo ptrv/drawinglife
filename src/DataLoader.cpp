@@ -231,7 +231,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
             walk->setGpsData(gpsDatas[i]->shared_from_this());
 
-            if (settings.isBoundingBoxAuto())
+            if (settings.isBoundingBoxCropMode())
             {
                 walk->setMagicBox(boxWeak);
             }
