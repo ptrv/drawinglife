@@ -44,7 +44,7 @@ public:
 
     const ofxPoint<double> getDrawablePoint(const UtmPoint& utmPoint) const;
 
-    void toggleZoomLevel(unsigned int zoomLevel);
+    void toggleZoomLevel(size_t zoomLevel);
 
     void zoom(Zoom z);
     void move(Direction d);

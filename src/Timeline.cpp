@@ -9,8 +9,8 @@
 
 Timeline::Timeline()
 :
-m_current(0),
-m_last(0),
+m_current(NULL),
+m_last(NULL),
 m_counter(0),
 m_indexToUpdate(0),
 m_lastUpdatedTimelineId(0),
@@ -32,7 +32,7 @@ void Timeline::setData(const GpsDataVector& gpsDatas)
 {
     m_counter = 0;
     m_timeline.clear();
-    int i = 0;
+    int userIndex = 0;
     BOOST_FOREACH(const GpsDataPtr gpsData, gpsDatas)
     {
         BOOST_FOREACH(const GpsSegment& gpsSegment, gpsData->getSegments())
@@ -43,13 +43,13 @@ void Timeline::setData(const GpsDataVector& gpsDatas)
                 TimelineObject tmObj;
                 tmObj.timeString = timeString;
                 tmObj.secs = makeTimeObject(timeString);
-                tmObj.id = i;
+                tmObj.id = userIndex;
                 tmObj.gpsid = gpsPoint.getGpsPointId();
                 m_timeline.push_back(tmObj);
 //                ofLog(OF_LOG_VERBOSE, "%s : %d : %li\n", tmObj.timeString.c_str(), tmObj.id, tmObj.secs);
             }
         }
-        ++i;
+        ++userIndex;
     }
 
     sortTimeline();
@@ -78,8 +78,7 @@ int Timeline::getCurrentId() const
 {
     try
     {
-        const int id = m_timeline.at(m_counter).id;
-        return id;
+        return m_timeline.at(m_counter).id;
     }
     catch (const std::out_of_range&)
     {

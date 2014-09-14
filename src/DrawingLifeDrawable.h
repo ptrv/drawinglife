@@ -8,6 +8,7 @@ class DrawingLifeDrawable
 public:
 
     DrawingLifeDrawable();
+    virtual ~DrawingLifeDrawable() {}
 
     void setViewBounds(const ViewDimensions& viewDimensions);
 

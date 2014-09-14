@@ -20,8 +20,7 @@ m_currentSize(size),
 m_padding(padding),
 m_defaultSize(10000.0)
 {
-    m_boxId = m_boxNum;
-    ++m_boxNum;
+    m_boxId = m_boxNum++;
 }
 
 //------------------------------------------------------------------------------
@@ -210,19 +209,15 @@ const ofxPoint<double> MagicBox::getDrawablePoint(const UtmPoint& utmPoint) cons
 //------------------------------------------------------------------------------
 // Zoom / move
 //------------------------------------------------------------------------------
-void MagicBox::toggleZoomLevel(unsigned int zoomLevel)
+void MagicBox::toggleZoomLevel(size_t zoomLevel)
 {
     if (zoomLevel > 3)
         zoomLevel = 3;
 
-    if (m_currentSize != m_zoomLevels[zoomLevel])
-    {
-        setSize(m_zoomLevels[zoomLevel]);
-    }
-    else
-    {
-        setSize(m_defaultSize);
-    }
+    const double newSize = m_currentSize != m_zoomLevels[zoomLevel] ?
+        m_zoomLevels[zoomLevel] : m_defaultSize;
+
+    setSize(newSize);
 }
 
 //------------------------------------------------------------------------------
@@ -248,7 +243,8 @@ void MagicBox::move(Direction d)
 
 void MagicBox::move(Direction d, const double val)
 {
-    switch (d) {
+    switch (d)
+    {
     case UP:
         m_centerUtm.y += val;
         break;

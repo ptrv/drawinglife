@@ -13,7 +13,7 @@ int Walk::m_dotAlpha = 127;
 
 //------------------------------------------------------------------------------
 
-Walk::Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled)
+Walk::Walk(const AppSettings& settings, ofColor dotColor)
 :
 DrawingLifeDrawable(),
 m_settings(settings),
@@ -49,9 +49,8 @@ m_imageAlpha(255)
 
 Walk::~Walk()
 {
-	m_image.clear();
-
     ofLogVerbose(Logger::WALK, "destroying");
+    m_image.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -213,8 +212,9 @@ void Walk::draw()
         // ---------------------------------------------------------------------
         const UtmPoint& currentUtm = currentSegment[m_currentGpsPoint];
 
-        if (!m_interactiveMode && !m_settings.isMultiMode()
-            && !m_settings.isBoundingBoxFixed())
+        if (!m_interactiveMode &&
+            !m_settings.isMultiMode() &&
+            !m_settings.isBoundingBoxFixed())
         {
             magicBox->updateBoxIfNeeded(currentUtm);
         }
@@ -330,8 +330,7 @@ void Walk::drawBoxes()
         ofNoFill();
         ofSetColor(255,0,0);
 
-        const ofxRectangle<double>& normalizedBox =
-                magicBox->getNormalizedBox();
+        const ofxRectangle<double>& normalizedBox = magicBox->getNormalizedBox();
         const double x = getScaledUtmX(normalizedBox.getX());
         const double y = getScaledUtmY(normalizedBox.getY());
         const double w = getScaledUtmX(normalizedBox.getWidth()) - x;
@@ -343,7 +342,7 @@ void Walk::drawBoxes()
         ofSetColor(0,255,0);
 
         const ofxRectangle<double>& normalizedPaddedBox =
-                magicBox->getNormalizedPaddedBox();
+            magicBox->getNormalizedPaddedBox();
         const double xp = getScaledUtmX(normalizedPaddedBox.getX());
         const double yp = getScaledUtmY(normalizedPaddedBox.getY());
         const double wp = getScaledUtmX(normalizedPaddedBox.getWidth()) - xp;
@@ -481,10 +480,7 @@ double Walk::getCurrentDoubleValue(const tFnGetCurrentDouble& fnGetCurrentDouble
     {
         return fnGetCurrentDouble(*gpsData, m_currentGpsSegment, m_currentGpsPoint);
     }
-    else
-    {
-        return 0.0;
-    }
+    return 0.0;
 }
 
 // -----------------------------------------------------------------------------
@@ -574,6 +570,7 @@ void Walk::setCurrentPointImage(const ofImage& img, const int alpha)
 // -----------------------------------------------------------------------------
 // other
 // -----------------------------------------------------------------------------
+
 void Walk::toggleTraced()
 {
     m_drawTraced = !m_drawTraced;

@@ -61,13 +61,13 @@ void GpsData::setGpsData(const GpsSegmentVector& segments,
 
 void GpsData::clear()
 {
-	m_gpsDataId = 0;
-	m_segments.clear();
+    m_gpsDataId = 0;
+    m_segments.clear();
     m_minLonLat = ofxPoint<double>(0.0, 0.0);
     m_maxLonLat = ofxPoint<double>(0.0, 0.0);
     m_minUtm = ofxPoint<double>(0.0, 0.0);
     m_maxUtm = ofxPoint<double>(0.0, 0.0);
-	m_user = "";
+    m_user = std::string();
 }
 
 //------------------------------------------------------------------------------

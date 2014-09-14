@@ -151,9 +151,9 @@ void DrawingLifeApp::setup()
     ofEnableAlphaBlending();
 
     ofSetVerticalSync(false);
-    string shaderDir = "shaders/";
-    string vertSrc = shaderDir + m_settings->getVertexShaderSource().c_str();
-    string fragSrc = shaderDir + m_settings->getFragmentShaderSource().c_str();
+    const std::string shaderDir = "shaders/";
+    const std::string vertSrc = shaderDir + m_settings->getVertexShaderSource();
+    const std::string fragSrc = shaderDir + m_settings->getFragmentShaderSource();
     shader.load(vertSrc, fragSrc);
     doShader = m_settings->useShader();
 
@@ -174,22 +174,23 @@ void DrawingLifeApp::setup()
         bool gpsDataLoadOk = false;
         switch(m_dbQueryData.type)
         {
-            case DBReader::DB_QUERY_DAY:
+        case DBReader::DB_QUERY_DAY:
             // TODO 101028_1700_TP: Not implemented yet.
             break;
-            case DBReader::DB_QUERY_MONTH:
+        case DBReader::DB_QUERY_MONTH:
             // TODO 101028_1701_TP: Not implemented yet.
             break;
-            case DBReader::DB_QUERY_CITY:
+        case DBReader::DB_QUERY_CITY:
             gpsDataLoadOk = DataLoader::loadGpsDataCity(
                 *this, m_names, m_dbQueryData.city);
             break;
-            case DBReader::DB_QUERY_YEAR:
+        case DBReader::DB_QUERY_YEAR:
             gpsDataLoadOk = DataLoader::loadGpsDataYearRange(
                 *this, m_names, m_dbQueryData.yearStart, m_dbQueryData.yearEnd);
             break;
-            case DBReader::DB_QUERY_SQLFILE:
-            gpsDataLoadOk = DataLoader::loadGpsDataWithSqlFile(*this, m_sqlFilePaths);
+        case DBReader::DB_QUERY_SQLFILE:
+            gpsDataLoadOk = DataLoader::loadGpsDataWithSqlFile(
+                *this, m_sqlFilePaths);
             break;
         }
         if (gpsDataLoadOk)

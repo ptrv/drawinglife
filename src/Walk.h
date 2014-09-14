@@ -20,7 +20,7 @@ public:
         FORWARD, BACKWARD
     };
 
-    Walk(const AppSettings& settings, ofColor dotColor, bool magicBoxEnabled=true);
+    Walk(const AppSettings& settings, ofColor dotColor);
 	~Walk();
 
     void update();
