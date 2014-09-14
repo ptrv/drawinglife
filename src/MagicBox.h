@@ -54,6 +54,9 @@ private:
 
     bool isInPaddedBox(const ofxPoint<double>& utmPoint) const;
 
+    void addX(double val);
+    void addY(double val);
+
     void setBoxes();
     // ist auch m_lon0
     ofxPoint<double> m_centerUtm;

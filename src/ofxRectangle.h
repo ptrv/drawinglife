@@ -59,8 +59,8 @@ class ofxRectangle
 
     bool inside(T px, T py) const
     {
-        if( px > pos.x && py > pos.y && px < pos.x + width
-                && py < pos.y + height )
+        if( px > pos.x && py > pos.y &&
+            px < pos.x + width && py < pos.y + height )
         {
             return true;
         }
@@ -71,6 +71,8 @@ class ofxRectangle
     inline T getY() const { return pos.y; }
     inline T getWidth() const { return width; }
     inline T getHeight() const { return height; }
+    inline T getRight() const { return pos.x + width; }
+    inline T getBottom() const { return pos.y + height; }
 
     inline void setX(const T newX) { pos.x = newX; }
     inline void setY(const T newY) { pos.y = newY; }

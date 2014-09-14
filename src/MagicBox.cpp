@@ -47,6 +47,22 @@ bool MagicBox::isInPaddedBox(const ofxPoint<double>& utmPoint) const
 }
 
 //------------------------------------------------------------------------------
+
+void MagicBox::addX(const double val)
+{
+    m_theBox.addX(val);
+    m_paddedBox.addX(val);
+}
+
+//------------------------------------------------------------------------------
+
+void MagicBox::addY(const double val)
+{
+    m_theBox.addY(val);
+    m_paddedBox.addY(val);
+}
+
+//------------------------------------------------------------------------------
 // Setter
 //------------------------------------------------------------------------------
 
@@ -101,33 +117,28 @@ void MagicBox::updateBoxIfNeeded(const ofxPoint<double>& utmPoint)
 {
     if (!isInPaddedBox(utmPoint))
     {
-        if (utmPoint.x >= m_paddedBox.getX() + m_paddedBox.getWidth())
+        if (utmPoint.x >= m_paddedBox.getRight())
         {
-            const double diffX = utmPoint.x - (m_paddedBox.getX()
-                                               + m_paddedBox.getWidth());
-            m_theBox.addX(diffX);
-            m_paddedBox.addX(diffX);
+            const double diffX = utmPoint.x - m_paddedBox.getRight();
+            addX(diffX);
         }
         else if (utmPoint.x < m_paddedBox.getX())
         {
             const double diffX = utmPoint.x - m_paddedBox.getX();
-            m_theBox.addX(diffX);
-            m_paddedBox.addX(diffX);
+            addX(diffX);
         }
 
-        if (utmPoint.y >= m_paddedBox.getY() + m_paddedBox.getHeight())
+        if (utmPoint.y >= m_paddedBox.getBottom())
         {
-            const double diffY = utmPoint.y - (m_paddedBox.getY()
-                                               + m_paddedBox.getHeight());
-            m_theBox.addY(diffY);
-            m_paddedBox.addY(diffY);
+            const double diffY = utmPoint.y - m_paddedBox.getBottom();
+            addY(diffY);
         }
         else if (utmPoint.y < m_paddedBox.getY())
         {
             const double diffY = utmPoint.y - m_paddedBox.getY();
-            m_theBox.addY(diffY);
-            m_paddedBox.addY(diffY);
+            addY(diffY);
         }
+
         m_centerUtm = m_theBox.getCenter();
     }
 }
