@@ -280,7 +280,7 @@ void DrawingLifeApp::update()
             }
             catch (const std::out_of_range&) {}
 
-            m_zoomAnimation->update(*this);
+            m_zoomAnimation->update(m_magicBoxes);
             soundUpdate();
 
             m_timeline->countUp();

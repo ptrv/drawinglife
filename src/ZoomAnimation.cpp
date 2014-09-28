@@ -1,13 +1,10 @@
-#include "DrawingLifeIncludes.h"
-#include "DrawingLifeApp.h"
-#include "GpsData.h"
-#include "Timeline.h"
-
 #include "ZoomAnimation.h"
 
+#include "GpsData.h"
+#include "Timeline.h"
+#include "MagicBox.h"
 #include "GeoUtils.h"
 
-int ZoomAnimation::m_sZoomFrameCount = 0;
 
 ZoomAnimation::ZoomAnimation(const AppSettings& settings,
                              const TimelineWeak timeline)
@@ -23,25 +20,23 @@ ZoomAnimation::ZoomAnimation(const AppSettings& settings,
                                                             dampCenter,
                                                             attrCenter));
 
+    m_currentZoomFrame = m_settings.getZoomAnimFrames().begin();
 }
 
-void ZoomAnimation::update(DrawingLifeApp& app)
+void ZoomAnimation::update(const MagicBoxVector& magicBoxes)
 {
-    const TimelinePtr timeline = m_timeline.lock();
-    if (!timeline)
+    if (!m_settings.isZoomAnimation())
     {
         return;
     }
 
-    if (m_settings.isZoomAnimation())
+    if (const TimelinePtr timeline = m_timeline.lock())
     {
         if (zoomHasChanged(*timeline))
         {
-            const ZoomAnimFrame& zoomAnimFrame =
-                    m_settings.getZoomAnimFrames()[m_sZoomFrameCount];
-            const float zoomLevel = zoomAnimFrame.frameZoom;
-            const double centerX = zoomAnimFrame.frameCenterX;
-            const double centerY = zoomAnimFrame.frameCenterY;
+            const float zoomLevel = m_currentZoomFrame->frameZoom;
+            const double centerX = m_currentZoomFrame->frameCenterX;
+            const double centerY = m_currentZoomFrame->frameCenterY;
 
             UtmPoint utmP = GeoUtils::LonLat2Utm(centerX, centerY);
 
@@ -54,17 +49,17 @@ void ZoomAnimation::update(DrawingLifeApp& app)
             m_theIntegrator->setTarget(utmP);
 
         }
-    }
-    m_zoomIntegrator->update();
-    m_theIntegrator->update();
 
-    if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
-    {
-        const MagicBoxVector& magicBoxes = app.getMagicBoxVector();
-        BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
+        m_zoomIntegrator->update();
+        m_theIntegrator->update();
+
+        if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
         {
-            box->setSize(m_zoomIntegrator->getValue());
-            box->setupBox(m_theIntegrator->getValue());
+            BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
+            {
+                box->setSize(m_zoomIntegrator->getValue());
+                box->setupBox(m_theIntegrator->getValue());
+            }
         }
     }
 }
@@ -73,104 +68,51 @@ void ZoomAnimation::update(DrawingLifeApp& app)
 
 bool ZoomAnimation::zoomHasChanged(const Timeline& timeline)
 {
+    const ZoomAnimFrameVec& zoomAnimFrames = m_settings.getZoomAnimFrames();
+
     if (timeline.isFirst())
     {
-        m_sZoomFrameCount = 0;
+        m_currentZoomFrame = zoomAnimFrames.begin();
         return true;
     }
 
+    tZoomAnimFrameIterator nextFrame = m_currentZoomFrame + 1;
+
+    if (nextFrame != zoomAnimFrames.end() &&
+        zoomHasChanged(timeline, nextFrame))
+    {
+        m_currentZoomFrame = nextFrame;
+        return true;
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+bool ZoomAnimation::zoomHasChanged(const Timeline& timeline,
+                                   tZoomAnimFrameIterator nextFrame)
+{
     switch (m_settings.getZoomAnimationCriteria())
     {
-        case 1:
-            return zoomHasChangedTime(timeline);
-        case 2:
-            return zoomHasChangedId(timeline);
-        case 3:
-            return zoomHasChangedTimestamp(timeline);
-        default:
-            return false;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-bool ZoomAnimation::zoomHasChangedId(const Timeline& timeline)
-{
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings.getZoomAnimFrames();
-
-    if (m_sZoomFrameCount + 1 >= static_cast<int>(zoomAnimFrames.size()))
+    case 1:
     {
-        return false;
+        const int current = timeline.getCurrentCount();
+        const int all = timeline.getAllCount();
+        return (current / (float) all) >= nextFrame->frameTime;
     }
-    const int currentId = timeline.getCurrentTimelineObj().gpsid;
-    const int zoomChangeId = zoomAnimFrames[m_sZoomFrameCount+1].gpsId;
-    if (currentId == zoomChangeId)
+    case 2:
     {
-        ++m_sZoomFrameCount;
-        return true;
+        const int currentGpsId = timeline.getCurrentTimelineObj().gpsid;
+        return currentGpsId == nextFrame->gpsId;
     }
-    else
+    case 3:
     {
-        return false;
+        const std::string& currentTimestamp =
+            timeline.getCurrentTimelineObj().timeString;
+        return nextFrame->timestamp.compare(currentTimestamp) == 0;
     }
-}
-
-//------------------------------------------------------------------------------
-
-bool ZoomAnimation::zoomHasChangedTimestamp(const Timeline& timeline)
-{
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings.getZoomAnimFrames();
-
-    if (m_sZoomFrameCount+1 >= static_cast<int>(zoomAnimFrames.size()))
-    {
-        return false;
-    }
-    const string& currentTimestamp = timeline.getCurrentTimelineObj().timeString;
-    const string& zoomChangeTimestamp =
-            zoomAnimFrames[m_sZoomFrameCount+1].timestamp;
-    if (zoomChangeTimestamp.compare(currentTimestamp) == 0)
-    {
-        ++m_sZoomFrameCount;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-bool ZoomAnimation::zoomHasChangedTime(const Timeline& timeline)
-{
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings.getZoomAnimFrames();
-
-    const int current = timeline.getCurrentCount();
-    const int all = timeline.getAllCount();
-
-    int currIndex = 0;
-    for (size_t i = 0; i < zoomAnimFrames.size(); ++i)
-    {
-        if ((current / (float)all) > zoomAnimFrames[i].frameTime)
-        {
-            currIndex = i;
-        }
-        else
-        {
-            break;
-        }
-    }
-    if (m_sZoomFrameCount != currIndex)
-    {
-        ++m_sZoomFrameCount;
-        if (m_sZoomFrameCount >= static_cast<int>(zoomAnimFrames.size()))
-        {
-            --m_sZoomFrameCount;
-        }
-        return true;
-    }
-    else
-    {
+    default:
         return false;
     }
 }

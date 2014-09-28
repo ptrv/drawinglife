@@ -9,14 +9,15 @@ class ZoomAnimation
 public:
     ZoomAnimation(const AppSettings& settings, const TimelineWeak timeline);
 
-    void update(DrawingLifeApp& app);
+    void update(const MagicBoxVector& magicBoxes);
 
 private:
 
     bool zoomHasChanged(const Timeline& timeline);
-    bool zoomHasChangedTime(const Timeline& timeline);
-    bool zoomHasChangedId(const Timeline& timeline);
-    bool zoomHasChangedTimestamp(const Timeline& timeline);
+
+    typedef ZoomAnimFrameVec::const_iterator tZoomAnimFrameIterator;
+    bool zoomHasChanged(const Timeline& timeline,
+                        tZoomAnimFrameIterator nextFrame);
 
     const AppSettings& m_settings;
     const TimelineWeak m_timeline;
@@ -24,7 +25,7 @@ private:
     boost::scoped_ptr<Integrator<double> > m_zoomIntegrator;
     boost::scoped_ptr<Integrator<ofxPoint<double> > > m_theIntegrator;
 
-    static int m_sZoomFrameCount;
+    tZoomAnimFrameIterator m_currentZoomFrame;
 
 };
 
