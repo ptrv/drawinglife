@@ -19,10 +19,6 @@
 
 //------------------------------------------------------------------------------
 
-int DrawingLifeApp::m_sZoomFrameCount = 0;
-
-//------------------------------------------------------------------------------
-
 DrawingLifeApp::DrawingLifeApp(std::string settingsFile) :
     m_settingsFile(settingsFile),
     //m_settings(0),
@@ -193,6 +189,7 @@ void DrawingLifeApp::setup()
                 *this, m_sqlFilePaths);
             break;
         }
+
         if (gpsDataLoadOk)
         {
             // GpsData are loaded now. Drawing routine can start.
@@ -208,8 +205,7 @@ void DrawingLifeApp::setup()
 
             DataLoader::loadLocationImages(*this);
 
-            m_zoomAnimation.reset(new ZoomAnimation(*m_settings,
-                                                    m_timeline));
+            m_zoomAnimation.reset(new ZoomAnimation(*m_settings, m_timeline));
         }
     }
     else
@@ -248,7 +244,6 @@ void DrawingLifeApp::handleFirstTimelineObject()
             if (m_loopMode)
             {
                 std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
-                m_sZoomFrameCount = 0;
                 const int sleepTime = m_settings->getSleepTime();
                 if (sleepTime > 0)
                 {

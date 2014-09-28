@@ -213,6 +213,10 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
         for (size_t i = 0; i < numPersons; ++i)
         {
+            const ViewDimensions& aViewDimensions = viewDimensions[i];
+            const ofColor& nameColor = settings.getNameColors()[i];
+            const GpsDataPtr& gpsData = gpsDatas[i];
+
             if (!settings.isMultiMode() || magicBoxes.empty())
             {
                 magicBoxes.push_back(
@@ -223,29 +227,31 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
             MagicBoxWeak boxWeak = magicBoxes.back();
 
-            Walk* walk = new Walk(settings, settings.getNameColors()[i]);
-            walks.push_back(walk);
+            walks.push_back(new Walk(settings, nameColor));
+            Walk& walk = walks.back();
 
-            walk->setViewBounds(viewDimensions[i]);
-            walk->reset();
+            walk.setViewBounds(aViewDimensions);
+            walk.reset();
 
-            walk->setGpsData(gpsDatas[i]->shared_from_this());
+            walk.setGpsData(gpsData);
 
             if (settings.isBoundingBoxFixed())
             {
                 double bbLat = settings.getBoundingBoxLat();
                 double bbLon = settings.getBoundingBoxLon();
-                walk->setMagicBoxStatic(boxWeak, bbLat, bbLon);
+                walk.setMagicBoxStatic(boxWeak, bbLat, bbLon);
             }
             else
             {
-                walk->setMagicBox(boxWeak);
+                walk.setMagicBox(boxWeak);
             }
 
             if (app.getIsImageAsCurrentPoint() &&
                 images.size() >= settings.getNumPersons())
             {
-                walk->setCurrentPointImage(images[i], imageList[i].alpha);
+                const ofImage& img = images[i];
+                const int alpha = imageList[i].alpha;
+                walk.setCurrentPointImage(img, alpha);
             }
         }
     }
@@ -279,28 +285,25 @@ bool DataLoader::loadGpsData(DrawingLifeApp& app,
 
             dbReader->closeDbConnection();
 
-            if (loadOk)
-            {
-                ofLogNotice(Logger::DATA_LOADER) << "--> GpsData load ok!";
-                ofLogNotice(Logger::DATA_LOADER)
-                        << "--> Total data: "
-                        << gpsData->getSegments().size() << " GpsSegments, "
-                        << gpsData->getTotalGpsPoints() << " GpsPoints!"
-                        << std::endl;
-            }
-            else
+            if (!loadOk)
             {
                 ofLogNotice(Logger::DATA_LOADER) << "--> No GpsData loaded!";
                 return false;
             }
-        }
-        // ---------------------------------------------------------------------
 
-        ofLogVerbose(Logger::DATA_LOADER)
-                << "minLon: " << gpsData->getMinUtmX() << ", "
-                << "maxLon: " << gpsData->getMaxUtmX() << ", "
-                << "minLat: " << gpsData->getMinUtmY() << ", "
-                << "maxLat: " << gpsData->getMaxUtmY();
+            ofLogNotice(Logger::DATA_LOADER) << "--> GpsData load ok!";
+            ofLogNotice(Logger::DATA_LOADER)
+                    << "--> Total data: "
+                    << gpsData->getSegments().size() << " GpsSegments, "
+                    << gpsData->getTotalGpsPoints() << " GpsPoints!"
+                    << std::endl;
+
+            ofLogVerbose(Logger::DATA_LOADER)
+                    << "minLon: " << gpsData->getMinUtmX() << ", "
+                    << "maxLon: " << gpsData->getMaxUtmX() << ", "
+                    << "minLat: " << gpsData->getMinUtmY() << ", "
+                    << "maxLat: " << gpsData->getMaxUtmY();
+        }
     }
 
     processGpsData(app);

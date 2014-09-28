@@ -17,7 +17,7 @@ using namespace sqlite3x;
 
 #ifdef TARGET_OSX
 static const std::string libspatialiteDylibPath =
-    "libspatialite_mac/mod_spatialite.dylib";
+    "libspatialite_mac/mod_spatialite";
 #else
 #include "sqlite3.h"
 #include <spatialite.h>
@@ -253,7 +253,6 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
     std::stringstream query;
     query << getBasicQueryString();
     query << sqlFileSource;
-//    query << ";";
     return getGpsData(gpsData, query.str());
 }
 
@@ -348,6 +347,7 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
         return true;
     }
     CATCHDBERRORSQ((queryFirstOk ? queryMinMax.str() : query))
+
     return false;
 }
 

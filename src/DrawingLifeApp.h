@@ -149,8 +149,6 @@ private:
     ofShader shader;
     bool doShader;
 
-    static int m_sZoomFrameCount;
-
     boost::function<void(Walk&)> fnWalkDrawAll;
     boost::function<void(Walk&)> fnWalkReset;
     boost::function<void(LocationImage&)> fnLocationImageDraw;

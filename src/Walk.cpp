@@ -163,10 +163,7 @@ void Walk::updateToSegment(const tWalkDirection direction)
         }
         else
         {
-            m_currentGpsPoint = 0;
-            m_currentGpsSegment = 0;
-            m_currentPoint = 0;
-            m_firstPoint = true;
+            reset();
         }
     }
 }
@@ -396,7 +393,6 @@ void Walk::drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm)
         ofSetColor(255, 255, 255, m_imageAlpha);
         m_image.draw(getScaledUtmX(currentPoint.x),
                      getScaledUtmY(currentPoint.y));
-
     }
     else if (!m_interactiveMode)
     {
