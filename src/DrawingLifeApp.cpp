@@ -233,6 +233,15 @@ void DrawingLifeApp::setup()
 
 //------------------------------------------------------------------------------
 
+void sleepFunc(int sleepTime)
+{
+#if defined (TARGET_WIN32)
+    Sleep(sleepTime*1000);
+#else
+    sleep(sleepTime);
+#endif
+}
+
 bool firstRun = true;
 void DrawingLifeApp::handleFirstTimelineObject()
 {
@@ -241,26 +250,21 @@ void DrawingLifeApp::handleFirstTimelineObject()
         if (firstRun)
         {
             firstRun = false;
+            return;
+        }
+
+        if (m_loopMode)
+        {
+            std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
+            const int sleepTime = m_settings->getSleepTime();
+            if (sleepTime > 0)
+            {
+                sleepFunc(sleepTime);
+            }
         }
         else
         {
-            if (m_loopMode)
-            {
-                std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
-                const int sleepTime = m_settings->getSleepTime();
-                if (sleepTime > 0)
-                {
-#if defined (TARGET_WIN32)
-                    Sleep(sleepTime*1000);
-#else
-                    sleep(sleepTime);
-#endif
-                }
-            }
-            else
-            {
-                OF_EXIT_APP(0);
-            }
+            OF_EXIT_APP(0);
         }
     }
 }
