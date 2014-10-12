@@ -7,13 +7,14 @@
         </person>
     </data>
     <dbquery>
-        <!-- There are four query types: -->
+        <!-- Query types: -->
         <!-- 1 = day range -->
         <!-- 2 = month range -->
         <!-- 3 = year range -->
         <!-- 4 = city -->
         <!-- 5 = sql file for each person-->
-        <type>5</type>
+        <!-- 6 = all -->
+        <type>6</type>
         <time>
             <yearstart>2007</yearstart>
             <yearend>2014</yearend>

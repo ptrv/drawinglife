@@ -188,6 +188,9 @@ void DrawingLifeApp::setup()
             gpsDataLoadOk = DataLoader::loadGpsDataWithSqlFile(
                 *this, m_sqlFilePaths);
             break;
+        case DBReader::DB_QUERY_ALL:
+            gpsDataLoadOk = DataLoader::loadGpsDataAll(*this, m_names);
+            break;
         }
 
         if (gpsDataLoadOk)

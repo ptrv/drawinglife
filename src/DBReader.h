@@ -19,6 +19,7 @@ public:
     static const int DB_QUERY_YEAR      = 3;	///< Database query type constant for year.
     static const int DB_QUERY_CITY      = 4;	///< Database query type constant for city.
     static const int DB_QUERY_SQLFILE   = 5;	///< Database query type constant for sql file.
+    static const int DB_QUERY_ALL       = 6;	///< Database query type constant for all.
 
 	DBReader(const std::string& dbpath, bool useSpeed=false);
 	~DBReader();
@@ -44,6 +45,7 @@ public:
                         const std::string& city);
     bool getGpsDataWithSqlFile(GpsData& gpsData,
                                const std::string& sqlFileSource);
+    bool getGpsDataAll(GpsData& gpsData, const std::string& userName);
 
 private:
 

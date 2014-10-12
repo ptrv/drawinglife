@@ -15,8 +15,8 @@ bool DataLoader::loadGpsDataCity(DrawingLifeApp& app,
     const size_t numPersons = app.getAppSettings().getNumPersons();
     for (size_t i = 0; i < numPersons; ++i)
     {
-        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataCity, _1, _2,
-                                         names[i], city);
+        tFuncLoadGpsData f =
+            boost::bind(&DBReader::getGpsDataCity, _1, _2, names[i], city);
         funcVec.push_back(f);
     }
 
@@ -58,8 +58,25 @@ bool DataLoader::loadGpsDataWithSqlFile(DrawingLifeApp& app,
                 std::string(std::istreambuf_iterator<char>(sqlFile),
                             std::istreambuf_iterator<char>());
 
-        tFuncLoadGpsData f = boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2,
-                                         sqlFileSource);
+        tFuncLoadGpsData f =
+            boost::bind(&DBReader::getGpsDataWithSqlFile, _1, _2, sqlFileSource);
+        funcVec.push_back(f);
+    }
+
+    return loadGpsData(app, funcVec);
+}
+
+//------------------------------------------------------------------------------
+
+bool DataLoader::loadGpsDataAll(DrawingLifeApp& app, const StringVec& names)
+{
+    std::vector<tFuncLoadGpsData> funcVec;
+
+    const size_t numPersons = app.getAppSettings().getNumPersons();
+    for (size_t i = 0; i < numPersons; ++i)
+    {
+        tFuncLoadGpsData f =
+            boost::bind(&DBReader::getGpsDataAll, _1, _2, names[i]);
         funcVec.push_back(f);
     }
 
@@ -249,9 +266,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
             if (app.getIsImageAsCurrentPoint() &&
                 images.size() >= settings.getNumPersons())
             {
-                const ofImage& img = images[i];
-                const int alpha = imageList[i].alpha;
-                walk.setCurrentPointImage(img, alpha);
+                walk.setCurrentPointImage(images[i], imageList[i].alpha);
             }
         }
     }

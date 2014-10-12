@@ -257,6 +257,18 @@ bool DBReader::getGpsDataWithSqlFile(GpsData& gpsData,
 }
 
 //------------------------------------------------------------------------------
+
+bool DBReader::getGpsDataAll(GpsData& gpsData, const std::string& userName)
+{
+    std::stringstream query;
+    query << getBasicQueryString();
+    query << "WHERE b.username = '";
+    query << userName;
+    query << "' ORDER BY datetime(a.utctimestamp);";
+    return getGpsData(gpsData, query.str());
+}
+
+//------------------------------------------------------------------------------
 bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
 {
     bool queryFirstOk = false;
@@ -330,13 +342,11 @@ bool DBReader::getGpsData(GpsData& gpsData, const std::string& query)
         sqlite3_command cmd2(*m_dbconn, queryMinMax.str());
         sqlite3_reader readerMinMax = cmd2.executereader();
         double minLon, maxLon, minLat, maxLat;
-        while (readerMinMax.read())
-        {
-            minLon = readerMinMax.getdouble(0);
-            maxLon = readerMinMax.getdouble(1);
-            minLat = readerMinMax.getdouble(2);
-            maxLat = readerMinMax.getdouble(3);
-        }
+        readerMinMax.read();
+        minLon = readerMinMax.getdouble(0);
+        maxLon = readerMinMax.getdouble(1);
+        minLat = readerMinMax.getdouble(2);
+        maxLat = readerMinMax.getdouble(3);
         readerMinMax.close();
         // -----------------------------------------------------------------------------
         gpsData.clear();

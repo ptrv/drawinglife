@@ -19,6 +19,8 @@ public:
                                      int yearStart, int yearEnd);
     static bool loadGpsDataWithSqlFile(DrawingLifeApp& app,
                                        const StringVec& sqlFilePaths);
+    static bool loadGpsDataAll(DrawingLifeApp& app,
+                               const StringVec& names);
 
     static bool loadCurrentPointImages(DrawingLifeApp& app);
     static void loadLocationImages(DrawingLifeApp& app);
