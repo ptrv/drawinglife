@@ -41,3 +41,11 @@ UtmPoint DrawingLifeDrawable::getScaledUtm(const UtmPoint& normalizedUtmPoint) c
 }
 
 //------------------------------------------------------------------------------
+
+ofVec2f DrawingLifeDrawable::getScaledVec2f(const double normalizedUtmX,
+                                            const double normalizedUtmY) const
+{
+    return ofVec2f(getScaledUtmX(normalizedUtmX), getScaledUtmY(normalizedUtmY));
+}
+
+//------------------------------------------------------------------------------

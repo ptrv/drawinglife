@@ -273,13 +273,15 @@ void Walk::draw()
                 {
                     const ofxPoint<double>& pt = magicBox->getDrawablePoint(utm);
                     // glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
-                    m_points.back().push_back(ofVec2f(getScaledUtmX(pt.x), getScaledUtmY(pt.y)));
+                    m_points.back().push_back(getScaledVec2f(pt.x, pt.y));
                 }
             }
             // glEnd();
-            drawPoints();
+
             startPoint = 0;
         }
+
+        drawPoints();
 
         drawCurrentPoint(*magicBox, currentUtm);
     }
@@ -322,7 +324,7 @@ void Walk::drawAll()
                 const ofxPoint<double>& tmp =
                         magicBox->getDrawablePoint(utmPoint);
                 // glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
-                m_points.back().push_back(ofVec2f(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y)));
+                m_points.back().push_back(getScaledVec2f(tmp.x, tmp.y));
             }
         }
         // glEnd();

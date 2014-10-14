@@ -17,6 +17,8 @@ public:
     double getScaledUtmX(double normalizedUtmX) const;
     double getScaledUtmY(double normalizedUtmY) const;
     UtmPoint getScaledUtm(const UtmPoint& normalizedUtmPoint) const;
+    ofVec2f getScaledVec2f(double normalizedUtmX,
+                           double normalizedUtmY) const;
 
 private:
 
