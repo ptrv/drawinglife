@@ -225,10 +225,14 @@ void Walk::draw()
             startSeg = m_currentGpsSegment;
         }
 
+        m_points.clear();
+
         for (int i = startSeg; i <= m_currentGpsSegment; ++i)
         {
             const UtmSegment& segment = utmData[i];
-            glBegin(GL_LINE_STRIP);
+            // glBegin(GL_LINE_STRIP);
+            m_points.push_back(tPoints());
+
             int pointEnd;
             if (i == m_currentGpsSegment)
             {
@@ -254,8 +258,9 @@ void Walk::draw()
                     isInBox = magicBox->isInBox(utm);
                     if (!isInBox)
                     {
-                        glEnd();
-                        glBegin(GL_LINE_STRIP);
+                        // glEnd();
+                        // glBegin(GL_LINE_STRIP);
+                        m_points.push_back(tPoints());
                     }
                 }
 
@@ -267,11 +272,12 @@ void Walk::draw()
                 if (isInBox)
                 {
                     const ofxPoint<double>& pt = magicBox->getDrawablePoint(utm);
-                    glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
+                    // glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
+                    m_points.back().push_back(ofVec2f(getScaledUtmX(pt.x), getScaledUtmY(pt.y)));
                 }
             }
-            glEnd();
-
+            // glEnd();
+            drawPoints();
             startPoint = 0;
         }
 
@@ -297,9 +303,13 @@ void Walk::drawAll()
     }
 
     ofNoFill();
+
+    m_points.clear();
+
     BOOST_FOREACH(const UtmSegment& utmSegment, gpsData->getUTMPoints())
     {
-        glBegin(GL_LINE_STRIP);
+        // glBegin(GL_LINE_STRIP);
+        m_points.push_back(tPoints());
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
         {
             bool isInBox = true;
@@ -311,11 +321,13 @@ void Walk::drawAll()
             {
                 const ofxPoint<double>& tmp =
                         magicBox->getDrawablePoint(utmPoint);
-                glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
+                // glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
+                m_points.back().push_back(ofVec2f(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y)));
             }
         }
-        glEnd();
+        // glEnd();
     }
+    drawPoints();
 }
 
 // -----------------------------------------------------------------------------
@@ -350,6 +362,18 @@ void Walk::drawBoxes()
 }
 
 // -----------------------------------------------------------------------------
+
+void Walk::drawPoints()
+{
+    for (tPointsVec::iterator it = m_points.begin(); it != m_points.end(); ++it)
+    {
+        const tPoints& pts = *it;
+        m_vbo.setVertexData(&pts[0], (int)pts.size(), GL_DYNAMIC_DRAW);
+        m_vbo.draw(GL_LINE_STRIP, 0, (int)pts.size());
+    }
+}
+
+// -----------------------------------------------------------------------------
 // Draw helpers
 // -----------------------------------------------------------------------------
 
@@ -369,16 +393,17 @@ std::pair<int, int> Walk::calculateStartSegmentAndStartPoint(const GpsData& gpsD
 
 void Walk::drawSpeedColor(const double speed, bool& isInBox)
 {
-    const ofColor& color = speed > m_settings.getSpeedThreshold()
-                                        ? m_settings.getSpeedColorAbove()
-                                        : m_settings.getSpeedColorUnder();
+    const ofColor& color = speed > m_settings.getSpeedThreshold() ?
+        m_settings.getSpeedColorAbove() :
+        m_settings.getSpeedColorUnder();
 
     ofSetColor(color);
     if (color.a == 0.0)
     {
         isInBox = false;
-        glEnd();
-        glBegin(GL_LINE_STRIP);
+        // glEnd();
+        // glBegin(GL_LINE_STRIP);
+        m_points.push_back(tPoints());
     }
 }
 
@@ -400,9 +425,9 @@ void Walk::drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm)
         bool skipDrawing = false;
         if (m_settings.useSpeed())
         {
-            skipDrawing = currentUtm.speed > m_settings.getSpeedThreshold()
-                    ? m_settings.getSpeedColorAbove().a == 0.0
-                    : m_settings.getSpeedColorUnder().a == 0.0;
+            skipDrawing = currentUtm.speed > m_settings.getSpeedThreshold() ?
+                m_settings.getSpeedColorAbove().a == 0.0 :
+                m_settings.getSpeedColorUnder().a == 0.0;
         }
         if (!skipDrawing)
         {

@@ -169,6 +169,10 @@ typedef boost::shared_ptr<Timeline> TimelinePtr;
 typedef boost::weak_ptr<Timeline> TimelineWeak;
 typedef std::vector<TimelineObject> TimelineObjectVec;
 
+class  ofVec2f;
+typedef std::vector<ofVec2f> tPoints;
+typedef std::vector<tPoints> tPointsVec;
+
 //---------------------------------------------------------------------------
 
 #endif // _DRAWINGLIFETYPES_H_

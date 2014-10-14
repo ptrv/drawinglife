@@ -54,6 +54,8 @@ public:
 
 private:
 
+    void drawPoints();
+
     void updateToSegment(const tWalkDirection direction);
 
     void drawBoxes();
@@ -101,6 +103,10 @@ private:
 	ofColor m_currentSegColor;
 
 	int m_imageAlpha;
+
+    ofVbo m_vbo;
+
+    tPointsVec m_points;
 };
 
 #endif // _WALK_H_
