@@ -4,7 +4,7 @@
 
 #include "DrawingLifeIncludes.h"
 #include "DrawingLifeApp.h"
-#include "ofAppGlutWindow.h"
+// #include "ofAppGlutWindow.h"
 
 #ifndef TARGET_OSX
 #include <tclap/CmdLine.h>
@@ -43,21 +43,20 @@ int main(int argc, const char* argv[] ){
         int width = widthArg.getValue();
         int height = heightArg.getValue();
         std::string settingsFile = settingsArg.getValue();
-        ofAppGlutWindow window;
+        // ofAppGlutWindow window;
 //        window.setGlutDisplayString("rgba double samples>=4");
     //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);
-        ofSetupOpenGL(&window, width, height, OF_WINDOW);			// <-------- setup the GL context
+        ofSetupOpenGL(width, height, OF_WINDOW);			// <-------- setup the GL context
 
         ofRunApp( new DrawingLifeApp(settingsFile));
 
-	} catch (TCLAP::ArgException &e)  // catch any exceptions
-	{ std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
+    } catch (TCLAP::ArgException &e)  // catch any exceptions
+    { std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; }
 #else
-	ofAppGlutWindow window;
+    // ofAppGlutWindow window;
     //    ofSetupOpenGL(&window, 1680,1000, OF_GAME_MODE);
-	ofSetupOpenGL(&window, 1024, 768, OF_WINDOW);			// <-------- setup the GL context
-
-	ofRunApp( new DrawingLifeApp("AppSettings.xml"));
+    ofSetupOpenGL(1024, 768, OF_WINDOW);  // <-------- setup the GL context
+    ofRunApp( new DrawingLifeApp("AppSettings.xml"));
 
 #endif
 
