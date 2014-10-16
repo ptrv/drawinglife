@@ -173,6 +173,35 @@ class  ofVec2f;
 typedef std::vector<ofVec2f> tPoints;
 typedef std::vector<tPoints> tPointsVec;
 
+struct ColorSlice
+{
+    ColorSlice(const ofColor& c, const int index)
+        : color(c), idx(index), num(0) {}
+    ofColor color;
+    int idx;
+    int num;
+};
+
+typedef std::vector<ColorSlice> tColorSlices;
+struct PointsAndColors
+{
+    tPoints points;
+    tColorSlices colors;
+
+    void add(const ofVec2f& pt, const ofColor& c)
+    {
+        points.push_back(pt);
+
+        if (colors.empty() || colors.back().color != c)
+        {
+            const int idx = static_cast<int>(points.size()) - 1;
+            colors.push_back(ColorSlice(c, idx));
+        }
+        ++colors.back().num;
+    }
+};
+typedef std::vector<PointsAndColors> tPointsAndColorsVec;
+
 //---------------------------------------------------------------------------
 
 #endif // _DRAWINGLIFETYPES_H_

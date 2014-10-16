@@ -62,7 +62,7 @@ private:
 
     std::pair<int, int> calculateStartSegmentAndStartPoint(const GpsData& gpsData);
 
-    void drawSpeedColor(double speed, bool& isInBox);
+    void drawSpeedColor(double speed, bool& isInBox, ofColor& currentColor);
 
     void drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm);
 
@@ -89,6 +89,7 @@ private:
 
     MagicBoxWeak m_magicBox;
 
+    ofColor m_fgColor;
     ofColor m_dotColor;
 
     int m_maxPointsToDraw;
@@ -106,7 +107,7 @@ private:
 
     ofVbo m_vbo;
 
-    tPointsVec m_points;
+    tPointsAndColorsVec m_points;
 };
 
 #endif // _WALK_H_

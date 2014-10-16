@@ -43,6 +43,10 @@ m_imageAlpha(255)
     fnGetCurrentUtmX = boost::bind(&GpsData::getUtmX, _1, _2, _3);
     fnGetCurrentUtmY = boost::bind(&GpsData::getUtmY, _1, _2, _3);
 
+    m_fgColor = ofColor(m_settings.getColorForegroundR(),
+                        m_settings.getColorForegroundG(),
+                        m_settings.getColorForegroundB(),
+                        m_settings.getAlphaTrack());
 }
 
 //------------------------------------------------------------------------------
@@ -203,9 +207,9 @@ void Walk::draw()
     if (utmData.size() > 0 &&
         currentSegment.size() > 0 &&
         m_currentGpsPoint < static_cast<int>(currentSegment.size()))
-	{
+    {
         // ---------------------------------------------------------------------
-		// Draw Gps data
+        // Draw Gps data
         // ---------------------------------------------------------------------
         const UtmPoint& currentUtm = currentSegment[m_currentGpsPoint];
 
@@ -231,7 +235,8 @@ void Walk::draw()
         {
             const UtmSegment& segment = utmData[i];
             // glBegin(GL_LINE_STRIP);
-            m_points.push_back(tPoints());
+            m_points.push_back(PointsAndColors());
+            ofColor& currentColor = m_fgColor;
 
             int pointEnd;
             if (i == m_currentGpsSegment)
@@ -239,7 +244,8 @@ void Walk::draw()
                 pointEnd = m_currentGpsPoint;
                 if (m_interactiveMode && m_drawTraced)
                 {
-                    ofSetColor(m_currentSegColor);
+                    // ofSetColor(m_currentSegColor);
+                    currentColor = m_currentSegColor;
                 }
             }
             else
@@ -260,20 +266,20 @@ void Walk::draw()
                     {
                         // glEnd();
                         // glBegin(GL_LINE_STRIP);
-                        m_points.push_back(tPoints());
+                        m_points.push_back(PointsAndColors());
                     }
                 }
 
                 if (m_settings.useSpeed())
                 {
-                    drawSpeedColor(utm.speed, isInBox);
+                    drawSpeedColor(utm.speed, isInBox, currentColor);
                 }
 
                 if (isInBox)
                 {
                     const ofxPoint<double>& pt = magicBox->getDrawablePoint(utm);
                     // glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
-                    m_points.back().push_back(getScaledVec2f(pt.x, pt.y));
+                    m_points.back().add(getScaledVec2f(pt.x, pt.y), currentColor);
                 }
             }
             // glEnd();
@@ -311,7 +317,7 @@ void Walk::drawAll()
     BOOST_FOREACH(const UtmSegment& utmSegment, gpsData->getUTMPoints())
     {
         // glBegin(GL_LINE_STRIP);
-        m_points.push_back(tPoints());
+        m_points.push_back(PointsAndColors());
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
         {
             bool isInBox = true;
@@ -324,7 +330,7 @@ void Walk::drawAll()
                 const ofxPoint<double>& tmp =
                         magicBox->getDrawablePoint(utmPoint);
                 // glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
-                m_points.back().push_back(getScaledVec2f(tmp.x, tmp.y));
+                m_points.back().add(getScaledVec2f(tmp.x, tmp.y), m_fgColor);
             }
         }
         // glEnd();
@@ -367,11 +373,20 @@ void Walk::drawBoxes()
 
 void Walk::drawPoints()
 {
-    for (tPointsVec::iterator it = m_points.begin(); it != m_points.end(); ++it)
+    for (tPointsAndColorsVec::const_iterator it = m_points.begin(); it != m_points.end(); ++it)
     {
-        const tPoints& pts = *it;
+        const tPoints& pts = it->points;
+        const tColorSlices& colors = it->colors;
         m_vbo.setVertexData(&pts[0], (int)pts.size(), GL_DYNAMIC_DRAW);
-        m_vbo.draw(GL_LINE_STRIP, 0, (int)pts.size());
+        for (tColorSlices::const_iterator it2 = colors.begin(); it2 != colors.end(); ++it2)
+        {
+            const ColorSlice& colorSlice = *it2;
+            ofSetColor(colorSlice.color);
+            const int start = colorSlice.idx <= 0 ? 0 : colorSlice.idx - 1;
+            const int total = start <= 0 ? colorSlice.num : colorSlice.num + 1;
+
+            m_vbo.draw(GL_LINE_STRIP, start, total);
+        }
     }
 }
 
@@ -393,19 +408,20 @@ std::pair<int, int> Walk::calculateStartSegmentAndStartPoint(const GpsData& gpsD
 
 // -----------------------------------------------------------------------------
 
-void Walk::drawSpeedColor(const double speed, bool& isInBox)
+void Walk::drawSpeedColor(const double speed, bool& isInBox, ofColor& currentColor)
 {
     const ofColor& color = speed > m_settings.getSpeedThreshold() ?
         m_settings.getSpeedColorAbove() :
         m_settings.getSpeedColorUnder();
 
-    ofSetColor(color);
+    // ofSetColor(color);
+    currentColor = color;
     if (color.a == 0.0)
     {
         isInBox = false;
         // glEnd();
         // glBegin(GL_LINE_STRIP);
-        m_points.push_back(tPoints());
+        m_points.push_back(PointsAndColors());
     }
 }
 

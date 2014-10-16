@@ -353,10 +353,10 @@ void DrawingLifeApp::draw()
                 {
                     shaderBegin();
                 }
-                ofSetColor(m_settings->getColorForegroundR(),
-                           m_settings->getColorForegroundG(),
-                           m_settings->getColorForegroundB(),
-                           m_settings->getAlphaTrack());
+                // ofSetColor(m_settings->getColorForegroundR(),
+                //            m_settings->getColorForegroundG(),
+                //            m_settings->getColorForegroundB(),
+                //            m_settings->getAlphaTrack());
                 ofNoFill();
                 walk.draw();
                 if (doShader)
