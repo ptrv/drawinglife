@@ -54,7 +54,7 @@ public:
 
 private:
 
-    void drawPoints();
+    void drawPoints(const PointsAndColors& pac);
 
     void updateToSegment(const tWalkDirection direction);
 
@@ -62,7 +62,12 @@ private:
 
     std::pair<int, int> calculateStartSegmentAndStartPoint(const GpsData& gpsData);
 
-    void drawSpeedColor(double speed, bool& isInBox, ofColor& currentColor);
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+    void drawSpeedColor(double speed, bool& isInBox);
+#else
+    void drawSpeedColor(double speed, bool& isInBox, ofColor& currentColor,
+                        PointsAndColors& pac);
+#endif
 
     void drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm);
 
@@ -105,9 +110,9 @@ private:
 
 	int m_imageAlpha;
 
+#ifndef USE_OPENGL_FIXED_FUNCTIONS
     ofVbo m_vbo;
-
-    tPointsAndColorsVec m_points;
+#endif
 };
 
 #endif // _WALK_H_

@@ -229,14 +229,16 @@ void Walk::draw()
             startSeg = m_currentGpsSegment;
         }
 
-        m_points.clear();
-
         for (int i = startSeg; i <= m_currentGpsSegment; ++i)
         {
             const UtmSegment& segment = utmData[i];
-            // glBegin(GL_LINE_STRIP);
-            m_points.push_back(PointsAndColors());
-            ofColor& currentColor = m_fgColor;
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+            glBegin(GL_LINE_STRIP);
+            ofSetColor(m_fgColor);
+#else
+            PointsAndColors pac;
+            ofColor currentColor = m_fgColor;
+#endif
 
             int pointEnd;
             if (i == m_currentGpsSegment)
@@ -244,8 +246,11 @@ void Walk::draw()
                 pointEnd = m_currentGpsPoint;
                 if (m_interactiveMode && m_drawTraced)
                 {
-                    // ofSetColor(m_currentSegColor);
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+                    ofSetColor(m_currentSegColor);
+#else
                     currentColor = m_currentSegColor;
+#endif
                 }
             }
             else
@@ -264,30 +269,42 @@ void Walk::draw()
                     isInBox = magicBox->isInBox(utm);
                     if (!isInBox)
                     {
-                        // glEnd();
-                        // glBegin(GL_LINE_STRIP);
-                        m_points.push_back(PointsAndColors());
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+                        glEnd();
+                        glBegin(GL_LINE_STRIP);
+#else
+                        drawPoints(pac);
+                        pac = PointsAndColors();
+#endif
                     }
                 }
 
                 if (m_settings.useSpeed())
                 {
-                    drawSpeedColor(utm.speed, isInBox, currentColor);
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+                    drawSpeedColor(utm.speed, isInBox);
+#else
+                    drawSpeedColor(utm.speed, isInBox, currentColor, pac);
+#endif
                 }
 
                 if (isInBox)
                 {
                     const ofxPoint<double>& pt = magicBox->getDrawablePoint(utm);
-                    // glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
-                    m_points.back().add(getScaledVec2f(pt.x, pt.y), currentColor);
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+                    glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
+#else
+                    pac.add(getScaledVec2f(pt.x, pt.y), currentColor);
+#endif
                 }
             }
-            // glEnd();
-
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+            glEnd();
+#else
+            drawPoints(pac);
+#endif
             startPoint = 0;
         }
-
-        drawPoints();
 
         drawCurrentPoint(*magicBox, currentUtm);
     }
@@ -312,12 +329,15 @@ void Walk::drawAll()
 
     ofNoFill();
 
-    m_points.clear();
+    ofSetColor(m_fgColor);
 
     BOOST_FOREACH(const UtmSegment& utmSegment, gpsData->getUTMPoints())
     {
-        // glBegin(GL_LINE_STRIP);
-        m_points.push_back(PointsAndColors());
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+        glBegin(GL_LINE_STRIP);
+#else
+        tPoints pts;
+#endif
         BOOST_FOREACH(const UtmPoint& utmPoint, utmSegment)
         {
             bool isInBox = true;
@@ -329,13 +349,20 @@ void Walk::drawAll()
             {
                 const ofxPoint<double>& tmp =
                         magicBox->getDrawablePoint(utmPoint);
-                // glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
-                m_points.back().add(getScaledVec2f(tmp.x, tmp.y), m_fgColor);
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+                glVertex2d(getScaledUtmX(tmp.x), getScaledUtmY(tmp.y));
+#else
+                pts.push_back(getScaledVec2f(tmp.x, tmp.y));
+#endif
             }
         }
-        // glEnd();
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+        glEnd();
+#else
+        m_vbo.setVertexData(&pts[0], (int)pts.size(), GL_DYNAMIC_DRAW);
+        m_vbo.draw(GL_LINE_STRIP, 0, (int)pts.size());
+#endif
     }
-    drawPoints();
 }
 
 // -----------------------------------------------------------------------------
@@ -371,23 +398,18 @@ void Walk::drawBoxes()
 
 // -----------------------------------------------------------------------------
 
-void Walk::drawPoints()
+void Walk::drawPoints(const PointsAndColors& pac)
 {
-    for (tPointsAndColorsVec::const_iterator it = m_points.begin(); it != m_points.end(); ++it)
+#ifndef USE_OPENGL_FIXED_FUNCTIONS
+    m_vbo.setVertexData(&pac.points[0], (int)pac.points.size(), GL_DYNAMIC_DRAW);
+    for (tColorSlices::const_iterator it = pac.colors.begin(); it != pac.colors.end(); ++it)
     {
-        const tPoints& pts = it->points;
-        const tColorSlices& colors = it->colors;
-        m_vbo.setVertexData(&pts[0], (int)pts.size(), GL_DYNAMIC_DRAW);
-        for (tColorSlices::const_iterator it2 = colors.begin(); it2 != colors.end(); ++it2)
-        {
-            const ColorSlice& colorSlice = *it2;
-            ofSetColor(colorSlice.color);
-            const int start = colorSlice.idx <= 0 ? 0 : colorSlice.idx - 1;
-            const int total = start <= 0 ? colorSlice.num : colorSlice.num + 1;
-
-            m_vbo.draw(GL_LINE_STRIP, start, total);
-        }
+        ofSetColor(it->color);
+        const int start = it->idx <= 0 ? 0 : it->idx - 1;
+        const int total = start <= 0 ? it->num : it->num + 1;
+        m_vbo.draw(GL_LINE_STRIP, start, total);
     }
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -408,20 +430,32 @@ std::pair<int, int> Walk::calculateStartSegmentAndStartPoint(const GpsData& gpsD
 
 // -----------------------------------------------------------------------------
 
-void Walk::drawSpeedColor(const double speed, bool& isInBox, ofColor& currentColor)
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+void Walk::drawSpeedColor(const double speed, bool& isInBox)
+#else
+void Walk::drawSpeedColor(const double speed, bool& isInBox, ofColor& currentColor,
+        PointsAndColors& pac)
+#endif
 {
     const ofColor& color = speed > m_settings.getSpeedThreshold() ?
         m_settings.getSpeedColorAbove() :
         m_settings.getSpeedColorUnder();
 
-    // ofSetColor(color);
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+    ofSetColor(color);
+#else
     currentColor = color;
+#endif
     if (color.a == 0.0)
     {
         isInBox = false;
-        // glEnd();
-        // glBegin(GL_LINE_STRIP);
-        m_points.push_back(PointsAndColors());
+#ifdef USE_OPENGL_FIXED_FUNCTIONS
+        glEnd();
+        glBegin(GL_LINE_STRIP);
+#else
+        drawPoints(pac);
+        pac = PointsAndColors();
+#endif
     }
 }
 

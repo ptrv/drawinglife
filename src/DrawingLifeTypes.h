@@ -171,7 +171,6 @@ typedef std::vector<TimelineObject> TimelineObjectVec;
 
 class  ofVec2f;
 typedef std::vector<ofVec2f> tPoints;
-typedef std::vector<tPoints> tPointsVec;
 
 struct ColorSlice
 {
@@ -183,6 +182,7 @@ struct ColorSlice
 };
 
 typedef std::vector<ColorSlice> tColorSlices;
+
 struct PointsAndColors
 {
     tPoints points;
@@ -200,7 +200,6 @@ struct PointsAndColors
         ++colors.back().num;
     }
 };
-typedef std::vector<PointsAndColors> tPointsAndColorsVec;
 
 //---------------------------------------------------------------------------
 

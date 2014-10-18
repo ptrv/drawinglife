@@ -94,7 +94,7 @@ PROJECT_LDFLAGS= -lspatialite -lproj
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_DEFINES =
+# PROJECT_DEFINES = USE_OPENGL_FIXED_FUNCTIONS
 
 ################################################################################
 # PROJECT CFLAGS
