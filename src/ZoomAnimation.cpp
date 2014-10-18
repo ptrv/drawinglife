@@ -8,24 +8,26 @@
 
 ZoomAnimation::ZoomAnimation(const AppSettings& settings,
                              const TimelineWeak timeline)
-    : m_settings(settings), m_timeline(timeline)
+    : m_timeline(timeline)
+    , m_zoomAnimFrames(settings.getZoomAnimFrames())
+    , m_zoomAnimType(settings.getZoomAnimationCriteria())
+    , m_animateXY(!settings.isBoundingBoxFixed())
 {
-    const double damp = m_settings.getZoomAnimationDamp();
-    const double attr = m_settings.getZoomAnimationAttraction();
-    const double dampCenter = m_settings.getZoomAnimationDampCenter();
-    const double attrCenter = m_settings.getZoomAnimationAttractionCenter();
+    const double damp = settings.getZoomAnimationDamp();
+    const double attr = settings.getZoomAnimationAttraction();
+    const double dampCenter = settings.getZoomAnimationDampCenter();
+    const double attrCenter = settings.getZoomAnimationAttractionCenter();
 
-    m_zoomIntegrator.reset(new Integrator<double>(0.0f, damp, attr));
-    m_theIntegrator.reset(new Integrator<ofxPoint<double> >(0.0f,
-                                                            dampCenter,
-                                                            attrCenter));
+    m_integratorZ.reset(new Integrator<double>(0.0f, damp, attr));
+    m_integratorXY.reset(new Integrator<ofxPoint<double> >(
+                             0.0f, dampCenter, attrCenter));
 
-    m_currentZoomFrame = m_settings.getZoomAnimFrames().begin();
+    m_currentZoomFrame = m_zoomAnimFrames.begin();
 }
 
 void ZoomAnimation::update(const MagicBoxVector& magicBoxes)
 {
-    if (!m_settings.isZoomAnimation())
+    if (m_currentZoomFrame == m_zoomAnimFrames.end())
     {
         return;
     }
@@ -34,31 +36,31 @@ void ZoomAnimation::update(const MagicBoxVector& magicBoxes)
     {
         if (zoomHasChanged(*timeline))
         {
-            const float zoomLevel = m_currentZoomFrame->frameZoom;
-            const double centerX = m_currentZoomFrame->frameCenterX;
-            const double centerY = m_currentZoomFrame->frameCenterY;
+            const bool isFirst = timeline->isFirst();
 
-            UtmPoint utmP = GeoUtils::LonLat2Utm(centerX, centerY);
+            setTargetZ(isFirst);
 
-            if (timeline->isFirst())
+            if (m_animateXY)
             {
-                m_zoomIntegrator->set(zoomLevel);
-                m_theIntegrator->set(utmP);
+                setTargetXY(isFirst);
             }
-            m_zoomIntegrator->setTarget(zoomLevel);
-            m_theIntegrator->setTarget(utmP);
-
         }
 
-        m_zoomIntegrator->update();
-        m_theIntegrator->update();
+        m_integratorZ->update();
+        if (m_animateXY)
+        {
+            m_integratorXY->update();
+        }
 
-        if (m_zoomIntegrator->isTargeting() || m_theIntegrator->isTargeting())
+        if (m_integratorZ->isTargeting() || m_integratorXY->isTargeting())
         {
             BOOST_FOREACH(MagicBoxPtr box, magicBoxes)
             {
-                box->setSize(m_zoomIntegrator->getValue());
-                box->setupBox(m_theIntegrator->getValue());
+                box->setSize(m_integratorZ->getValue());
+                if (m_animateXY)
+                {
+                    box->setupBox(m_integratorXY->getValue());
+                }
             }
         }
     }
@@ -66,19 +68,43 @@ void ZoomAnimation::update(const MagicBoxVector& magicBoxes)
 
 //------------------------------------------------------------------------------
 
+void ZoomAnimation::setTargetZ(const bool isFirst)
+{
+    const double zoomLevel = m_currentZoomFrame->frameZoom;
+    if (isFirst)
+    {
+        m_integratorZ->set(zoomLevel);
+    }
+    m_integratorZ->setTarget(zoomLevel);
+}
+
+//------------------------------------------------------------------------------
+
+void ZoomAnimation::setTargetXY(const bool isFirst)
+{
+    const double centerX = m_currentZoomFrame->frameCenterX;
+    const double centerY = m_currentZoomFrame->frameCenterY;
+    UtmPoint utmP = GeoUtils::LonLat2Utm(centerX, centerY);
+    if (isFirst)
+    {
+        m_integratorXY->set(utmP);
+    }
+    m_integratorXY->setTarget(utmP);
+}
+
+//------------------------------------------------------------------------------
+
 bool ZoomAnimation::zoomHasChanged(const Timeline& timeline)
 {
-    const ZoomAnimFrameVec& zoomAnimFrames = m_settings.getZoomAnimFrames();
-
     if (timeline.isFirst())
     {
-        m_currentZoomFrame = zoomAnimFrames.begin();
+        m_currentZoomFrame = m_zoomAnimFrames.begin();
         return true;
     }
 
     tZoomAnimFrameIterator nextFrame = m_currentZoomFrame + 1;
 
-    if (nextFrame != zoomAnimFrames.end() &&
+    if (nextFrame != m_zoomAnimFrames.end() &&
         zoomHasChanged(timeline, nextFrame))
     {
         m_currentZoomFrame = nextFrame;
@@ -93,7 +119,7 @@ bool ZoomAnimation::zoomHasChanged(const Timeline& timeline)
 bool ZoomAnimation::zoomHasChanged(const Timeline& timeline,
                                    tZoomAnimFrameIterator nextFrame)
 {
-    switch (m_settings.getZoomAnimationCriteria())
+    switch (m_zoomAnimType)
     {
     case 1:
     {

@@ -13,20 +13,26 @@ public:
 
 private:
 
+    void setTargetZ(bool isFirst);
+    void setTargetXY(bool isFirst);
+
     bool zoomHasChanged(const Timeline& timeline);
 
     typedef ZoomAnimFrameVec::const_iterator tZoomAnimFrameIterator;
     bool zoomHasChanged(const Timeline& timeline,
                         tZoomAnimFrameIterator nextFrame);
 
-    const AppSettings& m_settings;
+    // const AppSettings& m_settings;
     const TimelineWeak m_timeline;
 
-    boost::scoped_ptr<Integrator<double> > m_zoomIntegrator;
-    boost::scoped_ptr<Integrator<ofxPoint<double> > > m_theIntegrator;
+    boost::scoped_ptr<Integrator<double> > m_integratorZ;
+    boost::scoped_ptr<Integrator<ofxPoint<double> > > m_integratorXY;
 
+    const ZoomAnimFrameVec& m_zoomAnimFrames;
     tZoomAnimFrameIterator m_currentZoomFrame;
 
+    int m_zoomAnimType;
+    bool m_animateXY;
 };
 
 #endif // ZOOMANIMATION_H

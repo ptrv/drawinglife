@@ -287,8 +287,15 @@ void DrawingLifeApp::update()
             }
             catch (const std::out_of_range&) {}
 
-            m_zoomAnimation->update(m_magicBoxes);
-            soundUpdate();
+            if (m_settings->isZoomAnimation())
+            {
+                m_zoomAnimation->update(m_magicBoxes);
+            }
+
+            if (m_settings->isSoundActive())
+            {
+                soundUpdate();
+            }
 
             m_timeline->countUp();
         }
@@ -678,7 +685,7 @@ void DrawingLifeApp::resetData()
 
 void DrawingLifeApp::soundUpdate()
 {
-    if (m_settings->isSoundActive() && !m_soundPlayers.empty())
+    if (!m_soundPlayers.empty())
     {
         if (m_timeline->isFirst() ||
             m_currentSoundPlayer == m_soundPlayers.end())
