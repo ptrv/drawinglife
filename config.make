@@ -65,7 +65,7 @@ PROJECT_EXCLUSIONS = $(PROJECT_ROOT)/libs_mac%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/attic%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/docs%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/scripts%
-PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/tclap-1.2.0%
+PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/tclap-1.2.1%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/ofxJSON/example%
 PROJECT_EXCLUSIONS += $(PROJECT_ROOT)/libs/ofxJSON/lib%
 
@@ -111,7 +111,7 @@ PROJECT_LDFLAGS= -lspatialite -lproj
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -Ilibs/sqlite3 -Ilibs/sqlite3x -Ilibs/tclap-1.2.0/include
+PROJECT_CFLAGS = -Ilibs/sqlite3 -Ilibs/sqlite3x -Ilibs/tclap-1.2.1/include
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
