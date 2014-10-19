@@ -54,7 +54,7 @@ public:
 
 private:
 
-    void drawPoints(const PointsAndColors& pac);
+    void drawPoints(const PointsAndColors& pts);
 
     void updateToSegment(const tWalkDirection direction);
 

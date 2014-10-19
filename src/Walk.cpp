@@ -236,7 +236,7 @@ void Walk::draw()
             glBegin(GL_LINE_STRIP);
             ofSetColor(m_fgColor);
 #else
-            PointsAndColors pac;
+            PointsAndColors pts;
             ofColor currentColor = m_fgColor;
 #endif
 
@@ -284,7 +284,7 @@ void Walk::draw()
 #ifdef USE_OPENGL_FIXED_FUNCTIONS
                     glVertex2d(getScaledUtmX(pt.x), getScaledUtmY(pt.y));
 #else
-                    pac.add(getScaledVec2f(pt.x, pt.y), currentColor);
+                    pts.add(getScaledVec2f(pt.x, pt.y), currentColor);
 #endif
                 }
                 else
@@ -293,10 +293,10 @@ void Walk::draw()
                     glEnd();
                     glBegin(GL_LINE_STRIP);
 #else
-                    if (!pac.points.empty())
+                    if (!pts.points.empty())
                     {
-                        drawPoints(pac);
-                        pac = PointsAndColors();
+                        drawPoints(pts);
+                        pts = PointsAndColors();
                     }
 #endif
                 }
@@ -304,7 +304,7 @@ void Walk::draw()
 #ifdef USE_OPENGL_FIXED_FUNCTIONS
             glEnd();
 #else
-            drawPoints(pac);
+            drawPoints(pts);
 #endif
             startPoint = 0;
         }
@@ -415,11 +415,11 @@ void Walk::drawBoxes()
 
 // -----------------------------------------------------------------------------
 
-void Walk::drawPoints(const PointsAndColors& pac)
+void Walk::drawPoints(const PointsAndColors& pts)
 {
 #ifndef USE_OPENGL_FIXED_FUNCTIONS
-    const tPoints& points = pac.points;
-    const tColorSlices& colors = pac.colors;
+    const tPoints& points = pts.points;
+    const tColorSlices& colors = pts.colors;
     m_vbo.setVertexData(&points[0], (int)points.size(), GL_DYNAMIC_DRAW);
     for (tColorSlices::const_iterator it = colors.begin(); it != colors.end(); ++it)
     {
