@@ -174,11 +174,18 @@ typedef std::vector<ofVec2f> tPoints;
 
 struct ColorSlice
 {
-    ColorSlice(const ofColor& c, const int index)
-        : color(c), idx(index), num(0) {}
+    ColorSlice(const ofColor& c, const int startIndex)
+        : color(c), start(startIndex), total(1)
+    {
+        if (start > 0)
+        {
+            --start;
+            ++total;
+        }
+    }
     ofColor color;
-    int idx;
-    int num;
+    int start;
+    int total;
 };
 
 typedef std::vector<ColorSlice> tColorSlices;
@@ -194,10 +201,13 @@ struct PointsAndColors
 
         if (colors.empty() || colors.back().color != c)
         {
-            const int idx = static_cast<int>(points.size()) - 1;
-            colors.push_back(ColorSlice(c, idx));
+            const int startIndex = static_cast<int>(points.size()) - 1;
+            colors.push_back(ColorSlice(c, startIndex));
         }
-        ++colors.back().num;
+        else
+        {
+            ++colors.back().total;
+        }
     }
 };
 

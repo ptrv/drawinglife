@@ -65,8 +65,7 @@ private:
 #ifdef USE_OPENGL_FIXED_FUNCTIONS
     void drawSpeedColor(double speed, bool& isInBox);
 #else
-    void drawSpeedColor(double speed, bool& isInBox, ofColor& currentColor,
-                        PointsAndColors& pac);
+    void drawSpeedColor(double speed, bool& isInBox, ofColor& currentColor);
 #endif
 
     void drawCurrentPoint(const MagicBox& box, const UtmPoint& currentUtm);
