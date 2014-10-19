@@ -10,7 +10,6 @@
 
 GpsData::GpsData(const AppSettings& settings)
 :
-m_settings(settings),
 m_gpsDataId(0),
 m_user(""),
 m_minLonLat(0.0, 0.0),

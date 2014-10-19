@@ -102,7 +102,6 @@ private:
 
     //--------------------------------------------------------------------------
 
-    const AppSettings& m_settings;
     int m_gpsDataId;
     GpsSegmentVector m_segments;
 	std::string m_user;
