@@ -255,7 +255,7 @@ void DrawingLifeApp::handleFirstTimelineObject()
 
         if (m_loopMode)
         {
-            std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
+            // std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
             const int sleepTime = m_settings->getSleepTime();
             if (sleepTime > 0)
             {

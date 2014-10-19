@@ -69,43 +69,38 @@ void Walk::update()
         return;
     }
 
-    const UtmDataVector& utmPoints= gpsData->getUTMPoints();
-    const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
-
+    const UtmDataVector& utmPoints = gpsData->getUTMPoints();
+    if (utmPoints.empty())
+    {
+        return;
+    }
     const int numSegments = static_cast<int>(utmPoints.size());
+
+    const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
+    if (utmSegment.empty())
+    {
+        return;
+    }
     const int numPoints = static_cast<int>(utmSegment.size());
 
-    if (m_currentGpsSegment < numSegments)
+    if (m_firstPoint)
     {
-        if (m_currentGpsPoint < numPoints - 1)
-        {
-            if (!m_firstPoint)
-            {
-                ++m_currentGpsPoint;
-            }
-            else
-            {
-                m_firstPoint = false;
-            }
-        }
-        else
-        {
-            ++m_currentGpsSegment;
-            m_currentGpsPoint = 0;
-        }
+        m_firstPoint = false;
     }
     else
     {
-        if (m_currentGpsPoint < numPoints - 1)
+        ++m_currentGpsPoint;
+        m_currentGpsPoint %= numPoints;
+
+        if (m_currentGpsPoint == 0)
         {
-            ++m_currentGpsPoint;
-        }
-        else
-        {
-            std::cout << "I'm the last gps point" << std::endl;
-            m_currentGpsPoint = 0;
-            m_currentGpsSegment = 0;
-            m_currentPoint = 0;
+            ++m_currentGpsSegment;
+            m_currentGpsSegment %= numSegments;
+
+            if (m_currentGpsSegment == 0)
+            {
+                m_currentPoint = 0;
+            }
         }
     }
     ++m_currentPoint;
@@ -129,6 +124,18 @@ void Walk::updateToPreviousSegment()
 
 // -----------------------------------------------------------------------------
 
+int accumulateFn(UtmDataVector::const_iterator first, UtmDataVector::const_iterator last)
+{
+    int sum_points = 0;
+
+    while (first != last)
+    {
+        sum_points += static_cast<int>(first->size());
+        ++first;
+    }
+    return sum_points;
+}
+
 void Walk::updateToSegment(const tWalkDirection direction)
 {
     const GpsDataPtr gpsData = m_gpsData.lock();
@@ -138,38 +145,51 @@ void Walk::updateToSegment(const tWalkDirection direction)
     }
 
     const UtmDataVector& utmPoints = gpsData->getUTMPoints();
-
+    if (utmPoints.empty())
+    {
+        return;
+    }
     const int numSegments = static_cast<int>(utmPoints.size());
 
-    if (gpsData->getTotalGpsPoints() > 0 && numSegments > 0)
+    if (m_firstPoint)
     {
-        if (m_firstPoint || m_currentGpsSegment < (numSegments - 1))
+        m_firstPoint = false;
+    }
+    else if (direction == FORWARD)
+    {
+        ++m_currentGpsSegment;
+        m_currentGpsSegment %= numSegments;
+
+        if (m_currentGpsSegment == 0 && m_currentGpsPoint != 0)
         {
-            if (m_firstPoint)
-            {
-                m_firstPoint = false;
-            }
-            else if (direction == FORWARD)
-            {
-                ++m_currentGpsSegment;
-            }
-            else if (direction == BACKWARD)
-            {
-                if (m_currentGpsSegment == 0)
-                {
-                    m_currentGpsSegment = numSegments;
-                }
-                --m_currentGpsSegment;
-            }
-            const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
-            m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
-            m_currentPoint += m_currentGpsPoint;
+            m_firstPoint = true;
+            m_currentGpsPoint = 0;
+            m_currentPoint = 0;
+            return;
+        }
+    }
+    else if (direction == BACKWARD)
+    {
+        if (m_currentGpsSegment == 0 && m_currentGpsPoint != 0)
+        {
+            m_currentGpsPoint = 0;
+            m_currentPoint = 0;
+            return;
         }
         else
         {
-            reset();
+            --m_currentGpsSegment;
+            if (m_currentGpsSegment < 0)
+            {
+                m_currentGpsSegment = numSegments - 1;
+            }
         }
     }
+
+    const UtmSegment& utmSegment = utmPoints[m_currentGpsSegment];
+    m_currentGpsPoint = static_cast<int>(utmSegment.size()) - 1;
+    m_currentPoint = accumulateFn(utmPoints.begin(),
+                                  utmPoints.begin() + m_currentGpsSegment + 1);
 }
 
 // -----------------------------------------------------------------------------
