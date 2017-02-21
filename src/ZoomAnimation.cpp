@@ -136,7 +136,7 @@ bool ZoomAnimation::zoomHasChanged(const Timeline& timeline,
     {
         const std::string& currentTimestamp =
             timeline.getCurrentTimelineObj().timeString;
-        return nextFrame->timestamp.compare(currentTimestamp) == 0;
+        return nextFrame->timestamp.compare(currentTimestamp) <= 0;
     }
     default:
         return false;
