@@ -98,7 +98,7 @@ public:
     const std::vector<LocationImageData>& getLocationImageData() const
     { return m_locationImgData; }
     
-    bool isBoundingBoxFixed() const { return m_boundingBoxFixed; }
+    bool isBoundingBoxStatic() const { return m_boundingBoxStatic; }
     double getBoundingBoxLat() const { return m_boundingBoxLat; } 
     double getBoundingBoxLon() const { return m_boundingBoxLon; }
     
@@ -219,7 +219,7 @@ private:
     ofColor m_speedColorUnder;
     ofColor m_speedColorAbove;
     
-    bool m_boundingBoxFixed;
+    bool m_boundingBoxStatic;
     double m_boundingBoxLat;
     double m_boundingBoxLon;
 

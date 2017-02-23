@@ -252,7 +252,7 @@ void DataLoader::processGpsData(DrawingLifeApp& app)
 
             walk.setGpsData(gpsData);
 
-            if (settings.isBoundingBoxFixed())
+            if (settings.isBoundingBoxStatic())
             {
                 double bbLat = settings.getBoundingBoxLat();
                 double bbLon = settings.getBoundingBoxLon();

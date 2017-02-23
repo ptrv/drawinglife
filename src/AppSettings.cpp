@@ -174,7 +174,7 @@ bool AppSettings::loadXML()
 
     m_boundingBoxSize = m_xml.getValue("size", 3000.0);
     m_boundingBoxPadding = m_xml.getValue("padding", 500.0);
-    m_boundingBoxFixed = m_xml.getValue("static", 0) == 1;
+    m_boundingBoxStatic = m_xml.getValue("static", 0) == 1;
     m_boundingBoxLat = m_xml.getAttribute("position", "lat", 52.542);
     m_boundingBoxLon = m_xml.getAttribute("position", "lon", 13.413);
     m_boundingBoxShow = m_xml.getValue("show", 0) == 1;

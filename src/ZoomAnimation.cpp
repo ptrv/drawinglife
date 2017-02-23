@@ -43,7 +43,7 @@ ZoomAnimation::ZoomAnimation(const AppSettings& settings,
     : m_timeline(timeline)
     , m_zoomAnimFrames(settings.getZoomAnimFrames())
     , m_zoomAnimType(settings.getZoomAnimationCriteria())
-    , m_animateXY(settings.isBoundingBoxFixed())
+    , m_animateXY(settings.isBoundingBoxStatic())
 {
     const double damp = settings.getZoomAnimationDamp();
     const double attr = settings.getZoomAnimationAttraction();

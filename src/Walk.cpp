@@ -215,7 +215,7 @@ void Walk::draw()
 
         if (!m_interactiveMode &&
             !m_settings.isMultiMode() &&
-            !m_settings.isBoundingBoxFixed())
+            !m_settings.isBoundingBoxStatic())
         {
             magicBox->updateBoxIfNeeded(currentUtm);
         }
