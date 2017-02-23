@@ -25,8 +25,22 @@ private:
     // const AppSettings& m_settings;
     const TimelineWeak m_timeline;
 
-    boost::scoped_ptr<Integrator<double> > m_integratorZ;
-    boost::scoped_ptr<Integrator<ofxPoint<double> > > m_integratorXY;
+    boost::scoped_ptr<Integrator> m_integratorZ;
+
+    class IntegratorXY
+    {
+    public:
+        IntegratorXY(double val, double damp, double attr);
+        ofxPoint<double> getValue() const;
+        void update();
+        bool isTargeting() const;
+        void set(ofxPoint<double> p);
+        void setTarget(ofxPoint<double> p);
+    private:
+        Integrator m_x;
+        Integrator m_y;
+    };
+    boost::scoped_ptr<IntegratorXY> m_integratorXY;
 
     const ZoomAnimFrameVec& m_zoomAnimFrames;
     tZoomAnimFrameIterator m_currentZoomFrame;

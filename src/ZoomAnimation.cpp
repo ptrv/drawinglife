@@ -5,22 +5,53 @@
 #include "MagicBox.h"
 #include "GeoUtils.h"
 
+ZoomAnimation::IntegratorXY::IntegratorXY(double val, double damp, double attr)
+    : m_x(val, damp, attr), m_y(val, damp, attr)
+{
+}
+
+ofxPoint<double> ZoomAnimation::IntegratorXY::getValue() const
+{
+    return ofxPoint<double>(m_x.getValue(), m_y.getValue());
+}
+
+void ZoomAnimation::IntegratorXY::update()
+{
+    m_x.update();
+    m_y.update();
+}
+
+bool ZoomAnimation::IntegratorXY::isTargeting() const
+{
+    return m_x.isTargeting() || m_y.isTargeting();
+}
+
+void ZoomAnimation::IntegratorXY::set(ofxPoint<double> p)
+{
+    m_x.set(p.x);
+    m_y.set(p.y);
+}
+
+void ZoomAnimation::IntegratorXY::setTarget(ofxPoint<double> p)
+{
+    m_x.setTarget(p.x);
+    m_y.setTarget(p.y);
+}
 
 ZoomAnimation::ZoomAnimation(const AppSettings& settings,
                              const TimelineWeak timeline)
     : m_timeline(timeline)
     , m_zoomAnimFrames(settings.getZoomAnimFrames())
     , m_zoomAnimType(settings.getZoomAnimationCriteria())
-    , m_animateXY(!settings.isBoundingBoxFixed())
+    , m_animateXY(settings.isBoundingBoxFixed())
 {
     const double damp = settings.getZoomAnimationDamp();
     const double attr = settings.getZoomAnimationAttraction();
     const double dampCenter = settings.getZoomAnimationDampCenter();
     const double attrCenter = settings.getZoomAnimationAttractionCenter();
 
-    m_integratorZ.reset(new Integrator<double>(0.0f, damp, attr));
-    m_integratorXY.reset(new Integrator<ofxPoint<double> >(
-                             0.0f, dampCenter, attrCenter));
+    m_integratorZ.reset(new Integrator(0.0, damp, attr));
+    m_integratorXY.reset(new IntegratorXY(0.0, dampCenter, attrCenter));
 
     m_currentZoomFrame = m_zoomAnimFrames.begin();
 }

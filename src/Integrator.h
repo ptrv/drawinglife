@@ -10,7 +10,6 @@
 #ifndef INTEGRATOR_H_
 #define INTEGRATOR_H_
 
-template<class T>
 class Integrator {
 public:
 //    Integrator ()
@@ -26,7 +25,7 @@ public:
 //    {
 //    }
 
-    Integrator (T val, T damp, T attr)
+    Integrator (double val, double damp, double attr)
         : value(val)
         , target()
         , vel()
@@ -36,66 +35,67 @@ public:
         , damping(damp) // 0.5
         , mass(1)
         , targeting(false)
-	{
-	}
+    {
+    }
 
     virtual ~Integrator()
-	{
+    {
 
-	}
+    }
 
-    void set(T v)
-	{
-		value = v;
-	}
+    void set(double v)
+    {
+        value = v;
+    }
 
 
-	void update()
-	{
-		if (targeting)
-		{
+    void update()
+    {
+        if (targeting)
+        {
             force += attraction * (target - value);
-		}
+        }
 
-		accel = force / mass;
-		vel = (vel + accel) * damping;
-		value += vel;
+        accel = force / mass;
+        vel = (vel + accel) * damping;
+        value += vel;
 
-		force = 0;
-	}
-
-
-    void setTarget(T t) {
-		targeting = true;
-		target = t;
-	}
+        force = 0;
+    }
 
 
-	void noTarget() {
-		targeting = false;
-	}
+    void setTarget(double t) {
+        targeting = true;
+        target = t;
 
-    T getValue()
-	{
-		return value;
-	}
+    }
 
-	bool isTargeting()
-	{
-		return targeting;
-	}
+
+    void noTarget() {
+        targeting = false;
+    }
+
+    double getValue() const
+    {
+        return value;
+    }
+
+    bool isTargeting() const
+    {
+        return targeting;
+    }
 
 private:
 
-    T value;
-    T target;
+    double value;
+    double target;
 
-    T vel;
-    T accel;
-    T force;
+    double vel;
+    double accel;
+    double force;
 
-    T attraction;
-    T damping;
+    double attraction;
+    double damping;
     double mass;// = 1;
     bool targeting;
 };
