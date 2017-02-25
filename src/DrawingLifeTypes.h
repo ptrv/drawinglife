@@ -7,6 +7,8 @@
 
 //------------------------------------------------------------------------------
 
+#include <string>
+
 struct ZoomAnimFrame
 {
 	float frameTime;
@@ -122,6 +124,14 @@ struct UtmPoint : public ofxPoint<double>
 //------------------------------------------------------------------------------
 // typedefs
 //------------------------------------------------------------------------------
+
+#include <ofImage.h>
+#include <ofSoundPlayer.h>
+
+#include <vector>
+#include <boost/scoped_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class DBReader;
 class GpsData;
