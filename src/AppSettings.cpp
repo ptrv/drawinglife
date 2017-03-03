@@ -334,6 +334,10 @@ bool AppSettings::loadXML()
 
     m_grabScreen = m_xml.getValue("settings:grabscreen", 0) == 1;
 
+    m_timelineRt = m_xml.getValue("settings:timeline:realtime", 0) == 1;
+    m_timelineSpeed = m_xml.getValue("settings:timeline:speed", 100);
+    m_timelineSkipTime = m_xml.getValue("settings:timeline:skiptime", 60);
+
     m_xml.popTag();
 
     return true;
@@ -409,6 +413,11 @@ void AppSettings::print()
         ofLog(OF_LOG_SILENT, "Current point image %d: %s", i,
               m_currImageData[i].path.c_str());
     }
+
+    ofLog(OF_LOG_SILENT, "Timeline realtime: %d", m_timelineRt);
+    ofLog(OF_LOG_SILENT, "Timeline speed: %d", m_timelineSpeed);
+    ofLog(OF_LOG_SILENT, "Timeline skip time withaout data: %d", m_timelineSkipTime);
+
     ofLog(OF_LOG_SILENT, "------------------------------\n");
 
 }

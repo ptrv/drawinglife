@@ -52,6 +52,11 @@
             <padding>200.0</padding>
         </boundingbox>
         <grabscreen>0</grabscreen>
+        <timeline>
+            <realtime>0</realtime>
+            <speed>10</speed>
+            <skiptime>60</skiptime>     <!--in seconds-->
+        </timeline>
     </settings>
     <ui>
         <fonts>

@@ -7,14 +7,12 @@
 
 //------------------------------------------------------------------------------
 
-Timeline::Timeline()
-:
-m_current(NULL),
-m_last(NULL),
-m_counter(0),
-m_indexToUpdate(0),
-m_lastUpdatedTimelineId(0),
-m_currentCountWasUpdated(false)
+Timeline::Timeline(bool rt, float speed, unsigned skipAfterSeconds)
+: m_counter(0)
+, m_lastTime(0.f)
+, m_realtime(rt)
+, m_speedFactor(speed)
+, m_skipSecondsWithoutData(skipAfterSeconds)
 {
     //ctor
 }
@@ -53,21 +51,13 @@ void Timeline::setData(const GpsDataVector& gpsDatas)
     }
 
     sortTimeline();
-    try
-    {
-        m_current = &m_timeline.at(0);
-    }
-    catch (const std::out_of_range&) {}
+    m_lastTime = ofGetElapsedTimef();
 }
 
 //------------------------------------------------------------------------------
 
 void Timeline::countUp()
 {
-    if (m_currentCountWasUpdated)
-    {
-        m_lastUpdatedTimelineId = m_counter;
-    }
     ++m_counter;
     m_counter %= m_timeline.size();
 }
@@ -111,36 +101,35 @@ bool Timeline::isTimelineIndex(unsigned int index)
 
 bool Timeline::isNextReady()
 {
-//    bool ready = true;
-    m_current = &m_timeline[m_counter];
-
-    bool ready = false;
-    if (m_last != 0)
+    if (!m_realtime)
     {
-        const time_t current = m_current->secs;
-        const time_t last = m_last->secs;
+        return true;
+    }
 
-        const time_t diff = current - last;
+    if (m_counter + 1 < m_timeline.size())
+    {
+        float now = ofGetElapsedTimef();
+        float timeDiff = now - m_lastTime;
 
-        if (diff > 10)
+        const TimelineObject& nextTimelineObject = m_timeline[m_counter + 1];
+        const time_t next = nextTimelineObject.secs;
+        const time_t current = getCurrentTimelineObj().secs;
+
+        const time_t diff = next - current;
+
+        const float threshold = timeDiff * m_speedFactor;
+
+        const bool forceNext = m_skipSecondsWithoutData > 0 &&
+                               diff > m_skipSecondsWithoutData;
+
+        if (diff < threshold || forceNext)
         {
-            m_last = m_current;
-            m_currentCountWasUpdated = true;
-            ready = true;
-        }
-        else
-        {
-            m_currentCountWasUpdated = false;
-            ready = false;
+            m_lastTime = now;
+            return true;
         }
     }
-    else
-    {
-        m_last = m_current;
-        m_currentCountWasUpdated = true;
-        ready = true;
-    }
-    return ready;
+
+    return false;
 }
 
 //------------------------------------------------------------------------------

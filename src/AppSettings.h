@@ -122,6 +122,10 @@ public:
 
     bool getIsGrabScreen() const { return m_grabScreen; }
 
+    bool isTimelineRealtime() const { return m_timelineRt; }
+    unsigned getTimelineSpeed() const { return m_timelineSpeed; }
+    unsigned getTimelineSkipTime() const { return m_timelineSkipTime; }
+
 private:
 
     bool loadXML();
@@ -241,6 +245,10 @@ private:
     bool m_useShader;
 
     bool m_grabScreen;
+
+    bool m_timelineRt;
+    unsigned m_timelineSpeed;
+    unsigned m_timelineSkipTime;
 };
 
 //------------------------------------------------------------------------------

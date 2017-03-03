@@ -81,7 +81,7 @@ private:
     void shaderBegin();
     void shaderEnd();
 
-    void handleFirstTimelineObject();
+    void handleLoop();
 
     //---------------------------------------------------------------------------
     // Member variables

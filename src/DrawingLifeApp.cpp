@@ -161,7 +161,10 @@ void DrawingLifeApp::setup()
     // -------------------------------------------------------------------------
     m_imageAsCurrentPoint = DataLoader::loadCurrentPointImages(*this);
 
-    m_timeline.reset(new Timeline());
+    const bool timelineRt = m_settings->isTimelineRealtime();
+    const unsigned timelineSpeed = m_settings->getTimelineSpeed();
+    const unsigned timelineSkipTime = m_settings->getTimelineSkipTime();
+    m_timeline.reset(new Timeline(timelineRt, timelineSpeed, timelineSkipTime));
 
     m_sqlFilePaths = m_settings->getSqlFilePaths();
 
@@ -242,17 +245,16 @@ void sleepFunc(int sleepTime)
 #endif
 }
 
-bool firstRun = true;
-void DrawingLifeApp::handleFirstTimelineObject()
+bool nextIsFirst = false;
+void DrawingLifeApp::handleLoop()
 {
-    if (m_timeline->isFirst())
+    if (m_timeline->isLast())
     {
-        if (firstRun)
-        {
-            firstRun = false;
-            return;
-        }
+        nextIsFirst = true;
+    }
 
+    if (nextIsFirst)
+    {
         if (m_loopMode)
         {
             std::for_each(m_walks.begin(), m_walks.end(), fnWalkReset);
@@ -278,7 +280,7 @@ void DrawingLifeApp::update()
     {
         for (int i = 0; i < m_settings->getDrawSpeed(); ++i)
         {
-            handleFirstTimelineObject();
+            handleLoop();
 
             const int id = m_timeline->getCurrentId();
             try
@@ -297,7 +299,10 @@ void DrawingLifeApp::update()
                 soundUpdate();
             }
 
-            m_timeline->countUp();
+            if (m_timeline->isNextReady())
+            {
+                m_timeline->countUp();
+            }
         }
     }
 }

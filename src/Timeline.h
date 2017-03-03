@@ -17,7 +17,7 @@
 class Timeline
 {
 public:
-    Timeline();
+    Timeline(bool rt, float speed, unsigned skipAfterSeconds);
     ~Timeline();
 
     void setData(const GpsDataVector& gpsDatas);
@@ -32,7 +32,6 @@ public:
     bool isNextReady();
 
     const TimelineObjectVec& getTimeline() const { return m_timeline; }
-    inline unsigned int getNumberToUpdate() const;
     std::string getCurrentTime() const;
     unsigned int getCurrentCount() const;
     unsigned int getAllCount() const;
@@ -54,29 +53,19 @@ private:
     // -------------------------------------------------------------------------
     TimelineObjectVec m_timeline;
 
-    TimelineObject* m_current;
-    TimelineObject* m_last;
-
     unsigned int m_counter;
 
-    unsigned int m_indexToUpdate;
+    float m_lastTime;
 
-    unsigned int m_lastUpdatedTimelineId;
-
-    bool m_currentCountWasUpdated;
+    bool m_realtime;
+    unsigned m_speedFactor;
+    unsigned m_skipSecondsWithoutData;
 
     // (prevent copy constructor and operator= being generated..)
     Timeline (const Timeline&);
     const Timeline& operator= (const Timeline&);
 
 };
-
-//------------------------------------------------------------------------------
-
-unsigned int Timeline::getNumberToUpdate() const
-{
-    return m_counter - m_lastUpdatedTimelineId;
-}
 
 //------------------------------------------------------------------------------
 
